@@ -1,0 +1,31 @@
+# Local reference material
+Ejemplo de documentación/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!.env.production.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+coverage/
+
+# Raw data and research cache
+data/raw/
+spike/output/raw/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/

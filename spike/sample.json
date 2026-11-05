@@ -1,0 +1,36 @@
+[
+  {"name": "Iron Maiden", "subgenre": "Heavy Metal", "country": "GB", "notes": "Long discography; many editions and live releases"},
+  {"name": "Judas Priest", "subgenre": "Heavy Metal", "country": "GB", "notes": "Long career across the full period"},
+  {"name": "Motörhead", "subgenre": "Heavy Metal", "country": "GB", "notes": "High release volume; name with diacritics"},
+  {"name": "Black Sabbath", "subgenre": "Heavy Metal", "country": "GB", "notes": "Lineup changes; multiple eras"},
+
+  {"name": "Metallica", "subgenre": "Thrash Metal", "country": "US", "notes": "High edition count; major commercial albums"},
+  {"name": "Slayer", "subgenre": "Thrash Metal", "country": "US", "notes": "Long career; live and compilation releases"},
+  {"name": "Megadeth", "subgenre": "Thrash Metal", "country": "US", "notes": "Many remasters and editions"},
+  {"name": "Sepultura", "subgenre": "Thrash Metal", "country": "BR", "notes": "Non-US scene; lineup changes"},
+
+  {"name": "Death", "subgenre": "Death Metal", "country": "US", "notes": "Short name; possible search ambiguity"},
+  {"name": "Cannibal Corpse", "subgenre": "Death Metal", "country": "US", "notes": "Long discography; many lineup changes"},
+  {"name": "Morbid Angel", "subgenre": "Death Metal", "country": "US", "notes": "Classic period; multiple editions"},
+  {"name": "At the Gates", "subgenre": "Death Metal", "country": "SE", "notes": "Non-US scene; shorter discography"},
+
+  {"name": "Bathory", "subgenre": "Black Metal", "country": "SE", "notes": "Early black metal; one-person project"},
+  {"name": "Mayhem", "subgenre": "Black Metal", "country": "NO", "notes": "Sparse discography; notorious history"},
+  {"name": "Emperor", "subgenre": "Black Metal", "country": "NO", "notes": "Short classic period"},
+  {"name": "Darkthrone", "subgenre": "Black Metal", "country": "NO", "notes": "Genre transition; many albums"},
+
+  {"name": "Helloween", "subgenre": "Power Metal", "country": "DE", "notes": "Foundational power metal; lineup changes"},
+  {"name": "Blind Guardian", "subgenre": "Power Metal", "country": "DE", "notes": "Long career; layered production"},
+  {"name": "Stratovarius", "subgenre": "Power Metal", "country": "FI", "notes": "Non-central scene; long discography"},
+  {"name": "Gamma Ray", "subgenre": "Power Metal", "country": "DE", "notes": "Connected to Helloween lineage"},
+
+  {"name": "Candlemass", "subgenre": "Doom Metal", "country": "SE", "notes": "Foundational doom; lineup changes"},
+  {"name": "Paradise Lost", "subgenre": "Doom Metal", "country": "GB", "notes": "Genre evolution across the 1990s"},
+  {"name": "My Dying Bride", "subgenre": "Doom Metal", "country": "GB", "notes": "Long career; many editions"},
+  {"name": "Cathedral", "subgenre": "Doom Metal", "country": "GB", "notes": "Short name; possible search ambiguity"},
+
+  {"name": "Dream Theater", "subgenre": "Progressive Metal", "country": "US", "notes": "Long discography; many live releases"},
+  {"name": "Fates Warning", "subgenre": "Progressive Metal", "country": "US", "notes": "Career spans the full period"},
+  {"name": "Queensrÿche", "subgenre": "Progressive Metal", "country": "US", "notes": "Name with diacritics; concept albums"},
+  {"name": "Opeth", "subgenre": "Progressive Metal", "country": "SE", "notes": "1990s period; genre transition"}
+]

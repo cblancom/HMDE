@@ -1,0 +1,8 @@
+{
+  "date": "2026-11-05",
+  "sample_size": 28,
+  "network_requests": 409,
+  "cache_hits": 23,
+  "elapsed_seconds": 859.5,
+  "note": "Initial full MusicBrainz fetch. Later analysis reruns reuse the raw response cache."
+}

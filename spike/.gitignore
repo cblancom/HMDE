@@ -1,0 +1,4 @@
+output/raw/
+__pycache__/
+*.pyc
+output/spike_results_partial.json
