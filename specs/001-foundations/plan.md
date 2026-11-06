@@ -159,7 +159,7 @@ The route catches SQLAlchemy connection errors, logs a warning without connectio
 ### 4.5 Frontend and proxy
 
 - Vite serves the shell on port `5173`.
-- `/health` and `/api` proxy to `VITE_API_PROXY_TARGET`, default `http://localhost:8000`, Compose value `http://api:8000`.
+- `/health` and `/api` proxy to `VITE_API_PROXY_TARGET`, default `http://localhost:8001`, Compose value `http://api:8000`.
 - Components use relative paths only.
 - No CORS is enabled.
 - The shell uses `fetch`, local state and minimal CSS.
@@ -177,8 +177,8 @@ The route catches SQLAlchemy connection errors, logs a warning without connectio
 
 `compose.yaml`:
 
-- `db`: PostgreSQL 16 Alpine, persistent volume, `pg_isready` healthcheck, host port `127.0.0.1:5433`.
-- `api`: build from the repository root, mount `backend/`, internal `DATABASE_URL` pointing to `db:5432`, port `127.0.0.1:8000`, HTTP healthcheck.
+- `db`: PostgreSQL 16 Alpine, persistent volume, `pg_isready` healthcheck, host port `127.0.0.1:5434`.
+- `api`: build from the repository root, mount `backend/`, internal `DATABASE_URL` pointing to `db:5432`, port `127.0.0.1:8001`, HTTP healthcheck.
 - `web`: Node 20 Alpine, mount `frontend/`, named `node_modules` volume, Vite host `0.0.0.0`, port `127.0.0.1:5173`, depends on the API service being started (not necessarily healthy) so the degraded UI can be tested.
 - `web` runs `npm ci` and `npm run dev -- --host 0.0.0.0`.
 

@@ -209,7 +209,7 @@ Before closing any stage:
 | Stage | Status | Note |
 |---|---|---|
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
-| E1 | In implementation | T-001–T-005 complete; T-006 next |
+| E1 | Implemented | T-001–T-013 complete; remote CI pending first push |
 | E2–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -244,7 +244,7 @@ E0 is complete. The seed list is versioned at [`data/seed-list.json`](../../data
 
 Then:
 
-1. Continue E1 from T-006: frontend, Docker, CI, docs and validation.
-2. Complete E1 validation and close the stage.
+1. Commit and push the repository, then verify the remote CI run.
+2. Mark SPEC-001 Validated and close E1.
 3. Write and approve **SPEC-002 — Seed band explorer** for E2.
 4. Implement the walking skeleton and continue the roadmap.

@@ -1,6 +1,6 @@
 # SPEC-001 — Foundations
 
-- **Status:** In implementation
+- **Status:** Implemented
 - **Stage:** E1
 - **Iteration:** MVP
 - **Module:** `platform`
@@ -8,7 +8,7 @@
 - **Depends on:** E0 complete; [`constitution.md`](../../constitution.md), [`AGENTS.md`](../../AGENTS.md), [architecture overview](../../docs/01-architecture/overview.md), [engineering conventions](../../docs/01-architecture/conventions.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0003](../../docs/01-architecture/adr/ADR-0003-synchronous-sqlalchemy.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (in implementation)
+- **Tasks:** [tasks.md](tasks.md) (completed; remote CI pending first push)
 - **Owner:** Cristian
 
 ## Revision history
@@ -18,6 +18,10 @@
 | 1 | 2026-11-05 | Initial draft |
 | 2 | 2026-11-05 | Spec approved; plan and tasks drafted |
 | 3 | 2026-11-05 | Plan/tasks approved; T-001–T-005 implemented |
+| 4 | 2026-11-05 | T-006–T-007 implemented (frontend shell and API status) |
+| 5 | 2026-11-05 | T-008–T-009 implemented; local API/DB ports changed to 8001/5434 to avoid conflicts |
+| 6 | 2026-11-05 | T-010–T-011 implemented (CI workflow and logging verification) |
+| 7 | 2026-11-05 | T-012–T-013 local validation complete; remote CI pending first push |
 
 ## 1. Context and problem
 
@@ -240,8 +244,8 @@ This iteration uses minimal CSS. Tailwind, React Router, TanStack Query and Cyto
 The environment must support editing code without rebuilding images. Published ports bind to `127.0.0.1`:
 
 - Web: `5173`
-- API: `8000`
-- PostgreSQL: `5433` on the host
+- API: `8001`
+- PostgreSQL: `5434` on the host
 
 `docker compose up --build` must work from a clean clone using `.env.example` values.
 
@@ -456,7 +460,7 @@ All project content is in English: documentation, code, identifiers, API descrip
 - Docker 29.8.1 and Docker Compose v5.5.1 are available.
 - PostgreSQL 16 is used for development and tests.
 - The backend package uses the `src/hmde` layout.
-- Development ports are `5173` for web, `8000` for API and `5433` for PostgreSQL on the host.
+- Development ports are `5173` for web, `8001` for API and `5434` for PostgreSQL on the host.
 - Compose uses `infra/Dockerfile.api` for the backend and the Node image for the Vite web service.
 - Configuration uses the standard library, without `pydantic-settings`.
 - No CORS because the Vite proxy provides same-origin access.
@@ -477,9 +481,9 @@ No blocking questions for the technical plan.
 
 ## 11. Validation result
 
-- **Date:** —
-- **Verdict:** Not validated
-- **Evidence:** `tasks.md` validation table, once the plan and tasks exist.
+- **Date:** 2026-11-05
+- **Verdict:** Implemented; local validation complete, remote CI pending first push.
+- **Evidence:** `tasks.md` validation table. AC-011 is partial until GitHub Actions runs after the first push.
 
 ## 12. References
 

@@ -1,0 +1,26 @@
+.git
+.gitignore
+.agents
+.env
+.env.*
+!.env.example
+Ejemplo de documentación
+
+backend/.venv
+backend/.pytest_cache
+backend/.ruff_cache
+**/__pycache__
+**/*.pyc
+
+frontend
+docs
+specs
+data
+spike
+infra
+
+README.md
+AGENTS.md
+constitution.md
+compose.yaml
+compose.prod.yaml

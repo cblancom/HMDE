@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterator
 
 from sqlalchemy.exc import SQLAlchemyError
@@ -14,7 +15,7 @@ class HealthySession:
 
 class FailingSession:
     def execute(self, _statement: object) -> None:
-        raise SQLAlchemyError("database unavailable")
+        raise SQLAlchemyError("postgresql://user:secret@host/db")
 
 
 def _override_session(session: object):
@@ -40,7 +41,18 @@ def test_health_returns_degraded_without_leaking_details(client, app_instance) -
 
     assert response.status_code == 503
     assert response.json() == {"status": "degraded", "database": "unavailable"}
-    assert "database unavailable" not in response.text
+    assert "secret" not in response.text
+
+
+def test_health_failure_logs_a_warning_without_details(client, app_instance, caplog) -> None:
+    app_instance.dependency_overrides[get_db] = _override_session(FailingSession())
+
+    with caplog.at_level(logging.WARNING, logger="hmde.api.routes.health"):
+        response = client.get("/health")
+
+    assert response.status_code == 503
+    assert "Database health check failed" in caplog.text
+    assert "secret" not in caplog.text
 
 
 def test_health_is_documented_in_openapi(client) -> None:

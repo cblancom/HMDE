@@ -50,6 +50,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0 is complete. SPEC-001 is in implementation: T-001–T-005 are complete and T-006 is next. After E1, continue with `specs/002-seed-band-explorer/`.
+E0 is complete. SPEC-001 is implemented and locally validated; T-001–T-013 are complete. After the first push, verify remote CI, mark SPEC-001 Validated, and continue with `specs/002-seed-band-explorer/`.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

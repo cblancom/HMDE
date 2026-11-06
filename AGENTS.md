@@ -6,7 +6,7 @@ Operational instructions for working in this repository.
 
 Heavy Metal Data Explorer (HMDE) is a public, read-only application for exploring professional production relationships in heavy metal. The MVP covers 42 bands with studio albums released between 1980 and 2000, with a growth path to 200–500 bands.
 
-Stack once implementation starts:
+Stack:
 
 - Backend: Python, FastAPI, Pydantic v2, synchronous SQLAlchemy 2.0, psycopg, Alembic.
 - Database: PostgreSQL.
@@ -21,8 +21,8 @@ Stack once implementation starts:
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
 - The seed list is versioned at `data/seed-list.json` (v0.1.0).
-- No application code exists yet. The repository is initialized in E1.
-- SPEC-001 is in implementation: T-001–T-005 are complete; T-006 is next.
+- Backend, frontend, development Docker Compose and the CI workflow exist; remote CI is pending the first push.
+- SPEC-001 is implemented and locally validated; T-001–T-013 are complete. Remote CI is pending the first push.
 - The next spec after 001 is `specs/002-seed-band-explorer/` (E2).
 - The current SDD index is [specs/README.md](specs/README.md).
 
@@ -61,7 +61,9 @@ Do not create empty directories or extra layers without a need.
 
 ## 4. Canonical commands
 
-Backend commands are available and verified. Frontend, Docker Compose, CI and smoke-test commands are completed in T-012.
+These commands are verified against the repository. `cp .env.example .env` is required for commands that use `--env-file`.
+
+### Backend
 
 ```bash
 cd backend
@@ -69,9 +71,49 @@ uv sync
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest
-DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5433/hmde uv run alembic history
-DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5433/hmde uv run alembic heads
+uv run --env-file ../.env pytest
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic history
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic heads
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic upgrade head
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic downgrade base
 ```
+
+Unit tests run without PostgreSQL; integration tests require `TEST_DATABASE_URL` and the `hmde_test` database.
+
+### Frontend
+
+```bash
+cd frontend
+npm ci
+npm run dev
+npm run lint
+npm run typecheck
+npm run test
+npm run build
+```
+
+### Docker Compose
+
+```bash
+cp .env.example .env
+docker compose up --build -d
+docker compose ps
+docker compose logs -f
+docker compose exec db createdb -U hmde hmde_test
+docker compose exec api uv run alembic upgrade head
+docker compose exec api uv run alembic current
+docker compose exec api uv run alembic downgrade base
+docker compose exec api uv run alembic upgrade head
+docker compose down
+```
+
+`docker compose down -v` deletes the PostgreSQL volume and requires explicit authorization.
+
+### Host ports
+
+- Web: `5173`
+- API: `8001`
+- PostgreSQL: `5434`
 
 After E1, this section must contain the exact commands for:
 
@@ -79,7 +121,7 @@ After E1, this section must contain the exact commands for:
 - Frontend install, dev, lint, typecheck, tests and build.
 - Database migrations.
 - Docker Compose development and production.
-- Smoke tests.
+- Smoke tests when a smoke script exists.
 
 Do not assume a command works because it is listed in a document. Verify it against the repository.
 
