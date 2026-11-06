@@ -102,8 +102,8 @@ frontend/
 docs/             stable reference documentation
 specs/            active SDD specs and templates
 spike/            disposable research code
-infra/
-  compose/
+infra/            Dockerfiles and container assets
+compose.yaml      development services
 data/             local raw data, outside Git
 ```
 

@@ -8,7 +8,7 @@ The MVP focuses on 42 bands with studio albums released between 1980 and 2000. T
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
 - **Application code:** not started. The repository skeleton is built in E1.
-- **Next spec:** `specs/001-foundations/`.
+- **Next work:** SPEC-001 is in implementation; T-001–T-005 are complete and T-006 is next.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -61,7 +61,8 @@ specs/              Active SDD specs, templates and index
 docs/               Reference documentation
 backend/            Backend application (from E1)
 frontend/           React application (from E1)
-infra/              Compose and deployment configuration (from E1)
+compose.yaml        Development services (from E1)
+infra/              Dockerfiles and container assets (from E1)
 data/               Seed list and local raw data
 spike/              Disposable MusicBrainz research
 ```

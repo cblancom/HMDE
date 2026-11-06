@@ -59,7 +59,7 @@
 
 - **Objective:** provide a reproducible environment and a verifiable technical skeleton.
 - **Scope:** monorepo, uv, minimal FastAPI, React + Vite + TypeScript, PostgreSQL in Docker Compose, configuration, logging, healthcheck, lint, formatting, tests and CI.
-- **Activities:** write and approve **SPEC-001**; create the repository structure; configure Ruff, pytest, Vitest, TypeScript and GitHub Actions; document startup; define `.env.example` and configuration conventions; confirm the commands and working boundaries in [conventions](../01-architecture/conventions.md).
+- **Activities:** review and approve the **SPEC-001** plan and tasks; create the repository structure; configure Ruff, pytest, Vitest, TypeScript and GitHub Actions; document startup; define `.env.example` and configuration conventions; confirm the commands and working boundaries in [conventions](../01-architecture/conventions.md).
 - **Deliverables:** working `docker compose up`; `/health` endpoint; initial page; green CI; quick-start README; confirmed engineering conventions; **SPEC-001** implemented.
 - **Depends on:** E0.
 - **Done when:** a clean clone brings up the environment in under 15 minutes; lint, typecheck, tests and build pass locally and in CI.
@@ -209,7 +209,7 @@ Before closing any stage:
 | Stage | Status | Note |
 |---|---|---|
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
-| E1 | Pending | Next spec is `specs/001-foundations/` |
+| E1 | In implementation | T-001–T-005 complete; T-006 next |
 | E2–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -244,7 +244,7 @@ E0 is complete. The seed list is versioned at [`data/seed-list.json`](../../data
 
 Then:
 
-1. Write and approve **SPEC-001 — Foundations** for E1.
-2. Implement E1: repository, environment, configuration, health, test harnesses and CI.
+1. Continue E1 from T-006: frontend, Docker, CI, docs and validation.
+2. Complete E1 validation and close the stage.
 3. Write and approve **SPEC-002 — Seed band explorer** for E2.
 4. Implement the walking skeleton and continue the roadmap.

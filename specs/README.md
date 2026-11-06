@@ -23,11 +23,11 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0 is complete. No spec has been written yet; the next spec is `001-foundations`.
+E0 is complete. `001-foundations` is in implementation; T-001–T-005 are complete and `002` onward are pending.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
-| 001 | `001-foundations` | E1 | `platform` | Repository, environment, configuration, health, migrations baseline, test harnesses, CI | — | Pending |
+| 001 | [`001-foundations`](001-foundations/spec.md) | E1 | `platform` | Repository, environment, configuration, health, migrations baseline, test harnesses, CI | — | In implementation |
 | 002 | `002-seed-band-explorer` | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | Pending |
 | 003 | `003-musicbrainz-ingestion` | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Pending |
 | 004 | `004-normalization-identity` | E4 | `normalization` | Canonical entities, external IDs, role mapping, credit scope, provenance | 003 | Pending |
@@ -49,7 +49,9 @@ The index is updated when a spec is created, approved, implemented or validated.
 |---|---|
 | `Draft` | Being written; not ready for planning |
 | `In clarification` | Open questions must be resolved before `plan.md` |
-| `Approved` | Spec, plan and tasks are approved; implementation may start |
+| `Spec approved` | Spec content approved; plan and tasks not yet approved |
+| `Plan/tasks in review` | Plan and tasks drafted; awaiting approval |
+| `Approved` | Spec, plan and tasks approved; implementation may start |
 | `In implementation` | Work in progress |
 | `Implemented` | Code and migration work are complete |
 | `Validated` | Acceptance criteria have recorded evidence |
@@ -107,4 +109,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0 is complete, including the 42-band seed list. Write `specs/001-foundations/` for E1: repository skeleton, environment, configuration, health endpoint, Alembic baseline, test harnesses and CI. Do not start implementation until the spec, plan and tasks are approved.
+E0 is complete. SPEC-001 is in implementation: T-001–T-005 are complete. Continue with T-006 (frontend shell, tooling and test harness).

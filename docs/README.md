@@ -50,6 +50,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0 is complete. The next step is to write and approve `specs/001-foundations/` for E1, followed by `specs/002-seed-band-explorer/` for E2.
+E0 is complete. SPEC-001 is in implementation: T-001–T-005 are complete and T-006 is next. After E1, continue with `specs/002-seed-band-explorer/`.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

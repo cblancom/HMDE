@@ -22,7 +22,8 @@ Stack once implementation starts:
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
 - The seed list is versioned at `data/seed-list.json` (v0.1.0).
 - No application code exists yet. The repository is initialized in E1.
-- The next spec is `specs/001-foundations/` (E1), followed by `specs/002-seed-band-explorer/` (E2).
+- SPEC-001 is in implementation: T-001–T-005 are complete; T-006 is next.
+- The next spec after 001 is `specs/002-seed-band-explorer/` (E2).
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -50,7 +51,8 @@ Stack once implementation starts:
 │   └── 03-data/
 ├── backend/
 ├── frontend/
-├── infra/
+├── infra/              Dockerfiles and container assets
+├── compose.yaml         Development services
 ├── spike/
 └── data/
 ```
@@ -59,7 +61,17 @@ Do not create empty directories or extra layers without a need.
 
 ## 4. Canonical commands
 
-No application commands exist yet. They are defined and verified in `specs/001-foundations/`.
+Backend commands are available and verified. Frontend, Docker Compose, CI and smoke-test commands are completed in T-012.
+
+```bash
+cd backend
+uv sync
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5433/hmde uv run alembic history
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5433/hmde uv run alembic heads
+```
 
 After E1, this section must contain the exact commands for:
 
@@ -94,13 +106,15 @@ Allowed statuses:
 
 - `Draft`
 - `In clarification`
+- `Spec approved`
+- `Plan/tasks in review`
 - `Approved`
 - `In implementation`
 - `Implemented`
 - `Validated`
 - `Superseded`
 
-`Implemented` means code is complete. `Validated` means acceptance criteria have evidence. Do not use them interchangeably.
+`Spec approved` and `Plan/tasks in review` do not authorize implementation. Only `Approved` does. `Implemented` means code is complete. `Validated` means acceptance criteria have evidence. Do not use them interchangeably.
 
 Specs may be revised while in draft, clarification or approval. After validation, a behavior change requires a new spec or an explicit versioned revision with a changelog.
 

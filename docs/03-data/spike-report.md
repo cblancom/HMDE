@@ -187,8 +187,8 @@ E0 is complete: the final 42-band seed list is available at `data/seed-list.json
 
 Next steps:
 
-1. Write and approve SPEC-001 — Foundations for E1.
-2. Implement E1.
+1. Continue E1 implementation at T-006; T-001–T-005 are complete.
+2. Complete E1 validation and close the stage.
 3. Write and approve SPEC-002 — Seed band explorer using a subset of the seed list.
 4. Implement E2.
 
@@ -221,7 +221,7 @@ The raw cache is disposable and should not be committed to the main repository. 
 
 ## 9. Next steps
 
-1. Write and approve SPEC-001 — Foundations.
-2. Implement E1.
+1. Continue E1 implementation at T-006; T-001–T-005 are complete.
+2. Complete E1 validation and close the stage.
 3. Write and approve SPEC-002 — Seed band explorer.
 4. Implement E2.

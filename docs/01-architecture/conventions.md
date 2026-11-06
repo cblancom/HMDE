@@ -14,7 +14,8 @@ The proposed structure is in [Architecture overview](overview.md). Summary:
 - `frontend/` — React/TypeScript application.
 - `docs/` — stable reference documentation.
 - `specs/` — active SDD specs and templates.
-- `infra/` — Compose and deployment configuration.
+- `compose.yaml` — development services.
+- `infra/` — Dockerfiles and container assets.
 - `data/` — local raw data, outside Git.
 
 ## 2. Planned commands
