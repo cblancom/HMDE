@@ -7,8 +7,8 @@ The MVP focuses on 42 bands with studio albums released between 1980 and 2000. T
 ## Status
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
-- **Application code:** E1 and E2 validated. SPEC-002 is complete (T-001–T-012).
-- **Next work:** no next spec has been started.
+- **Application code:** E1 and E2 validated. E3 implemented and locally validated (T-001–T-012).
+- **Next work:** confirm E3 in remote CI; no next spec has been started.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -141,6 +141,65 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
 ```
 
 The loader is idempotent and makes no network calls. Re-running it updates the same deterministic records and adds a new `fixture_load` audit row without duplicating entities.
+
+## E3 MusicBrainz ingestion
+
+E3 ingests the 42-band seed list directly from MusicBrainz. Set a meaningful User-Agent with contact details before a live run:
+
+```bash
+cd backend
+MUSICBRAINZ_USER_AGENT="HMDE/0.1 (you@example.com)" \
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.etl.musicbrainz ingest \
+    --seed-list ../data/seed-list.json \
+    --raw-root ../data/raw/musicbrainz \
+    --output ../data/ingestions/musicbrainz
+```
+
+The command writes:
+
+- immutable raw responses under `data/raw/musicbrainz/`;
+- a versioned NDJSON dataset under `data/ingestions/musicbrainz/<dataset_version>/`;
+- `coverage.json` and `report.md` inside that dataset directory.
+
+It records every execution in `ingest_run`, respects the one-request-per-second limit and does not modify the canonical E2 tables or the API contract.
+
+Reuse cached responses without network access:
+
+```bash
+MUSICBRAINZ_USER_AGENT="HMDE/0.1 (you@example.com)" \
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.etl.musicbrainz ingest \
+    --seed-list ../data/seed-list.json \
+    --cache-only
+```
+
+Force fresh requests and a new dataset version when source data changes:
+
+```bash
+MUSICBRAINZ_USER_AGENT="HMDE/0.1 (you@example.com)" \
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.etl.musicbrainz ingest \
+    --seed-list ../data/seed-list.json \
+    --refresh
+```
+
+With Docker Compose, set `MUSICBRAINZ_USER_AGENT` in `.env` and use the `ingest` profile:
+
+```bash
+docker compose --profile ingest run --rm ingest
+```
+
+For cache-only inside Compose, override the service command:
+
+```bash
+docker compose --profile ingest run --rm ingest \
+  uv run --frozen python -m hmde.etl.musicbrainz ingest \
+  --seed-list /data/seed-list.json --raw-root /data/raw/musicbrainz \
+  --output /data/ingestions/musicbrainz --cache-only
+```
+
+Exit codes: `0` completed, `2` completed with band failures, `1` fatal configuration or execution error.
 
 ## Test database
 

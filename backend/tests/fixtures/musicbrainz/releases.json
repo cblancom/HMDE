@@ -1,0 +1,24 @@
+{
+  "releases": [
+    {
+      "id": "44444444-4444-4444-8444-444444444444",
+      "title": "Canonical Album",
+      "date": "1985-05-01",
+      "country": "GB",
+      "status": "Official",
+      "disambiguation": "",
+      "relations": []
+    },
+    {
+      "id": "55555555-5555-4555-8555-555555555555",
+      "title": "Canonical Album",
+      "date": "1986-06-01",
+      "country": "US",
+      "status": "Official",
+      "disambiguation": "reissue",
+      "relations": []
+    }
+  ],
+  "release-count": 2,
+  "release-offset": 0
+}

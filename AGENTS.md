@@ -24,7 +24,7 @@ Stack:
 - Backend, frontend, development Docker Compose and CI are implemented. The E1 and E2 remote CI runs passed.
 - E1 is complete and SPEC-001 is validated.
 - E2 is complete and SPEC-002 is validated; T-001–T-012 are complete.
-- No next spec has been started.
+- E3 is implemented and locally validated; SPEC-003 has T-001–T-012 complete. Remote E3 CI confirmation is pending a push; no next spec has been started.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -81,6 +81,12 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
   uv run python -m hmde.seed.loader --fixtures ../data/fixtures/e2
 DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
   uv run python -m hmde.openapi --output ../openapi.json
+MUSICBRAINZ_USER_AGENT="HMDE/0.1 (contact)" \
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.etl.musicbrainz ingest \
+    --seed-list ../data/seed-list.json \
+    --raw-root ../data/raw/musicbrainz \
+    --output ../data/ingestions/musicbrainz
 ```
 
 Unit tests run without PostgreSQL; integration tests require `TEST_DATABASE_URL` and the `hmde_test` database.
@@ -111,6 +117,7 @@ docker compose exec api uv run alembic current
 docker compose exec api uv run alembic downgrade base
 docker compose exec api uv run alembic upgrade head
 docker compose exec api uv run python -m hmde.seed.loader --fixtures /data/fixtures/e2
+docker compose --profile ingest run --rm ingest
 docker compose down
 ```
 

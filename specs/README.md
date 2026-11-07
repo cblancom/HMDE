@@ -23,13 +23,13 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 is implemented and locally validated; remote CI is pending a push.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
 | 001 | [`001-foundations`](001-foundations/spec.md) | E1 | `platform` | Repository, environment, configuration, health, migrations baseline, test harnesses, CI | — | Validated |
 | 002 | [`002-seed-band-explorer`](002-seed-band-explorer/spec.md) | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | Validated |
-| 003 | `003-musicbrainz-ingestion` | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Pending |
+| 003 | [`003-musicbrainz-ingestion`](003-musicbrainz-ingestion/spec.md) | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Implemented |
 | 004 | `004-normalization-identity` | E4 | `normalization` | Canonical entities, external IDs, role mapping, credit scope, provenance | 003 | Pending |
 | 005 | `005-data-quality` | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 004 | Pending |
 | 006 | `006-eda-metrics` | E6 | `analytics` | Exploratory analysis and metric definitions | 005 | Pending |
@@ -109,4 +109,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-002 is validated. No next spec has been started.
+E0, E1 and E2 are complete. SPEC-002 is validated. SPEC-003 is implemented and locally validated (T-001–T-012 complete). Remote E3 CI confirmation is pending a push; no next spec has been started.

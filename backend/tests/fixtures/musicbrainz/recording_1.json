@@ -1,0 +1,22 @@
+{
+  "id": "66666666-6666-4666-8666-666666666666",
+  "title": "Track One",
+  "first-release-date": "1985",
+  "disambiguation": "",
+  "relations": [
+    {
+      "type": "engineer",
+      "target-type": "artist",
+      "artist": {"id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa", "name": "Engineer One"},
+      "attributes": ["recording"],
+      "source-credit": "",
+      "target-credit": ""
+    },
+    {
+      "type": "mixed at",
+      "target-type": "place",
+      "place": {"id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", "name": "Studio One"},
+      "attributes": []
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "id": "55555555-5555-4555-8555-555555555555",
+  "title": "Canonical Album",
+  "date": "1986-06-01",
+  "country": "US",
+  "status": "Official",
+  "disambiguation": "reissue",
+  "relations": [],
+  "media": [
+    {
+      "position": 1,
+      "tracks": [
+        {
+          "position": "1",
+          "number": "1",
+          "title": "Track Two",
+          "recording": {
+            "id": "77777777-7777-4777-8777-777777777777",
+            "title": "Track Two",
+            "first-release-date": "1986",
+            "disambiguation": "",
+            "relations": []
+          }
+        },
+        {
+          "position": "2",
+          "number": "2",
+          "title": "Track One",
+          "recording": {
+            "id": "66666666-6666-4666-8666-666666666666",
+            "title": "Track One",
+            "first-release-date": "1985",
+            "disambiguation": "",
+            "relations": []
+          }
+        }
+      ]
+    }
+  ]
+}

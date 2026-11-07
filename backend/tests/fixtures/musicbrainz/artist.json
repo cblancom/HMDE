@@ -1,0 +1,15 @@
+{
+  "id": "11111111-1111-4111-8111-111111111111",
+  "name": "Test Band",
+  "sort-name": "Test Band",
+  "type": "Group",
+  "country": "GB",
+  "disambiguation": "",
+  "relations": [
+    {
+      "type": "wikidata",
+      "target-type": "url",
+      "url": {"resource": "https://www.wikidata.org/wiki/Q12345"}
+    }
+  ]
+}

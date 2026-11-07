@@ -4,6 +4,7 @@ from hmde.models.artist import Artist, ExternalId
 from hmde.models.catalog import Recording, RecordingRelease, Release, ReleaseGroup
 from hmde.models.credit import Credit, Role, SourceRecord
 from hmde.models.fixture import FixtureLoad
+from hmde.models.ingestion import IngestError, IngestRun, RawResponse
 from hmde.models.subgenre import ArtistSubgenre, Subgenre
 
 __all__ = [
@@ -12,6 +13,9 @@ __all__ = [
     "Credit",
     "ExternalId",
     "FixtureLoad",
+    "IngestError",
+    "IngestRun",
+    "RawResponse",
     "Recording",
     "RecordingRelease",
     "Release",

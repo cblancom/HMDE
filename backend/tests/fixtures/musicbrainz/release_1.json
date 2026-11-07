@@ -1,0 +1,43 @@
+{
+  "id": "44444444-4444-4444-8444-444444444444",
+  "title": "Canonical Album",
+  "date": "1985-05-01",
+  "country": "GB",
+  "status": "Official",
+  "disambiguation": "",
+  "relations": [
+    {
+      "type": "producer",
+      "target-type": "artist",
+      "artist": {"id": "99999999-9999-4999-8999-999999999999", "name": "Producer Two"},
+      "attributes": [],
+      "source-credit": "",
+      "target-credit": ""
+    },
+    {
+      "type": "recorded at",
+      "target-type": "place",
+      "place": {"id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb", "name": "Studio One"},
+      "attributes": []
+    }
+  ],
+  "media": [
+    {
+      "position": 1,
+      "tracks": [
+        {
+          "position": "1",
+          "number": "1",
+          "title": "Track One",
+          "recording": {
+            "id": "66666666-6666-4666-8666-666666666666",
+            "title": "Track One",
+            "first-release-date": "1985",
+            "disambiguation": "",
+            "relations": []
+          }
+        }
+      ]
+    }
+  ]
+}

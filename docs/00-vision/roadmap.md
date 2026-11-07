@@ -211,7 +211,8 @@ Before closing any stage:
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
 | E1 | Completed | SPEC-001 validated; CI green |
 | E2 | Validated | SPEC-002 validated; local and remote CI evidence complete |
-| E3–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
+| E3 | Implemented | SPEC-003 locally validated; remote CI pending |
+| E4–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
 
@@ -241,4 +242,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E2 are complete. The seed list is versioned at [`data/seed-list.json`](../../data/seed-list.json), documented in [`docs/03-data/seed-list.md`](../03-data/seed-list.md), and SPEC-002 is validated. No next stage has been started.
+E0–E2 are complete. The seed list is versioned at [`data/seed-list.json`](../../data/seed-list.json), documented in [`docs/03-data/seed-list.md`](../03-data/seed-list.md), and SPEC-002 is validated. E3 is implemented and locally validated; remote CI confirmation is pending a push. No next stage has been started.

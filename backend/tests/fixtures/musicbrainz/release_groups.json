@@ -1,0 +1,37 @@
+{
+  "release-groups": [
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "title": "Canonical Album",
+      "primary-type": "Album",
+      "secondary-types": [],
+      "first-release-date": "1985-05-01",
+      "disambiguation": "",
+      "tags": [{"name": "heavy metal", "count": 4}],
+      "genres": [{"name": "heavy metal", "count": 4}],
+      "relations": [
+        {
+          "type": "producer",
+          "target-type": "artist",
+          "artist": {"id": "88888888-8888-4888-8888-888888888888", "name": "Producer One"},
+          "attributes": ["co"],
+          "source-credit": "",
+          "target-credit": ""
+        }
+      ]
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "title": "Live Collection",
+      "primary-type": "Album",
+      "secondary-types": ["Live"],
+      "first-release-date": "1990",
+      "disambiguation": "",
+      "tags": [],
+      "genres": [],
+      "relations": []
+    }
+  ],
+  "release-group-count": 2,
+  "release-group-offset": 0
+}

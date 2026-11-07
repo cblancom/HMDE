@@ -44,6 +44,39 @@ services:
       retries: 12
       start_period: 10s
 
+  ingest:
+    build:
+      context: .
+      dockerfile: infra/Dockerfile.api
+    profiles: ["ingest"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-hmde}:${POSTGRES_PASSWORD:-hmde_dev}@db:5432/${POSTGRES_DB:-hmde}
+      APP_ENV: development
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      MUSICBRAINZ_USER_AGENT: ${MUSICBRAINZ_USER_AGENT:-}
+    volumes:
+      - ./backend:/app
+      - ./data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      [
+        "uv",
+        "run",
+        "--frozen",
+        "python",
+        "-m",
+        "hmde.etl.musicbrainz",
+        "ingest",
+        "--seed-list",
+        "/data/seed-list.json",
+        "--raw-root",
+        "/data/raw/musicbrainz",
+        "--output",
+        "/data/ingestions/musicbrainz",
+      ]
+
   web:
     image: node:20-alpine
     working_dir: /app

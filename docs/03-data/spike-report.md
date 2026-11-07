@@ -188,7 +188,7 @@ E0 is complete: the final 42-band seed list is available at `data/seed-list.json
 Next steps:
 
 1. E2 is validated (T-001–T-012); local and remote CI evidence is complete.
-2. No next stage has been started.
+2. E3 is implemented and locally validated; remote CI confirmation is pending a push.
 
 ## 7. Limitations
 
@@ -220,4 +220,4 @@ The raw cache is disposable and should not be committed to the main repository. 
 ## 9. Next steps
 
 1. E2 is validated (T-001–T-012); local and remote CI evidence is complete.
-2. No next stage has been started.
+2. E3 is implemented and locally validated; remote CI confirmation is pending a push.
