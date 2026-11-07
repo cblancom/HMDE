@@ -13,7 +13,7 @@ from hmde.etl.musicbrainz.seed import (
     select_bands,
 )
 
-SEED_LIST_PATH = Path(__file__).resolve().parents[3] / "data" / "seed-list.json"
+SEED_LIST_PATH = Path(__file__).resolve().parents[3] / "data" / "seed-lists" / "v0.1.0.json"
 
 
 def _payload() -> dict:

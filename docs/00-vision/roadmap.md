@@ -1,8 +1,8 @@
 # Project roadmap
 
 - **Status:** Approved
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Version:** 0.2
+- **Date:** 2026-11-06
 - **Scope:** from initialization to v0.1 and the later expansion to hundreds of bands
 
 ## 1. Sequencing principles
@@ -12,7 +12,7 @@
 - **One feature, one spec:** specs are written at the start of a feature, not all in advance.
 - **Stage gates:** do not move on unless exit criteria are met.
 - **No rigid dates:** plan by dependencies and deliverables. Estimates are made per stage with real data.
-- **Progressive growth:** the MVP uses 42 bands; the architecture must support 200–500 without redesign.
+- **Progressive growth:** the original corpus uses 42 bands and the active v0.2.0 corpus uses 57; the architecture must support 200–500 without redesign while the period expands to 1960–2026.
 
 ## 2. Stage summary
 
@@ -51,7 +51,7 @@
 - **Objective:** fix the operational scope, evaluate sources and demonstrate that the project is feasible with real data.
 - **Scope:** MVP questions, seed list, period, subgenres, inclusion criteria, terms of use, general architecture, glossary, risks and the MusicBrainz spike.
 - **Activities:** review official documentation for each source; define the seed list; run a 20–30 band spike; measure credit, studio, date and identifier coverage; write ADRs; review licenses and attribution.
-- **Deliverables:** [vision](vision.md), [scope](scope.md), [roadmap](roadmap.md), [glossary](glossary.md), [source evaluation](../03-data/sources.md), [spike report](../03-data/spike-report.md), [seed list](../03-data/seed-list.md), [architecture](../01-architecture/overview.md), [data model v0](../01-architecture/data-model.md), ADRs 0001–0007, SDD templates.
+- **Deliverables:** [vision](vision.md), [scope](scope.md), [roadmap](roadmap.md), [glossary](glossary.md), [source evaluation](../03-data/sources.md), [spike report](../03-data/spike-report.md), [seed list](../03-data/seed-list.md), [architecture](../01-architecture/overview.md), [data model v0](../01-architecture/data-model.md), ADRs 0001–0008, SDD templates.
 - **Depends on:** nothing.
 - **Done when:** scope is approved, sources have a documented decision, the spike demonstrates a viable path, the 42-band seed list is versioned, and no blocking unknowns remain.
 
@@ -78,72 +78,72 @@
 ### E3 — MusicBrainz ingestion
 
 - **Objective:** extract the seed dataset with full traceability.
-- **Scope:** HTTP client with User-Agent, rate limiting, retries and caching; traversal artist → release-groups → releases → recordings → relationships and credits; raw storage; run logging.
-- **Activities:** implement an idempotent ingestion CLI; preserve raw payloads or hash references; record URL, date, status and errors; fetch release-level and recording-level relationships; generate a coverage and failure report; respect the one-request-per-second limit.
-- **Deliverables:** raw layer; extracted dataset; ingestion report; reproducible CLI; **SPEC-003**.
+- **Scope:** HTTP client with User-Agent, rate limiting, retries and caching; traversal artist → release-groups → releases → recordings → relationships and credits; raw storage; run logging; period declared by the versioned seed list.
+- **Activities:** implement an idempotent ingestion CLI; preserve raw payloads or hash references; record URL, date, status and errors; fetch release-level and recording-level relationships; generate a coverage and failure report; respect the one-request-per-second limit; support versioned seed-list batches.
+- **Deliverables:** raw layer; extracted dataset; ingestion report; reproducible CLI; **SPEC-003**. The implemented 1980–2000 dataset remains historical while the expanded 1960–2026 corpus is built as a new version.
 - **Depends on:** E2 and source approval in E0.
 - **Done when:** ingestion is reproducible and idempotent; every record is traceable to its source; access limits are respected; failures are recorded.
 
 ### E4 — Normalization, identity and provenance
 
 - **Objective:** convert raw data into canonical entities without losing traceability.
-- **Scope:** entity mapping; MBID as key; external identifier table; aliases; role mapping including producer attributes (`co`, `executive`, `assistant`, `additional`); recording-level credit scope; date precision; conflicts; quarantine; deterministic deduplication.
-- **Activities:** document normalization rules; resolve identities by MBID, QID and other identifiers; do not perform automatic fuzzy matching; record provenance and confidence per credit; separate confirmed, inferred and missing data.
-- **Deliverables:** normalized tables; rules; identity and deduplication report; normalization tests; **SPEC-004**.
+- **Scope:** entity mapping; MBID as key; external identifier table; aliases; role mapping including producer attributes (`co`, `executive`, `assistant`, `additional`); recording-level credit scope; date precision; conflicts; quarantine; deterministic deduplication; album-level taxonomy and dataset membership.
+- **Activities:** document normalization rules; resolve identities by MBID, QID and other identifiers; do not perform automatic fuzzy matching; record provenance and confidence per credit; separate confirmed, inferred and missing data; classify albums with one primary and multiple secondary leaf subgenres; derive band aggregates; preserve retired bands and dataset membership.
+- **Deliverables:** normalized tables; rules; identity and deduplication report; taxonomy classification tables; normalization tests; **SPEC-005**.
 - **Depends on:** E3.
 - **Done when:** every raw record is mapped or quarantined; there are no orphans; deduplication is deterministic and auditable; rules are documented and tested.
 
 ### E5 — Data quality and validation
 
 - **Objective:** measure and control quality before analysis.
-- **Scope:** completeness, validity, uniqueness, consistency and coverage by decade, subgenre and source; low-confidence release-group review; absence-is-not-negative rules.
-- **Activities:** rule catalogue; automated checks; reports; acceptance thresholds; quarantine; documentation of limitations.
-- **Deliverables:** quality suite; coverage and quality report; agreed thresholds; list of known gaps; **SPEC-005**.
+- **Scope:** completeness, validity, uniqueness, consistency and coverage by decade, subgenre and source; low-confidence release-group and classification review; absence-is-not-negative rules.
+- **Activities:** rule catalogue; automated checks; reports; acceptance thresholds; quarantine; confidence thresholds; review queues for low and medium confidence; documentation of limitations.
+- **Deliverables:** quality suite; coverage and quality report; agreed thresholds; list of known gaps; **SPEC-006**.
 - **Depends on:** E4.
 - **Done when:** the suite runs in CI or batch; thresholds are met or exceptions are justified; limitations are documented.
 
 ### E6 — Exploratory analysis and metric definition
 
 - **Objective:** understand the data and decide which metrics make sense before building the graph.
-- **Scope:** distribution by decade, subgenre and role; coverage; most frequent producers; concentration; collaboration frequencies.
-- **Activities:** reproducible analyses; reports; formal metric definitions; review of analytical scope; bias identification, including subgenre and decade coverage differences.
-- **Deliverables:** EDA report; metric catalogue; limitations and scope decisions; **SPEC-006**.
+- **Scope:** distribution by decade (1960s–2020s), subgenre and role; coverage; most frequent producers; concentration; collaboration frequencies.
+- **Activities:** reproducible analyses; reports; formal metric definitions; review of analytical scope; bias identification, including subgenre and decade coverage differences; report taxonomy and dataset versions.
+- **Deliverables:** EDA report; metric catalogue; limitations and scope decisions; **SPEC-007**.
 - **Depends on:** E5.
 - **Done when:** the MVP questions can be answered with the available data and metrics are defined without ambiguity.
 
 ### E7 — Graph construction and network analysis
 
 - **Objective:** build network snapshots and persist reproducible analytical results.
-- **Scope:** bipartite credit graph, projections, centrality, communities and temporal analysis by decade.
-- **Activities:** define node and edge types; build the graph from a snapshot; compute metrics; persist `analysis_run`, metrics and communities; review results with control visualizations.
-- **Deliverables:** graph builder; results tables; network report; reproducibility metadata; **SPEC-007**.
+- **Scope:** bipartite credit graph, projections, centrality, communities and temporal analysis by decade (1960s–2020s).
+- **Activities:** define node and edge types; build the graph from a snapshot; compute metrics; persist `analysis_run`, metrics, communities, dataset version and taxonomy version; review results with control visualizations.
+- **Deliverables:** graph builder; results tables; network report; reproducibility metadata; **SPEC-008**.
 - **Depends on:** E6.
 - **Done when:** a run is reproducible with the same data and parameters; results are persisted and versioned; performance is acceptable for the MVP volume.
 
 ### E8 — Read-only API v1
 
 - **Objective:** expose entities, relationships and analytics through a stable contract.
-- **Scope:** `/api/v1` for artists, albums, producers, credits, search, filters, pagination and subgraphs; precomputed metric endpoints.
-- **Activities:** resource design; pagination and whitelist filters; consistent errors; OpenAPI; contract tests; subgraph depth and size limits; CORS; TypeScript type generation.
-- **Deliverables:** API v1; OpenAPI; documentation; contract tests; **SPEC-008**.
+- **Scope:** `/api/v1` for artists, albums, producers, credits, search, filters, pagination and subgraphs; precomputed metric endpoints; taxonomy and period filters; retired-band detail behaviour.
+- **Activities:** resource design; pagination and whitelist filters; consistent errors; OpenAPI; contract tests; subgraph depth and size limits; CORS; TypeScript type generation; taxonomy endpoint and hierarchical filter semantics.
+- **Deliverables:** API v1; OpenAPI; documentation; contract tests; **SPEC-009**.
 - **Depends on:** E2 and E4; analytical endpoints depend on E7.
 - **Done when:** the contract is stable; contract tests pass; response times meet the target for the MVP volume; there are no obvious N+1 queries.
 
 ### E9 — Frontend: entity explorer
 
 - **Objective:** build the main exploration interface with real data.
-- **Scope:** application shell; routing; search; band, album and producer list and detail views; loading, error and empty states; URL filters.
-- **Activities:** Tailwind; React Router; TanStack Query; generated types; responsive design; basic accessibility.
-- **Deliverables:** working explorer; typed client; component tests; main flow; **SPEC-009**.
+- **Scope:** application shell; routing; search; band, album and producer list and detail views; loading, error and empty states; URL filters; dynamic taxonomy, period filters and album-level subgenres.
+- **Activities:** Tailwind; React Router; TanStack Query; generated types; responsive design; basic accessibility; consume taxonomy metadata instead of hard-coded subgenre lists.
+- **Deliverables:** working explorer; typed client; component tests; main flow; **SPEC-010**.
 - **Depends on:** E8.
 - **Done when:** the list → detail → relationship flow works end to end; typecheck, lint, tests and build pass.
 
 ### E10 — Graph visualization and interaction
 
 - **Objective:** allow exploration of collaboration networks without degrading performance.
-- **Scope:** Cytoscape view; layouts; filters by role, decade and subgenre; neighbor expansion; node and edge details; legend; accessible table fallback.
-- **Activities:** integrate the subgraph endpoint; set node and edge limits; expand on demand; URL state; interaction tests; performance budget.
-- **Deliverables:** graph page; interactions; UX and performance documentation; **SPEC-010**.
+- **Scope:** Cytoscape view; layouts; filters by role, decade and hierarchical subgenre; neighbor expansion; node and edge details; legend; accessible table fallback.
+- **Activities:** integrate the subgraph endpoint; set node and edge limits; expand on demand; URL state; interaction tests; performance budget; taxonomy-versioned filters.
+- **Deliverables:** graph page; interactions; UX and performance documentation; **SPEC-011**.
 - **Depends on:** E7, E8 and E9.
 - **Done when:** a 500–2000 node subgraph is usable; the interface does not freeze; an accessible table alternative exists.
 
@@ -152,7 +152,7 @@
 - **Objective:** validate the complete system before release.
 - **Scope:** end-to-end tests, performance, accessibility, basic security, backup restoration and dependency review.
 - **Activities:** Playwright for critical flows; simple load tests; accessibility audit; review of CORS, secrets and input validation; restore test.
-- **Deliverables:** QA report; fixes; performance report; accessibility and security checklists; **SPEC-011**.
+- **Deliverables:** QA report; fixes; performance report; accessibility and security checklists; **SPEC-012**.
 - **Depends on:** E9 and E10.
 - **Done when:** critical flows pass; there are no P1/P2 bugs; agreed performance and accessibility targets are met.
 
@@ -161,16 +161,16 @@
 - **Objective:** publish a reproducible and documented version.
 - **Scope:** production Compose; reverse proxy; TLS; migrations; backups; runbooks; source attribution; release notes.
 - **Activities:** deploy to the chosen environment; document operation and rollback; licenses and attribution page; post-deployment smoke test; version tag.
-- **Deliverables:** deployed v0.1; runbook; deployment documentation; visible attribution; release notes; **SPEC-012**.
+- **Deliverables:** deployed v0.1; runbook; deployment documentation; visible attribution; release notes; **SPEC-013**.
 - **Depends on:** E11.
 - **Done when:** the application is accessible; deployment is reproducible; rollback is documented; licenses are displayed correctly.
 
 ### E13 — Corpus expansion to 200–500 bands (v1)
 
 - **Objective:** expand the dataset without changing the architecture and validate that patterns hold.
-- **Scope:** new seed-list batches; re-run ingestion, normalization, quality, analysis and result publication.
-- **Activities:** expand the list using the same criteria; run E3–E5 in batches; compare coverage and bias; recompute analyses; review API and graph performance; update the limitations report.
-- **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-013**.
+- **Scope:** new seed-list batches; re-run ingestion, normalization, quality, analysis and result publication across 1960–2026.
+- **Activities:** expand the list using the same criteria; run E3–E5 in batches; compare coverage and bias; recompute analyses with dataset and taxonomy versions; review API and graph performance; update the limitations report.
+- **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-014**.
 - **Depends on:** E12.
 - **Done when:** the expanded corpus passes the same quality gates; API and UI maintain performance; results are documented with their limitations.
 
@@ -211,7 +211,7 @@ Before closing any stage:
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
 | E1 | Completed | SPEC-001 validated; CI green |
 | E2 | Validated | SPEC-002 validated; local and remote CI evidence complete |
-| E3 | Implemented | SPEC-003 locally validated; remote CI pending |
+| E3 | Implemented | SPEC-003 validated with remote CI. SPEC-004 corpus v0.2 implemented locally: 57 bands, 1960–2026 and reproducible dataset; remote CI pending before E4. |
 | E4–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -219,11 +219,12 @@ Before closing any stage:
 Moving from 42 to 200–500 bands is a change in volume, not architecture. To keep it that way:
 
 - Ingestion must be idempotent and batch-operable.
-- Each run must record its dataset version.
-- The API must paginate and limit subgraphs.
-- Analyses must run in batch and be persisted.
+- Each run must record its dataset version, seed-list version and taxonomy version.
+- The API must paginate, limit subgraphs and support hierarchical taxonomy filters.
+- Analyses must run in batch and be persisted with dataset and taxonomy versions.
 - The UI must load data on demand, not the entire graph.
 - Quality and coverage must be measured for every batch.
+- Retired bands must remain in history but disappear from active listings.
 
 A change of sources, credit model or taxonomy is a scope change and requires an ADR, updated specs and a pipeline re-run.
 
@@ -242,4 +243,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E2 are complete. The seed list is versioned at [`data/seed-list.json`](../../data/seed-list.json), documented in [`docs/03-data/seed-list.md`](../03-data/seed-list.md), and SPEC-002 is validated. E3 is implemented and locally validated; remote CI confirmation is pending a push. No next stage has been started.
+E0–E3 are complete. SPEC-003 is validated; SPEC-004 is implemented locally with the 57-band v0.2.0 corpus and reproducible dataset. Remote CI and formal SPEC-004 validation remain; E4 follows as SPEC-005.

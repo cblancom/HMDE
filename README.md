@@ -2,13 +2,13 @@
 
 HMDE is a public, read-only application for exploring professional production relationships in heavy metal: who produced, recorded, mixed or mastered an album, and how those people, bands, albums and studios connect.
 
-The MVP focuses on 42 bands with studio albums released between 1980 and 2000. The architecture supports growth to 200–500 bands without redesign.
+The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 seed list now contains 57 bands across 1960–2026 and grows through versioned batches toward 200–500 bands without redesign.
 
 ## Status
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
-- **Application code:** E1 and E2 validated. E3 implemented and locally validated (T-001–T-012).
-- **Next work:** confirm E3 in remote CI; no next spec has been started.
+- **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
+- **Corpus v0.2:** SPEC-004 implemented locally. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI for SPEC-004 is pending. E4 follows as SPEC-005.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -132,7 +132,7 @@ npm run generate:api
 
 ## E2 seed data
 
-E2 uses the versioned fixture set `e2-v0.1.0`: 14 bands, 41 albums, 247 recordings and 859 credits. It is loaded explicitly; it is not part of the migrations.
+E2 uses the historical versioned fixture set `e2-v0.1.0`: 14 bands, 41 albums, 247 recordings and 859 credits, all from 1980–2000. It is loaded explicitly; it is not part of the migrations and will not be rewritten by corpus v0.2.
 
 ```bash
 cd backend
@@ -144,7 +144,7 @@ The loader is idempotent and makes no network calls. Re-running it updates the s
 
 ## E3 MusicBrainz ingestion
 
-E3 ingests the 42-band seed list directly from MusicBrainz. Set a meaningful User-Agent with contact details before a live run:
+E3 ingests the active seed list directly from MusicBrainz. `data/seed-list.json` is an active-version pointer to the 57-band v0.2.0 corpus (1960–2026); `data/seed-lists/v0.1.0.json` remains the immutable 42-band historical archive. Set a meaningful User-Agent with contact details before a live run:
 
 ```bash
 cd backend
@@ -162,7 +162,7 @@ The command writes:
 - a versioned NDJSON dataset under `data/ingestions/musicbrainz/<dataset_version>/`;
 - `coverage.json` and `report.md` inside that dataset directory.
 
-It records every execution in `ingest_run`, respects the one-request-per-second limit and does not modify the canonical E2 tables or the API contract.
+It records every execution in `ingest_run`, respects the one-request-per-second limit and does not modify the canonical E2 tables or the API contract. The validated v0.2.0 run processed 57 bands with 0 failures: 731 release groups, 9,236 releases, 16,683 recordings, 32,326 credits and 3,991 exclusions. Dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced with `--cache-only` without changing its version.
 
 Reuse cached responses without network access:
 
@@ -350,8 +350,8 @@ Use Node.js 20 and ensure `frontend/package-lock.json` exists. Do not edit the l
 | [`docs/01-architecture/adr/README.md`](docs/01-architecture/adr/README.md) | Architecture decisions |
 | [`docs/03-data/sources.md`](docs/03-data/sources.md) | Source evaluation |
 | [`docs/03-data/spike-report.md`](docs/03-data/spike-report.md) | MusicBrainz feasibility results |
-| [`docs/03-data/seed-list.md`](docs/03-data/seed-list.md) | Final 42-band MVP seed list |
-| [`data/seed-list.json`](data/seed-list.json) | Machine-readable seed list |
+| [`docs/03-data/seed-list.md`](docs/03-data/seed-list.md) | Historical 42-band seed list and active 57-band v0.2.0 corpus |
+| [`data/seed-list.json`](data/seed-list.json) | Active-version pointer; versioned files live in `data/seed-lists/` |
 
 ## Repository layout
 

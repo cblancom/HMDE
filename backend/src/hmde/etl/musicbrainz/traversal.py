@@ -156,7 +156,12 @@ def date_precision(value: str | None) -> str:
     return "unknown"
 
 
-def release_group_exclusion_reason(release_group: dict[str, Any]) -> str | None:
+def release_group_exclusion_reason(
+    release_group: dict[str, Any],
+    *,
+    period_start_year: int = PERIOD_START_YEAR,
+    period_end_year: int = PERIOD_END_YEAR,
+) -> str | None:
     primary_type = str(release_group.get("primary-type") or "").casefold()
     if primary_type != "album":
         return "not_album"
@@ -165,14 +170,24 @@ def release_group_exclusion_reason(release_group: dict[str, Any]) -> str | None:
     year = _year(release_group.get("first-release-date"))
     if year is None:
         return "missing_date"
-    if year < PERIOD_START_YEAR or year > PERIOD_END_YEAR:
+    if year < period_start_year or year > period_end_year:
         return "out_of_period"
     return None
 
 
 class MusicBrainzTraversal:
-    def __init__(self, client: MusicBrainzClient) -> None:
+    def __init__(
+        self,
+        client: MusicBrainzClient,
+        *,
+        period_start_year: int = PERIOD_START_YEAR,
+        period_end_year: int = PERIOD_END_YEAR,
+    ) -> None:
+        if period_start_year > period_end_year:
+            raise ValueError("period_start_year must not be after period_end_year")
         self._client = client
+        self._period_start_year = period_start_year
+        self._period_end_year = period_end_year
 
     def extract_band(self, band: SeedBand) -> BandExtraction:
         artist_response = self._client.fetch_json(
@@ -414,7 +429,11 @@ class MusicBrainzTraversal:
         )
         for data, raw_response_id in items:
             mbid = _required_id(data)
-            reason = release_group_exclusion_reason(data)
+            reason = release_group_exclusion_reason(
+                data,
+                period_start_year=self._period_start_year,
+                period_end_year=self._period_end_year,
+            )
             if reason is not None:
                 exclusions.append(
                     ExclusionRecord(

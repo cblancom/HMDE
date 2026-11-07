@@ -377,6 +377,10 @@ The test suite must not call MusicBrainz. Mocked transports or committed synthet
 | AC-011 | 6 | T-002, T-011, T-012 |
 | AC-012 | 4.5, 4.6 | T-012 |
 
-## 15. Approval and next step
+## 15. Corpus v0.2 note
+
+This plan describes the historical E3 implementation for the 42-band, 1980–2000 corpus. ADR-0008 defines the next corpus scope: 1960–2026, album-level taxonomy, versioned seed-list batches and non-destructive history. Those changes require a new E3 seed-list/dataset version and belong to the E4 normalization work for classification and membership. The existing E3 raw data and dataset remain immutable.
+
+## 16. Approval and next step
 
 This plan must be approved together with `tasks.md` before implementation starts. The first task is T-001 (configuration, package boundary and CLI skeleton), followed by the ingestion schema and raw store.

@@ -19,7 +19,12 @@ from hmde.etl.musicbrainz.rate_limit import RateLimiter
 from hmde.etl.musicbrainz.raw_store import RawStore
 from hmde.etl.musicbrainz.report import ReportResult, write_report
 from hmde.etl.musicbrainz.seed import SeedBand, SeedList
-from hmde.etl.musicbrainz.traversal import BandExtraction, MusicBrainzTraversal
+from hmde.etl.musicbrainz.traversal import (
+    PERIOD_END_YEAR,
+    PERIOD_START_YEAR,
+    BandExtraction,
+    MusicBrainzTraversal,
+)
 from hmde.models import IngestError, IngestRun, RawResponse
 
 HttpClientFactory = Callable[[], Any]
@@ -54,6 +59,17 @@ class IngestPipeline:
     def run(self) -> PipelineResult:
         extractions: dict[str, BandExtraction] = {}
 
+        period_start_year = (
+            self._seed_list.period_start.year
+            if self._seed_list.period_start is not None
+            else PERIOD_START_YEAR
+        )
+        period_end_year = (
+            self._seed_list.period_end.year
+            if self._seed_list.period_end is not None
+            else PERIOD_END_YEAR
+        )
+
         def processor(session: Session, band: SeedBand, run_id: uuid.UUID) -> None:
             http_client = self._http_client_factory() if self._http_client_factory else None
             raw_store = RawStore(session, self._options.raw_root)
@@ -67,7 +83,11 @@ class IngestPipeline:
                 rate_limiter=self._rate_limiter,
             )
             try:
-                extraction = MusicBrainzTraversal(client).extract_band(band)
+                extraction = MusicBrainzTraversal(
+                    client,
+                    period_start_year=period_start_year,
+                    period_end_year=period_end_year,
+                ).extract_band(band)
             except Exception:
                 session.commit()
                 raise
@@ -94,6 +114,18 @@ class IngestPipeline:
             extractions.values(),
             self._options.output,
             seed_list_version=self._seed_list.version,
+            taxonomy_version=self._seed_list.taxonomy_version,
+            period_start=(
+                self._seed_list.period_start.isoformat()
+                if self._seed_list.period_start is not None
+                else None
+            ),
+            period_end=(
+                self._seed_list.period_end.isoformat()
+                if self._seed_list.period_end is not None
+                else None
+            ),
+            batch_ids=tuple(batch.batch_id for batch in self._seed_list.batches),
             source_snapshot_at=source_snapshot_at,
             code_version=self._code_version,
         )
@@ -110,6 +142,18 @@ class IngestPipeline:
             extractions.values(),
             dataset_version=dataset.dataset_version,
             seed_list_version=self._seed_list.version,
+            taxonomy_version=self._seed_list.taxonomy_version,
+            period_start=(
+                self._seed_list.period_start.isoformat()
+                if self._seed_list.period_start is not None
+                else None
+            ),
+            period_end=(
+                self._seed_list.period_end.isoformat()
+                if self._seed_list.period_end is not None
+                else None
+            ),
+            batch_ids=tuple(batch.batch_id for batch in self._seed_list.batches),
             source_snapshot_at=source_snapshot_at,
             code_version=self._code_version,
             counters=counters,

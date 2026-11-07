@@ -4,7 +4,7 @@ Operational instructions for working in this repository.
 
 ## 1. Project summary
 
-Heavy Metal Data Explorer (HMDE) is a public, read-only application for exploring professional production relationships in heavy metal. The MVP covers 42 bands with studio albums released between 1980 and 2000, with a growth path to 200–500 bands.
+Heavy Metal Data Explorer (HMDE) is a public, read-only application for exploring professional production relationships in heavy metal. The canonical E2 fixture dataset covers 42 bands and 1980–2000; the active E3 seed list is v0.2.0 with 57 bands across 1960–2026 and grows through versioned batches toward 200–500 bands.
 
 Stack:
 
@@ -20,11 +20,12 @@ Stack:
 ## 2. Current state
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
-- The seed list is versioned at `data/seed-list.json` (v0.1.0).
+- `data/seed-list.json` is the active-version pointer to `data/seed-lists/v0.2.0.json` (57 active bands, 1960–2026). `data/seed-lists/v0.1.0.json` is the immutable 42-band historical archive; the approved batch is `data/seed-lists/batches/v0.2.0-batch-01.json`.
 - Backend, frontend, development Docker Compose and CI are implemented. The E1 and E2 remote CI runs passed.
 - E1 is complete and SPEC-001 is validated.
 - E2 is complete and SPEC-002 is validated; T-001–T-012 are complete.
-- E3 is implemented and locally validated; SPEC-003 has T-001–T-012 complete. Remote E3 CI confirmation is pending a push; no next spec has been started.
+- E3 is validated; SPEC-003 has T-001–T-012 complete and the remote CI run passed.
+- ADR-0008 is accepted. SPEC-004 is implemented locally: taxonomy v0.2.0, 42 + 15 active bands, 1960–2026, data-driven seed validation, expanded-decade reports and corpus metadata in E3 runs. The v0.2.0 dataset is `mb-20261107T194927Z-0d6cedd5c261` and cache-only replay is stable. Remote CI and formal validation are pending. E4 follows as SPEC-005.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -87,6 +88,13 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     --seed-list ../data/seed-list.json \
     --raw-root ../data/raw/musicbrainz \
     --output ../data/ingestions/musicbrainz
+
+# Reuse cached raw responses without network access.
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.etl.musicbrainz ingest \
+    --seed-list ../data/seed-list.json \
+    --raw-root ../data/raw/musicbrainz \
+    --output ../data/ingestions/musicbrainz --cache-only
 ```
 
 Unit tests run without PostgreSQL; integration tests require `TEST_DATABASE_URL` and the `hmde_test` database.

@@ -1,13 +1,13 @@
 # MVP scope
 
-- **Status:** Approved; seed list v0.1.0 completed in E0
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Status:** Approved; corpus v0.2 scope documented; seed list v0.1.0 historical
+- **Version:** 0.2
+- **Date:** 2026-11-06
 - **Stage:** E0
 
 ## 1. MVP definition
 
-The MVP is an **explorer of professional production relationships in heavy metal between 1980 and 2000**, built from public data, with source traceability and network visualization.
+The MVP is an **explorer of professional production relationships in heavy metal from 1960 to 2026**, built from public data, with source traceability and network visualization. The active corpus contains 57 bands (the original 42 plus the first 15-band batch) and grows through versioned batches.
 
 The MVP does not aim to cover the entire scene. It aims to demonstrate that the architecture, data model and pipeline can answer real questions with a bounded and documented dataset.
 
@@ -15,7 +15,7 @@ The MVP does not aim to cover the entire scene. It aims to demonstrate that the 
 
 | Phase | Bands | Goal |
 |---|---:|---|
-| MVP | 42 | Validate the full flow and data quality |
+| Initial corpus | 42 | Validate the full flow and data quality |
 | v1 | 200–500 | Analyze patterns with reasonable statistical power |
 | Long term | Thousands | Broad coverage, subject to sources and licenses |
 
@@ -25,7 +25,7 @@ The architecture must support growth without structural changes. Expansion happe
 
 - **Canonical album:** MusicBrainz `release-group` with primary type `album`, excluding all secondary types: `audio drama`, `audiobook`, `compilation`, `demo`, `dj-mix`, `field recording`, `interview`, `live`, `mixtape/street`, `remix`, `soundtrack` and `spokenword`.
 - **Edition:** MusicBrainz `release`. Credits may be captured at release-group, edition or recording level and aggregated to the canonical album with provenance. Credit scope is defined in [ADR-0007](../01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md).
-- **Album date:** first release date of the `release-group`. It is included if it falls within 1980–2000.
+- **Album date:** first release date of the `release-group`. It is included if it falls within 1960–2026.
 - **Credits from later editions:** retained if they add information, but tagged with the edition date. Analyses must be able to filter by edition, recording or canonical album.
 - **Recording-level credits:** retained on their source recording and projected to the album with supporting-recording counts and ratios; a credit on one track is not assumed to apply to the whole album.
 
@@ -33,26 +33,30 @@ This decision is recorded in [ADR-0004](../01-architecture/adr/ADR-0004-release-
 
 ## 4. Period
 
-- From 1980-01-01 to 2000-12-31, based on the first release date of the canonical album.
+- From 1960-01-01 to 2026-12-31, based on the first release date of the canonical album.
 - Available precision is preserved: day, month, year or unknown.
 - Albums without a usable date are excluded from temporal analyses but may be retained with a quality flag.
 - Reissues are not excluded if they document credits from the original album; their date and provenance are recorded.
+- The historical E2 and E3 datasets built for 1980–2000 remain immutable; the expanded period requires a new versioned dataset.
 
 ## 5. Subgenres
 
-Initial curated taxonomy, provisional until E0 validation:
+Subgenres are curated analytical categories, not objective labels. The single versioned source is [`data/taxonomy.json`](../../data/taxonomy.json).
 
-1. Heavy Metal
-2. Thrash Metal
-3. Death Metal
-4. Black Metal
-5. Power Metal
-6. Doom Metal
-7. Progressive Metal
+The taxonomy is a manually curated hierarchy:
 
-A residual `other` category is added for bands that do not fit the list, and `unclassified` for data without sufficient evidence. These are analytical categories, not objective labels.
+- parent nodes are families used for grouping and filters;
+- only leaf nodes may be assigned to albums;
+- an album has exactly one primary leaf and zero or more secondary leaves;
+- an artist may have multiple subgenres across its albums;
+- the band-level primary subgenre is derived from its album primary labels;
+- ties are resolved by an audited manual classification.
 
-MusicBrainz uses collaborative and noisy genres and tags. Original tags are stored and a curated mapping table maps them to the taxonomy above. A band may have more than one subgenre; analyses must support multi-label assignment and document the assignment rule.
+Filtering by a parent node includes descendant leaves by default. An explicit exact-match option may disable that behaviour.
+
+MusicBrainz uses collaborative and noisy genres and tags. Original tags are stored and curated mappings map tags to taxonomy leaves. Album and band classifications carry confidence, provenance and a review status.
+
+The current seven MVP categories remain valid leaves. The draft taxonomy additionally includes families and leaves needed for the 1960–2026 range, such as Hard Rock, Proto-Metal, NWOBHM, Groove Metal, Stoner Metal, Sludge Metal, Metalcore, Deathcore, Djent and Post-Metal.
 
 ## 6. Included entities
 
@@ -103,7 +107,7 @@ The seed list is a versioned artifact produced in E0. It must satisfy:
 ### Inclusion criteria
 
 1. Artist primarily associated with one of the in-scope subgenres.
-2. At least one studio album with first release between 1980 and 2000.
+2. At least one studio album with first release between 1960 and 2026.
 3. Stable and verifiable MusicBrainz identifier (MBID).
 4. Presence in at least one published source documenting relevance; the list is not based on personal preference.
 5. Deliberate distribution by subgenre, decade and country, not an arbitrary ranking.
@@ -118,10 +122,12 @@ The seed list is a versioned artifact produced in E0. It must satisfy:
 
 ### Size and composition
 
-- MVP: 42 bands. See the [seed list](../03-data/seed-list.md).
-- v1: 200–500 bands.
-- The list, selection source, date and MBID are documented.
-- The list can grow in batches; ingestion history is not rewritten.
+- Initial corpus: the 42 active bands in the [seed list](../03-data/seed-list.md).
+- The corpus grows by appending versioned seed-list batches; the initial 42 bands remain active.
+- v1 target: 200–500 bands.
+- The list, selection source, date, period and MBID are documented.
+- Additions and retirements require a version bump; ingestion and analysis history is never rewritten.
+- A retired band is excluded from default listing and search but remains accessible by direct URL and in historical datasets and analyses.
 
 Bands are not required to have documented production credits. Excluding them would introduce bias. Coverage is measured and reported.
 
@@ -144,7 +150,7 @@ Bands are not required to have documented production credits. Excluding them wou
 - Listener preferences, ratings and plays.
 - User accounts, writes and contributions.
 - Complete coverage of worldwide discography.
-- Bands outside the period or without a studio album.
+- Bands outside the 1960–2026 period or without a studio album in that period.
 - Discogs and Metallum integration.
 - Automatic fuzzy deduplication.
 - Scheduled incremental updates.
@@ -175,7 +181,8 @@ A change to the period, seed list, subgenre taxonomy, core roles or sources requ
 
 1. Updating this document.
 2. Recording the decision in an ADR if it affects architecture or the model.
-3. Adjusting affected specs.
-4. Re-running ingestion and analyses if the dataset changes.
+3. Creating a new version of the seed list and/or taxonomy; never editing historical versions in place.
+4. Adjusting affected specs.
+5. Re-running ingestion, normalization and analyses into new versioned datasets and analysis runs.
 
 Scope is not expanded for convenience during implementation. It is documented and approved first.

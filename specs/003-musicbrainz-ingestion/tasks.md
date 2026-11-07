@@ -1,6 +1,6 @@
 # Tasks — SPEC-003 MusicBrainz ingestion
 
-- **Status:** Implemented (local validation complete; remote CI pending)
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -196,13 +196,13 @@ T-001 establishes the package and configuration boundary. T-002 and T-003 establ
     uv run pytest
   ```
 - **Files:** `backend/tests/unit/`, `backend/tests/integration/`, `.github/workflows/ci.yml`.
-- **Evidence:** 2026-11-06: the scope guard now checks both network-import confinement and the API/ETL import boundary; ingestion tests are fully mocked and network-free; pipeline idempotency asserts canonical E2 artist/release-group/credit counts are unchanged; migration and OpenAPI drift checks remain in CI. Full backend suite after T-012: 120 passed; Ruff check/format pass. The remote CI run for E3 remains pending a push.
+- **Evidence:** 2026-11-06: the scope guard now checks both network-import confinement and the API/ETL import boundary; ingestion tests are fully mocked and network-free; pipeline idempotency asserts canonical E2 artist/release-group/credit counts are unchanged; migration and OpenAPI drift checks remain in CI. Full backend suite after T-012: 120 passed; Ruff check/format pass. The remote CI run for E3 passed (run 42396996612).
 
 ### T-012 — Run the full 42-band ingestion and validate E3
 
 - **Requirements:** FR-011, FR-012, all acceptance criteria.
 - **Dependencies:** T-011.
-- **Status:** Completed locally (2026-11-06); remote CI confirmation pending a push.
+- **Status:** Completed (2026-11-06); remote CI passed.
 - **Description:** perform a controlled live 42-band ingestion, run cache-only replay, review counts/coverage/failures/runtime, verify canonical E2 data and API contract are unchanged, and record final evidence.
 - **Done when:** all ACs have evidence, the full run and offline replay meet their targets, no canonical/API/frontend changes occurred and SPEC-003 is updated with the result.
 - **Verification:**
@@ -226,7 +226,7 @@ T-001 establishes the package and configuration boundary. T-002 and T-003 establ
   uv run ruff format --check .
   ```
 - **Files:** `specs/003-musicbrainz-ingestion/spec.md`, `specs/003-musicbrainz-ingestion/tasks.md`, `README.md`, `AGENTS.md`, `data/README.md`.
-- **Evidence:** 2026-11-06: live ingestion completed 42 bands with 0 failures. Raw store contains 2,001 committed responses; the full run used 414 responses (403 new, 11 reused) and completed in 11m15s. Dataset `mb-20261107T165005Z-52404839c696`: 42 artists, 293 release-groups, 4,280 releases, 8,038 recordings, 54,531 release-recordings, 13,765 deduplicated credits, 6,769 places, 3,007 exclusions and 42 Wikidata QIDs. Cache-only replay completed in ~5s and produced the same dataset version and manifest checksum without network access. Canonical E2 counts stayed at 94 artists, 41 release-groups and 859 credits; OpenAPI drift check found no changes. Full backend suite: 120 passed; Ruff check/format pass. Remote E3 CI remains pending a push.
+- **Evidence:** 2026-11-06: live ingestion completed 42 bands with 0 failures. Raw store contains 2,001 committed responses; the full run used 414 responses (403 new, 11 reused) and completed in 11m15s. Dataset `mb-20261107T165005Z-52404839c696`: 42 artists, 293 release-groups, 4,280 releases, 8,038 recordings, 54,531 release-recordings, 13,765 deduplicated credits, 6,769 places, 3,007 exclusions and 42 Wikidata QIDs. Cache-only replay completed in ~5s and produced the same dataset version and manifest checksum without network access. Canonical E2 counts stayed at 94 artists, 41 release-groups and 859 credits; OpenAPI drift check found no changes. Full backend suite: 120 passed; Ruff check/format pass. Remote E3 CI passed in GitHub Actions run 42396996612.
 
 ## 3. Coverage matrix
 
@@ -275,7 +275,7 @@ T-001 establishes the package and configuration boundary. T-002 and T-003 establ
 | AC-007 | Passed | Cache-only replay produced the same dataset version without network |
 | AC-008 | Passed | coverage.json/report.md assertions and full-run report |
 | AC-009 | Passed | Partial-run failure/resume tests |
-| AC-010 | Local pass; remote pending | 120 tests and scope guards pass locally; remote CI requires a push |
+| AC-010 | Passed | 120 tests and scope guards pass locally; GitHub Actions run 42396996612 succeeded |
 | AC-011 | Passed | Canonical E2 counts unchanged; OpenAPI drift check clean |
 | AC-012 | Passed | 42-band run 11m15s; cache-only replay ~5s; both under targets |
 
@@ -285,5 +285,6 @@ T-001 establishes the package and configuration boundary. T-002 and T-003 establ
 - Raw payloads live outside Git; only small synthetic fixtures are committed for tests.
 - Full live ingestion is a manual validation step; CI must use mocked/recorded responses.
 - E3 must not normalize canonical data or change the API/frontend.
+- The completed E3 dataset is historical (1980–2000). ADR-0008 defines corpus v0.2 (1960–2026, album-level taxonomy); SPEC-004 implements its new E3 seed-list/dataset and E4 owns normalization.
 - Do not mark a task complete until its verification has been executed and recorded.
 - Update `spec.md` or `plan.md` first if an implementation decision changes scope.

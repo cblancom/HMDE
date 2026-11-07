@@ -148,6 +148,19 @@ class IngestRunner:
         }
         parameters = {
             "seed_list_path": str(self._options.seed_list),
+            "seed_list_version": self._seed_list.version,
+            "taxonomy_version": self._seed_list.taxonomy_version,
+            "period_start": (
+                self._seed_list.period_start.isoformat()
+                if self._seed_list.period_start is not None
+                else None
+            ),
+            "period_end": (
+                self._seed_list.period_end.isoformat()
+                if self._seed_list.period_end is not None
+                else None
+            ),
+            "batch_ids": [batch.batch_id for batch in self._seed_list.batches],
             "bands": list(self._options.bands),
             "max_bands": self._options.max_bands,
             "cache_only": self._options.cache_only,

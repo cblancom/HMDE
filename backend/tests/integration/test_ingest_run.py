@@ -82,6 +82,8 @@ def test_runner_completes_all_bands(seeded_session_factory, tmp_path, run_cleanu
         assert run.counters["bands_processed"] == 2
         assert run.counters["bands_failed"] == 0
         assert run.parameters["seed_list_path"] == str(tmp_path / "seed-list.json")
+        assert run.parameters["seed_list_version"] == "0.1.0"
+        assert run.parameters["batch_ids"] == []
 
 
 def test_failed_band_does_not_abort_the_run(

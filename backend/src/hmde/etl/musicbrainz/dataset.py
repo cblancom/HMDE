@@ -8,9 +8,9 @@ import os
 import shutil
 import tempfile
 import uuid
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -52,6 +52,10 @@ def write_dataset(
     output_root: Path,
     *,
     seed_list_version: str,
+    taxonomy_version: str | None = None,
+    period_start: date | str | None = None,
+    period_end: date | str | None = None,
+    batch_ids: Sequence[str] = (),
     source_snapshot_at: datetime,
     code_version: str,
 ) -> DatasetWriteResult:
@@ -61,6 +65,10 @@ def write_dataset(
     dataset_version = _dataset_version(
         files,
         seed_list_version=seed_list_version,
+        taxonomy_version=taxonomy_version,
+        period_start=period_start,
+        period_end=period_end,
+        batch_ids=batch_ids,
         source_snapshot_at=source_snapshot,
         code_version=code_version,
     )
@@ -69,6 +77,10 @@ def write_dataset(
         extraction_list,
         dataset_version=dataset_version,
         seed_list_version=seed_list_version,
+        taxonomy_version=taxonomy_version,
+        period_start=period_start,
+        period_end=period_end,
+        batch_ids=batch_ids,
         source_snapshot_at=source_snapshot,
         code_version=code_version,
     )
@@ -204,12 +216,20 @@ def _dataset_version(
     files: dict[str, bytes],
     *,
     seed_list_version: str,
+    taxonomy_version: str | None,
+    period_start: date | str | None,
+    period_end: date | str | None,
+    batch_ids: Sequence[str],
     source_snapshot_at: datetime,
     code_version: str,
 ) -> str:
     digest = hashlib.sha256()
     context = {
         "seed_list_version": seed_list_version,
+        "taxonomy_version": taxonomy_version,
+        "period_start": _date_string(period_start),
+        "period_end": _date_string(period_end),
+        "batch_ids": sorted(batch_ids),
         "source_snapshot_at": source_snapshot_at.isoformat(),
         "code_version": code_version,
     }
@@ -227,6 +247,10 @@ def _build_manifest(
     *,
     dataset_version: str,
     seed_list_version: str,
+    taxonomy_version: str | None,
+    period_start: date | str | None,
+    period_end: date | str | None,
+    batch_ids: Sequence[str],
     source_snapshot_at: datetime,
     code_version: str,
 ) -> dict[str, Any]:
@@ -240,6 +264,10 @@ def _build_manifest(
     return {
         "dataset_version": dataset_version,
         "seed_list_version": seed_list_version,
+        "taxonomy_version": taxonomy_version,
+        "period_start": _date_string(period_start),
+        "period_end": _date_string(period_end),
+        "batch_ids": sorted(batch_ids),
         "source_snapshot_at": source_snapshot_at.isoformat(),
         "code_version": code_version,
         "schema_version": SCHEMA_VERSION,
@@ -255,3 +283,11 @@ def _line_count(data: bytes) -> int:
     if not data:
         return 0
     return data.count(b"\n")
+
+
+def _date_string(value: date | str | None) -> str | None:
+    if value is None:
+        return None
+    if isinstance(value, date):
+        return value.isoformat()
+    return value

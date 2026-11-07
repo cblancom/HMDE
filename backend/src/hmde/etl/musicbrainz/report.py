@@ -33,6 +33,10 @@ def build_coverage(
     *,
     dataset_version: str | None = None,
     seed_list_version: str | None = None,
+    taxonomy_version: str | None = None,
+    period_start: str | None = None,
+    period_end: str | None = None,
+    batch_ids: Sequence[str] = (),
     source_snapshot_at: datetime | None = None,
     code_version: str | None = None,
     counters: Mapping[str, Any] | None = None,
@@ -149,6 +153,10 @@ def build_coverage(
         "dataset": {
             "dataset_version": dataset_version,
             "seed_list_version": seed_list_version,
+            "taxonomy_version": taxonomy_version,
+            "period_start": period_start,
+            "period_end": period_end,
+            "batch_ids": sorted(batch_ids),
             "source_snapshot_at": _datetime_string(source_snapshot_at),
             "code_version": code_version,
         },
@@ -178,6 +186,9 @@ def render_report(coverage: Mapping[str, Any]) -> str:
         "",
         f"- Dataset version: {dataset['dataset_version'] or 'unknown'}",
         f"- Seed list version: {dataset['seed_list_version'] or 'unknown'}",
+        f"- Taxonomy version: {dataset['taxonomy_version'] or 'unknown'}",
+        f"- Period: {dataset['period_start'] or 'unknown'} to {dataset['period_end'] or 'unknown'}",
+        f"- Batch IDs: {', '.join(dataset['batch_ids']) or 'unknown'}",
         f"- Source snapshot: {dataset['source_snapshot_at'] or 'unknown'}",
         f"- Code version: {dataset['code_version'] or 'unknown'}",
         "",
@@ -418,18 +429,20 @@ def _decade(value: str | None) -> str:
     if not isinstance(value, str) or not value[:4].isdigit():
         return "unknown"
     year = int(value[:4])
-    if 1980 <= year <= 1989:
-        return "1980s"
-    if 1990 <= year <= 1999:
-        return "1990s"
     if year == 2000:
         return "2000"
-    return "unknown"
+    return f"{year // 10 * 10}s"
 
 
 def _decade_order(value: str) -> tuple[int, str]:
-    order = {"1980s": 0, "1990s": 1, "2000": 2, "unknown": 3}
-    return order.get(value, 4), value
+    if value == "unknown":
+        return 9999, value
+    if value == "2000":
+        return 2000, value
+    try:
+        return int(value.removesuffix("s")), value
+    except ValueError:
+        return 9998, value
 
 
 def _datetime_string(value: datetime | None) -> str | None:

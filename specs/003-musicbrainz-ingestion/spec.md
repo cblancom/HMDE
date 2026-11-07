@@ -1,6 +1,6 @@
 # SPEC-003 — MusicBrainz ingestion
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E3
 - **Iteration:** MVP
 - **Module:** `ingestion`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-002 validated; E0 source evaluation; [seed list](../../data/seed-list.json) v0.1.0
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md), [ADR-0003](../../docs/01-architecture/adr/ADR-0003-synchronous-sqlalchemy.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (implemented)
+- **Tasks:** [tasks.md](tasks.md) (validated)
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -30,6 +30,8 @@
 | 12 | 2026-11-06 | T-010 implemented (CLI, Compose ingestion profile and docs) |
 | 13 | 2026-11-06 | T-011 implemented (tests, scope guards and CI coverage) |
 | 14 | 2026-11-06 | T-012 implemented (full 42-band run and local E3 validation); remote CI pending |
+| 15 | 2026-11-06 | Corpus-v2 direction documented in ADR-0008; historical E3 dataset unchanged |
+| 16 | 2026-11-07 | E3 remote CI passed; SPEC-003 validated |
 
 ## 1. Context and problem
 
@@ -434,11 +436,17 @@ All code, documentation, report labels and error messages are in English.
 
 ## 11. Validation result
 
-- **Date:** 2026-11-06
-- **Verdict:** Implemented; local validation passed. Remote CI confirmation is pending because no push was performed.
-- **Evidence:** `tasks.md` T-001–T-012 evidence, the validation table, the full 42-band run, cache-only replay, canonical/API regression checks and the test suite.
+- **Date:** 2026-11-07
+- **Verdict:** Validated.
+- **Evidence:** `tasks.md` T-001–T-012 evidence, the validation table, the full 42-band run, cache-only replay, canonical/API regression checks, the local test suite and GitHub Actions run 42396996612 (success) for commit `c6cd92f`.
 
-## 12. References
+## 12. Corpus v0.2 note
+
+This specification records E3 as implemented for the historical 42-band, 1980–2000 corpus. [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md) changes the target corpus to 1960–2026 with album-level taxonomy, versioned seed-list batches and non-destructive history.
+
+The implemented E3 dataset remains historical and must not be rewritten. The corpus-v0.2 ingestion will use a new seed-list version, a new dataset version and the taxonomy version defined in [`data/taxonomy.json`](../../data/taxonomy.json). E4 owns album-level classification, band aggregates, confidence handling and dataset membership.
+
+## 13. References
 
 - [Constitution](../../constitution.md)
 - [AGENTS.md](../../AGENTS.md)

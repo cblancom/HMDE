@@ -1,8 +1,8 @@
 # Data model v0
 
-- **Status:** Draft; consolidated in E2
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Status:** Draft; E2 physical schema consolidated; E4 taxonomy and lifecycle planned
+- **Version:** 0.2
+- **Date:** 2026-11-06
 - **Stage:** E0
 
 This document is a conceptual model, not a physical schema. The DDL is defined with Alembic migrations in E2. Its purpose is to fix vocabulary, relationships and provenance decisions before implementation.
@@ -32,9 +32,10 @@ This document is a conceptual model, not a physical schema. The DDL is defined w
 | `genre_tag` | Original source tag or genre | `tag_id` | MusicBrainz |
 | `artist_genre_tag` | Original tag associated with an artist | Composite key | MusicBrainz |
 | `release_group_genre_tag` | Original tag associated with an album | Composite key | MusicBrainz |
-| `subgenre` | Curated project category | `subgenre_id` / `code` | HMDE |
-| `artist_subgenre` | Artist–subgenre mapping with confidence | Composite key | HMDE |
-| `release_group_subgenre` | Album–subgenre mapping with confidence | Composite key | HMDE |
+| `subgenre` | Curated taxonomy node with optional parent | `code` | HMDE |
+| `artist_subgenre` | Derived artist–subgenre aggregate with confidence | Composite key | HMDE |
+| `release_group_subgenre` | Album–subgenre classification; one primary and multiple secondary leaves | Composite key | HMDE |
+| `dataset_membership` | Active/retired band membership for a dataset version | Composite key | HMDE |
 | `external_id` | Identifier of an entity in another source | `external_id_id` | Multiple |
 | `source_record` | Raw record and its provenance | `source_record_id` | Multiple |
 | `ingest_run` | Ingestion run | `ingest_run_id` | HMDE |
@@ -134,13 +135,33 @@ Rules:
 - Decade analyses use the canonical album date and report how many records have sufficient precision.
 - Missing dates are not imputed without marking the imputation.
 
-## 8. Subgenres
+## 8. Subgenres and taxonomy
 
-- Original MusicBrainz tags are stored.
-- A curated mapping table `genre_tag -> subgenre` is maintained.
-- An album or artist may have multiple subgenres.
-- Each mapping has a rule, source and confidence.
-- Analyses must declare whether they use the primary label, all labels or a weighted rule.
+- The taxonomy is a manually curated, versioned hierarchy in `data/taxonomy.json`.
+- Parent nodes are families for grouping and filters; only leaf nodes may be assigned to albums.
+- Each canonical album has exactly one primary leaf and zero or more secondary leaves.
+- Original MusicBrainz tags are stored; curated mappings connect tags to taxonomy leaves.
+- A band may have multiple subgenres across its albums.
+- The band-level primary subgenre is derived from album primary labels; ties are resolved by an audited manual classification.
+- Album and band classifications carry `confidence`, `status`, `mapping_rule`, `source_record_id` and `taxonomy_version`.
+- Filtering by a parent taxonomy node includes descendant leaves by default; exact matching is an explicit option.
+- Analyses must declare the taxonomy version and whether they use the band aggregate, album primary or all album labels.
+
+Confidence policy:
+
+| Level | Score | Action |
+|---|---:|---|
+| Low | `< 0.50` | Manual review required |
+| Medium | `0.50–0.79` | Alert and review queue; non-blocking |
+| High | `>= 0.80` | Accepted automatically |
+
+Manual classifications have confidence `1.0` and an audit trail.
+
+Historical preservation:
+
+- `dataset_membership` records which bands are active in each dataset version.
+- Retiring a band removes it from the active listing/search but preserves its rows, raw data, dataset membership history and analyses.
+- A taxonomy or corpus change creates a new taxonomy/seed-list/dataset version; it does not silently rewrite historical classifications or analysis results.
 
 ## 9. Analytical layer
 
@@ -157,7 +178,7 @@ Results are not recomputed on every request. They are persisted in versioned tab
 | `producer_metric` | Participation and concentration aggregates |
 | `temporal_metric` | Aggregates by decade or period |
 
-Every analytical row must reference an `analysis_run`. A result without an identifiable run is not valid.
+Every analytical row must reference an `analysis_run`. A result without an identifiable run is not valid. Each analysis run must also record its source `dataset_version` and `taxonomy_version`.
 
 ## 10. Open questions for E2
 

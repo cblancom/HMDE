@@ -215,6 +215,8 @@ Raw data is preserved so it can be reprocessed without calling the source again.
 
 ## 10. Feasibility spike (E0)
 
+> The E0 spike evaluated 1980–2000 only. Coverage for the planned 1960–2026 corpus is not yet measured.
+
 ### Objective
 
 Measure whether MusicBrainz contains enough information to answer the MVP questions before investing in the full pipeline.

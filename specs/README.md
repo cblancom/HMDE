@@ -23,23 +23,24 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 is implemented and locally validated; remote CI is pending a push.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 is validated. SPEC-004 is implemented locally: the active corpus is v0.2.0 with 57 bands, 1960–2026 and a reproducible ingestion dataset. Remote CI and formal validation are pending. E4 follows as SPEC-005.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
 | 001 | [`001-foundations`](001-foundations/spec.md) | E1 | `platform` | Repository, environment, configuration, health, migrations baseline, test harnesses, CI | — | Validated |
 | 002 | [`002-seed-band-explorer`](002-seed-band-explorer/spec.md) | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | Validated |
-| 003 | [`003-musicbrainz-ingestion`](003-musicbrainz-ingestion/spec.md) | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Implemented |
-| 004 | `004-normalization-identity` | E4 | `normalization` | Canonical entities, external IDs, role mapping, credit scope, provenance | 003 | Pending |
-| 005 | `005-data-quality` | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 004 | Pending |
-| 006 | `006-eda-metrics` | E6 | `analytics` | Exploratory analysis and metric definitions | 005 | Pending |
-| 007 | `007-network-analysis` | E7 | `analytics` | Graph snapshots, metrics and communities | 006 | Pending |
-| 008 | `008-read-api` | E8 | `api` | Read API v1, filters, pagination, subgraphs, precomputed metrics | 002, 004, 007 | Pending |
-| 009 | `009-entity-explorer` | E9 | `web` | Band, album and producer exploration UI | 008 | Pending |
-| 010 | `010-graph-visualization` | E10 | `web` | Interactive collaboration graph and accessible fallback | 007, 008, 009 | Pending |
-| 011 | `011-integration-qa` | E11 | `platform` | End-to-end tests, performance, accessibility and security review | 009, 010 | Pending |
-| 012 | `012-release-v0.1` | E12 | `platform` | Deployment, attribution, runbooks and release | 011 | Pending |
-| 013 | `013-corpus-expansion` | E13 | `ingestion` | Expansion to 200–500 bands and v1 validation | 012 | Pending |
+| 003 | [`003-musicbrainz-ingestion`](003-musicbrainz-ingestion/spec.md) | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Validated |
+| 004 | [`004-corpus-v0-2`](004-corpus-v0-2/spec.md) | E3 | `ingestion` | 15-band corpus v0.2 seed list, 1960–2026 period and new E3 dataset | 003 | Implemented |
+| 005 | `005-normalization-identity` | E4 | `normalization` | Canonical entities, album-level taxonomy, role mapping, credit scope, provenance, dataset lifecycle | 004 | Pending |
+| 006 | `006-data-quality` | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 005 | Pending |
+| 007 | `007-eda-metrics` | E6 | `analytics` | Exploratory analysis and metric definitions | 006 | Pending |
+| 008 | `008-network-analysis` | E7 | `analytics` | Graph snapshots, metrics and communities | 007 | Pending |
+| 009 | `009-read-api` | E8 | `api` | Read API v1, filters, pagination, subgraphs, precomputed metrics | 002, 005, 008 | Pending |
+| 010 | `010-entity-explorer` | E9 | `web` | Band, album and producer exploration UI | 009 | Pending |
+| 011 | `011-graph-visualization` | E10 | `web` | Interactive collaboration graph and accessible fallback | 008, 009, 010 | Pending |
+| 012 | `012-integration-qa` | E11 | `platform` | End-to-end tests, performance, accessibility and security review | 010, 011 | Pending |
+| 013 | `013-release-v0.1` | E12 | `platform` | Deployment, attribution, runbooks and release | 012 | Pending |
+| 014 | `014-corpus-expansion` | E13 | `ingestion` | Expansion to 200–500 bands and v1 validation | 013 | Pending |
 
 The index is updated when a spec is created, approved, implemented or validated. A spec that is split or superseded keeps its number and is marked accordingly.
 
@@ -109,4 +110,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-002 is validated. SPEC-003 is implemented and locally validated (T-001–T-012 complete). Remote E3 CI confirmation is pending a push; no next spec has been started.
+E0, E1 and E2 are complete. SPEC-002 and SPEC-003 are validated. SPEC-004 is implemented locally with the 57-band corpus and reproducible dataset; remote CI and formal validation remain. E4 follows as SPEC-005 after validation.

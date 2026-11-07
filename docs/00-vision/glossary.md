@@ -1,8 +1,8 @@
 # Glossary
 
 - **Status:** Draft
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Version:** 0.2
+- **Date:** 2026-11-06
 
 Domain and methodology terms. English identifiers are the ones used in code and the database.
 
@@ -11,7 +11,14 @@ Domain and methodology terms. English identifiers are the ones used in code and 
 | Term | Definition |
 |---|---|
 | **Heavy Metal** | Broad set of genres derived from heavy rock; in this project it is used as an umbrella term, not a single genre. |
-| **Subgenre** | Analytical category within metal (thrash, death, black, power, doom, progressive, heavy). It is not an objective truth. |
+| **Subgenre** | Analytical category within metal. Valid album labels are taxonomy leaves; the category is not an objective truth. |
+| **Taxonomy** | Manually curated, versioned hierarchy of subgenres and families. |
+| **Taxonomy family** | Parent node used for grouping and filters; it cannot be assigned to an album. |
+| **Taxonomy leaf** | Terminal node with no children; the only kind of node assignable as an album primary or secondary subgenre. |
+| **Album primary subgenre** | The single leaf label that best represents an album. |
+| **Album secondary subgenre** | Additional leaf labels for an album; they do not replace the primary. |
+| **Band aggregate subgenre** | Band-level primary subgenre derived from its album primary labels. Ties are resolved manually. |
+| **Retired band** | Band removed from the active corpus but preserved in history, datasets and analyses; excluded from default listing/search and accessible by direct URL. |
 | **Artist** | Person or group that performs, composes or participates in production. MusicBrainz includes both types. |
 | **Band / group** | Artist of type group. |
 | **Canonical album (`release-group`)** | Abstract work that groups the editions of an album. It is the MVP unit of analysis. |
@@ -59,6 +66,9 @@ Domain and methodology terms. English identifiers are the ones used in code and 
 | **Raw data** | Original source response, preserved for traceability. |
 | **Normalization** | Transformation of raw data into the canonical model. |
 | **Snapshot / dataset version** | Frozen dataset at a point in time, identifiable and reproducible. |
+| **Dataset membership** | Record of which bands are active in a dataset version and their lifecycle status. |
+| **Taxonomy version** | Version of the taxonomy used to classify albums and derive band aggregates. |
+| **Classification confidence** | Explicit score attached to an album or band classification, used to trigger review. |
 | **Ingest run (`ingest_run`)** | Record of an execution: source, parameters, date, results and errors. |
 | **Analysis run (`analysis_run`)** | Record of an analytical computation: dataset, parameters, code version and results. |
 | **Bipartite graph** | Graph with two node types (e.g., artists and albums) and credit edges. |

@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import uuid
 from dataclasses import replace
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 from hmde.etl.musicbrainz.dataset import (
@@ -45,6 +45,48 @@ def test_write_dataset_creates_files_and_manifest(tmp_path: Path) -> None:
     assert manifest["files"]["artists.ndjson"]["count"] == 1
     assert manifest["files"]["credits.ndjson"]["count"] == 3
     assert manifest["files"]["exclusions.ndjson"]["count"] == 1
+
+
+def test_manifest_records_corpus_and_taxonomy_metadata(tmp_path: Path) -> None:
+    result = write_dataset(
+        [sample_extraction()],
+        tmp_path,
+        seed_list_version="0.2.0",
+        taxonomy_version="0.2.0",
+        period_start=date(1960, 1, 1),
+        period_end=date(2026, 12, 31),
+        batch_ids=("v0.1.0", "v0.2.0-batch-01"),
+        source_snapshot_at=SOURCE_TIME,
+        code_version="test-version",
+    )
+
+    manifest = result.manifest
+    assert manifest["seed_list_version"] == "0.2.0"
+    assert manifest["taxonomy_version"] == "0.2.0"
+    assert manifest["period_start"] == "1960-01-01"
+    assert manifest["period_end"] == "2026-12-31"
+    assert manifest["batch_ids"] == ["v0.1.0", "v0.2.0-batch-01"]
+
+
+def test_metadata_changes_the_dataset_version(tmp_path: Path) -> None:
+    first = write_dataset(
+        [sample_extraction()],
+        tmp_path / "one",
+        seed_list_version="0.2.0",
+        taxonomy_version="0.2.0",
+        source_snapshot_at=SOURCE_TIME,
+        code_version="test-version",
+    )
+    second = write_dataset(
+        [sample_extraction()],
+        tmp_path / "two",
+        seed_list_version="0.2.0",
+        taxonomy_version="0.1.0",
+        source_snapshot_at=SOURCE_TIME,
+        code_version="test-version",
+    )
+
+    assert first.dataset_version != second.dataset_version
 
 
 def test_dataset_records_keep_raw_response_ids(tmp_path: Path) -> None:

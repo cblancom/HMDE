@@ -280,5 +280,6 @@ These will be resolved in E2, E7 or E8 as appropriate, with an ADR if the decisi
 - [ADR-0005 — Identity and provenance](adr/ADR-0005-identity-and-provenance.md)
 - [ADR-0006 — Read-only API](adr/ADR-0006-read-only-api.md)
 - [ADR-0007 — Credit scope and recording-level aggregation](adr/ADR-0007-credit-scope-and-recording-level-aggregation.md)
+- [ADR-0008 — Taxonomy and corpus versioning](adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - [Source evaluation](../03-data/sources.md)
 - [MusicBrainz spike report](../03-data/spike-report.md)

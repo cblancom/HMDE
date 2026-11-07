@@ -1,8 +1,8 @@
 # Architecture Decision Records
 
 - **Status:** Current index
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Version:** 0.2
+- **Date:** 2026-11-06
 
 ADRs record architectural decisions and their rationale. They are never deleted: if a decision changes, a new ADR is created that supersedes the previous one.
 
@@ -15,6 +15,7 @@ ADRs record architectural decisions and their rationale. They are never deleted:
 | [ADR-0005](ADR-0005-identity-and-provenance.md) | Deterministic identity and mandatory provenance | Accepted |
 | [ADR-0006](ADR-0006-read-only-api.md) | Public read-only API in v0.1 | Accepted |
 | [ADR-0007](ADR-0007-credit-scope-and-recording-level-aggregation.md) | Credit scope and recording-level aggregation | Accepted |
+| [ADR-0008](ADR-0008-taxonomy-corpus-and-versioning.md) | Album-level taxonomy, corpus lifecycle and period expansion | Accepted |
 
 ## Template
 

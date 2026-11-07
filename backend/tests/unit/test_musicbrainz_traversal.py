@@ -199,6 +199,58 @@ def test_date_precision() -> None:
     assert date_precision(None) == "unknown"
 
 
+@pytest.mark.parametrize(
+    ("release_date", "period_start", "period_end", "reason"),
+    [
+        ("1959", 1960, 2026, "out_of_period"),
+        ("1960", 1960, 2026, None),
+        ("1975", 1960, 2026, None),
+        ("2000", 1960, 2026, None),
+        ("2026", 1960, 2026, None),
+        ("2027", 1960, 2026, "out_of_period"),
+    ],
+)
+def test_release_group_exclusion_uses_configured_period(
+    release_date: str,
+    period_start: int,
+    period_end: int,
+    reason: str | None,
+) -> None:
+    release_group = {
+        "primary-type": "Album",
+        "secondary-types": [],
+        "first-release-date": release_date,
+    }
+
+    assert (
+        release_group_exclusion_reason(
+            release_group,
+            period_start_year=period_start,
+            period_end_year=period_end,
+        )
+        == reason
+    )
+
+
+def test_traversal_includes_albums_from_the_configured_expanded_period() -> None:
+    groups = _load("release_groups")
+    groups["release-groups"][0]["first-release-date"] = "1969-01-12"
+
+    def handler(path: str, params: dict) -> dict:
+        if path == "release-group":
+            return groups
+        return _handler(path, params)
+
+    extraction = MusicBrainzTraversal(
+        FakeClient(handler),
+        period_start_year=1960,
+        period_end_year=2026,
+    ).extract_band(_band())
+
+    assert [group.mbid for group in extraction.release_groups] == [RG1]
+    assert all(exclusion.release_group_mbid != RG1 for exclusion in extraction.exclusions)
+
+
 def test_browse_payload_with_recordings_avoids_lookup_requests() -> None:
     release_one = _load("release_1")
     release_two = _load("release_2")

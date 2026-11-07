@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -20,6 +21,10 @@ def _coverage() -> dict:
         [sample_extraction()],
         dataset_version="mb-test",
         seed_list_version="0.1.0",
+        taxonomy_version="0.2.0",
+        period_start="1960-01-01",
+        period_end="2026-12-31",
+        batch_ids=("v0.1.0", "v0.2.0-batch-01"),
         source_snapshot_at=SOURCE_TIME,
         code_version="test-version",
         counters={"requests": 7, "cache_hits": 2, "retries": 0},
@@ -79,6 +84,35 @@ def test_render_report_contains_required_sections_and_warning() -> None:
     assert "No recorded failures" not in markdown
     assert "Missing data is not negative evidence" in markdown
     assert "| Heavy Metal | 1 | 1 |" in markdown
+    assert "Taxonomy version: 0.2.0" in markdown
+    assert "Period: 1960-01-01 to 2026-12-31" in markdown
+    assert "v0.2.0-batch-01" in markdown
+
+
+def test_build_coverage_labels_expanded_decades() -> None:
+    base = sample_extraction()
+    release_group = base.release_groups[0]
+    dates = {
+        "1965-01-01": "1960s",
+        "1975-01-01": "1970s",
+        "1985-01-01": "1980s",
+        "1995-01-01": "1990s",
+        "2000-01-01": "2000",
+        "2005-01-01": "2000s",
+        "2015-01-01": "2010s",
+        "2025-01-01": "2020s",
+    }
+    groups = tuple(
+        replace(
+            release_group,
+            mbid=f"20000000-0000-4000-8000-{index:012d}",
+            first_release_date=release_date,
+        )
+        for index, release_date in enumerate(dates, start=1)
+    )
+    coverage = build_coverage([replace(base, release_groups=groups)])
+
+    assert set(coverage["decades"]) == set(dates.values())
 
 
 def test_write_report_creates_json_and_markdown(tmp_path: Path) -> None:
@@ -87,6 +121,10 @@ def test_write_report_creates_json_and_markdown(tmp_path: Path) -> None:
         [sample_extraction()],
         dataset_version="mb-test",
         seed_list_version="0.1.0",
+        taxonomy_version="0.2.0",
+        period_start="1960-01-01",
+        period_end="2026-12-31",
+        batch_ids=("v0.1.0", "v0.2.0-batch-01"),
         source_snapshot_at=SOURCE_TIME,
         code_version="test-version",
         counters={"requests": 7},

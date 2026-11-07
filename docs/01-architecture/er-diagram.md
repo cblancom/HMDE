@@ -204,10 +204,22 @@ The `credit` table supports three scopes:
 
 `release_group_id` is always present so every credit can be aggregated at album level. Recording-scoped credits are aggregated later with supporting-recording counts and ratios.
 
+## Planned E4 additions
+
+The E2 diagram above is historical and only shows the physical schema through `0003`. E4 will add:
+
+- `release_group_subgenre` with one primary and multiple secondary taxonomy leaves;
+- taxonomy parent relationships in `subgenre`;
+- classification confidence, status, mapping rule and taxonomy version;
+- dataset membership/lifecycle tables for active and retired bands.
+
+These additions must not delete or rewrite historical E2/E3 data. The final physical diagram will be updated with the E4 migration.
+
 ## Related documents
 
 - [Data model v0](data-model.md)
 - [ADR-0004 — Release-group model](adr/ADR-0004-release-group-model.md)
 - [ADR-0005 — Identity and provenance](adr/ADR-0005-identity-and-provenance.md)
 - [ADR-0007 — Credit scope](adr/ADR-0007-credit-scope-and-recording-level-aggregation.md)
+- [ADR-0008 — Taxonomy and corpus versioning](adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - [E2 plan](../../specs/002-seed-band-explorer/plan.md)

@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "status": "approved",
+  "notes": "Manually curated taxonomy hierarchy. Only assignable leaf nodes may be used as album primary or secondary subgenre labels. Parent nodes are for grouping, filters and presentation.",
+  "nodes": [
+    {"code": "metal", "name": "Metal", "parent_code": null, "assignable": false},
+    {"code": "traditional-metal", "name": "Traditional Metal", "parent_code": "metal", "assignable": false},
+    {"code": "heavy-metal", "name": "Heavy Metal", "parent_code": "traditional-metal", "assignable": true},
+    {"code": "nwobhm", "name": "NWOBHM", "parent_code": "traditional-metal", "assignable": true},
+    {"code": "hard-rock-proto-metal", "name": "Hard Rock & Proto-Metal", "parent_code": "metal", "assignable": false},
+    {"code": "hard-rock", "name": "Hard Rock", "parent_code": "hard-rock-proto-metal", "assignable": true},
+    {"code": "proto-metal", "name": "Proto-Metal", "parent_code": "hard-rock-proto-metal", "assignable": true},
+    {"code": "extreme-metal", "name": "Extreme Metal", "parent_code": "metal", "assignable": false},
+    {"code": "thrash-metal", "name": "Thrash Metal", "parent_code": "extreme-metal", "assignable": true},
+    {"code": "death-metal", "name": "Death Metal", "parent_code": "extreme-metal", "assignable": true},
+    {"code": "black-metal", "name": "Black Metal", "parent_code": "extreme-metal", "assignable": true},
+    {"code": "doom-stoner", "name": "Doom & Stoner", "parent_code": "metal", "assignable": false},
+    {"code": "doom-metal", "name": "Doom Metal", "parent_code": "doom-stoner", "assignable": true},
+    {"code": "stoner-metal", "name": "Stoner Metal", "parent_code": "doom-stoner", "assignable": true},
+    {"code": "sludge-metal", "name": "Sludge Metal", "parent_code": "doom-stoner", "assignable": true},
+    {"code": "power-metal", "name": "Power Metal", "parent_code": "metal", "assignable": true},
+    {"code": "progressive-metal", "name": "Progressive Metal", "parent_code": "metal", "assignable": true},
+    {"code": "groove-metal", "name": "Groove Metal", "parent_code": "metal", "assignable": true},
+    {"code": "modern-metal", "name": "Modern Metal", "parent_code": "metal", "assignable": false},
+    {"code": "metalcore", "name": "Metalcore", "parent_code": "modern-metal", "assignable": true},
+    {"code": "deathcore", "name": "Deathcore", "parent_code": "modern-metal", "assignable": true},
+    {"code": "djent", "name": "Djent", "parent_code": "modern-metal", "assignable": true},
+    {"code": "post-metal", "name": "Post-Metal", "parent_code": "modern-metal", "assignable": true}
+  ],
+  "musicbrainz_mappings": []
+}

@@ -1,8 +1,8 @@
 # Project vision
 
 - **Status:** Approved
-- **Version:** 0.1
-- **Date:** 2026-11-04
+- **Version:** 0.2
+- **Date:** 2026-11-06
 - **Stage:** E0
 
 ## 1. Problem
@@ -77,7 +77,7 @@ A shared credit does not demonstrate musical affinity, causal influence or prefe
 
 A first version is useful if it:
 
-- Allows exploration of 42 bands from the 1980–2000 period, with their albums and available production credits.
+- Allows exploration of the active 57-band corpus across the 1960–2026 period, with their albums and available production credits; the corpus grows through versioned batches.
 - Allows navigation from a band to its albums, from an album to its producers, and from a producer to their collaborations.
 - Shows an interactive professional relationship graph with basic filters and size limits.
 - Exposes precomputed metrics for participation, concentration and communities.
