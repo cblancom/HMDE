@@ -21,10 +21,10 @@ Stack:
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
 - The seed list is versioned at `data/seed-list.json` (v0.1.0).
-- Backend, frontend, development Docker Compose and CI are implemented. The E1 remote CI run passed; the expanded E2 remote CI run is pending a push.
+- Backend, frontend, development Docker Compose and CI are implemented. The E1 and E2 remote CI runs passed.
 - E1 is complete and SPEC-001 is validated.
-- E2 is implemented and locally validated; SPEC-002 has T-001–T-012 complete.
-- The next work is to confirm E2 in CI, then start SPEC-003 (E3 MusicBrainz ingestion).
+- E2 is complete and SPEC-002 is validated; T-001–T-012 are complete.
+- No next spec has been started.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure

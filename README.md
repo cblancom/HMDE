@@ -7,8 +7,8 @@ The MVP focuses on 42 bands with studio albums released between 1980 and 2000. T
 ## Status
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
-- **Application code:** E1 validated; E2 implemented and locally validated (T-001–T-012 complete). Remote CI confirmation is pending a push.
-- **Next work:** confirm E2 in CI, then start SPEC-003 (E3 MusicBrainz ingestion).
+- **Application code:** E1 and E2 validated. SPEC-002 is complete (T-001–T-012).
+- **Next work:** no next spec has been started.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -194,7 +194,7 @@ npm run build
 
 ### Continuous integration
 
-`.github/workflows/ci.yml` runs migration checks, OpenAPI drift detection, backend tests with a PostgreSQL service and the full frontend checks on push and pull request. The remote E2 run is confirmed after the next push.
+`.github/workflows/ci.yml` runs migration checks, OpenAPI drift detection, backend tests with a PostgreSQL service and the full frontend checks on push and pull request. The E2 run passed in GitHub Actions.
 
 ## Migrations
 

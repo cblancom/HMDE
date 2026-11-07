@@ -51,6 +51,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0 and E1 are complete. SPEC-001 is validated. SPEC-002 is implemented and locally validated (T-001–T-012); its remote CI run is pending a push.
+E0, E1 and E2 are complete. SPEC-001 and SPEC-002 are validated. No next spec has been started.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

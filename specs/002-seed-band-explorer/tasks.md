@@ -1,6 +1,6 @@
 # Tasks — SPEC-002 Seed band explorer
 
-- **Status:** Implemented (local validation complete; remote CI pending)
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -202,7 +202,7 @@ T-002 can start once T-001 defines the model and ID strategy. T-004–T-006 are 
 
 - **Requirements:** FR-010, NFR-002, NFR-007.
 - **Dependencies:** T-006, T-010.
-- **Status:** Completed locally (2026-11-06); remote CI run requires a push and is not executed in this environment.
+- **Status:** Completed (2026-11-06); remote CI passed.
 - **Description:** complete backend integration tests with migrations/fixtures, frontend component tests, CI migration/OpenAPI drift checks and full backend/frontend runs.
 - **Done when:** local suites pass and CI passes with the expanded tests.
 - **Verification:**
@@ -211,13 +211,13 @@ T-002 can start once T-001 defines the model and ID strategy. T-004–T-006 are 
   (cd frontend && npm ci && npm run lint && npm run typecheck && npm run test && npm run build)
   ```
 - **Files:** `backend/tests/integration/`, `frontend/src/**/*.test.tsx`, `.github/workflows/ci.yml`.
-- **Evidence:** 2026-11-06: backend Ruff check/format pass; 36 tests pass, including migration upgrade/downgrade/upgrade, fixture idempotency, list/search/filter/pagination, detail/404, graph/no-credit/404, OpenAPI read-only contract and E2 scope guards. Frontend `npm ci`, lint, typecheck, 21 Vitest tests and production build pass. The regenerated `openapi.json` is byte-identical to the snapshot. CI now runs explicit migration up/down/up and OpenAPI drift checks before the full suites. The remote CI run is pending because no push was performed.
+- **Evidence:** 2026-11-06: backend Ruff check/format pass; 36 tests pass, including migration upgrade/downgrade/upgrade, fixture idempotency, list/search/filter/pagination, detail/404, graph/no-credit/404, OpenAPI read-only contract and E2 scope guards. Frontend `npm ci`, lint, typecheck, 21 Vitest tests and production build pass. The regenerated `openapi.json` is byte-identical to the snapshot. CI now runs explicit migration up/down/up and OpenAPI drift checks before the full suites. The remote CI run passed.
 
 ### T-012 — Document and validate E2
 
 - **Requirements:** FR-011, FR-012, NFR-001, NFR-003, NFR-005, NFR-007, NFR-008.
 - **Dependencies:** T-001 through T-011.
-- **Status:** Completed locally (2026-11-06); remote CI confirmation pending a push.
+- **Status:** Completed (2026-11-06); E2 validated.
 - **Description:** update README/AGENTS with fixture loading, endpoints, routes and tests; run the full E2 validation; record fixture counts, API/UI evidence, CI, scope guard and update spec/result.
 - **Done when:** all acceptance criteria have evidence and the spec is marked Validated.
 - **Verification:**
@@ -236,7 +236,7 @@ T-002 can start once T-001 defines the model and ID strategy. T-004–T-006 are 
   npm run build
   ```
 - **Files:** `README.md`, `AGENTS.md`, `specs/002-seed-band-explorer/spec.md`, `specs/002-seed-band-explorer/tasks.md`, `specs/README.md`, `docs/00-vision/roadmap.md`.
-- **Evidence:** 2026-11-06: README and AGENTS document fixture loading, endpoints, routes, migrations and commands. Compose builds and all three services are healthy; the API and web proxy return healthy responses; migrations and the fixture loader succeed from both host and container. Loader runs twice with stable counts (14 bands, 41 albums, 247 recordings, 859 credits). API smoke: list 39 ms, detail 18 ms, graph 11 ms; Iron Maiden detail has 3 albums and graph 4 nodes/3 edges with fixture `e2-v0.1.0`. Backend 36 tests and frontend 21 tests pass, with Ruff, ESLint, typecheck and builds clean. The only remaining validation evidence is the remote CI run, which requires a push.
+- **Evidence:** 2026-11-06: README and AGENTS document fixture loading, endpoints, routes, migrations and commands. Compose builds and all three services are healthy; the API and web proxy return healthy responses; migrations and the fixture loader succeed from both host and container. Loader runs twice with stable counts (14 bands, 41 albums, 247 recordings, 859 credits). API smoke: list 39 ms, detail 18 ms, graph 11 ms; Iron Maiden detail has 3 albums and graph 4 nodes/3 edges with fixture `e2-v0.1.0`. Backend 36 tests and frontend 21 tests pass, with Ruff, ESLint, typecheck and builds clean. The remote CI run passed.
 
 ## 3. Coverage matrix
 
@@ -283,7 +283,7 @@ T-002 can start once T-001 defines the model and ID strategy. T-004–T-006 are 
 | AC-007 | Passed | Component tests cover list/search/filter, loading, error, empty and detail; Compose SPA and API proxy smoke tests pass |
 | AC-008 | Passed | Component tests cover Cytoscape setup, legend, fallback table, empty graph and lifecycle cleanup |
 | AC-009 | Passed | `openapi.json` regenerates byte-identically; `openapi-typescript` and frontend typecheck pass |
-| AC-010 | Local pass; remote pending | Backend 36 tests, frontend 21 tests, Ruff, ESLint, typecheck and builds pass locally; remote CI requires a push |
+| AC-010 | Passed | Backend 36 tests, frontend 21 tests, Ruff, ESLint, typecheck and builds pass locally; the GitHub Actions E2 run passed |
 | AC-011 | Passed | Runtime scope guard rejects network imports; tests use fixtures only and no live ingestion |
 | AC-012 | Passed | README and AGENTS document fixtures, endpoints, routes, tests, migrations and commands; Compose and host commands verified |
 | AC-013 | Passed | Scope guard rejects Tailwind/Plotly; OpenAPI contains only GET operations |
@@ -291,7 +291,7 @@ T-002 can start once T-001 defines the model and ID strategy. T-004–T-006 are 
 ## 5. Notes
 
 - E2 uses fixtures, not live ingestion.
-- Local implementation and validation are complete. The remote CI confirmation remains pending because no push was performed.
+- Local and remote validation are complete; E2 is validated.
 - The fixture builder is a one-off development tool and is not imported by the API.
 - Do not commit generated TypeScript types; commit the reviewed `openapi.json` snapshot.
 - Do not introduce Tailwind, Plotly or analytics in E2.

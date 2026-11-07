@@ -69,7 +69,7 @@
 - **Objective:** validate the full architecture with a minimal vertical slice and an initial model.
 - **Scope:** core entities, initial migration, seed fixtures, minimal read API, band page and mini-graph.
 - **Activities:** consolidate the ERD and data dictionary v0; decide release-group vs release; define credit scopes (release-group, release, recording) and role attributes; create the Alembic migration; load 10–20 bands from the spike; implement list and detail views; render a band–producer graph with Cytoscape; generate TypeScript types from OpenAPI.
-- **Deliverables:** schema migratable from scratch; fixtures; OpenAPI v0 contract; band list and detail; mini-graph; end-to-end smoke test; **SPEC-002** implemented.
+- **Deliverables:** schema migratable from scratch; fixtures; OpenAPI v0 contract; band list and detail; mini-graph; end-to-end smoke test; **SPEC-002** validated.
 - **Depends on:** E0, E1.
 - **Done when:** the PostgreSQL → FastAPI → React → Cytoscape flow works with seed data; migrations apply from scratch; the contract is generated without manual intervention; CI is green.
 
@@ -210,7 +210,7 @@ Before closing any stage:
 |---|---|---|
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
 | E1 | Completed | SPEC-001 validated; CI green |
-| E2 | Implemented | T-001–T-012 complete; local validation passed; remote CI pending |
+| E2 | Validated | SPEC-002 validated; local and remote CI evidence complete |
 | E3–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -241,9 +241,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0 is complete. The seed list is versioned at [`data/seed-list.json`](../../data/seed-list.json) and documented in [`docs/03-data/seed-list.md`](../03-data/seed-list.md).
-
-Then:
-
-1. Confirm the expanded E2 run in remote CI after the next push.
-2. Start E3 (SPEC-003 MusicBrainz ingestion).
+E0–E2 are complete. The seed list is versioned at [`data/seed-list.json`](../../data/seed-list.json), documented in [`docs/03-data/seed-list.md`](../03-data/seed-list.md), and SPEC-002 is validated. No next stage has been started.
