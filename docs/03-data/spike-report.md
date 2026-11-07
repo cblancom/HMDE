@@ -187,7 +187,7 @@ E0 is complete: the final 42-band seed list is available at `data/seed-list.json
 
 Next steps:
 
-1. Continue E2 implementation at T-003; T-001 and T-002 are complete.
+1. E2 is implemented and locally validated (T-001–T-012); confirm the remote CI run, then start E3.
 2. Complete and validate the walking skeleton.
 
 ## 7. Limitations
@@ -219,5 +219,5 @@ The raw cache is disposable and should not be committed to the main repository. 
 
 ## 9. Next steps
 
-1. Continue E2 implementation at T-003; T-001 and T-002 are complete.
+1. E2 is implemented and locally validated (T-001–T-012); confirm the remote CI run, then start E3.
 2. Complete and validate the walking skeleton.

@@ -1,17 +1,26 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import App from './App'
+import { mockFetchRoutes } from './test/fetch'
+import { renderWithProviders } from './test/render'
 
-function mockFetchResponse(status: number, body: unknown) {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn().mockResolvedValue({
-      ok: status >= 200 && status < 300,
-      status,
-      json: async () => body,
-    }),
-  )
+const band = {
+  id: 'band-1',
+  mbid: 'mbid-1',
+  name: 'Iron Maiden',
+  country: 'GB',
+  subgenre: 'Heavy Metal',
+  album_count: 3,
+}
+
+function mockAppRoutes() {
+  return mockFetchRoutes({
+    '/health': { body: { status: 'ok', database: 'ok' } },
+    '/api/v1/bands': {
+      body: { items: [band], total: 1, limit: 20, offset: 0 },
+    },
+  })
 }
 
 afterEach(() => {
@@ -19,41 +28,41 @@ afterEach(() => {
 })
 
 describe('App', () => {
-  it('renders the project name and construction message', () => {
-    mockFetchResponse(200, { status: 'ok', database: 'ok' })
-    render(<App />)
+  it('redirects the root route to the band list', async () => {
+    mockAppRoutes()
+    renderWithProviders(<App />, { route: '/' })
+
+    expect(await screen.findByRole('heading', { name: 'Bands' })).toBeInTheDocument()
+    expect(await screen.findByRole('link', { name: 'Iron Maiden' })).toBeInTheDocument()
+  })
+
+  it('renders the band detail route', async () => {
+    mockFetchRoutes({
+      '/health': { body: { status: 'ok', database: 'ok' } },
+      '/api/v1/bands/band-1': {
+        body: { ...band, albums: [] },
+      },
+      '/api/v1/bands/band-1/graph': {
+        body: {
+          nodes: [{ id: 'band-1', label: 'Iron Maiden', type: 'band' }],
+          edges: [],
+          meta: { fixture_version: 'e2-v0.1.0' },
+        },
+      },
+    })
+    renderWithProviders(<App />, { route: '/bands/band-1' })
 
     expect(
-      screen.getByRole('heading', { name: 'Heavy Metal Data Explorer' }),
+      await screen.findByRole('heading', { name: 'Iron Maiden', level: 1 }),
     ).toBeInTheDocument()
-    expect(screen.getByText(/foundations are under construction/i)).toBeInTheDocument()
   })
 
-  it('shows the loading state while the health request is pending', () => {
-    vi.stubGlobal('fetch', vi.fn().mockReturnValue(new Promise(() => {})))
-    render(<App />)
+  it('renders a not-found page for unknown routes', () => {
+    mockFetchRoutes({
+      '/health': { body: { status: 'ok', database: 'ok' } },
+    })
+    renderWithProviders(<App />, { route: '/unknown' })
 
-    expect(screen.getByRole('status')).toHaveTextContent('Checking API status')
-  })
-
-  it('shows the available state when the API is healthy', async () => {
-    mockFetchResponse(200, { status: 'ok', database: 'ok' })
-    render(<App />)
-
-    expect(await screen.findByRole('status')).toHaveTextContent('API available')
-  })
-
-  it('shows the degraded state when the API reports a database problem', async () => {
-    mockFetchResponse(503, { status: 'degraded', database: 'unavailable' })
-    render(<App />)
-
-    expect(await screen.findByRole('status')).toHaveTextContent('API degraded')
-  })
-
-  it('shows the unavailable state when the request fails', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')))
-    render(<App />)
-
-    expect(await screen.findByRole('status')).toHaveTextContent('API unavailable')
+    expect(screen.getByRole('heading', { name: 'Page not found' })).toBeInTheDocument()
   })
 })

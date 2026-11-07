@@ -655,6 +655,16 @@ def build_fixtures(
             "subgenre_distribution": dict(
                 Counter(band["subgenre"] for band in band_summaries)
             ),
+            "source_record_count": len(source_records),
+            "artist_count": len(artists),
+            "release_group_count": len(release_group_records),
+            "release_count": len(release_records),
+            "recording_count": len(recording_records),
+            "recording_release_count": len(recording_release_records),
+            "role_count": len(roles),
+            "subgenre_count": len(SUBGENRES),
+            "artist_subgenre_count": len(artist_subgenres),
+            "external_id_count": len(external_ids),
             "album_count": len(release_group_records),
             "credit_count": len(credits),
             "credit_scope_distribution": dict(

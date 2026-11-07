@@ -29,3 +29,6 @@ spike/output/raw/
 .DS_Store
 .idea/
 .vscode/
+
+# Generated frontend API types
+frontend/src/api/schema.d.ts

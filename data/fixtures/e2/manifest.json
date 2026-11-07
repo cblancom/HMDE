@@ -1,5 +1,7 @@
 {
   "album_count": 41,
+  "artist_count": 94,
+  "artist_subgenre_count": 14,
   "band_count": 14,
   "bands": [
     {
@@ -93,6 +95,7 @@
     "recording": 779,
     "release": 80
   },
+  "external_id_count": 14,
   "files": {
     "artist_subgenres.json": "d0257d1986343b989b053fbf18a42e56428582f1200c1a96d1f1d65827f35bd5",
     "artists.json": "4293a5ce9358427738046b81b81a303cd6da411bdd59947300f647005d9050b8",
@@ -108,6 +111,11 @@
   },
   "generated_at": "2026-11-06",
   "license": "CC0-1.0",
+  "recording_count": 247,
+  "recording_release_count": 248,
+  "release_count": 60,
+  "release_group_count": 41,
+  "role_count": 7,
   "role_distribution": {
     "additional-producer": 4,
     "co-producer": 30,
@@ -122,7 +130,9 @@
   },
   "selection_policy": "Prefer albums with core producer/co-producer credits, using the earliest official release for release-level provenance.",
   "source": "musicbrainz",
+  "source_record_count": 442,
   "source_snapshot": "2026-11-05T01:58:10.444211+00:00",
+  "subgenre_count": 7,
   "subgenre_distribution": {
     "Black Metal": 2,
     "Death Metal": 2,

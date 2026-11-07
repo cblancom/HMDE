@@ -1,6 +1,6 @@
 # SPEC-002 — Seed band explorer
 
-- **Status:** In implementation
+- **Status:** Implemented
 - **Stage:** E2
 - **Iteration:** MVP
 - **Module:** `catalog`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-001 validated; E0 seed list; [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0003](../../docs/01-architecture/adr/ADR-0003-synchronous-sqlalchemy.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (in implementation)
+- **Tasks:** [tasks.md](tasks.md) (implemented)
 - **Owner:** Cristian
 
 ## Revision history
@@ -19,6 +19,16 @@
 | 2 | 2026-11-06 | Spec approved; plan and tasks drafted |
 | 3 | 2026-11-06 | Plan/tasks approved; T-001 implemented |
 | 4 | 2026-11-06 | T-002 implemented (E2 fixtures) |
+| 5 | 2026-11-06 | T-003 implemented (idempotent fixture loader) |
+| 6 | 2026-11-06 | T-004 implemented (band list/search API) |
+| 7 | 2026-11-06 | T-005 implemented (band detail API) |
+| 8 | 2026-11-06 | T-006 implemented (band graph API) |
+| 9 | 2026-11-06 | T-007 implemented (OpenAPI export and generated types) |
+| 10 | 2026-11-06 | T-008 implemented (frontend routes and band list) |
+| 11 | 2026-11-06 | T-009 implemented (band detail and credits UI) |
+| 12 | 2026-11-06 | T-010 implemented (Cytoscape mini graph and fallback) |
+| 13 | 2026-11-06 | T-011 implemented (expanded tests and CI) |
+| 14 | 2026-11-06 | T-012 implemented (documentation and local E2 validation); remote CI pending |
 
 ## 1. Context and problem
 
@@ -418,9 +428,9 @@ No blocking questions for the technical plan.
 
 ## 11. Validation result
 
-- **Date:** —
-- **Verdict:** Not validated
-- **Evidence:** `tasks.md` validation table, once the plan and tasks exist.
+- **Date:** 2026-11-06
+- **Verdict:** Implemented; local validation passed. Remote CI confirmation is pending because no push was performed.
+- **Evidence:** `tasks.md` T-001–T-012 evidence, the validation table, backend/frontend test output and the local Compose smoke run.
 
 ## 12. References
 

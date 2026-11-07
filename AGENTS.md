@@ -21,10 +21,10 @@ Stack:
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
 - The seed list is versioned at `data/seed-list.json` (v0.1.0).
-- Backend, frontend, development Docker Compose and CI are implemented; the remote CI run passed.
+- Backend, frontend, development Docker Compose and CI are implemented. The E1 remote CI run passed; the expanded E2 remote CI run is pending a push.
 - E1 is complete and SPEC-001 is validated.
-- SPEC-002 is in implementation: T-001 and T-002 are complete; T-003 is next.
-- The next work is T-003 (implement the idempotent fixture loader).
+- E2 is implemented and locally validated; SPEC-002 has T-001–T-012 complete.
+- The next work is to confirm E2 in CI, then start SPEC-003 (E3 MusicBrainz ingestion).
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -77,6 +77,10 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alemb
 DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic heads
 DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic upgrade head
 DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde uv run alembic downgrade base
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.seed.loader --fixtures ../data/fixtures/e2
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.openapi --output ../openapi.json
 ```
 
 Unit tests run without PostgreSQL; integration tests require `TEST_DATABASE_URL` and the `hmde_test` database.
@@ -91,6 +95,7 @@ npm run lint
 npm run typecheck
 npm run test
 npm run build
+npm run generate:api
 ```
 
 ### Docker Compose
@@ -105,10 +110,26 @@ docker compose exec api uv run alembic upgrade head
 docker compose exec api uv run alembic current
 docker compose exec api uv run alembic downgrade base
 docker compose exec api uv run alembic upgrade head
+docker compose exec api uv run python -m hmde.seed.loader --fixtures /data/fixtures/e2
 docker compose down
 ```
 
 `docker compose down -v` deletes the PostgreSQL volume and requires explicit authorization.
+
+### E2 endpoints and routes
+
+API:
+
+- `GET /health`
+- `GET /api/v1/bands` with `q`, `subgenre`, `limit`, `offset`
+- `GET /api/v1/bands/{band_id}`
+- `GET /api/v1/bands/{band_id}/graph`
+
+Web:
+
+- `/` redirects to `/bands`
+- `/bands` list/search/filter
+- `/bands/:bandId` detail, credits and producer graph
 
 ### Host ports
 

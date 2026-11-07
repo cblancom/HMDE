@@ -23,12 +23,12 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0 and E1 are complete. `001-foundations` is validated; `002-seed-band-explorer` is in implementation with T-001 and T-002 complete.
+E0 and E1 are complete. `001-foundations` is validated; `002-seed-band-explorer` is implemented and locally validated (T-001–T-012 complete). Its remote CI run is pending a push.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
 | 001 | [`001-foundations`](001-foundations/spec.md) | E1 | `platform` | Repository, environment, configuration, health, migrations baseline, test harnesses, CI | — | Validated |
-| 002 | [`002-seed-band-explorer`](002-seed-band-explorer/spec.md) | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | In implementation |
+| 002 | [`002-seed-band-explorer`](002-seed-band-explorer/spec.md) | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | Implemented |
 | 003 | `003-musicbrainz-ingestion` | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Pending |
 | 004 | `004-normalization-identity` | E4 | `normalization` | Canonical entities, external IDs, role mapping, credit scope, provenance | 003 | Pending |
 | 005 | `005-data-quality` | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 004 | Pending |
@@ -109,4 +109,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0 and E1 are complete. SPEC-002 is in implementation: T-001 and T-002 are complete. Continue with T-003 (fixture loader).
+E0 and E1 are complete. SPEC-002 is implemented and locally validated; T-001–T-012 are complete. Confirm E2 in CI after the next push, then start SPEC-003 (E3 MusicBrainz ingestion).

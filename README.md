@@ -7,8 +7,8 @@ The MVP focuses on 42 bands with studio albums released between 1980 and 2000. T
 ## Status
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
-- **Application code:** E1 validated; E2 in implementation with T-001 and T-002 complete.
-- **Next work:** T-003 (implement the idempotent fixture loader).
+- **Application code:** E1 validated; E2 implemented and locally validated (T-001–T-012 complete). Remote CI confirmation is pending a push.
+- **Next work:** confirm E2 in CI, then start SPEC-003 (E3 MusicBrainz ingestion).
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -40,10 +40,12 @@ For running backend or frontend outside containers:
 ```bash
 cp .env.example .env
 docker compose up --build -d
+docker compose exec api uv run alembic upgrade head
+docker compose exec api uv run python -m hmde.seed.loader --fixtures /data/fixtures/e2
 docker compose ps
 ```
 
-All three services should become healthy.
+The first startup applies the schema and loads the versioned E2 fixtures. All three services should become healthy.
 
 | Service | URL |
 |---|---|
@@ -54,6 +56,23 @@ All three services should become healthy.
 | PostgreSQL | `127.0.0.1:5434` |
 
 The API container listens on port `8000` internally and PostgreSQL on `5432`; only the host ports above are published. All published ports bind to `127.0.0.1`.
+
+### API endpoints
+
+| Method | Path | Purpose |
+|---|---|---|
+| `GET` | `/health` | API and database health |
+| `GET` | `/api/v1/bands` | List/search bands with `q`, `subgenre`, `limit` and `offset` |
+| `GET` | `/api/v1/bands/{band_id}` | Band metadata, albums and aggregated credits |
+| `GET` | `/api/v1/bands/{band_id}/graph` | One-hop band–producer graph |
+
+### Frontend routes
+
+| Route | Purpose |
+|---|---|
+| `/` | Redirects to `/bands` |
+| `/bands` | Band search, subgenre filter and list |
+| `/bands/:bandId` | Band detail, credits and producer graph |
 
 Stop the environment without deleting data:
 
@@ -95,6 +114,33 @@ npm run dev
 ```
 
 Vite runs on `http://127.0.0.1:5173` and proxies `/health` and `/api` to `http://localhost:8001` by default. Inside Compose it targets `http://api:8000`.
+
+### OpenAPI types
+
+The committed `openapi.json` is the API contract snapshot. Regenerate it from the backend, then generate the ignored frontend types:
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.openapi --output ../openapi.json
+
+cd ../frontend
+npm run generate:api
+```
+
+`npm run dev`, `npm run typecheck` and `npm run build` regenerate `src/api/schema.d.ts` automatically. Do not edit that file by hand.
+
+## E2 seed data
+
+E2 uses the versioned fixture set `e2-v0.1.0`: 14 bands, 41 albums, 247 recordings and 859 credits. It is loaded explicitly; it is not part of the migrations.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.seed.loader --fixtures ../data/fixtures/e2
+```
+
+The loader is idempotent and makes no network calls. Re-running it updates the same deterministic records and adds a new `fixture_load` audit row without duplicating entities.
 
 ## Test database
 
@@ -148,7 +194,7 @@ npm run build
 
 ### Continuous integration
 
-`.github/workflows/ci.yml` runs backend checks with a PostgreSQL service and frontend checks on push and pull request. The remote run starts with the first push.
+`.github/workflows/ci.yml` runs migration checks, OpenAPI drift detection, backend tests with a PostgreSQL service and the full frontend checks on push and pull request. The remote E2 run is confirmed after the next push.
 
 ## Migrations
 
@@ -169,7 +215,7 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
   uv run alembic upgrade head
 ```
 
-`0001_baseline` is an empty reversible baseline. Domain tables are added in later specs.
+`0001_baseline` is an empty reversible baseline. `0002_catalog_v0` adds the E2 catalog tables and `0003_credit_target_restrict` tightens credit target delete rules.
 
 ## Troubleshooting
 

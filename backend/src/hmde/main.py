@@ -4,6 +4,7 @@ import logging
 
 from fastapi import FastAPI
 
+from hmde.api.routes.bands import router as bands_router
 from hmde.api.routes.health import router as health_router
 from hmde.core.config import get_settings
 from hmde.core.logging import configure_logging
@@ -18,6 +19,7 @@ def create_app() -> FastAPI:
 
     app = FastAPI(title="HMDE API", version="0.1.0")
     app.include_router(health_router)
+    app.include_router(bands_router)
     return app
 
 
