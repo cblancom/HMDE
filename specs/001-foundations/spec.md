@@ -1,6 +1,6 @@
 # SPEC-001 — Foundations
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E1
 - **Iteration:** MVP
 - **Module:** `platform`
@@ -8,7 +8,7 @@
 - **Depends on:** E0 complete; [`constitution.md`](../../constitution.md), [`AGENTS.md`](../../AGENTS.md), [architecture overview](../../docs/01-architecture/overview.md), [engineering conventions](../../docs/01-architecture/conventions.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0003](../../docs/01-architecture/adr/ADR-0003-synchronous-sqlalchemy.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (completed; remote CI pending first push)
+- **Tasks:** [tasks.md](tasks.md) (completed and validated)
 - **Owner:** Cristian
 
 ## Revision history
@@ -22,6 +22,7 @@
 | 5 | 2026-11-05 | T-008–T-009 implemented; local API/DB ports changed to 8001/5434 to avoid conflicts |
 | 6 | 2026-11-05 | T-010–T-011 implemented (CI workflow and logging verification) |
 | 7 | 2026-11-05 | T-012–T-013 local validation complete; remote CI pending first push |
+| 8 | 2026-11-06 | Remote CI passed; SPEC-001 validated |
 
 ## 1. Context and problem
 
@@ -481,9 +482,9 @@ No blocking questions for the technical plan.
 
 ## 11. Validation result
 
-- **Date:** 2026-11-05
-- **Verdict:** Implemented; local validation complete, remote CI pending first push.
-- **Evidence:** `tasks.md` validation table. AC-011 is partial until GitHub Actions runs after the first push.
+- **Date:** 2026-11-06
+- **Verdict:** Validated.
+- **Evidence:** `tasks.md` validation table. All acceptance criteria, including the remote GitHub Actions run, are met.
 
 ## 12. References
 

@@ -1,0 +1,100 @@
+[
+  {
+    "artist_id": "520b6a04-5f15-5dbb-9efb-a4e3ac44630f",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "cc0b15a8-9d9c-53e2-9df2-dbc805a69c5f",
+    "subgenre_code": "black-metal"
+  },
+  {
+    "artist_id": "eafd6fa2-9960-5d4b-a6de-08bf31da432d",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "b7a4cb64-0486-5555-b88b-30ced0e7a7cf",
+    "subgenre_code": "black-metal"
+  },
+  {
+    "artist_id": "1f58e58a-a6ac-5381-bbc3-78267962131d",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "faf1d6e7-3de9-5f6c-b2c7-99b8aec498b4",
+    "subgenre_code": "death-metal"
+  },
+  {
+    "artist_id": "445a6a02-54fa-5f90-b601-117a4f739825",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "2aa6123c-8a08-574d-82ad-aef684535cf3",
+    "subgenre_code": "death-metal"
+  },
+  {
+    "artist_id": "89003bf8-7d5f-5c83-a62e-8dd5cc6b0b3d",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "d2343c93-0066-5ea4-9dc3-a19ba677c0f8",
+    "subgenre_code": "doom-metal"
+  },
+  {
+    "artist_id": "f8453bdd-6b25-54ca-9ff9-b9b41bd9f37b",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "abe53704-bd9e-5b75-bcb1-23fbb3b1f2e1",
+    "subgenre_code": "doom-metal"
+  },
+  {
+    "artist_id": "1822f070-61a9-5608-bbe9-2cf831d7abb0",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "1252cff3-7cca-513a-8fb0-75b8cdafc630",
+    "subgenre_code": "heavy-metal"
+  },
+  {
+    "artist_id": "194dcb6d-8bc6-5684-a399-04e8a1a975bc",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "9bb53d69-a221-50d1-9a9c-d154e21eef58",
+    "subgenre_code": "heavy-metal"
+  },
+  {
+    "artist_id": "74e8928b-627b-5a1b-9334-1404094fce8e",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "6d830dd9-6f0c-5a2c-be62-1c72da48537a",
+    "subgenre_code": "power-metal"
+  },
+  {
+    "artist_id": "ab63bc62-7293-537d-8efe-cd1e8d6f566e",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "6467ae58-7862-5d27-99a3-d189c1919eaf",
+    "subgenre_code": "power-metal"
+  },
+  {
+    "artist_id": "04db6fb8-5563-57e0-962c-5aba4a69374e",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "99cde72d-613f-57db-bec3-9e088cfc5ccc",
+    "subgenre_code": "progressive-metal"
+  },
+  {
+    "artist_id": "ad377351-046e-5a04-87f1-640109b52420",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "5bd9fe26-3db0-5c85-a2b9-d40a8a8e7173",
+    "subgenre_code": "progressive-metal"
+  },
+  {
+    "artist_id": "7f225f5c-b1a0-56b2-9d29-abfa32348c79",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "d04350c1-9beb-5858-9f78-e8bf6df38218",
+    "subgenre_code": "thrash-metal"
+  },
+  {
+    "artist_id": "ad278b0c-8da3-5dc5-a1c9-a4f4dff4e5e5",
+    "confidence": 1.0,
+    "is_primary": true,
+    "source_record_id": "b15de5a2-404a-5b70-8d62-adffe914e684",
+    "subgenre_code": "thrash-metal"
+  }
+]

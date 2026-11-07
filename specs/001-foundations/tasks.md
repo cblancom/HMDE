@@ -257,7 +257,7 @@ Backend and frontend can advance in parallel after T-001. T-009 integrates infra
   npm run build
   ```
 - **Files:** `specs/001-foundations/spec.md`, `specs/001-foundations/tasks.md`, `AGENTS.md`, `README.md`, `specs/README.md`.
-- **Evidence:** 2026-11-05: Compose started db/api/web healthy; `/health` returned 200; web and Vite proxy returned 200; stopping PostgreSQL produced 503 with `{"status":"degraded","database":"unavailable"}` while the API stayed up; restarting PostgreSQL restored 200. `hmde_test` was created; full backend suite passed 14/14; Alembic upgrade → downgrade base → upgrade succeeded and `current` returned `0001 (head)`; `\dt` showed only `alembic_version`. Frontend `npm ci`, lint, typecheck, 5 tests and build passed; backend Ruff/format passed. A clean-copy validation of backend/frontend commands and `docker compose config -q` passed. OpenAPI exposes only `/health`. `actionlint` exited 0 and the local CI equivalent passed. AC-011 is partially verified because the remote GitHub Actions run requires the first push, which was not performed.
+- **Evidence:** 2026-11-05: Compose started db/api/web healthy; `/health` returned 200; web and Vite proxy returned 200; stopping PostgreSQL produced 503 with `{"status":"degraded","database":"unavailable"}` while the API stayed up; restarting PostgreSQL restored 200. `hmde_test` was created; full backend suite passed 14/14; Alembic upgrade → downgrade base → upgrade succeeded and `current` returned `0001 (head)`; `\dt` showed only `alembic_version`. Frontend `npm ci`, lint, typecheck, 5 tests and build passed; backend Ruff/format passed. A clean-copy validation of backend/frontend commands and `docker compose config -q` passed. OpenAPI exposes only `/health`. `actionlint` exited 0, the local CI equivalent passed, and the remote GitHub Actions run passed after the first push (confirmed 2026-11-06).
 
 ## 3. Coverage matrix
 
@@ -309,7 +309,7 @@ Backend and frontend can advance in parallel after T-001. T-009 integrates infra
 | AC-008 | Met | `npm ci`, lint, typecheck, 5 tests and build passed. |
 | AC-009 | Met | Ruff check and format check passed (23 files). |
 | AC-010 | Met | `.env` is absent/ignored; `.env.example` contains development values only; no real secrets found. |
-| AC-011 | Partial | `actionlint` passed and local CI equivalent passed; remote GitHub Actions run pending first push. |
+| AC-011 | Met | `actionlint` passed, local CI equivalent passed, and the remote GitHub Actions run passed (confirmed 2026-11-06). |
 | AC-012 | Met | README/AGENTS commands verified in a clean copy; `docker compose config -q` passed. |
 | AC-013 | Met | OpenAPI exposes only `/health`; database contains only `alembic_version`. |
 
@@ -318,5 +318,4 @@ Backend and frontend can advance in parallel after T-001. T-009 integrates infra
 - Do not implement domain tables, ingestion or domain endpoints in this iteration.
 - If a task reveals a decision not covered by the spec or plan, update the spec or plan first.
 - Do not mark a task complete unless its verification was executed.
-- AC-011 remains partial until the first push runs GitHub Actions; the spec stays `Implemented` until then.
 - Record follow-up debt or open issues here.

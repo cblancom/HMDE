@@ -1,0 +1,30 @@
+[
+  {
+    "code": "black-metal",
+    "name": "Black Metal"
+  },
+  {
+    "code": "death-metal",
+    "name": "Death Metal"
+  },
+  {
+    "code": "doom-metal",
+    "name": "Doom Metal"
+  },
+  {
+    "code": "heavy-metal",
+    "name": "Heavy Metal"
+  },
+  {
+    "code": "power-metal",
+    "name": "Power Metal"
+  },
+  {
+    "code": "progressive-metal",
+    "name": "Progressive Metal"
+  },
+  {
+    "code": "thrash-metal",
+    "name": "Thrash Metal"
+  }
+]

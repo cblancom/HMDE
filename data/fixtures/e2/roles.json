@@ -1,0 +1,37 @@
+[
+  {
+    "category": "extended",
+    "code": "additional-producer",
+    "name": "Additional producer"
+  },
+  {
+    "category": "core",
+    "code": "co-producer",
+    "name": "Co-producer"
+  },
+  {
+    "category": "extended",
+    "code": "engineer",
+    "name": "Engineer"
+  },
+  {
+    "category": "extended",
+    "code": "executive-producer",
+    "name": "Executive producer"
+  },
+  {
+    "category": "extended",
+    "code": "mastering",
+    "name": "Mastering"
+  },
+  {
+    "category": "extended",
+    "code": "mix",
+    "name": "Mix"
+  },
+  {
+    "category": "core",
+    "code": "producer",
+    "name": "Producer"
+  }
+]

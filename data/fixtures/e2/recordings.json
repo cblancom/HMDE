@@ -1,0 +1,1484 @@
+[
+  {
+    "id": "0206be5f-8db8-51b7-8f1b-ad054dacd79f",
+    "mbid": "bc9ca5c8-8b29-44db-aaba-4e0e84964494",
+    "source_record_id": "baff1b1b-5037-5eaf-9633-032b3b54ada7",
+    "title": "Take the Time"
+  },
+  {
+    "id": "028ab3e2-fdb2-5b8c-88d7-4c747ae25617",
+    "mbid": "6b589896-45a1-4c1c-81ec-d3fc316e296d",
+    "source_record_id": "605b505b-4ffd-5fa5-ae2b-1eb0c0ad406e",
+    "title": "Another Life"
+  },
+  {
+    "id": "028af9af-ad88-53c4-a9d5-620602ddb81c",
+    "mbid": "b559b2be-7e0d-4f91-adc7-758bb1e1a986",
+    "source_record_id": "d2405fe2-8780-5bd6-bf12-bb650d249fa8",
+    "title": "Trial by the Archon / Wizard’s Crown"
+  },
+  {
+    "id": "037f6cdd-789c-52f1-b9bc-55b33ee3b575",
+    "mbid": "2ef5b4cd-2f5d-4159-945d-d274e83bd3ce",
+    "source_record_id": "10be58e9-2478-5522-a45b-803eca3b2b71",
+    "title": "Orphan Gypsy"
+  },
+  {
+    "id": "04ee4b47-d9eb-5ca9-a2bc-111492b04aef",
+    "mbid": "415e80a8-ba06-4f7d-86cc-15b8e255823b",
+    "source_record_id": "f9c84384-71cb-54e4-99b4-b4227479244e",
+    "title": "Pirates of the Underground"
+  },
+  {
+    "id": "081d0f1c-a650-51cc-84f1-e0dccc08bce6",
+    "mbid": "de7bd835-09ba-49b4-9480-6caef9b1811e",
+    "source_record_id": "3186e7af-987e-5a99-aab3-c33a752e44a3",
+    "title": "Regurgitated Guts"
+  },
+  {
+    "id": "0a29f2b7-e5a4-565a-b3b6-f8121e21390e",
+    "mbid": "acefd70b-3d4b-4803-995c-ebdbc987b349",
+    "source_record_id": "301187ff-d866-5f7d-ad3b-911c5beb003c",
+    "title": "Scream Bloody Gore"
+  },
+  {
+    "id": "0aab2ade-d08e-5742-82c3-76f12185cea8",
+    "mbid": "46169b2f-fae9-4adb-aa12-b68d24d2692e",
+    "source_record_id": "26e85119-5e4a-5a32-8edc-c51780911442",
+    "title": "The Antichrist"
+  },
+  {
+    "id": "0b62324c-70d4-5979-a350-1e623b2c92c7",
+    "mbid": "eb3d3c2d-aee7-483c-b1a2-acb9269ca440",
+    "source_record_id": "79ff8009-2664-536b-8470-606ae1b04393",
+    "title": "A Tale That Wasn’t Right"
+  },
+  {
+    "id": "0def353f-5b0c-5b01-9230-5eca024b9132",
+    "mbid": "9c424bc4-8325-4be5-b467-101bbba0f3fd",
+    "source_record_id": "c3fd4bd1-a8bd-587f-9bb8-a49cffd2e819",
+    "title": "Epistle No. 81"
+  },
+  {
+    "id": "0e084933-871f-54dd-9cf8-70601305448d",
+    "mbid": "188650c8-56ca-4616-bc1c-350a36eee2eb",
+    "source_record_id": "c836a7b5-016a-517d-8309-f5da15436e8b",
+    "title": "13 Candles"
+  },
+  {
+    "id": "0edc6a44-955b-5d30-b48d-2b51b7c1c06b",
+    "mbid": "a1cdc622-4090-4cd5-b5bf-6d01c7c04259",
+    "source_record_id": "7676a864-621a-5009-b8e3-6dd70436a78e",
+    "title": "Under the Oak"
+  },
+  {
+    "id": "0fdbf555-3fb9-5c53-afdd-5e9ff6c6bfb5",
+    "mbid": "ea5ca890-3035-4445-9c59-e076958c79e7",
+    "source_record_id": "a4fc7396-1105-53d4-b0c0-437d404816e1",
+    "title": "Armageddon"
+  },
+  {
+    "id": "10229855-3d12-5641-8595-4c58a298ed2d",
+    "mbid": "a01a33c7-9a38-41a1-9e3f-63b30f30753a",
+    "source_record_id": "5fb31fb6-2616-5e03-b06f-895943ce3e0b",
+    "title": "Evil Dead"
+  },
+  {
+    "id": "10671d53-0c40-52e7-a6e8-0cb289033122",
+    "mbid": "656543f0-20b9-485f-aaa2-3933c9202408",
+    "source_record_id": "66b4b9aa-b84e-51ce-8373-8db383f8a7a5",
+    "title": "Jesus Saves"
+  },
+  {
+    "id": "10e5fa4e-fdf3-5670-985c-7b9414ecfdf3",
+    "mbid": "d0e4c2a5-829f-455f-9d48-4ba5946ffe26",
+    "source_record_id": "635fa933-b2a2-5f68-a69c-4718eab15d5e",
+    "title": "Massacre"
+  },
+  {
+    "id": "1116be8e-43f4-57b8-9a26-330896f7a138",
+    "mbid": "fa4bbbd9-7e53-4f70-adab-4fdb901e5065",
+    "source_record_id": "ebd68d1f-59d6-539c-9e79-9e852735eef0",
+    "title": "Scattered Remains, Splattered Brains"
+  },
+  {
+    "id": "116f30d2-be28-5a23-9aaa-e10013ba1ee2",
+    "mbid": "d2cd1d73-f846-4b8f-b8f9-dc13a90c03d4",
+    "source_record_id": "ac49b62c-5812-5277-84be-d38432a7e7eb",
+    "title": "The Last Candle"
+  },
+  {
+    "id": "1182476a-eb52-55a0-b63a-2e3ec5490496",
+    "mbid": "56d2735d-abc7-4070-9c3f-bc27593d922d",
+    "source_record_id": "3370fb54-b544-5490-98be-989383cdbc2d",
+    "title": "One"
+  },
+  {
+    "id": "11a8b343-ec59-5573-868b-d6a336d536af",
+    "mbid": "d03e8d5a-ae98-4817-8a4a-cacd1311a616",
+    "source_record_id": "1e2906f6-c65c-5e5b-9873-498684cf1e87",
+    "title": "Night on Bröcken"
+  },
+  {
+    "id": "11c3aedb-812a-55c1-a131-4e2ac9b27520",
+    "mbid": "6c1e2692-9418-4a01-ba18-6cd3ce83b3d5",
+    "source_record_id": "1dbacd77-8d6d-56b7-801a-a64edf90bed6",
+    "title": "Hades"
+  },
+  {
+    "id": "141022a1-3c1a-5a8c-904f-aa65281c90b5",
+    "mbid": "1728de62-9d23-4594-8f96-1ce4044177b8",
+    "source_record_id": "8822ad0a-7b75-545c-bf06-1a4633ab5aee",
+    "title": "By the Gates of Moria"
+  },
+  {
+    "id": "15904096-cd04-56eb-a4ca-26de8b277fe2",
+    "mbid": "93cfd823-9fb7-4799-b8dc-1796f300af27",
+    "source_record_id": "f9acc275-1842-5334-ae3f-24189dc1ddb1",
+    "title": "How Many Tears"
+  },
+  {
+    "id": "162814f3-0665-51af-8931-f12f76ecbe18",
+    "mbid": "292c7c0f-b536-4816-90ce-c5d7d54a0819",
+    "source_record_id": "e53032e4-df5b-5240-a797-8f9c02fa8c87",
+    "title": "Reptile"
+  },
+  {
+    "id": "165acb33-c65f-5171-b18e-1261a937601b",
+    "mbid": "771f2eb6-7a31-41b8-b66f-5c6560a089e0",
+    "source_record_id": "7737f8e8-affe-5a5e-a0f3-ad6f81a9f1a7",
+    "title": "Darkness in Paradise"
+  },
+  {
+    "id": "166c778c-a789-5e69-ac9f-fc133fd70877",
+    "mbid": "faa30672-79ad-4fa8-b071-df64561ebc40",
+    "source_record_id": "83e14f87-e0d5-59bd-bfb4-a29ba4174d22",
+    "title": "Time Long Past"
+  },
+  {
+    "id": "171899a4-2d3b-52d9-afc9-e621410198d5",
+    "mbid": "9c41895c-8fcd-4f89-9e1f-feb64103ba73",
+    "source_record_id": "e5d03fc8-bf29-510d-8ec6-921dd90acbc5",
+    "title": "Rotting Head"
+  },
+  {
+    "id": "1724b8d5-425f-5dfc-b6f7-38061455998b",
+    "mbid": "df1a80d2-a727-49cb-bd41-d65efd7cb623",
+    "source_record_id": "ff272692-9751-5401-be0b-d99989514008",
+    "title": "Meat Hook Sodomy"
+  },
+  {
+    "id": "1762c590-b6e8-5493-9476-5b9f3fbf7ca2",
+    "mbid": "3b505696-52e1-4422-8a3b-ab84e6cf87e0",
+    "source_record_id": "bc7aa9ab-9f70-5759-a301-e1182b29675c",
+    "title": "Gutted"
+  },
+  {
+    "id": "177b80d8-1a55-5e13-9e8a-36f6572d0c55",
+    "mbid": "9d4d8404-c807-4c6b-b6e5-5b02f804eff4",
+    "source_record_id": "1862006f-c875-52bc-94f9-248af98d071c",
+    "title": "Baptized in Blood"
+  },
+  {
+    "id": "1801fe7b-03be-575f-9aa2-22c42f68f805",
+    "mbid": "e90d1aa0-e6de-4a52-9b0d-21ef4f2e477b",
+    "source_record_id": "51daa471-ffa6-5c66-b1f6-8d3d1334af14",
+    "title": "Barbara Ann"
+  },
+  {
+    "id": "18632f74-1c95-5982-8eee-58565558efed",
+    "mbid": "4fcd5a4a-fb09-4929-958c-e806ae4ea570",
+    "source_record_id": "bb6389d3-3b7f-535a-9acc-d5401520176c",
+    "title": "The Bells of Acheron"
+  },
+  {
+    "id": "18aa839d-d795-5e46-ab50-cf0953939b2a",
+    "mbid": "b05bed1b-2af2-4d1b-bdc5-13661151e1a7",
+    "source_record_id": "e85afd0e-a3f7-5a08-9055-2f42e16ab6ea",
+    "title": "A Cry From the Crypt"
+  },
+  {
+    "id": "191353a2-2b28-5b8f-adb8-1370834ea189",
+    "mbid": "7df95306-f2d9-4a34-bc2a-d223e12aab07",
+    "source_record_id": "5fae0df6-c3d4-55a7-ae87-67b33c65b089",
+    "title": "Prelude to Ruin"
+  },
+  {
+    "id": "1af011e5-c048-5ddc-8703-99e10d928e45",
+    "mbid": "21ca2df0-5fbb-4823-acf8-6a0761e536ee",
+    "source_record_id": "5151271f-26a5-5dc3-87ec-4e36ae672e10",
+    "title": "Innards Decay"
+  },
+  {
+    "id": "1f2d8076-6f5c-5e6c-87f5-53a47151697b",
+    "mbid": "ad808a33-3a3a-4fdb-af6c-7a6bb574267a",
+    "source_record_id": "71a2b3d2-937e-549d-bc6e-d4747fca4c1c",
+    "title": "Welcome to Dying"
+  },
+  {
+    "id": "208f9c45-d233-5ab1-8e6f-9d323d09bbc1",
+    "mbid": "613a2ac0-f8e9-40f3-9c9c-ec9c1f35268d",
+    "source_record_id": "440d073d-0971-5bd5-a0b8-973cf45e45ea",
+    "title": "Of Doom"
+  },
+  {
+    "id": "2498ad51-a54b-5f96-b2c5-bb3cb5d6ba97",
+    "mbid": "b5f37012-6f59-4441-8852-db49fceaec9f",
+    "source_record_id": "16265003-08c5-5f5b-85fa-805163718d4e",
+    "title": "The Well of Souls"
+  },
+  {
+    "id": "252ba0d7-7c05-5995-bdd1-b8d1f7719612",
+    "mbid": "cdc2fe36-65cb-473c-b75b-a1d7803571d0",
+    "source_record_id": "f4f19ad7-5330-5386-ab12-8c01a9e52fc5",
+    "title": "Living Dissection"
+  },
+  {
+    "id": "25a4f1d8-7ec0-59a2-8c96-5637540f3d56",
+    "mbid": "11bbbcf2-3880-4f49-98a0-383d05cb43e1",
+    "source_record_id": "88328a0d-13b8-54f2-b0ed-fee7e18df75c",
+    "title": "Postmortem"
+  },
+  {
+    "id": "2b9d77a5-099a-5062-999e-023924c770ba",
+    "mbid": "6f3a7300-77e6-4f82-9302-ded4858ac98c",
+    "source_record_id": "876a4d00-e9f3-56fd-bcf5-b6a053444fbb",
+    "title": "A Little Time"
+  },
+  {
+    "id": "2b9e1df5-c3c5-5c91-bd08-ad0db8e73c07",
+    "mbid": "8b95a258-cb00-48f1-a198-59eb47130927",
+    "source_record_id": "dd602884-4733-5324-8203-736fea069ff2",
+    "title": "Chariots of Fire"
+  },
+  {
+    "id": "2d891796-9fe9-5f39-a6ce-f162b7445360",
+    "mbid": "ce7ff366-e611-40ba-93b2-746d53367caa",
+    "source_record_id": "a3cde0c1-588c-57f8-82c0-5426cbb7f316",
+    "title": "Pagan Fears"
+  },
+  {
+    "id": "303a0952-ec63-5046-87b1-5637258141ca",
+    "mbid": "bf674e96-c52e-493b-b00a-5b3e7c180f5a",
+    "source_record_id": "f1cc556d-57c9-5664-abcd-8dd27747f477",
+    "title": "Metropolis, Part I: The Miracle and the Sleeper"
+  },
+  {
+    "id": "3165c2dc-1c9a-5411-b5d1-f8f149439cbb",
+    "mbid": "88aedfc6-6359-423d-ade9-e3fda0987705",
+    "source_record_id": "0f2921e1-d362-5931-8ee4-5bc6e1a11594",
+    "title": "I’m Doin’ Fine, Crazy Man"
+  },
+  {
+    "id": "31cf1c0d-bc82-5f20-9a8c-4cf4327f3711",
+    "mbid": "1902046b-2587-44d5-abbf-255941049bb2",
+    "source_record_id": "9d4be7b3-e72d-5dff-9d53-35cea6b4dea8",
+    "title": "Black Magic"
+  },
+  {
+    "id": "32da375c-1e03-585b-bf8d-4793d02cbadf",
+    "mbid": "c17d1354-b09c-4ea7-a88f-126becd7cf23",
+    "source_record_id": "61eb9f8f-eb0f-51b6-bf0f-e95c62141bf3",
+    "title": "Hall of the King"
+  },
+  {
+    "id": "33ce6b76-160b-5cac-aabd-3098d4a7b527",
+    "mbid": "6e8d47e0-2156-4fc8-bd65-1f068effde43",
+    "source_record_id": "07218192-c132-5651-99f7-e828a944363e",
+    "title": "Gothic Stone"
+  },
+  {
+    "id": "37dbdbaf-8080-587e-8412-37c93034c1a7",
+    "mbid": "c26f5a73-73f3-43d4-8ed4-258ec21caae1",
+    "source_record_id": "29e8a1d9-f774-5f69-9213-f638ac4ab901",
+    "title": "Defensive Personalities"
+  },
+  {
+    "id": "37e1b9a5-0b0e-5594-8ea5-cffa0e2cb5cb",
+    "mbid": "40ac9aac-3f8c-49a9-be82-08b7a9d61a21",
+    "source_record_id": "8de7731a-b744-564a-9a20-14ee2b5a4124",
+    "title": "Heavy Metal Hamsters"
+  },
+  {
+    "id": "392be196-9714-55e7-bcc9-89a95da18db1",
+    "mbid": "e940a1f3-fb19-4e8d-b7f5-9565f99a1e67",
+    "source_record_id": "ad7420f7-9959-5890-917d-57314f9e837c",
+    "title": "The Martyr"
+  },
+  {
+    "id": "39ef46b5-fbd8-58f3-b6b5-68c9a23cb240",
+    "mbid": "56fe4f4e-6b0b-4161-81fb-b4647b1835e0",
+    "source_record_id": "4c0f48c9-fd1b-542f-93f2-6c7e128844ea",
+    "title": "Genetic Reconstruction"
+  },
+  {
+    "id": "3a2f0df5-1c52-5581-8264-64eb97cf4772",
+    "mbid": "c5203e87-ceb8-4572-895c-692e8bfead03",
+    "source_record_id": "b4157da8-866d-5c4d-88ed-b27bf5175c42",
+    "title": "Fast to Madness"
+  },
+  {
+    "id": "3a5c0cf8-be19-5aa1-9b2d-ea81932328e4",
+    "mbid": "6fe0d9ec-0f54-4095-b0ec-59111ee71b23",
+    "source_record_id": "b93c0003-c354-5601-a939-8b2dafc3b6bf",
+    "title": "View From Nihil, Part II"
+  },
+  {
+    "id": "3c83be3d-a9cb-5b36-836b-36e8f764e0f3",
+    "mbid": "f3301458-434f-46e7-bcc3-f8578323a4eb",
+    "source_record_id": "f9ea15ba-3ce7-5534-a639-a033f723f570",
+    "title": "Mirror Mirror"
+  },
+  {
+    "id": "3f0d3a59-d955-58c3-998d-fedaecd3636e",
+    "mbid": "c944592b-f7fa-48b6-8f85-d0e8e2e799a5",
+    "source_record_id": "701455d6-8387-5cce-b314-db40acd4933a",
+    "title": "Back on the Streets"
+  },
+  {
+    "id": "3fb8e173-ff22-5bb0-9047-4134294e7b75",
+    "mbid": "74c515cd-7f86-4a4d-9673-e42c325a6b04",
+    "source_record_id": "2034d47d-d2f6-5535-8cad-14005b27de0a",
+    "title": "Guardian"
+  },
+  {
+    "id": "4034373d-3163-545f-87c6-623123bc33be",
+    "mbid": "40dbcd3f-6597-4a07-ad8f-4b9c8974ea7e",
+    "source_record_id": "45fe8451-a95c-5cdc-affd-0c28e8c2fdc4",
+    "title": "Put Them to Death"
+  },
+  {
+    "id": "40787909-c97b-5045-8028-fbbe9498ca7b",
+    "mbid": "1748f267-36ad-4c4c-aeb1-405571aaf3a5",
+    "source_record_id": "02d8b8b3-d413-533e-bf9c-71396bf7eb90",
+    "title": "Cursed in Eternity"
+  },
+  {
+    "id": "417f9190-72d4-548b-a8b8-dff6969158ed",
+    "mbid": "e47457f1-d624-463d-9000-001df614aa6d",
+    "source_record_id": "17450a00-d391-5664-8110-1ef78915cb11",
+    "title": "Evil Has No Boundaries"
+  },
+  {
+    "id": "42e0f812-28ad-56ce-8edc-bc662d2df505",
+    "mbid": "2246045e-5b47-42ab-a7f0-175e291bb462",
+    "source_record_id": "5340481a-fad1-5657-b4ee-46f1a412dcb7",
+    "title": "Inquisition"
+  },
+  {
+    "id": "46fa6d31-b53e-5c57-bd2c-5114d04ab44f",
+    "mbid": "731a4233-e5c6-40f1-aab8-57dbc5d8d9d2",
+    "source_record_id": "130c6dbc-c304-51b7-9f70-4a7b3bbaface",
+    "title": "Soldier Boy"
+  },
+  {
+    "id": "4749f7cf-d2b0-5fca-947c-2e83134c3f46",
+    "mbid": "9b2b1102-7284-44ce-846d-0c206e5f39cd",
+    "source_record_id": "fdc0e0f2-53e3-5a6a-94d8-7faeefd66c17",
+    "title": "The Ides of March"
+  },
+  {
+    "id": "47fc0e2c-4126-5109-8559-d583a96cf744",
+    "mbid": "2ba28563-5ac0-46d7-ad79-939c377617ec",
+    "source_record_id": "cb1ce7d4-e42c-5bbf-bd6a-fd58940ba46b",
+    "title": "Woman of Dark Desires"
+  },
+  {
+    "id": "4827504c-6aac-5f9d-b569-944fa44ede39",
+    "mbid": "238a37ce-298a-401e-98a8-7d5df61aa74d",
+    "source_record_id": "9931e123-c940-5b10-af82-d3c3bb236aae",
+    "title": "Altering the Future"
+  },
+  {
+    "id": "48dcf222-52de-56c3-8b8a-8f2783cc472d",
+    "mbid": "44f78cf1-ea5c-4328-9b3d-52e0a03feecf",
+    "source_record_id": "7929515e-0e40-551c-8697-05329ff09442",
+    "title": "Vomit the Soul"
+  },
+  {
+    "id": "4ca20f09-28a1-579e-b542-d2f9f0b1fe6a",
+    "mbid": "f4f8e6f2-1f97-41a5-891a-c3b3d62316ff",
+    "source_record_id": "1fb3a121-d5ae-5ef8-85f2-8b29fb7621f8",
+    "title": "The Calling"
+  },
+  {
+    "id": "4ee0f382-899d-55ae-b834-a17f137a34eb",
+    "mbid": "e56ced10-af88-48ff-a4c6-20f366c55adf",
+    "source_record_id": "d3502490-8ee6-5d43-a44d-85f412c07bab",
+    "title": "Another Day"
+  },
+  {
+    "id": "4f47c5ad-d04f-556f-98ae-1b699f884620",
+    "mbid": "e93263db-6d40-4ab2-b315-182621baaaff",
+    "source_record_id": "3b661d02-fa34-5208-b869-56f62eec88e4",
+    "title": "View From Nihil, Part I"
+  },
+  {
+    "id": "4f746efd-aca3-5d40-b8c0-e32c1f3e303a",
+    "mbid": "f76e4603-ef04-4698-83c5-e6088cd70484",
+    "source_record_id": "e863f549-1389-524b-8ed8-6cf22e6ba678",
+    "title": "Codex Gigas"
+  },
+  {
+    "id": "4f7fad77-80c0-5695-ba56-9e7a59af19d0",
+    "mbid": "1108e8bb-008b-49b4-b2bf-f5f0686ec59d",
+    "source_record_id": "a44664fc-f391-5e24-915c-ed8aa90ac967",
+    "title": "Genghis Khan"
+  },
+  {
+    "id": "506f0485-826e-5904-a6ba-44fbf7dd33eb",
+    "mbid": "370cb0da-f19d-4878-8dc4-453d27f7d3db",
+    "source_record_id": "1a2afaed-006b-575b-abda-787d841839bd",
+    "title": "Guardians"
+  },
+  {
+    "id": "51d946de-7a39-532c-aa09-e721b56a6c4d",
+    "mbid": "faa68439-0aba-432f-903d-cd5de40dc924",
+    "source_record_id": "45dc9ea9-e4ab-594b-818a-e8f33d6a2dbf",
+    "title": "Don’t Break the Circle"
+  },
+  {
+    "id": "52413a9d-c2db-5d90-b5d5-c9a1f41855a9",
+    "mbid": "08479354-d37f-41f1-aa13-a65303ad2883",
+    "source_record_id": "ac822738-6841-581e-8f3a-061a052add18",
+    "title": "Lord of the Rings"
+  },
+  {
+    "id": "5283d5a2-21e0-5ac1-a5be-57af1687fb7c",
+    "mbid": "4a590428-d9e0-4d76-a6f2-10a1b02bfa42",
+    "source_record_id": "678cd7fb-281e-56e9-9619-39690db01a1b",
+    "title": "Incarnation of Evil"
+  },
+  {
+    "id": "53c12a7c-a223-5aef-96e4-82a36ae7dc55",
+    "mbid": "381dea84-8691-459f-b7ac-21e4ea2a5271",
+    "source_record_id": "837b616d-75fc-5f39-a09b-66418c69db63",
+    "title": "Buried in the Backyard"
+  },
+  {
+    "id": "53c972c2-b1e4-52a3-a025-d386fc40a7af",
+    "mbid": "b28a6a53-a20e-4915-8b2f-c517fd5b3a1e",
+    "source_record_id": "7aa6f279-89cf-5a45-acae-88682dda0156",
+    "title": "Funeral Fog"
+  },
+  {
+    "id": "5463d865-47cd-5be4-9495-95e136afb216",
+    "mbid": "e68ca209-b41f-4fcb-abce-1947176c834e",
+    "source_record_id": "b5340e6b-f616-57bb-9af9-8ff33add4bad",
+    "title": "Edible Autopsy"
+  },
+  {
+    "id": "54dd7069-064e-5cf6-9ddc-6542c902f6b9",
+    "mbid": "08593446-c6e9-4f69-b5f2-a3626e18384e",
+    "source_record_id": "0ecff003-3e15-557c-9fbf-b2a6c931fd36",
+    "title": "Samarithan"
+  },
+  {
+    "id": "57e73006-390d-5823-b07d-384412321103",
+    "mbid": "28bc0469-1a2e-4df3-8e94-9dcaf8126a27",
+    "source_record_id": "e5abb9ce-8a4b-5f31-811a-ef9d870919f8",
+    "title": "Initiation"
+  },
+  {
+    "id": "5801fd33-0ab0-59a3-a402-b45628fb499e",
+    "mbid": "18c19d88-45e2-49bf-bf79-4418788f959c",
+    "source_record_id": "413f5035-c09b-57ea-aed7-d313f1b25a2e",
+    "title": "To Daimonion, Part I"
+  },
+  {
+    "id": "5ca5ffac-8563-5c4e-92f6-e6a3a0ae5d92",
+    "mbid": "631c6d03-ba05-4f69-913f-bdf832ee767c",
+    "source_record_id": "5d80041a-6621-5617-9045-69947d3ac3b9",
+    "title": "Follow the Sign"
+  },
+  {
+    "id": "5d0f700c-c390-5571-bcc1-41f47a133841",
+    "mbid": "afaefb31-f121-4f7b-a892-9bb864445bd3",
+    "source_record_id": "bfc56c34-8ef9-5e25-91e3-636e8e319815",
+    "title": "Covered With Sores"
+  },
+  {
+    "id": "5d68a137-5cb1-5830-af8e-3cf8c40f234e",
+    "mbid": "94bb008d-ded9-4933-a920-039a836edcb6",
+    "source_record_id": "cdabf0b2-9104-5b38-8f19-69635b2929a4",
+    "title": "Battalions of Fear"
+  },
+  {
+    "id": "5f7beec2-9ea6-5b86-b072-f54973825493",
+    "mbid": "a9b97599-2173-40b1-9219-d27fcd647623",
+    "source_record_id": "3b56a58a-3026-5b5a-9581-14245cc91291",
+    "title": "Fight Till Death"
+  },
+  {
+    "id": "60836cd3-d588-57e1-92cb-290c4ba5a5d0",
+    "mbid": "2fe4f189-b4ee-41f6-90d3-39920925a579",
+    "source_record_id": "1e217c8a-0389-5a77-ad54-0ec98d1336d8",
+    "title": "I’m Alive"
+  },
+  {
+    "id": "61d6f2fa-4aa9-5ba0-8421-a1163a8a6666",
+    "mbid": "03955426-9a7c-40e6-be65-2f0d7c54273e",
+    "source_record_id": "77133675-d682-5744-bf6a-7c70e1b0a31a",
+    "title": "Traveler in Time"
+  },
+  {
+    "id": "6349fe02-386b-546a-aecf-16e62b4fca07",
+    "mbid": "81c07572-84fe-46a1-a2a7-dfe2277359dd",
+    "source_record_id": "887db7f9-c9ce-5ae4-acf0-c64c30397a92",
+    "title": "Necrophobic"
+  },
+  {
+    "id": "648fa62c-3cc5-53ff-9d48-05b8b05ebdab",
+    "mbid": "a50730b2-6115-46af-b906-a9fd653a8ba7",
+    "source_record_id": "e46734e3-de41-5d0d-aa37-08ea4ad4290d",
+    "title": "Innocent Exile"
+  },
+  {
+    "id": "6527a638-676f-5627-a8e2-af1d98962e13",
+    "mbid": "b4b7da27-4f7a-44e3-a188-97566b074d34",
+    "source_record_id": "b6475053-8188-5466-8751-49070bc1bb94",
+    "title": "Hammer Smashed Face"
+  },
+  {
+    "id": "662abdff-3124-5478-bb01-e990c061bbb8",
+    "mbid": "5e640698-467e-4026-a345-111af629e251",
+    "source_record_id": "8ace4469-1f75-5f88-94b7-dfc533c2b4cb",
+    "title": "Beyond the Cemetery"
+  },
+  {
+    "id": "662c7b73-a9e1-59a1-aa3d-fb0581cf9452",
+    "mbid": "85825bcb-2797-4bc1-a8ff-7dd0347370b2",
+    "source_record_id": "1af0d5f7-9541-5ee5-987c-f39de83c7560",
+    "title": "In Conspiracy With Satan"
+  },
+  {
+    "id": "665d51ef-84e9-50da-a9ee-ceda370990db",
+    "mbid": "0acb0673-9a26-4d0b-ad8b-14cc9dfea7ab",
+    "source_record_id": "bb88ce9f-aeaa-5ce7-aa4e-1509a925db64",
+    "title": "Harvester of Sorrow"
+  },
+  {
+    "id": "669f0eb8-855d-5335-8892-a31cd537df05",
+    "mbid": "bd1f6338-b60c-4f65-9ec3-bafc7c643cbd",
+    "source_record_id": "e5a82644-e602-59ed-ad15-4712aa49a931",
+    "title": "Infernal Death"
+  },
+  {
+    "id": "67357e24-5d69-57c3-9a23-4aaa54ee6a76",
+    "mbid": "2db8cd35-6fa7-4b4b-8093-eef0550a81e6",
+    "source_record_id": "34c8a74a-3379-53fd-a2d9-1386a6a4fee6",
+    "title": "Blackened"
+  },
+  {
+    "id": "687d7f4c-4fca-5cbf-b900-8c03d7fdce92",
+    "mbid": "2d23539c-cf0a-4727-8b6c-8d6dff572c58",
+    "source_record_id": "070053f7-e3db-5133-8f3f-aa8cc464d707",
+    "title": "Die by the Sword"
+  },
+  {
+    "id": "694fb48b-63db-5e0d-a0ae-57c8895a924f",
+    "mbid": "80d8b974-b2d1-4386-8f78-e05af5e1e9b4",
+    "source_record_id": "b234d634-f95b-56ea-992a-a62b4fb13d4b",
+    "title": "Future World"
+  },
+  {
+    "id": "69844709-589a-5bb3-a737-847884ab1263",
+    "mbid": "fe56cf06-8f45-4736-9184-f292cc9da763",
+    "source_record_id": "0e95b996-34a7-55e3-810a-4ef2e8223c31",
+    "title": "Entrails Ripped From a Virgin’s Cunt"
+  },
+  {
+    "id": "6a1b7d82-be2b-5348-9db2-30aea4814bcf",
+    "mbid": "626ddc6b-f219-4ac0-855b-9cafc452ee81",
+    "source_record_id": "4ca2242d-f569-5867-bca7-b3ff8dc3ddae",
+    "title": "Raise the Dead"
+  },
+  {
+    "id": "6a217afd-da1b-5085-af42-ea58e11ad6f8",
+    "mbid": "e508a3c4-2057-46d9-beb2-6ee5f3046562",
+    "source_record_id": "94cede3e-81ac-56fe-93a9-92d25c65db1c",
+    "title": "A Sorcerer’s Pledge"
+  },
+  {
+    "id": "6b17e78c-efa0-5599-bb6e-7b37a6a4cb31",
+    "mbid": "7a1bfb2a-e9b9-41cc-bec8-64169e9dc2fc",
+    "source_record_id": "2ca5ea74-c975-52d2-ba70-98966dcb16b2",
+    "title": "Leprosy"
+  },
+  {
+    "id": "6b75da67-ba5c-591a-ac4d-700365a7ea02",
+    "mbid": "7fedeb23-125c-4ada-9184-d751d3fcadb2",
+    "source_record_id": "410b5d0e-85dc-5795-a0f4-2d3d562c787b",
+    "title": "Kids of the Century"
+  },
+  {
+    "id": "6cdb2cff-fa71-5f16-a0e6-0f6007590905",
+    "mbid": "1810a41e-b6d2-442f-bf28-f62d9fb1b9ab",
+    "source_record_id": "0254bdb4-50fe-5bed-b91d-2f1fae972a2f",
+    "title": "At the Gallows End"
+  },
+  {
+    "id": "6d14e4f8-fb51-5430-a70c-ef2beb0beba8",
+    "mbid": "695f108d-7d3c-4f49-82f0-3999684cabcb",
+    "source_record_id": "a53b8222-083a-5ddf-9d5e-ec2594e15d3d",
+    "title": "To Live Is to Die"
+  },
+  {
+    "id": "6fcbffe4-dbe8-5014-83a6-8c35dddac58a",
+    "mbid": "7bbac79c-3969-44d5-8f62-8f7da657098d",
+    "source_record_id": "01d4dd57-8dbc-5217-a2c9-7e96f4cf9887",
+    "title": "Lost in the Twilight Hall"
+  },
+  {
+    "id": "703a4c27-1f04-5a5a-99e7-389f146fc748",
+    "mbid": "105a2fb2-7a76-4ad3-b69e-bb0cd9aec12e",
+    "source_record_id": "daf3d0e9-dafe-564a-8a4c-587e34d5acdb",
+    "title": "A Grand Declaration of War"
+  },
+  {
+    "id": "706ce8b7-5dc1-5a9a-9698-47b91bf55ea4",
+    "mbid": "f58249f7-ccc2-4e69-81de-a174f0364874",
+    "source_record_id": "9e419114-8fea-58d5-8b36-6d96749f07f2",
+    "title": "Banish From Sanctuary"
+  },
+  {
+    "id": "72b8a854-58aa-58ae-97fc-22726310ff47",
+    "mbid": "ce778fc4-be4c-4bce-a256-f1a762111928",
+    "source_record_id": "8b04c348-48d3-5432-b210-713b2491f4a3",
+    "title": "Exodus"
+  },
+  {
+    "id": "72f71130-0777-59cc-8fab-41a2b592ed0b",
+    "mbid": "a1aae3fa-3bbc-4ecd-a17e-a9a5a871283f",
+    "source_record_id": "07388a2d-3dbe-51c6-93e8-e3ca2846364f",
+    "title": "Goodbye My Friend"
+  },
+  {
+    "id": "735b4d9b-01fe-505e-81bf-b3dccd7144d6",
+    "mbid": "2551ab5d-69aa-48ab-a304-acaae1633994",
+    "source_record_id": "ab3a9e11-5a60-5029-97f2-5a12b9262038",
+    "title": "I Cum Blood"
+  },
+  {
+    "id": "73fc00bd-39c3-5519-baf4-dc2cdd31eb0c",
+    "mbid": "a76ab854-ff88-4650-a7a8-fa9e7674a040",
+    "source_record_id": "58e978dc-0853-5954-9477-13b395ea3db1",
+    "title": "Necromansy"
+  },
+  {
+    "id": "74530d0c-9216-5a47-9032-3ff33e251426",
+    "mbid": "b61a0bc7-9638-467b-8496-d743a190eec8",
+    "source_record_id": "42a81a27-2c9c-5739-957d-12577dda6ae5",
+    "title": "Crystalized Pain in Deconstruction"
+  },
+  {
+    "id": "74a2f6bb-1e6e-585c-a787-d2fe49055681",
+    "mbid": "723ba0eb-0855-42d0-bbc9-0020785727a3",
+    "source_record_id": "385f2a62-ad51-5ded-9214-58a447da64d9",
+    "title": "Butchered at Birth"
+  },
+  {
+    "id": "752ec841-bf86-5cf7-9efc-0e1c65a770ce",
+    "mbid": "60d92de3-b3e9-4875-8bbe-3da4eb59ac0f",
+    "source_record_id": "7bedc978-ef8a-53c2-a330-bb2cc326f975",
+    "title": "Ancient Dreams"
+  },
+  {
+    "id": "757c2aa7-e1df-540d-b3f3-cf949de31d80",
+    "mbid": "3ad79030-603b-4536-ac0c-7f0308e78d94",
+    "source_record_id": "f2eb6a78-7b55-5969-ba04-e9e0771f5876",
+    "title": "Murders in the Rue Morgue"
+  },
+  {
+    "id": "7634df71-d5fb-503b-b9c7-f2920aa68517",
+    "mbid": "2e4ea3cd-b132-4b6d-a9c6-b893834349d3",
+    "source_record_id": "9fb59633-238d-5f4e-8920-d4d52207b6e5",
+    "title": "Gorgar"
+  },
+  {
+    "id": "763a4928-bfb7-59b0-90ea-6e0bbec2206f",
+    "mbid": "87787817-cd38-4c97-8736-f894d1361dfe",
+    "source_record_id": "07eb64c2-60bb-52a4-9e54-30b14401f28c",
+    "title": "Fata Morgana"
+  },
+  {
+    "id": "76d224f1-4d34-5e9d-8d47-af1b782344c6",
+    "mbid": "42dad7f3-c2a4-44ec-850b-062569a2c099",
+    "source_record_id": "39f83a8a-b957-5edd-b4b0-42f4d2d60178",
+    "title": "Valley of the Dolls"
+  },
+  {
+    "id": "77e52444-bd02-5597-872c-7a02aea1982f",
+    "mbid": "09aa3d48-c779-4b1d-8df2-84623f8d8b05",
+    "source_record_id": "ae74a6ff-784e-5ac5-976b-d3799b30f75b",
+    "title": "Heavy Metal (Is the Law)"
+  },
+  {
+    "id": "78082200-8e5d-5336-a40f-cbcd2ccd0f4b",
+    "mbid": "9b7eef03-e715-4640-9b27-61b2f099e6f7",
+    "source_record_id": "803bcf0b-03bb-5edc-af5f-9375fb4b67ff",
+    "title": "Torn to Pieces"
+  },
+  {
+    "id": "787e6a11-f89a-5ca5-8f2a-7ff4ec152605",
+    "mbid": "a94b8fa2-951b-48c3-a043-3952047bdbcd",
+    "source_record_id": "3a6659f3-289f-598c-880d-6a48a675f997",
+    "title": "Goin’ Home"
+  },
+  {
+    "id": "79141e4b-dd3c-5f30-9fb1-ef16c5a0d185",
+    "mbid": "1675aafe-397d-41fc-b7f6-fde5681f56c4",
+    "source_record_id": "ae0c986f-bb00-56a3-af5a-c5b5a598c3da",
+    "title": "Raining Blood"
+  },
+  {
+    "id": "7a33085f-d57f-54f2-a3a0-7fadf4cc7052",
+    "mbid": "6b722590-db9e-4b73-97b9-5b5b93f3eb9e",
+    "source_record_id": "425f3d05-910c-5f61-b24b-3f774d065322",
+    "title": "Split Wide Open"
+  },
+  {
+    "id": "7b090041-656c-5750-88b5-18c8a2e7d12f",
+    "mbid": "44b26fe7-e222-470b-9f87-7b93dbae6775",
+    "source_record_id": "c6abb0db-9f6e-57e4-98ab-af31f4a4ac60",
+    "title": "Pink Bubbles Go Ape"
+  },
+  {
+    "id": "7b621bca-cd0c-5485-aea1-bc27ff7329c2",
+    "mbid": "9ebc2083-e963-463b-886e-cee17a8982fa",
+    "source_record_id": "3f5f04cf-eb88-5c3f-a74a-71f0e4108a76",
+    "title": "The Final Command"
+  },
+  {
+    "id": "7ba06810-8b54-52f9-8739-660da3810d2c",
+    "mbid": "847fcb7d-cb20-4c99-a5d8-87b120bfb47e",
+    "source_record_id": "57f4e501-78fa-56cb-b493-d9ab41ae1ac4",
+    "title": "Twilight of the Gods"
+  },
+  {
+    "id": "7c1b6639-5422-52aa-a4aa-c10f4757615d",
+    "mbid": "a72820d3-3bbd-4824-bb8e-52035e17b7a9",
+    "source_record_id": "b7c968c7-7914-5177-88c8-891b41ccd5ee",
+    "title": "Run for the Night"
+  },
+  {
+    "id": "7c73a350-6db0-5326-802c-b01fd595f9e0",
+    "mbid": "3f498890-4034-4835-8f75-c0a23feabf45",
+    "source_record_id": "d940ef1b-aa60-5224-87a3-b1a9879f53df",
+    "title": "Within the Mind"
+  },
+  {
+    "id": "7cf8af99-9184-5da8-91e4-40eb8604b2ef",
+    "mbid": "f9f72f86-1279-4daf-8293-77c57ba1ee68",
+    "source_record_id": "9d23e9a1-013b-58d5-81b9-63da4206f5e7",
+    "title": "Guardian of the Blind"
+  },
+  {
+    "id": "7e2f3df4-ffe8-58fa-8f5d-b1f698de8201",
+    "mbid": "13c6f14c-6f02-4242-b2fa-2e52af52467e",
+    "source_record_id": "74749e4d-62ca-58a3-95e7-0f3631dc2862",
+    "title": "S.E.K."
+  },
+  {
+    "id": "813961d9-f55e-5e74-ad6f-3c07d12c0d7c",
+    "mbid": "6b9de49a-5173-4e35-a450-e9c8d00e30cb",
+    "source_record_id": "b3e50170-7d72-5f21-9510-ed2b0a842cfd",
+    "title": "The Sorceress"
+  },
+  {
+    "id": "81c760e7-23cf-5f86-9a49-38070bc3665f",
+    "mbid": "2663a1f3-e560-4316-b872-6fde09136b1b",
+    "source_record_id": "3dcdd75e-a34b-51fd-8a32-e29a92064082",
+    "title": "Killing Spree"
+  },
+  {
+    "id": "81dfb75a-7660-5d61-99ec-930bb1ad9854",
+    "mbid": "63615456-23fc-4227-8068-97f27bbafd20",
+    "source_record_id": "bfadbf57-39bb-5d13-8919-83d8601dc1ba",
+    "title": "Nocturnal Obeisance"
+  },
+  {
+    "id": "82f0c279-02b1-5278-905b-e59671ad7727",
+    "mbid": "ed5c8934-f492-4469-b8fc-60433fc4a31a",
+    "source_record_id": "d1751da5-bd71-5894-847b-c301643300ba",
+    "title": "Freezing Moon"
+  },
+  {
+    "id": "846dbd00-4fd5-5780-9f82-f653133931a8",
+    "mbid": "bcbaca8b-9480-4041-b401-17c209d63dca",
+    "source_record_id": "1912631d-0569-5247-95fd-8354b20345cd",
+    "title": "The Shortest Straw"
+  },
+  {
+    "id": "85ffbc8c-a4b2-5d49-b3b9-fac6104e4361",
+    "mbid": "0850bc61-f0c5-41c9-bfed-5246903ca539",
+    "source_record_id": "1a0eed68-90c0-5103-bc35-e4fd082d7212",
+    "title": "Valhalla"
+  },
+  {
+    "id": "862c91cf-9115-554b-abaa-f76fa6c09e30",
+    "mbid": "56ae6282-0452-43e5-9a64-3db82a847976",
+    "source_record_id": "48f4fd25-d56b-5ade-aad4-233984c26ad0",
+    "title": "Sacrificial"
+  },
+  {
+    "id": "863467ff-92aa-578b-95a0-95c729418680",
+    "mbid": "32aefa34-6960-4aa2-ad1d-f5e903e1449b",
+    "source_record_id": "75b14a50-7478-5d7f-9835-bbc60bbc31ff",
+    "title": "Demons Gate"
+  },
+  {
+    "id": "87111ae4-2e19-59cc-a2c7-9959790451ab",
+    "mbid": "689c9068-80b1-4eef-bf85-ddc995725c00",
+    "source_record_id": "6256f2d9-f51f-5d1c-b0d6-df3f771ac62e",
+    "title": "The Undead Will Feast"
+  },
+  {
+    "id": "8789aa19-ae48-5853-81bd-909fec4aefa5",
+    "mbid": "40bc251a-f787-41c7-a1b2-be16a81eef17",
+    "source_record_id": "09f599f8-fb9b-54c5-9c0c-e26febcd6390",
+    "title": "Number One"
+  },
+  {
+    "id": "87d739e7-9523-531b-af07-e78bfb4b1e79",
+    "mbid": "04e43dbd-b678-4bba-a327-d8f450b7c746",
+    "source_record_id": "43a78fd9-4d00-5cb6-8f74-a22181df7ab4",
+    "title": "Phantoms of Death"
+  },
+  {
+    "id": "88ed6798-ff56-5353-b4e1-20fcd09c1ec5",
+    "mbid": "4c9fc99b-db83-43af-873c-1a093a860fc3",
+    "source_record_id": "89b63818-5afd-5f79-91ba-5d1aff14ff33",
+    "title": "Metal Storm / Face the Slayer"
+  },
+  {
+    "id": "8906453c-58b5-507c-b022-033e42702815",
+    "mbid": "a00011a2-a9b4-4385-a378-8df63df51cf4",
+    "source_record_id": "692f560a-8261-5697-96d2-a8b79d7d5d18",
+    "title": "Living Monstrosity"
+  },
+  {
+    "id": "8b483ab0-317e-5bea-8d1c-e821bfe92710",
+    "mbid": "fbced4ab-e95f-4bd6-a77e-a0a3d79434ca",
+    "source_record_id": "7b3073c8-4a45-5eab-9b5e-d336fe8cbe48",
+    "title": "From the Dark Past"
+  },
+  {
+    "id": "8b53ccc4-8f6e-5237-b86c-c5be1f8a0fde",
+    "mbid": "ee311e66-1a6f-428e-8ea3-4539e48b291f",
+    "source_record_id": "4ecd3f65-bb18-5a58-a911-b25cc2d09c61",
+    "title": "Low Life"
+  },
+  {
+    "id": "8b79c830-9aa7-5190-81d3-30fff4715146",
+    "mbid": "0b8d13b7-e1b4-4ffb-809e-d47fd43dda52",
+    "source_record_id": "234b8065-5c32-5c02-b42d-a84a14dfc24e",
+    "title": "Crionics"
+  },
+  {
+    "id": "8c2484cb-a3f8-5b0b-afd4-b61cdec74731",
+    "mbid": "6f8a2b6a-e84f-42fd-ac5f-e53f067c2243",
+    "source_record_id": "8506d140-aa53-5115-8061-d0b16b71835c",
+    "title": "The Apparition"
+  },
+  {
+    "id": "8ca69948-0e15-5188-a116-d26bf474bd4d",
+    "mbid": "6839d4ce-29ae-4e16-9b51-1a3898eea66f",
+    "source_record_id": "444dcc9c-61e8-54ea-8ed6-9a7a23cf45a8",
+    "title": "Life Eternal"
+  },
+  {
+    "id": "8dc62ef2-f125-5542-8bf9-c70012a35592",
+    "mbid": "7e4cfb6c-bee8-4001-947d-2d7efc8d0037",
+    "source_record_id": "3c03c83c-2d9b-54ae-baa7-5d0eee03531e",
+    "title": "Left to Die"
+  },
+  {
+    "id": "8f98ff56-bbaa-5e37-a336-20634d926f28",
+    "mbid": "859ca2ee-4af7-4b6c-adfc-73abd3c0073b",
+    "source_record_id": "54196013-2a54-56c8-8077-f157a8f1829d",
+    "title": "A Bloodsword and a Colder Sun, Part II"
+  },
+  {
+    "id": "8fac89f8-b90f-51f6-8708-00d07f0b99b6",
+    "mbid": "0227a5d4-8c4a-4a34-a413-955b2f361d1b",
+    "source_record_id": "ae76b92d-a67c-52ae-b701-9b937dc55bf0",
+    "title": "Marche Funebre"
+  },
+  {
+    "id": "8fdcf239-657d-5631-9502-b0ee821cabca",
+    "mbid": "e676c700-51b4-4bfd-bc2b-116446d6c6a1",
+    "source_record_id": "68efd65c-293a-573d-b016-4fabc3ab5f38",
+    "title": "Spiritual Healing"
+  },
+  {
+    "id": "8fe6d77e-a44d-5fde-9e70-63475fca97a3",
+    "mbid": "b26d7bc2-f0a6-4702-bfe0-7f3830e54870",
+    "source_record_id": "3cfceb2a-f705-5c99-9e4d-687f4eceff6d",
+    "title": "War"
+  },
+  {
+    "id": "8fef61bf-3e42-5bf8-bed5-73ddd8744be2",
+    "mbid": "a8d926db-7331-4af7-ad3e-c8b8d161ac53",
+    "source_record_id": "b707aee3-492e-594b-a661-f2a5b9e84265",
+    "title": "Altair 4"
+  },
+  {
+    "id": "8ffba837-8ae7-5e97-944e-1f0ccc15dfe1",
+    "mbid": "13a7518b-57fc-4cff-88c4-d78fa8f84f69",
+    "source_record_id": "96f78cea-bdbe-5098-b547-acc5aefa180b",
+    "title": "Follow the Blind"
+  },
+  {
+    "id": "8ffc2ecd-f988-5a96-af9f-8d61031a3835",
+    "mbid": "0d245fbc-fa6c-4f4d-90bd-40cf2d399453",
+    "source_record_id": "22c76636-e60a-5670-86a6-d2d4f883d0e3",
+    "title": "Bewitched"
+  },
+  {
+    "id": "901a881d-4633-56fd-8908-198108a2787f",
+    "mbid": "a307164f-d53b-4548-995e-16a85472f519",
+    "source_record_id": "6e90a16f-570a-5314-8479-8311305473b2",
+    "title": "Someone’s Crying"
+  },
+  {
+    "id": "903281bc-e81c-5d4d-9783-61271b8ca4ba",
+    "mbid": "5278247e-89c6-4e4d-b5ac-ca2df45ef285",
+    "source_record_id": "2e8bdeec-833e-52dc-bdca-a3e85d42de13",
+    "title": "De Mysteriis Dom Sathanas"
+  },
+  {
+    "id": "907c750a-a219-5ad8-8663-0c5a6cc32ec8",
+    "mbid": "bcd179a6-67b3-4820-a704-4e3a11c8be84",
+    "source_record_id": "90954122-72a0-5f58-9ce7-5f710dafb6c7",
+    "title": "Completion in Science of Agony, Part II"
+  },
+  {
+    "id": "954f9434-45e2-50f4-92b5-53f9d74ff4a9",
+    "mbid": "0333c4b7-c09d-4c60-a422-ad83ef751245",
+    "source_record_id": "7d4a0de3-a3da-5958-a7dd-c4fbbc8e5b93",
+    "title": "The Cryptic Stench"
+  },
+  {
+    "id": "97216901-e0aa-5e7a-9137-193de1d52677",
+    "mbid": "e6a9437a-f89d-4c3e-85fe-a2ea5a840b6c",
+    "source_record_id": "4aa08751-f59e-5c52-8db0-ca2fc5bc5aba",
+    "title": "Angel of Death"
+  },
+  {
+    "id": "97cd2b4e-31fd-55c8-b38c-bb6d4b480aa2",
+    "mbid": "9d1462d7-4c91-47b9-bf6b-2927593949c0",
+    "source_record_id": "0b53fe94-663c-5bf4-bc50-ad1ed2660dee",
+    "title": "Rancid Amputation"
+  },
+  {
+    "id": "9a0cdb53-4110-5ac6-8675-945c606b5e74",
+    "mbid": "02826aad-ead1-43e1-b4cd-787c3cef89c8",
+    "source_record_id": "348a2388-3886-559a-a41d-78df15b9fba8",
+    "title": "Black Candles"
+  },
+  {
+    "id": "9a592019-f49e-5ad1-bb96-5b115c86b6f5",
+    "mbid": "a587af76-b33b-49d6-96fd-008ac8203910",
+    "source_record_id": "b45690c9-9dcf-5823-afc6-9756feb3798f",
+    "title": "Post Mortal Ejaculation"
+  },
+  {
+    "id": "9c45897b-dae9-5ad4-a03f-feaadc4c6f69",
+    "mbid": "b0a7bbe8-6658-4206-8f57-573aeaabc574",
+    "source_record_id": "c7b525bb-9fdd-5a60-a41c-a82f088d6e73",
+    "title": "In the Lies Where Upon You Lay"
+  },
+  {
+    "id": "9ca77d2f-1696-529a-967f-960501765ce6",
+    "mbid": "6823c35b-19b8-4b68-9e66-43f87fe752c0",
+    "source_record_id": "d3a4686d-5a80-5cf1-ad1e-7ac16bba4ca6",
+    "title": "Mankind"
+  },
+  {
+    "id": "9caafbe8-5318-5e74-a879-73a970624269",
+    "mbid": "b0f56424-9ba4-44ad-bbc6-bb6b1a2ea817",
+    "source_record_id": "da6bacbe-7f0c-539e-92ee-c16f47ce8803",
+    "title": "Completion in Science of Agony, Part I"
+  },
+  {
+    "id": "9cb67e7d-c868-5d20-af11-d5daba659955",
+    "mbid": "c6c5e6c3-cb53-479b-b97e-100aa889786b",
+    "source_record_id": "bba8d014-612f-585d-a886-83cc974fbbf8",
+    "title": "Traveler in Time"
+  },
+  {
+    "id": "9cd82734-62ff-5046-97be-bc72d5f48338",
+    "mbid": "30a8b3ac-ac9e-4e3b-b213-1c7270be7335",
+    "source_record_id": "4d6a5d00-e5d5-5ecc-9f5d-81bfb3a3f274",
+    "title": "Wrathchild"
+  },
+  {
+    "id": "9e661874-6817-58fa-91c1-e845273d46b9",
+    "mbid": "93f01848-d56c-4f0f-9a71-b98f3d9f5896",
+    "source_record_id": "c925938b-125a-5ce3-b4c6-1d36fd6b7fb1",
+    "title": "Pull the Plug"
+  },
+  {
+    "id": "9f6a5836-097e-51dc-8de6-ba7b3bed0353",
+    "mbid": "a0d06679-5a62-4fc2-93c7-8f6bbfd3f7bb",
+    "source_record_id": "bf36e895-c84e-586d-b6ec-7eb62affa470",
+    "title": "Pull Me Under"
+  },
+  {
+    "id": "a09c779c-ae63-5c50-9248-e5f9ddf0849d",
+    "mbid": "982cd4d1-00cc-418d-a70d-7673b727e9b5",
+    "source_record_id": "5ea5bd89-a0ba-54db-a6f2-da17967d09b3",
+    "title": "Necropedophile"
+  },
+  {
+    "id": "a0e36202-59fa-5a87-b347-11570f922e64",
+    "mbid": "4e80f58e-dbd7-44e0-a606-126739155836",
+    "source_record_id": "b042a254-6bd0-5e30-a441-d5cae7121c6a",
+    "title": "A Skull Full of Maggots"
+  },
+  {
+    "id": "a3582ab4-1fb5-59bc-a4c2-72a3f325845b",
+    "mbid": "0c22d6a2-3d09-43ac-b438-d0df8a596fd9",
+    "source_record_id": "43c415d3-cc4f-55d2-a640-fdb803b9b04b",
+    "title": "Majesty"
+  },
+  {
+    "id": "a42994ba-b1b5-5e8e-91bf-312c4cba47ee",
+    "mbid": "85c2572b-a8d2-48fc-a526-2257c878ffd2",
+    "source_record_id": "a1e3bc68-3e0c-5cc7-a854-50918a33a71e",
+    "title": "Run for the Night"
+  },
+  {
+    "id": "a8ae477c-7fb7-5d4f-a6d1-c55ce957762a",
+    "mbid": "e238979e-ff32-4fce-8cef-7064ae5480e2",
+    "source_record_id": "3a5856c8-f4aa-5ead-a0ce-1d99e3bab519",
+    "title": "Shadowfax"
+  },
+  {
+    "id": "a8c0e93a-c75a-5e5c-a3d8-748db0a6a72a",
+    "mbid": "93402bae-304d-4d79-9ebf-68bc50c0824d",
+    "source_record_id": "b2561450-7464-5298-9a6e-de258b34484a",
+    "title": "Halloween"
+  },
+  {
+    "id": "a97db853-026b-5a40-9b97-860584bcdc48",
+    "mbid": "ffdc2573-cb36-484b-b8fa-16975d5a7e0f",
+    "source_record_id": "03001b8a-f6ee-5e51-b447-ff311f2307ba",
+    "title": "Metal Invaders"
+  },
+  {
+    "id": "ab09aa85-a978-5bdd-9f09-f41509208b62",
+    "mbid": "23801f29-111a-42e3-8cd0-f2cc65b2eeb7",
+    "source_record_id": "48820262-4d11-5ac0-ba19-99e578857bd7",
+    "title": "Primitive Ways"
+  },
+  {
+    "id": "ab77e8f1-4cd5-5b2c-a4a7-b5329b5dde3b",
+    "mbid": "b949af07-0e40-4c83-b75a-93e84040958a",
+    "source_record_id": "400e0dd3-0a0d-5489-b81a-48eaa8191552",
+    "title": "Altar of Sacrifice"
+  },
+  {
+    "id": "ac029282-bb23-572d-a2db-5fdba1344782",
+    "mbid": "e2de9214-efd9-4979-82a6-f3d33113618b",
+    "source_record_id": "1ead28a3-f082-5dc7-82e6-e5c6cf1a969b",
+    "title": "Kiss of Death"
+  },
+  {
+    "id": "adc6c02c-feec-5de9-a654-3a6c216811f7",
+    "mbid": "6d8f7dc1-8da8-441a-b446-e0d13efddfe9",
+    "source_record_id": "1bde356f-b7bd-51c9-bcf2-a741077c5d00",
+    "title": "Your Turn"
+  },
+  {
+    "id": "aec52b28-7ac1-5ccc-a98c-f721c6e62d77",
+    "mbid": "a60d985a-aa94-41f7-bbbc-c510f1408e54",
+    "source_record_id": "29f85bdc-7a77-5a0b-b1ed-2b63d3264553",
+    "title": "Born in a Casket"
+  },
+  {
+    "id": "af9310dd-5fe0-54c1-9453-819653f811ab",
+    "mbid": "eddfab5a-23c5-4781-9b23-14102e68fe26",
+    "source_record_id": "0df7876e-ff53-52b3-95ed-c28ea719dbda",
+    "title": "Show No Mercy"
+  },
+  {
+    "id": "b0286d51-a3a0-5f08-a841-e3766fcc8a99",
+    "mbid": "7dd140c1-635f-425b-917c-d8eb511096c1",
+    "source_record_id": "7f572c03-2823-5911-9d11-a108d3c8b223",
+    "title": "Piece by Piece"
+  },
+  {
+    "id": "b142fafc-ffc1-5917-b09e-7adb13d94961",
+    "mbid": "1dc5bf73-b46f-48ab-82f4-3932a4e54435",
+    "source_record_id": "52e8fe0c-b4fd-532b-bdbf-770c32a47003",
+    "title": "Eye of the Beholder"
+  },
+  {
+    "id": "b1f92583-c03a-5514-9fc3-75dec71db292",
+    "mbid": "56ec3a4d-0fd3-4925-bd14-6af0847d338c",
+    "source_record_id": "e098e149-e774-5a19-bbac-f7408c843345",
+    "title": "Wait for Sleep"
+  },
+  {
+    "id": "b2113a2e-b6ab-545d-91e9-db08a43cacee",
+    "mbid": "84a382b6-b127-41f5-9592-364184b31998",
+    "source_record_id": "d888193f-fa9d-5051-a1a7-1eb146f62467",
+    "title": "Enter the Eternal Fire"
+  },
+  {
+    "id": "b2143473-abf5-50cf-ad10-f84dee990191",
+    "mbid": "dd62ef8e-ad0a-46fb-8e68-cd3044a92cfc",
+    "source_record_id": "97fa6a18-c052-5105-b61f-1cc68a346004",
+    "title": "Beyond the Ice"
+  },
+  {
+    "id": "b545dd92-7493-5913-8a2d-da42742ea06f",
+    "mbid": "c637fdec-322e-4344-9064-c4b9c0de84d4",
+    "source_record_id": "3a5fae0f-03e8-5d43-adb6-c6d4605c1179",
+    "title": "Solitude"
+  },
+  {
+    "id": "b6a9fb84-7021-543c-b147-757c5c5d8d57",
+    "mbid": "a36f0964-b211-4c3e-a4de-e6edbbabc336",
+    "source_record_id": "1283ac2c-5b72-5ef9-b270-113c64d5b01d",
+    "title": "Black Sabbath Medley"
+  },
+  {
+    "id": "b70deb20-bdc6-5a5c-8ce1-d0133a207fea",
+    "mbid": "a95f9390-03b8-4bbd-8c25-934070f3ae8c",
+    "source_record_id": "e33ea449-3c08-5997-9d5e-db874e2f15e3",
+    "title": "Black Stone Wielder"
+  },
+  {
+    "id": "b747dc81-6fcd-58eb-8825-52088d02c9d5",
+    "mbid": "65127250-99bf-4df9-81f1-e7d1cac2cddf",
+    "source_record_id": "2b8f94fb-93ea-5121-9ffc-53b18f301d4e",
+    "title": "Prodigal Son"
+  },
+  {
+    "id": "b8ac2c7f-683e-50fb-9ae3-6335f68437e2",
+    "mbid": "996e3da7-4a91-4009-b7fe-2bac7f1fc448",
+    "source_record_id": "b9505df4-fb36-5dad-871b-e3ffb9ec66ae",
+    "title": "Crystal Ball"
+  },
+  {
+    "id": "ba9366b0-dde6-53f2-a005-7f268cdea7d4",
+    "mbid": "aea76a19-484f-47ab-858f-6682b0b87658",
+    "source_record_id": "d30e2f42-470f-5cd1-b945-a2a1f75392bd",
+    "title": "Bearer of Pain"
+  },
+  {
+    "id": "bc65b57a-57a5-5114-bf00-14f85589ec03",
+    "mbid": "f430a3f6-3cd8-47fc-8be6-cdb9542222c2",
+    "source_record_id": "d0165884-7171-5f88-b487-3adc51656707",
+    "title": "Forgotten Past"
+  },
+  {
+    "id": "be2f2b00-ae0a-5c27-af5b-42db68aa690b",
+    "mbid": "f4efb134-b22c-4429-9514-e7ceb2e73ff6",
+    "source_record_id": "c7658fab-9e61-5296-8878-fc0ff7849b68",
+    "title": "Drifter"
+  },
+  {
+    "id": "bebf6725-3fea-5885-8226-994d240be6a8",
+    "mbid": "40e2127d-8ba4-4087-bb08-586c941c28b4",
+    "source_record_id": "0fc74cea-dfb9-59b3-bacf-bd4e1765fedf",
+    "title": "Damnation"
+  },
+  {
+    "id": "bf5f971f-efa5-5e1e-8203-55080458fd05",
+    "mbid": "6316b243-684f-4790-8829-c3c59ee173ee",
+    "source_record_id": "01bdc456-c9d3-5a53-9894-0c84023ea3a2",
+    "title": "Tormentor"
+  },
+  {
+    "id": "c0f24cea-b198-50e7-9163-a80d369c990e",
+    "mbid": "0e348dd0-2b9e-494c-898c-b74bbf87367f",
+    "source_record_id": "9492f507-78a1-584a-a69f-fe45a691eba3",
+    "title": "The Chance"
+  },
+  {
+    "id": "c2d0308b-9408-52f2-a6f9-ec3aa4a25987",
+    "mbid": "a4f7cc0d-40dd-4e75-ba58-a56f8607d0cc",
+    "source_record_id": "7dc066bf-7366-5342-bf01-1cecbaad851f",
+    "title": "Bloody Chunks"
+  },
+  {
+    "id": "c64bd4c6-743e-549e-b423-ca52831d9b11",
+    "mbid": "0c4b1c34-aac8-4712-a497-6e60739a6de9",
+    "source_record_id": "2bf7de35-cc2c-50a1-ae53-3c0afe1a4c23",
+    "title": "Walls of Jericho"
+  },
+  {
+    "id": "c86110b9-cda5-5cdf-ae23-c4d2a6320aa1",
+    "mbid": "499e2cca-ec8b-4a11-9453-8c39328b0419",
+    "source_record_id": "b7826543-9f8c-58ea-bb97-ade9f7401c1b",
+    "title": "Misfit"
+  },
+  {
+    "id": "c8a0037d-d909-5238-b1be-d34fa94fb43e",
+    "mbid": "8e193363-9779-4f59-9cb4-068d2be19b09",
+    "source_record_id": "6245aff1-380f-5d3a-9cd1-c431ad661584",
+    "title": "[untitled]"
+  },
+  {
+    "id": "cb0fc17a-dced-5aa3-946b-39a839d340b3",
+    "mbid": "0c6e4376-643d-4205-9504-6803052f596d",
+    "source_record_id": "c8159a3a-a075-5761-9782-510dbebab95f",
+    "title": "Damned for All Time"
+  },
+  {
+    "id": "ccbc1bde-43da-59bf-8a89-dc4fc55f6781",
+    "mbid": "15fca750-e5a9-4b9c-8567-a3107c8bb986",
+    "source_record_id": "555cc23b-f02c-5fa4-b8b5-98a942a888cf",
+    "title": "To Daimonion, Part II"
+  },
+  {
+    "id": "ccf0f864-cdbd-5525-a1cf-a878873cebed",
+    "mbid": "4affb96e-199e-48f5-9266-9286e0ef523a",
+    "source_record_id": "6c3aa84a-c703-5fae-9e66-347363f590f5",
+    "title": "Sacrifice"
+  },
+  {
+    "id": "cd3b279f-5824-565c-bc15-593373232773",
+    "mbid": "c2a5f7f1-2356-4579-ba6e-95a46e3f588e",
+    "source_record_id": "154a3cf2-980f-5ba3-ade8-a9ff2acced3a",
+    "title": "Under the Rotted Flesh"
+  },
+  {
+    "id": "ce88ac25-ac3f-503e-86ce-27ecdef9ec2c",
+    "mbid": "bfdaebd8-467b-4d58-875f-4ef57736dd99",
+    "source_record_id": "888f59ca-d765-50e1-b14a-bf80750c8ed1",
+    "title": "Twilight Zone"
+  },
+  {
+    "id": "d11e8133-cbf0-5a8d-be71-1e80e22b6dc0",
+    "mbid": "1e57b2ac-18e9-433b-8a85-290f0719b457",
+    "source_record_id": "9961e216-17d6-5041-b345-b4541a7e4b62",
+    "title": "Dark Are the Veils of Death"
+  },
+  {
+    "id": "d28672df-a54e-5b67-90ce-7b3ec77cc8be",
+    "mbid": "186ddbae-4f16-4761-9469-1fa7df33b310",
+    "source_record_id": "8e3aa8ef-319b-5bdb-b704-7f9d051d68dc",
+    "title": "Buried Alive"
+  },
+  {
+    "id": "d3700653-0ced-5718-94f9-b9503d0b4d9f",
+    "mbid": "066c77e4-81ba-4c72-ad34-80f445f5ec5a",
+    "source_record_id": "f2587802-0236-5d0f-8e25-34209a4475da",
+    "title": "Shredded Humans"
+  },
+  {
+    "id": "d6a4a5b0-ef7e-579a-96e4-861ad6e232c7",
+    "mbid": "f95021a6-7a27-4af0-b5a5-6a9638a2bcb7",
+    "source_record_id": "6698745e-458b-571d-b0c9-941754134934",
+    "title": "Open Casket"
+  },
+  {
+    "id": "d8db2536-c399-59fa-b52c-32b3ec7bdc5f",
+    "mbid": "f2358ac6-0117-4c4a-bbe9-97a75a57ae18",
+    "source_record_id": "f027f001-444f-58bc-874f-9c01da444137",
+    "title": "Epidemic"
+  },
+  {
+    "id": "d8e58242-c987-50df-b9df-ffe987e6d5be",
+    "mbid": "0b5d87ae-a847-4826-98a9-e7a896f2a482",
+    "source_record_id": "8bdbaf91-9788-5206-9254-6ccb79d07f35",
+    "title": "Mourners Lament"
+  },
+  {
+    "id": "d944556b-9645-5884-9d72-4f1883cc6fea",
+    "mbid": "20f5b82a-fdd8-40e1-9b8e-2a4d41351013",
+    "source_record_id": "e66a4eff-878c-53b1-a1cc-da210d6fb238",
+    "title": "Born Dead"
+  },
+  {
+    "id": "dc392e17-98fa-55b2-87e1-3ba68ba6768e",
+    "mbid": "d58f71db-7650-47a9-a9bf-11bdf90494c0",
+    "source_record_id": "43d9b4c6-99eb-53f9-a2ee-8cbb00c96c69",
+    "title": "Under a Glass Moon"
+  },
+  {
+    "id": "dcb7a6f2-2ad9-5179-9f9c-10341032e39b",
+    "mbid": "2edd0ef4-487f-4361-a749-cf0b376702c8",
+    "source_record_id": "f293f423-3342-5c66-98a0-b1648be2ebb0",
+    "title": "Giant’s Lore (Heart of Winter)"
+  },
+  {
+    "id": "dd6000a5-37ef-5214-9665-8552c621592d",
+    "mbid": "b3a987f2-e22d-44db-9595-2bcc45259c0e",
+    "source_record_id": "7cade63e-15d2-5363-a2bd-ad88957ebba0",
+    "title": "Zombie Ritual"
+  },
+  {
+    "id": "dd9a92a5-a20b-5c12-af10-b00a8fe962fd",
+    "mbid": "c3fa6f95-9788-4c30-a5bb-456f9dab53e9",
+    "source_record_id": "7c09048d-7918-56ee-91a6-c785388f106c",
+    "title": "Without a Trace"
+  },
+  {
+    "id": "ddb28bd6-cce4-5ed0-a232-9ea5fea0e1b2",
+    "mbid": "a8964757-4b38-4da9-ab49-b28c388736ce",
+    "source_record_id": "15722071-62d9-50e7-9c54-18027c719064",
+    "title": "Reaper"
+  },
+  {
+    "id": "ddf96fc5-c8a4-5316-8ffb-32092ef94b03",
+    "mbid": "519b6ce2-bc5e-4e6f-ab4e-7d0e7acabc4e",
+    "source_record_id": "4f1070d7-d939-5ffc-abef-b0f3eb6398b8",
+    "title": "Weird Dreams"
+  },
+  {
+    "id": "ddff4879-5afd-54f0-975f-662c8b6743c7",
+    "mbid": "51ed1576-3402-4d64-9fba-93be69c809b1",
+    "source_record_id": "0cf81c50-dcde-5d77-919e-81154ce3fb9a",
+    "title": "Surrounded"
+  },
+  {
+    "id": "de71c6e4-1756-5c0f-ab93-69bb8b8a1eb8",
+    "mbid": "d1dd8f3a-bdff-44a4-8b77-84a90bfd7b86",
+    "source_record_id": "aaf15dba-a8fe-5f83-bd8f-f26283c81a68",
+    "title": "Purgatory"
+  },
+  {
+    "id": "df6d6279-9deb-5e5d-9e73-4cb31b542349",
+    "mbid": "ba144272-70bc-4002-b119-d7c808f77d91",
+    "source_record_id": "fce6d88d-8ee9-55dc-b92b-4d2e96d21149",
+    "title": "Ride the Sky"
+  },
+  {
+    "id": "df78cf24-fa40-5d3d-ab16-1c655a85c4f4",
+    "mbid": "72ea39c2-c923-4221-8b34-a9b10f658738",
+    "source_record_id": "b1fc5a7b-7a48-57ab-8a00-194c9be11bb6",
+    "title": "Buried by Time and Dust"
+  },
+  {
+    "id": "e71d65f3-7931-5919-9476-44256222c47c",
+    "mbid": "f9a23bc7-d80d-47b5-8c17-25121989f3c7",
+    "source_record_id": "66438463-7fbc-5275-a8ca-ddb4642d6f65",
+    "title": "Addicted to Vaginal Skin"
+  },
+  {
+    "id": "e86a89ef-89c1-5cf7-ad28-1e410cd0ef79",
+    "mbid": "0e6a058b-a15d-4161-931e-36c995bd87b9",
+    "source_record_id": "b49c3687-44de-5fca-a04a-4212177c3f83",
+    "title": "A Time to Die"
+  },
+  {
+    "id": "e87dcbb3-814f-5cbc-845c-b14a5f5c53b4",
+    "mbid": "bd08c49e-32ef-4a98-97cb-392c347397d1",
+    "source_record_id": "d2fc7fb4-9814-5112-8a97-a2d3f9069778",
+    "title": "Kyrie Eleison"
+  },
+  {
+    "id": "ea51751d-c4ea-5996-84ab-28a85434506d",
+    "mbid": "5e7ddca7-ce07-49bb-be32-0bd89fd00ddc",
+    "source_record_id": "f983ef86-741f-533d-bf0a-57d290e5f31d",
+    "title": "A Bloodsword and a Colder Sun, Part I"
+  },
+  {
+    "id": "eb6f2a1f-71c2-5432-bba3-fbbef0580de3",
+    "mbid": "9c998036-2944-4ab1-b6b0-e23965e25533",
+    "source_record_id": "46ec987b-d337-5f4e-97dc-dc099d3fa3de",
+    "title": "To Daimonion, Part III"
+  },
+  {
+    "id": "eb8cfe90-063e-563d-afe3-bb86d482d19a",
+    "mbid": "a00dbe53-b1ae-41aa-8766-622742887fa9",
+    "source_record_id": "49c89c5a-ff09-555f-ae0a-b61453c44b75",
+    "title": "Reborn"
+  },
+  {
+    "id": "ebde8bbd-44a2-5bb3-a126-45786ebc66d4",
+    "mbid": "aafc44a7-0a83-40a0-8f6c-9f74a510d914",
+    "source_record_id": "43367311-8130-5d4d-9389-b3bb08a54276",
+    "title": "Equimanthorn"
+  },
+  {
+    "id": "ebfd8982-cd6d-544e-aed8-f8c59d240c09",
+    "mbid": "0f5cd4d4-178a-471f-bbab-265aa783df40",
+    "source_record_id": "85dc3f2f-1b29-52e5-b37c-52e216caeb66",
+    "title": "Choke on It"
+  },
+  {
+    "id": "ec539393-d741-51f2-98d8-70e77f56887c",
+    "mbid": "44c962ad-944d-48cd-ae95-6bcac795e333",
+    "source_record_id": "a88861da-1d4e-5087-8540-2e0c7c45f706",
+    "title": "Mutilation"
+  },
+  {
+    "id": "ed9b0ad5-9767-59b5-be4f-c1dd3c25d511",
+    "mbid": "0933883f-4b03-47ff-a071-97b8ffc922de",
+    "source_record_id": "07a045cf-fda9-5dc1-98b0-1c359813d6d5",
+    "title": "Epitaph"
+  },
+  {
+    "id": "eecb45e9-b9b5-5038-ac09-8f29b839743e",
+    "mbid": "e33b4e6f-5332-4c23-82b1-c60fd9c3fa6f",
+    "source_record_id": "fc62b096-a073-59ff-bbc7-980ddc2fe49b",
+    "title": "Storm of Damnation (intro)"
+  },
+  {
+    "id": "ef6c381a-403a-582e-a73f-2f5ec42fed32",
+    "mbid": "8e8c1326-0a12-40f4-963a-34ffbd8c6a73",
+    "source_record_id": "9978abb2-2226-5341-b835-853b30218b31",
+    "title": "Criminally Insane"
+  },
+  {
+    "id": "f2b79efb-0b8d-5c51-8c86-0874614454e2",
+    "mbid": "6ddd0bce-231f-43ab-b830-1d1152996ac0",
+    "source_record_id": "245de8a6-84c7-57d2-9f27-6d7f7b095434",
+    "title": "Tommyknockers"
+  },
+  {
+    "id": "f3158320-5e5a-5e4e-a175-b14adce11c71",
+    "mbid": "07746bd9-c6d5-490b-a6e6-d944355ef513",
+    "source_record_id": "5370b8d1-226a-5913-8c42-161a8626110b",
+    "title": "Mangled"
+  },
+  {
+    "id": "f33c3ff6-b563-54c3-9cfb-e40e620b1587",
+    "mbid": "971e54ec-a7af-43ca-b7c4-411e754d66f1",
+    "source_record_id": "8091f97a-0867-547b-bf83-d1f081f246af",
+    "title": "Dyers Eve"
+  },
+  {
+    "id": "f4958344-9785-5fe8-bb2e-43b1c68f282e",
+    "mbid": "ed1083b3-a913-425d-9bdd-af9eb8b2484a",
+    "source_record_id": "20e8d577-c56c-56be-af37-69cb05f4d3bf",
+    "title": "Killers"
+  },
+  {
+    "id": "f4dde3de-d5ab-583a-bf05-fb386ae4c3d4",
+    "mbid": "84893313-4f61-46f6-a35c-c3edf673010e",
+    "source_record_id": "647efe29-a395-56f8-bf0d-439bd8c16508",
+    "title": "Call From the Grave"
+  },
+  {
+    "id": "f6b06c87-4bad-5cb4-b8a3-098864445370",
+    "mbid": "bb6caed2-606f-4b95-96e0-fb3a6bb6e7cd",
+    "source_record_id": "34e870d5-55fe-56f2-88e7-28e9be5ede9a",
+    "title": "The Frayed Ends of Sanity"
+  },
+  {
+    "id": "f6c0159f-8775-57da-b3e8-d174e6924610",
+    "mbid": "6d420853-624c-420f-b82e-69a52612a235",
+    "source_record_id": "a53c500c-9be0-57e7-a966-5482b6d42259",
+    "title": "Learning to Live"
+  },
+  {
+    "id": "f8546996-ea12-5f8b-a5bb-15fb00bf03df",
+    "mbid": "a8df34a7-f0ff-4002-8f06-79aadf5b0d8e",
+    "source_record_id": "763f3845-c63b-5a9d-8f71-5dc79cd10702",
+    "title": "Denial of Life"
+  },
+  {
+    "id": "fb431efd-b7b4-56cd-b85a-767866dc17b4",
+    "mbid": "51a78bee-4ef0-4b5b-96ea-f2878f3d7993",
+    "source_record_id": "a11ec4c6-18a8-5010-bf33-ab4dfd5369d7",
+    "title": "…And Justice for All"
+  }
+]

@@ -1,0 +1,114 @@
+[
+  {
+    "entity_id": "194dcb6d-8bc6-5684-a399-04e8a1a975bc",
+    "entity_type": "artist",
+    "external_id": "Q42482",
+    "id": "05c4ceb5-137c-559a-9c42-9a565bf7b49f",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q42482"
+  },
+  {
+    "entity_id": "445a6a02-54fa-5f90-b601-117a4f739825",
+    "entity_type": "artist",
+    "external_id": "Q192843",
+    "id": "2df7c38c-64d8-56fb-93c9-08febdc3edf0",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q192843"
+  },
+  {
+    "entity_id": "ad377351-046e-5a04-87f1-640109b52420",
+    "entity_type": "artist",
+    "external_id": "Q754323",
+    "id": "61656193-70dd-5f45-9906-09cfed68dba6",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q754323"
+  },
+  {
+    "entity_id": "74e8928b-627b-5a1b-9334-1404094fce8e",
+    "entity_type": "artist",
+    "external_id": "Q158895",
+    "id": "7ea037de-ee7f-5b1d-a956-2fb1624b1173",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q158895"
+  },
+  {
+    "entity_id": "7f225f5c-b1a0-56b2-9d29-abfa32348c79",
+    "entity_type": "artist",
+    "external_id": "Q131231",
+    "id": "82c48470-8a8f-531b-baef-294192146eb5",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q131231"
+  },
+  {
+    "entity_id": "ad278b0c-8da3-5dc5-a1c9-a4f4dff4e5e5",
+    "entity_type": "artist",
+    "external_id": "Q15920",
+    "id": "885b35d3-bb48-5e5c-af58-211856c89771",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q15920"
+  },
+  {
+    "entity_id": "520b6a04-5f15-5dbb-9efb-a4e3ac44630f",
+    "entity_type": "artist",
+    "external_id": "Q157201",
+    "id": "947e3cf2-e068-5e58-b9cb-32941fdb5a5d",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q157201"
+  },
+  {
+    "entity_id": "89003bf8-7d5f-5c83-a62e-8dd5cc6b0b3d",
+    "entity_type": "artist",
+    "external_id": "Q840197",
+    "id": "9acdc406-9915-5871-a709-a86902c62b82",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q840197"
+  },
+  {
+    "entity_id": "f8453bdd-6b25-54ca-9ff9-b9b41bd9f37b",
+    "entity_type": "artist",
+    "external_id": "Q750593",
+    "id": "9f1fc5ba-81a0-58e1-a7b9-332e27105d53",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q750593"
+  },
+  {
+    "entity_id": "ab63bc62-7293-537d-8efe-cd1e8d6f566e",
+    "entity_type": "artist",
+    "external_id": "Q152540",
+    "id": "bb2961bf-dea0-575d-9718-ff1a3b389915",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q152540"
+  },
+  {
+    "entity_id": "eafd6fa2-9960-5d4b-a6de-08bf31da432d",
+    "entity_type": "artist",
+    "external_id": "Q485116",
+    "id": "bdbc0791-a6f3-58ac-8b33-0381c9e748d1",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q485116"
+  },
+  {
+    "entity_id": "1822f070-61a9-5608-bbe9-2cf831d7abb0",
+    "entity_type": "artist",
+    "external_id": "Q83468",
+    "id": "c1425d7c-d45e-5f26-9303-1890f597d677",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q83468"
+  },
+  {
+    "entity_id": "04db6fb8-5563-57e0-962c-5aba4a69374e",
+    "entity_type": "artist",
+    "external_id": "Q162586",
+    "id": "e5b03447-5f4a-58c7-8f0e-cf896b12c716",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q162586"
+  },
+  {
+    "entity_id": "1f58e58a-a6ac-5381-bbc3-78267962131d",
+    "entity_type": "artist",
+    "external_id": "Q485231",
+    "id": "f40d92db-2128-5281-ba39-7e2dac73414a",
+    "source": "wikidata",
+    "url": "https://www.wikidata.org/wiki/Q485231"
+  }
+]

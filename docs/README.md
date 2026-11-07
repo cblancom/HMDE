@@ -23,6 +23,7 @@ Operational entry points:
 | [Glossary](00-vision/glossary.md) | Domain and methodology vocabulary |
 | [Architecture](01-architecture/overview.md) | Architectural style, components, flows and technology |
 | [Data model v0](01-architecture/data-model.md) | Conceptual model; consolidated in E2 |
+| [ER diagram](01-architecture/er-diagram.md) | Physical E2 tables, relationships and delete rules |
 | [Conventions](01-architecture/conventions.md) | Detailed code style, testing and working boundaries |
 | [ADRs](01-architecture/adr/README.md) | Architecture decisions and their rationale |
 | [Sources](03-data/sources.md) | Evaluation of MusicBrainz, Wikidata, Wikipedia, Discogs and Metallum |
@@ -50,6 +51,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0 is complete. SPEC-001 is implemented and locally validated; T-001–T-013 are complete. After the first push, verify remote CI, mark SPEC-001 Validated, and continue with `specs/002-seed-band-explorer/`.
+E0 and E1 are complete. SPEC-001 is validated. SPEC-002 is in implementation: T-001 (catalog model and migration) and T-002 (E2 fixtures) are complete; T-003 is next.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

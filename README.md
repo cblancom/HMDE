@@ -7,8 +7,8 @@ The MVP focuses on 42 bands with studio albums released between 1980 and 2000. T
 ## Status
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
-- **Application code:** E1 implemented and locally validated; remote CI is pending the first push.
-- **Next work:** commit/push, verify GitHub Actions, mark SPEC-001 Validated, then start SPEC-002.
+- **Application code:** E1 validated; E2 in implementation with T-001 and T-002 complete.
+- **Next work:** T-003 (implement the idempotent fixture loader).
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide

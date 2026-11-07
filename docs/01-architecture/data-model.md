@@ -98,7 +98,7 @@ MusicBrainz stores `co-producer`, `executive producer`, `assistant producer` and
 - Ambiguities go to quarantine or a manual review queue.
 - A merge must leave an audit trail: absorbed entity, resulting entity, reason and date.
 
-The policy is recorded in [ADR-0005](adr/ADR-0005-identity-and-provenance.md).
+The policy is recorded in [ADR-0005](adr/ADR-0005-identity-and-provenance.md). See the [E2 ER diagram](er-diagram.md) for physical relationships and delete rules.
 
 ## 6. Provenance
 

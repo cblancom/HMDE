@@ -1,0 +1,942 @@
+[
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "a5caae48-38e0-5e96-ae46-616a359112f4",
+    "mbid": "be417943-d5fa-4e22-9f6b-c4b099c47040",
+    "name": "Andrew Holdsworth",
+    "sort_name": "Holdsworth, Andrew",
+    "source_record_id": "ffba8497-98d9-52c6-a660-aa9c7de7cd03",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "engineer",
+    "id": "9b19ca6e-9cb2-5a2b-b74b-0fba929c00a8",
+    "mbid": "05f87a3d-df77-42a0-b004-f1990b609dd5",
+    "name": "Andy Wallace",
+    "sort_name": "Wallace, Andy",
+    "source_record_id": "7b520c0c-3491-5f5d-9040-212cbf61a0b9",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "Swedish black/Viking/thrash metal band",
+    "id": "520b6a04-5f15-5dbb-9efb-a4e3ac44630f",
+    "mbid": "d292b4cd-37bd-4a88-a823-8710f273cc31",
+    "name": "Bathory",
+    "sort_name": "Bathory",
+    "source_record_id": "cc0b15a8-9d9c-53e2-9df2-dbc805a69c5f",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "1ec61364-54ab-545b-a17e-8493cf0eb783",
+    "mbid": "d667a70b-dcf1-457a-9e88-aaa5714d5884",
+    "name": "Bernie Grundman",
+    "sort_name": "Grundman, Bernie",
+    "source_record_id": "e5d39f01-20ee-5b6f-8c14-b2a29a43aada",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "bfaeeb9e-97a7-51b5-8599-59e195e1f6e7",
+    "mbid": "ad9383e9-3c0f-496d-8b76-f7bf4b1d4c28",
+    "name": "Bill Metoyer",
+    "sort_name": "Metoyer, Bill",
+    "source_record_id": "428f54a3-6dca-5ec8-910c-9c90ccf45332",
+    "type": "person"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "ab63bc62-7293-537d-8efe-cd1e8d6f566e",
+    "mbid": "7fa7fc04-1011-4876-8095-ecd232edea87",
+    "name": "Blind Guardian",
+    "sort_name": "Blind Guardian",
+    "source_record_id": "6467ae58-7862-5d27-99a3-d189c1919eaf",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "mastering engineer",
+    "id": "d8441d46-ac26-5ac3-ba74-aa8b8a8dd74e",
+    "mbid": "874ce122-ca6f-45cb-a7b8-c798cf02b718",
+    "name": "Bob Ludwig",
+    "sort_name": "Ludwig, Bob",
+    "source_record_id": "4f43d3c6-b3fe-5c6b-bffa-5f5080b988a0",
+    "type": "person"
+  },
+  {
+    "country": "CA",
+    "disambiguation": "",
+    "id": "828a648f-5ac1-53aa-8a44-10685f30cab0",
+    "mbid": "4f0730d0-fd52-4818-8a5d-f3f69ce8f378",
+    "name": "Bob Rock",
+    "sort_name": "Rock, Bob",
+    "source_record_id": "9577b5fb-1351-5e6c-9f24-62c33388e735",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "Swedish metal producer",
+    "id": "cdce1635-aad6-5d27-813a-ed266f8dab82",
+    "mbid": "5a940e7b-a8b9-417a-a370-761fd3c76d97",
+    "name": "Boss",
+    "sort_name": "Boss",
+    "source_record_id": "f6eea541-90f6-5fc5-8f0a-0b34805dfcda",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "e8781bf5-5eab-5488-88ec-cb59d638c083",
+    "mbid": "101b0d41-a288-438c-84fb-b115b1311882",
+    "name": "Brad Vance",
+    "sort_name": "Vance, Brad",
+    "source_record_id": "5011ce89-f36a-56cf-8c6c-5099d855893c",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "ff94dc48-6122-56ea-88ec-5d84229674e3",
+    "mbid": "b8fcce4c-1276-4946-9f63-f8bcf1125be5",
+    "name": "Brian Slagel",
+    "sort_name": "Slagel, Brian",
+    "source_record_id": "e9e3fc60-3228-5dfb-98b6-6e02e34fb428",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "e1a8f61c-f7fc-5eae-a531-a8c2bd2a8589",
+    "mbid": "74603b55-4369-4a71-bbce-64217f513cc8",
+    "name": "Brian Stover",
+    "sort_name": "Stover, Brian",
+    "source_record_id": "2d1dc389-fa6f-5f2a-ad9b-a20471e66b54",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "Swedish doom metal",
+    "id": "89003bf8-7d5f-5c83-a62e-8dd5cc6b0b3d",
+    "mbid": "7dba6614-d0bd-4950-8b7b-841b31c413c2",
+    "name": "Candlemass",
+    "sort_name": "Candlemass",
+    "source_record_id": "d2343c93-0066-5ea4-9dc3-a19ba677c0f8",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "American death metal",
+    "id": "1f58e58a-a6ac-5381-bbc3-78267962131d",
+    "mbid": "af8e4cc5-ef54-458d-a194-7b210acf638f",
+    "name": "Cannibal Corpse",
+    "sort_name": "Cannibal Corpse",
+    "source_record_id": "faf1d6e7-3de9-5f6c-b2c7-99b8aec498b4",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "fafbc14d-6448-5734-9a10-891f95565ab5",
+    "mbid": "1b0c2a44-60db-454f-85b2-64e869be0c47",
+    "name": "Carmen Rizzo",
+    "sort_name": "Rizzo, Carmen",
+    "source_record_id": "f421fdb4-6707-5a7b-89cd-d8c84d57d561",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "91e2d11d-0ab3-5553-a101-2d11960ab3f5",
+    "mbid": "f48fd3c5-8134-4f07-9b24-61757dd8a6ec",
+    "name": "Carolyn Collins",
+    "sort_name": "Collins, Carolyn",
+    "source_record_id": "71397c6c-9e49-579c-8f96-05500b368b73",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "2be07723-95ee-59c8-b3cc-fe6d6e4eaa7a",
+    "mbid": "c0112e0f-3cc7-4837-bc96-2a21833f2442",
+    "name": "Charly Rinne",
+    "sort_name": "Rinne, Charly",
+    "source_record_id": "5a419ff4-75d3-523c-9a20-94496632c08f",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "07db4005-7648-5b43-aef4-da99b916bf73",
+    "mbid": "49bfe10e-bfa2-4a26-b018-e46d1a98bec4",
+    "name": "Chris Tsangarides",
+    "sort_name": "Tsangarides, Chris",
+    "source_record_id": "4a04b08e-e43c-5484-949f-b0b5496e0d95",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "75b69e94-0c6a-58a7-8699-d21e9bd8d0b5",
+    "mbid": "59f751b5-291d-42be-b490-bdc856ca45c1",
+    "name": "Chuck Schuldiner",
+    "sort_name": "Schuldiner, Chuck",
+    "source_record_id": "f3b20ccf-e0d4-5bf4-8f55-566f42492cf8",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US metal recording engineer & producer",
+    "id": "19e76a54-4521-5f57-baa8-1142d614a019",
+    "mbid": "ce7e6c92-8b5b-4959-8a6a-3d1665af74f8",
+    "name": "Dan Johnson",
+    "sort_name": "Johnson, Dan",
+    "source_record_id": "4a595dd9-6ec8-5749-95d0-8736aeec5a9b",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "2451238a-a302-55d5-bbfa-00d9bab2376d",
+    "mbid": "69327f1f-dcd1-4bae-8aae-410b3c3435b0",
+    "name": "Dave Obrizzo",
+    "sort_name": "Obrizzo, Dave",
+    "source_record_id": "65a5f4b4-f945-564d-b847-6133013d9522",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "producer and drummer",
+    "id": "e735fecc-33b6-54d0-a62e-d2aaf02fd208",
+    "mbid": "e806b40c-36dc-4945-8542-50989901ddd8",
+    "name": "David Prater",
+    "sort_name": "Prater, David",
+    "source_record_id": "34850c53-7009-556b-aadb-35294bda6302",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US death metal band",
+    "id": "445a6a02-54fa-5f90-b601-117a4f739825",
+    "mbid": "dbb3b771-ae77-4381-b61c-758b5b7898ec",
+    "name": "Death",
+    "sort_name": "Death",
+    "source_record_id": "2aa6123c-8a08-574d-82ad-aef684535cf3",
+    "type": "group"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "e47ad02b-fc82-5085-99d5-20fda8a42cd2",
+    "mbid": "e52c0b1b-db41-4484-8b0d-7bf6d276a2b8",
+    "name": "Dirk Steffens",
+    "sort_name": "Steffens, Dirk",
+    "source_record_id": "b9412e61-e10c-5a0f-8310-681d72ac5604",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "engineer",
+    "id": "27fb263f-bb87-5f0a-bf77-c9e337c5e759",
+    "mbid": "24b90edb-d6e1-403f-8bc1-2082dbd3a6be",
+    "name": "Doug Clark",
+    "sort_name": "Clark, Doug",
+    "source_record_id": "6cd7df26-d021-5cf7-b84d-7debab9b9981",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "061f5035-5475-50c6-8bde-249097d7941d",
+    "mbid": "12a07fc3-09bf-41e5-abef-d3542b53b2d9",
+    "name": "Doug Oberkircher",
+    "sort_name": "Oberkircher, Doug",
+    "source_record_id": "02a5ed75-4630-5c04-a3f8-dfff3c95d201",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "04db6fb8-5563-57e0-962c-5aba4a69374e",
+    "mbid": "28503ab7-8bf2-4666-a7bd-2644bfc7cb1d",
+    "name": "Dream Theater",
+    "sort_name": "Dream Theater",
+    "source_record_id": "99cde72d-613f-57db-bec3-9e088cfc5ccc",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "deb3363e-798a-5255-bde1-dd6cedc7cd69",
+    "mbid": "1ac9b265-4db8-47da-a575-bb81aa14f365",
+    "name": "Duane Baron",
+    "sort_name": "Baron, Duane",
+    "source_record_id": "9a28996c-1c6f-5cc8-99e5-ac64a65686ed",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "mix engineering assistant",
+    "id": "0b48880d-55e3-58c6-b335-898379bb413e",
+    "mbid": "71b95cd3-7bf7-4e66-937b-540fd3747fd9",
+    "name": "Ed Miller",
+    "sort_name": "Miller, Ed",
+    "source_record_id": "d39a859a-9943-5884-bfa3-e9444696229d",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US mastering engineer",
+    "id": "276d7a89-72c6-5a6a-8d8f-55f2857c5c16",
+    "mbid": "3558e537-0518-44c5-a686-758c42a02678",
+    "name": "Eddy Schreyer",
+    "sort_name": "Schreyer, Eddy",
+    "source_record_id": "1e8e05f6-58a9-55b3-9150-9145d4c00c62",
+    "type": "person"
+  },
+  {
+    "country": "NO",
+    "disambiguation": "",
+    "id": "8eeb4fb9-53bb-532c-a01d-efd4eba48e54",
+    "mbid": "ef204b7e-16b2-46b2-98f2-a2edd0dc4d50",
+    "name": "Eirik Hundvin",
+    "sort_name": "Hundvin, Eirik",
+    "source_record_id": "295c3396-da06-572b-887a-e32eaca0a2ec",
+    "type": "person"
+  },
+  {
+    "country": "NO",
+    "disambiguation": "",
+    "id": "2986facd-96f1-52cf-9975-40464fc86a58",
+    "mbid": "5d9313c9-3ce4-49d7-8f53-3f9e44812765",
+    "name": "Euronymous",
+    "sort_name": "Euronymous",
+    "source_record_id": "382e3776-1922-5739-9995-8e3d9a63de18",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "ad377351-046e-5a04-87f1-640109b52420",
+    "mbid": "17fbada3-6dac-42f3-8a6c-8c1c1484f730",
+    "name": "Fates Warning",
+    "sort_name": "Fates Warning",
+    "source_record_id": "5bd9fe26-3db0-5c85-a2b9-d40a8a8e7173",
+    "type": "group"
+  },
+  {
+    "country": "DK",
+    "disambiguation": "",
+    "id": "13922f8d-334e-5d66-bc53-48f001790ff8",
+    "mbid": "03196f4d-a486-4573-8146-b98150dbe0a7",
+    "name": "Flemming Rasmussen",
+    "sort_name": "Rasmussen, Flemming",
+    "source_record_id": "f9b924bc-7984-591a-b77a-b25eeb82c81e",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "mastering engineer",
+    "id": "71232285-afae-5e6b-8107-e403eb3ae65c",
+    "mbid": "d5de9c4d-0b68-4d16-b422-7a1a8a0791d3",
+    "name": "Geoff Pesche",
+    "sort_name": "Pesche, Geoff",
+    "source_record_id": "8bd25b22-6bc4-569d-82bd-83f2b3eab104",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US engineer",
+    "id": "ef3aee0b-ef11-536a-a241-a6fb5ffdd7d2",
+    "mbid": "03254af4-18be-4889-8847-a5d5f6058995",
+    "name": "George Cowan",
+    "sort_name": "Cowan, George",
+    "source_record_id": "1149fb3f-0552-51cf-b63d-545c4da6c676",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "mastering engineer",
+    "id": "2f11361d-8326-5471-8acd-eae7a4d7cfe3",
+    "mbid": "26a5dbc0-72f1-4e72-b5a2-40acd6aa84e5",
+    "name": "George Marino",
+    "sort_name": "Marino, George",
+    "source_record_id": "895c1ec6-6979-5986-98da-0e179614b000",
+    "type": "person"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "a24329dd-9ab5-55c6-ab90-e20c9bf86be7",
+    "mbid": "c2b04e87-ec7e-453c-b5ff-19972e6cf4d4",
+    "name": "Harris Johns",
+    "sort_name": "Johns, Harris",
+    "source_record_id": "c9c0849e-bb4e-5694-ac29-3469d5aa0e0f",
+    "type": "person"
+  },
+  {
+    "country": "NO",
+    "disambiguation": "Norwegian drummer",
+    "id": "7a6370dc-b369-5a4b-834c-4d1002da02a2",
+    "mbid": "813548a9-9bae-4cd7-8cbb-1e732136b652",
+    "name": "Hellhammer",
+    "sort_name": "Hellhammer",
+    "source_record_id": "bdb46bf2-b3eb-57d3-9cb0-ffbd84d6b88e",
+    "type": "person"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "German power metal band",
+    "id": "74e8928b-627b-5a1b-9334-1404094fce8e",
+    "mbid": "765774a0-2060-469b-8b7d-612eea48579b",
+    "name": "Helloween",
+    "sort_name": "Helloween",
+    "source_record_id": "6d830dd9-6f0c-5a2c-be62-1c72da48537a",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "mastering engineer",
+    "id": "324be273-6e6b-5d20-b0d7-7cb2eb87ec05",
+    "mbid": "1a7a89e8-d3f3-4b39-97d8-63156a6ca88c",
+    "name": "Howie Weinberg",
+    "sort_name": "Weinberg, Howie",
+    "source_record_id": "3c7b0e74-bc9f-5b7c-bfb6-35fc223fb9b9",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "English heavy metal band",
+    "id": "194dcb6d-8bc6-5684-a399-04e8a1a975bc",
+    "mbid": "ca891d65-d9b0-4258-89f7-e6ba29d83767",
+    "name": "Iron Maiden",
+    "sort_name": "Iron Maiden",
+    "source_record_id": "9bb53d69-a221-50d1-9a9c-d154e21eef58",
+    "type": "group"
+  },
+  {
+    "country": "NO",
+    "disambiguation": "",
+    "id": "4b11f3bc-31b4-5d67-afc3-b82a11312c38",
+    "mbid": "56e8c375-e54b-41fa-9b00-67cc20b6cf2d",
+    "name": "Iver Sandøy",
+    "sort_name": "Sandøy, Iver",
+    "source_record_id": "4d2b1962-5c78-512c-8bd8-fad0e21359cd",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "b58b296b-5029-516c-b973-ec6e3e8c1c02",
+    "mbid": "e8d4d34c-a3ab-4b4b-81ab-69e90bfa759b",
+    "name": "Jaime Gomez Arellano",
+    "sort_name": "Gomez Arellano, Jaime",
+    "source_record_id": "325cfef9-1fe4-5cb7-b6d9-4275d5c50471",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "c7dff961-0952-5358-a280-54ad08ecda2f",
+    "mbid": "68c34082-c1d5-4399-af9b-3921ca0a6a1f",
+    "name": "James Hetfield",
+    "sort_name": "Hetfield, James",
+    "source_record_id": "71a582ec-62a0-57be-82b0-6b2707aba6fc",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "engineer",
+    "id": "d05ef4fe-83b9-59a0-afd3-5e3eb68bfb09",
+    "mbid": "7e72890a-1ee9-4b24-91e0-c1ed13e39372",
+    "name": "Joe Alexander",
+    "sort_name": "Alexander, Joe",
+    "source_record_id": "623b6ad5-e443-5ecc-86e5-e08e793a9c25",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "0eafd3bf-2ce8-5f5a-8d1d-0ec166165cfc",
+    "mbid": "7c435a12-423a-4b01-8e28-d27d5292b433",
+    "name": "John Cervini",
+    "sort_name": "Cervini, John",
+    "source_record_id": "3226346d-7e8e-58c4-a363-d94186a1a171",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "7e726f30-732b-5380-b4e9-26fe22650587",
+    "mbid": "9c6ba5ff-2d7c-4587-aebd-3f3f0e984801",
+    "name": "John Purdell",
+    "sort_name": "Purdell, John",
+    "source_record_id": "ad757d41-b9b2-5ea3-93be-363f5b3d9d86",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "1822f070-61a9-5608-bbe9-2cf831d7abb0",
+    "mbid": "6b335658-22c8-485d-93de-0bc29a1d0349",
+    "name": "Judas Priest",
+    "sort_name": "Judas Priest",
+    "source_record_id": "1252cff3-7cca-513a-8fb0-75b8cdafc630",
+    "type": "group"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "700ad898-ddb8-59ee-afa5-74e3dc943e42",
+    "mbid": "564ccbbf-941d-4c1a-a51c-a27087fc946d",
+    "name": "Kalle Trapp",
+    "sort_name": "Trapp, Kalle",
+    "source_record_id": "ec549b96-d589-538a-a405-1be6a6d7706f",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "engineer; producer",
+    "id": "94228e4f-2b82-5b7e-82ac-05a6cc0d147b",
+    "mbid": "b9646b7f-97ce-4f40-8e3f-e5b58c0cc74b",
+    "name": "Kevin Beauchamp",
+    "sort_name": "Beauchamp, Kevin",
+    "source_record_id": "7f273635-8e95-5b5d-981d-e1868e32747c",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "mastering engineer",
+    "id": "cc1df7cf-f22f-513a-8494-466ff8098ac9",
+    "mbid": "3de5944f-63c8-428a-a1d7-51a2f5f3e831",
+    "name": "Kevin Gray",
+    "sort_name": "Gray, Kevin",
+    "source_record_id": "29bd5029-c28e-5699-b10b-38329727d58e",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "6f8ac7c3-2c30-5f04-b80f-f4f0608017e4",
+    "mbid": "e2190b35-1181-44f6-8587-4c04123a6f30",
+    "name": "Lars Ulrich",
+    "sort_name": "Ulrich, Lars",
+    "source_record_id": "ebb625f9-5bf1-5b8b-b33b-52d54bcea04f",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "engineering",
+    "id": "baaed2a9-41ed-5049-a6d0-da4658aec10e",
+    "mbid": "95903a6f-4423-461b-abbf-d16afb6763a0",
+    "name": "Louis Austin",
+    "sort_name": "Austin, Louis",
+    "source_record_id": "02b30701-c145-56de-ae35-0427a6f576d5",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "3e607cad-38ba-5edd-acba-297cb13c604c",
+    "mbid": "8e09f689-8f39-42a5-a3c0-c7acaf30d941",
+    "name": "Martin Birch",
+    "sort_name": "Birch, Martin",
+    "source_record_id": "7c7d5e12-7cf6-5a44-b64c-3d73bfc2c7f4",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "studio manager/mastering engineer",
+    "id": "b2dec136-696a-5d31-bd65-145202f2c1c4",
+    "mbid": "5d744128-e5bf-4d55-8cea-f0bab5c4d505",
+    "name": "Mats Lindfors",
+    "sort_name": "Lindfors, Mats",
+    "source_record_id": "4d291b07-3c94-5014-8b17-4cd036992b73",
+    "type": "person"
+  },
+  {
+    "country": "NO",
+    "disambiguation": "Norwegian black metal band",
+    "id": "eafd6fa2-9960-5d4b-a6de-08bf31da432d",
+    "mbid": "c5f9e699-7b0d-4030-86dd-7acc8250d147",
+    "name": "Mayhem",
+    "sort_name": "Mayhem",
+    "source_record_id": "b7a4cb64-0486-5555-b88b-30ced0e7a7cf",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "ad278b0c-8da3-5dc5-a1c9-a4f4dff4e5e5",
+    "mbid": "65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab",
+    "name": "Metallica",
+    "sort_name": "Metallica",
+    "source_record_id": "b15de5a2-404a-5b70-8d62-adffe914e684",
+    "type": "group"
+  },
+  {
+    "country": "US",
+    "disambiguation": "producer, mixer, engineer, songwriter, collaborator with Steve Thompson",
+    "id": "a9cb83d9-b8b3-56ae-841c-4a0bb67a67d0",
+    "mbid": "f13951f1-5675-404e-b707-c31915ddc2d8",
+    "name": "Michael Barbiero",
+    "sort_name": "Barbiero, Michael",
+    "source_record_id": "ca77f675-4883-58a7-9631-84a2bd0e386f",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "5b417989-b371-5dda-8343-12ad9a4954bf",
+    "mbid": "ced22478-7dfa-461a-98dc-c0db6b6f45b1",
+    "name": "Michael Fuller",
+    "sort_name": "Fuller, Michael",
+    "source_record_id": "cdfa71e4-d79a-58dd-ae07-27ba0b23b081",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "e09143c0-0499-5541-84e0-f0dc4e12b9e8",
+    "mbid": "3ea68687-03b2-477e-835c-601d64098e62",
+    "name": "Micke Lind",
+    "sort_name": "Lind, Micke",
+    "source_record_id": "a1f1ccf4-354c-5cc7-9b51-801299e09b6d",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "7e8c0935-02cf-55b7-bdc5-2309b3fd61a6",
+    "mbid": "65b7b32a-08eb-41e6-b713-f7a0a10c1a62",
+    "name": "Mike Clink",
+    "sort_name": "Clink, Mike",
+    "source_record_id": "070e8738-6e16-5f7b-bbd3-9948867487b4",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "3bb40e21-3f16-5000-9d76-7ca93de735df",
+    "mbid": "3a9cc3c3-14e1-4f22-8907-b45ab5e78a1e",
+    "name": "Mike Gowan",
+    "sort_name": "Gowan, Mike",
+    "source_record_id": "0ca91af2-fc56-533d-baa2-f2d222c350b2",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "masterer",
+    "id": "30eb0d69-b75a-57ae-92a8-88f75f8861b6",
+    "mbid": "983a2656-8fda-469b-a19b-f2cbcc145b96",
+    "name": "Nick Watson",
+    "sort_name": "Watson, Nick",
+    "source_record_id": "2e3126b2-0133-501e-b5d0-29e09070d967",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "a296f45d-f93a-5835-bab4-3d968cb04985",
+    "mbid": "540fb6d4-4822-4dc9-80fc-17b5f115f82f",
+    "name": "Nigel Hewitt",
+    "sort_name": "Hewitt, Nigel",
+    "source_record_id": "30be8465-77d8-54e5-9a54-7c5a3589daa1",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "British metal / hard rock band",
+    "id": "f8453bdd-6b25-54ca-9ff9-b9b41bd9f37b",
+    "mbid": "10bf95b6-30e3-44f1-817f-45762cdc0de0",
+    "name": "Paradise Lost",
+    "sort_name": "Paradise Lost",
+    "source_record_id": "abe53704-bd9e-5b75-bcb1-23fbb3b1f2e1",
+    "type": "group"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "16391a9b-a799-5c15-a1bf-ffa7e9627fb1",
+    "mbid": "097c9676-cafa-460e-9995-f9522c799b4c",
+    "name": "Pat Grogan",
+    "sort_name": "Grogan, Pat",
+    "source_record_id": "cfc2c978-2238-59d9-92c8-32c300cb4049",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "Hammy, producer/founder of Peaceville Records",
+    "id": "c42e698d-989d-5122-bf06-c898d6821752",
+    "mbid": "30b8012c-a285-4d61-86c8-f695c00ef69b",
+    "name": "Paul Halmshaw",
+    "sort_name": "Halmshaw, Paul",
+    "source_record_id": "ef1c8c00-a7e7-5aaf-a9f9-e3b4d153c83c",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "8bf95361-9d39-5863-9eb7-1cee8d4319af",
+    "mbid": "88a4cf5d-f3a4-479c-8934-8775a647e17c",
+    "name": "Pete Coleman",
+    "sort_name": "Coleman, Pete",
+    "source_record_id": "29cd1c84-65b3-501a-a3f5-fb98507ca46f",
+    "type": "person"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "4c5b5b44-c4d5-5145-996f-ef65c882368c",
+    "mbid": "df426089-77e3-4da4-beb1-5d0716601161",
+    "name": "Piet Sielck",
+    "sort_name": "Sielck, Piet",
+    "source_record_id": "01fcffa7-8a60-5175-96cd-a3c73a7548a4",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "Swedish black metal",
+    "id": "0a3b9966-aa68-5308-b6fd-2b8aece88da2",
+    "mbid": "bf348cda-3377-4888-82dc-85bba1a2d50a",
+    "name": "Quorthon",
+    "sort_name": "Quorthon",
+    "source_record_id": "fadff94f-c16d-553f-95e7-301fcb1294c2",
+    "type": "person"
+  },
+  {
+    "country": "SE",
+    "disambiguation": "",
+    "id": "98bd10f7-7cfb-5bd3-8e82-27c549c84481",
+    "mbid": "a5bc36d1-4e48-4863-bdc9-4ecef91e9067",
+    "name": "Ragne Wahlquist",
+    "sort_name": "Wahlquist, Ragne",
+    "source_record_id": "f45d60a3-fa25-5be0-99e4-9ebdbf0ea5e4",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "Producer / Engineer",
+    "id": "d9545dfe-85df-5913-99ed-f14d6dd76dc7",
+    "mbid": "91855ca3-b587-4e3d-987a-12855426345c",
+    "name": "Randy Burns",
+    "sort_name": "Burns, Randy",
+    "source_record_id": "b2c5f726-2617-5f9b-8956-134c1c0c3621",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "British mastering engineer",
+    "id": "935624e6-ac0a-5671-a75f-2bbbb2196134",
+    "mbid": "75b6e5e3-5769-426b-a1be-4808345364f1",
+    "name": "Ray Staff",
+    "sort_name": "Staff, Ray",
+    "source_record_id": "040856a0-4c4e-5d73-87af-83b6197d71ed",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US record producer, former co‐president of Columbia Records",
+    "id": "b6cc2170-b0c6-5cbe-b2eb-97f86c1d1299",
+    "mbid": "07aebfa0-55d6-47e0-a284-12330e3eae0d",
+    "name": "Rick Rubin",
+    "sort_name": "Rubin, Rick",
+    "source_record_id": "ad3e9574-c240-5662-947b-1fd786e4032f",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "veteran A&R executive, record producer arranger, recording engineer and songwriter",
+    "id": "48654759-b97e-5126-8365-4130276e24cc",
+    "mbid": "b940b832-506c-45ef-9f3a-40d5d053eb27",
+    "name": "Ron Fair",
+    "sort_name": "Fair, Ron",
+    "source_record_id": "66b08f95-7ee4-56be-8078-5d1f47c70588",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "engineer",
+    "id": "ac5203c8-0671-5069-a1bc-576fc2e0bacf",
+    "mbid": "f01d5c3d-cb15-4b0a-b51c-8741e890f244",
+    "name": "Ryan Arnold",
+    "sort_name": "Arnold, Ryan",
+    "source_record_id": "4341d5da-97a9-53ca-a71c-7aa8e3d8e88e",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "record producer",
+    "id": "9061ac2c-7579-5904-be6d-d485f014edec",
+    "mbid": "2c13a0d2-6089-4467-a2b7-f4c812de4790",
+    "name": "Scott Burns",
+    "sort_name": "Burns, Scott",
+    "source_record_id": "607ee9e3-3efb-5ed6-9b20-c4a7844f76a5",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "recording engineer",
+    "id": "a94386ba-5195-52b4-9f00-fe0ca8086f25",
+    "mbid": "13f43af4-ee50-4a74-ba6b-07ddfd552f8a",
+    "name": "Scott Campbell",
+    "sort_name": "Campbell, Scott",
+    "source_record_id": "970a02f7-67c3-5238-9498-80c3cb0a9c28",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "75cd89f2-3b30-54d9-bc4d-31e55167036c",
+    "mbid": "00c52c6b-ebbc-4179-8312-d4f7d1d72a4a",
+    "name": "Simon Efemey",
+    "sort_name": "Efemey, Simon",
+    "source_record_id": "158c8bfa-f162-5a26-97b8-5e07c803fbbb",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "UK record engineer and producer",
+    "id": "5ede4b08-e9ba-57f7-aa01-0ff7874a29b3",
+    "mbid": "d578fdcd-5233-4cdc-808f-b7e0e934bc0e",
+    "name": "Simon Heyworth",
+    "sort_name": "Heyworth, Simon",
+    "source_record_id": "40351b10-0f4a-5866-a796-ab585de701c4",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "US thrash metal band",
+    "id": "7f225f5c-b1a0-56b2-9d29-abfa32348c79",
+    "mbid": "bdacc37b-8633-4bf8-9dd5-4662ee651aec",
+    "name": "Slayer",
+    "sort_name": "Slayer",
+    "source_record_id": "d04350c1-9beb-5858-9f78-e8bf6df38218",
+    "type": "group"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "440f3616-5961-5bf5-8aaf-5e2ac0245e4f",
+    "mbid": "28cefcad-a748-482c-9b13-4ec84f2f7533",
+    "name": "Steve Himelfarb",
+    "sort_name": "Himelfarb, Steve",
+    "source_record_id": "bfde30d1-5d4b-5054-87a8-6e895abf3043",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "aba6c3e2-03ef-55f3-a3e1-3a2cd25fe120",
+    "mbid": "dd3d0c5a-cfec-4706-8bcd-ed984d02aa16",
+    "name": "Steve Regina",
+    "sort_name": "Regina, Steve",
+    "source_record_id": "44373957-d093-5f83-a6e5-0217ddb6566f",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "",
+    "id": "25ed5887-015e-5501-893a-971a9e189dc5",
+    "mbid": "c8751d46-5e36-46f9-83d3-3174f74ed092",
+    "name": "Steve Sinclair",
+    "sort_name": "Sinclair, Steve",
+    "source_record_id": "9c7547a9-3f3c-5c47-b903-1593c31566b8",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "producer",
+    "id": "fdf904d3-2ac5-5742-b62f-edc6d3c4a0b1",
+    "mbid": "589d55ec-8b64-49db-bd1a-a368a2e70eb4",
+    "name": "Steve Thompson",
+    "sort_name": "Thompson, Steve",
+    "source_record_id": "8030cd27-c7ba-5b21-b42f-1d88de19a451",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "American mastering engineer",
+    "id": "c48d908c-b4e3-56e8-9d1a-934e31930dff",
+    "mbid": "2bf1575f-88f7-4df0-8f9d-28be403f1891",
+    "name": "Ted Jensen",
+    "sort_name": "Jensen, Ted",
+    "source_record_id": "6e85911a-ed86-5e4c-bd7c-fd154d612b72",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "American record producer and engineer",
+    "id": "8fc98204-f113-5a7c-b0ea-85eaeedb0d20",
+    "mbid": "c5a4083f-c868-4e50-b180-b95225ff7e54",
+    "name": "Terry Date",
+    "sort_name": "Date, Terry",
+    "source_record_id": "c7a9e708-9046-5ce9-a1b5-297e36ec060e",
+    "type": "person"
+  },
+  {
+    "country": "US",
+    "disambiguation": "producer & engineer",
+    "id": "25461646-0a89-5dc6-bd07-b7bf44c48fe7",
+    "mbid": "6c453725-e2be-49bf-8c42-119970fa588f",
+    "name": "Toby Wright",
+    "sort_name": "Wright, Toby",
+    "source_record_id": "f18c9f0e-1156-5430-bb45-e696d9b7ba5f",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "19646e95-4207-58d4-8302-f28dd5c76d64",
+    "mbid": "17b0cc36-1058-4562-9d2c-ac2fdd017c47",
+    "name": "Tom Allom",
+    "sort_name": "Allom, Tom",
+    "source_record_id": "49a8b44c-da27-5271-9293-47abaa09237a",
+    "type": "person"
+  },
+  {
+    "country": "DK",
+    "disambiguation": "",
+    "id": "4d086b97-c1a6-5bf7-bca4-c908522e8e09",
+    "mbid": "b4c0c650-f2c6-42c6-a7a9-65e0b29fdc22",
+    "name": "Tommy Hansen",
+    "sort_name": "Hansen, Tommy",
+    "source_record_id": "52f5e2c0-69fa-5b11-a0b4-74899554bf7d",
+    "type": "person"
+  },
+  {
+    "country": "DE",
+    "disambiguation": "",
+    "id": "2133af43-35d9-507f-afa3-5a9b6f92e291",
+    "mbid": "3e577953-6f0b-4120-9382-27f7e6e0f575",
+    "name": "Tommy Newton",
+    "sort_name": "Newton, Tommy",
+    "source_record_id": "e4e86245-b7a1-5c1b-b846-38bd91cdebd2",
+    "type": "person"
+  },
+  {
+    "country": null,
+    "disambiguation": "",
+    "id": "663b8241-8e13-5340-afc1-1764d6b6fa54",
+    "mbid": "69f9e5cc-08e2-4a6f-b6a0-29ed66ac7aab",
+    "name": "Trish Finnegan",
+    "sort_name": "Finnegan, Trish",
+    "source_record_id": "3134ac61-b42b-5ed3-a538-209ed768ea08",
+    "type": "person"
+  },
+  {
+    "country": "GB",
+    "disambiguation": "",
+    "id": "0edfdbae-afed-5192-b26c-928bef19a9fb",
+    "mbid": "894861fb-efc3-42fb-93ae-b4b84adf9d52",
+    "name": "Wil Malone",
+    "sort_name": "Malone, Wil",
+    "source_record_id": "b64a9195-91cb-502f-ab44-4288568bacbe",
+    "type": "person"
+  }
+]

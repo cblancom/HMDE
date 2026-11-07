@@ -21,9 +21,10 @@ Stack:
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
 - The seed list is versioned at `data/seed-list.json` (v0.1.0).
-- Backend, frontend, development Docker Compose and the CI workflow exist; remote CI is pending the first push.
-- SPEC-001 is implemented and locally validated; T-001–T-013 are complete. Remote CI is pending the first push.
-- The next spec after 001 is `specs/002-seed-band-explorer/` (E2).
+- Backend, frontend, development Docker Compose and CI are implemented; the remote CI run passed.
+- E1 is complete and SPEC-001 is validated.
+- SPEC-002 is in implementation: T-001 and T-002 are complete; T-003 is next.
+- The next work is T-003 (implement the idempotent fixture loader).
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure

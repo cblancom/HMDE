@@ -187,9 +187,8 @@ E0 is complete: the final 42-band seed list is available at `data/seed-list.json
 
 Next steps:
 
-1. Commit and push the repository, then verify the remote CI run and mark SPEC-001 Validated.
-2. Write and approve SPEC-002 — Seed band explorer using a subset of the seed list.
-3. Implement E2.
+1. Continue E2 implementation at T-003; T-001 and T-002 are complete.
+2. Complete and validate the walking skeleton.
 
 ## 7. Limitations
 
@@ -220,6 +219,5 @@ The raw cache is disposable and should not be committed to the main repository. 
 
 ## 9. Next steps
 
-1. Commit and push the repository, then verify the remote CI run and mark SPEC-001 Validated.
-2. Write and approve SPEC-002 — Seed band explorer.
-3. Implement E2.
+1. Continue E2 implementation at T-003; T-001 and T-002 are complete.
+2. Complete and validate the walking skeleton.

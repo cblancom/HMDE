@@ -1,0 +1,136 @@
+{
+  "album_count": 41,
+  "band_count": 14,
+  "bands": [
+    {
+      "album_count": 3,
+      "name": "Iron Maiden",
+      "producer_credit_count": 14,
+      "subgenre": "Heavy Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Judas Priest",
+      "producer_credit_count": 4,
+      "subgenre": "Heavy Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Metallica",
+      "producer_credit_count": 20,
+      "subgenre": "Thrash Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Slayer",
+      "producer_credit_count": 32,
+      "subgenre": "Thrash Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Death",
+      "producer_credit_count": 44,
+      "subgenre": "Death Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Cannibal Corpse",
+      "producer_credit_count": 29,
+      "subgenre": "Death Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Bathory",
+      "producer_credit_count": 24,
+      "subgenre": "Black Metal"
+    },
+    {
+      "album_count": 2,
+      "name": "Mayhem",
+      "producer_credit_count": 24,
+      "subgenre": "Black Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Helloween",
+      "producer_credit_count": 36,
+      "subgenre": "Power Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Blind Guardian",
+      "producer_credit_count": 26,
+      "subgenre": "Power Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Candlemass",
+      "producer_credit_count": 31,
+      "subgenre": "Doom Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Paradise Lost",
+      "producer_credit_count": 3,
+      "subgenre": "Doom Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Dream Theater",
+      "producer_credit_count": 12,
+      "subgenre": "Progressive Metal"
+    },
+    {
+      "album_count": 3,
+      "name": "Fates Warning",
+      "producer_credit_count": 39,
+      "subgenre": "Progressive Metal"
+    }
+  ],
+  "builder": "scripts/build_e2_fixtures.py",
+  "credit_count": 859,
+  "credit_scope_distribution": {
+    "recording": 779,
+    "release": 80
+  },
+  "files": {
+    "artist_subgenres.json": "d0257d1986343b989b053fbf18a42e56428582f1200c1a96d1f1d65827f35bd5",
+    "artists.json": "4293a5ce9358427738046b81b81a303cd6da411bdd59947300f647005d9050b8",
+    "credits.json": "51d781db337a1f9057680b002e39bbb1d955a141b9e553b0bbd44ec96aa36c0a",
+    "external_ids.json": "ae0a56d3a4cf64906e910f1b46f054fee032cd03b27f00ffb72e24b06a537fab",
+    "recording_releases.json": "4d617bea11e3dd85522a43a4c5961aa5b43033977ddaec37783e8e209ae9b74e",
+    "recordings.json": "f74b8af52c4f58343a1c6db045a6b2ee17dbe1183448844eaa1d9b8b03956595",
+    "release_groups.json": "b7f8e54c35479d5523de7526059cd2179a0338bac1b46a715e92e21536bd70f7",
+    "releases.json": "9abcd840cb21ffafb78f2d39d08435227b067349dc37e835c7d19e6fd3070b8d",
+    "roles.json": "60dd836d82b0cb9795a78286d1d30ff0750da69dd650c9874090c2e208c1739c",
+    "source_records.json": "551423e4e4acee0ec2f07b090da8734034441c2f1f359f602885cf32186363b0",
+    "subgenres.json": "075f76ae032232d781afdfcd6966927b06b5a163e4be8d445029bb4f8038b372"
+  },
+  "generated_at": "2026-11-06",
+  "license": "CC0-1.0",
+  "role_distribution": {
+    "additional-producer": 4,
+    "co-producer": 30,
+    "engineer": 276,
+    "executive-producer": 24,
+    "mastering": 25,
+    "mix": 194,
+    "producer": 306
+  },
+  "selection_notes": {
+    "Mayhem": "Only 2 eligible studio album(s) in the spike sample."
+  },
+  "selection_policy": "Prefer albums with core producer/co-producer credits, using the earliest official release for release-level provenance.",
+  "source": "musicbrainz",
+  "source_snapshot": "2026-11-05T01:58:10.444211+00:00",
+  "subgenre_distribution": {
+    "Black Metal": 2,
+    "Death Metal": 2,
+    "Doom Metal": 2,
+    "Heavy Metal": 2,
+    "Power Metal": 2,
+    "Progressive Metal": 2,
+    "Thrash Metal": 2
+  },
+  "version": "e2-v0.1.0"
+}
