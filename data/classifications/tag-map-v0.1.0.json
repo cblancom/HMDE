@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "taxonomy_version": "0.2.0",
+  "description": "Exact MusicBrainz genre/tag labels mapped to assignable taxonomy leaves for corpus v0.2.",
+  "rules": [
+    {
+      "source_label": "heavy metal",
+      "target_code": "heavy-metal",
+      "confidence": 0.95,
+      "priority": 100,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "nwobhm",
+      "target_code": "nwobhm",
+      "confidence": 0.95,
+      "priority": 60,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "new wave of british heavy metal",
+      "target_code": "nwobhm",
+      "confidence": 0.9,
+      "priority": 60,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "hard rock",
+      "target_code": "hard-rock",
+      "confidence": 0.9,
+      "priority": 110,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "proto-metal",
+      "target_code": "proto-metal",
+      "confidence": 0.9,
+      "priority": 120,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "proto metal",
+      "target_code": "proto-metal",
+      "confidence": 0.9,
+      "priority": 120,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "thrash metal",
+      "target_code": "thrash-metal",
+      "confidence": 0.95,
+      "priority": 30,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "speed metal",
+      "target_code": "thrash-metal",
+      "confidence": 0.65,
+      "priority": 30,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "speed/thrash metal",
+      "target_code": "thrash-metal",
+      "confidence": 0.75,
+      "priority": 30,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "crossover thrash",
+      "target_code": "thrash-metal",
+      "confidence": 0.7,
+      "priority": 30,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "technical thrash metal",
+      "target_code": "thrash-metal",
+      "confidence": 0.8,
+      "priority": 30,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "death metal",
+      "target_code": "death-metal",
+      "confidence": 0.95,
+      "priority": 40,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "melodic death metal",
+      "target_code": "death-metal",
+      "confidence": 0.75,
+      "priority": 40,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "technical death metal",
+      "target_code": "death-metal",
+      "confidence": 0.8,
+      "priority": 40,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "brutal death metal",
+      "target_code": "death-metal",
+      "confidence": 0.8,
+      "priority": 40,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "old school death metal",
+      "target_code": "death-metal",
+      "confidence": 0.8,
+      "priority": 40,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "black metal",
+      "target_code": "black-metal",
+      "confidence": 0.95,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "melodic black metal",
+      "target_code": "black-metal",
+      "confidence": 0.75,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "symphonic black metal",
+      "target_code": "black-metal",
+      "confidence": 0.7,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "atmospheric black metal",
+      "target_code": "black-metal",
+      "confidence": 0.75,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "raw black metal",
+      "target_code": "black-metal",
+      "confidence": 0.75,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "post-black metal",
+      "target_code": "post-metal",
+      "confidence": 0.7,
+      "priority": 10,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "blackgaze",
+      "target_code": "post-metal",
+      "confidence": 0.6,
+      "priority": 10,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "doom metal",
+      "target_code": "doom-metal",
+      "confidence": 0.95,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "traditional doom metal",
+      "target_code": "doom-metal",
+      "confidence": 0.85,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "epic doom metal",
+      "target_code": "doom-metal",
+      "confidence": 0.8,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "stoner metal",
+      "target_code": "stoner-metal",
+      "confidence": 0.95,
+      "priority": 20,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "stoner rock",
+      "target_code": "stoner-metal",
+      "confidence": 0.6,
+      "priority": 20,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "sludge metal",
+      "target_code": "sludge-metal",
+      "confidence": 0.95,
+      "priority": 15,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "sludge",
+      "target_code": "sludge-metal",
+      "confidence": 0.65,
+      "priority": 15,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "atmospheric sludge",
+      "target_code": "post-metal",
+      "confidence": 0.65,
+      "priority": 10,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "power metal",
+      "target_code": "power-metal",
+      "confidence": 0.95,
+      "priority": 50,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "symphonic power metal",
+      "target_code": "power-metal",
+      "confidence": 0.75,
+      "priority": 50,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "neoclassical metal",
+      "target_code": "power-metal",
+      "confidence": 0.65,
+      "priority": 50,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "progressive metal",
+      "target_code": "progressive-metal",
+      "confidence": 0.95,
+      "priority": 55,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "groove metal",
+      "target_code": "groove-metal",
+      "confidence": 0.95,
+      "priority": 25,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "metalcore",
+      "target_code": "metalcore",
+      "confidence": 0.95,
+      "priority": 5,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "melodic metalcore",
+      "target_code": "metalcore",
+      "confidence": 0.75,
+      "priority": 5,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "progressive metalcore",
+      "target_code": "metalcore",
+      "confidence": 0.7,
+      "priority": 5,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "deathcore",
+      "target_code": "deathcore",
+      "confidence": 0.95,
+      "priority": 5,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "djent",
+      "target_code": "djent",
+      "confidence": 0.95,
+      "priority": 5,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "post-metal",
+      "target_code": "post-metal",
+      "confidence": 0.95,
+      "priority": 10,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "post metal",
+      "target_code": "post-metal",
+      "confidence": 0.9,
+      "priority": 10,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "death-doom metal",
+      "target_code": "doom-metal",
+      "confidence": 0.7,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "gothic metal",
+      "target_code": "doom-metal",
+      "confidence": 0.7,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "gothic rock",
+      "target_code": "doom-metal",
+      "confidence": 0.6,
+      "priority": 45,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "viking metal",
+      "target_code": "black-metal",
+      "confidence": 0.65,
+      "priority": 35,
+      "mapping_rule": "exact-label"
+    },
+    {
+      "source_label": "blues rock",
+      "target_code": "hard-rock",
+      "confidence": 0.6,
+      "priority": 110,
+      "mapping_rule": "exact-label"
+    }
+  ]
+}

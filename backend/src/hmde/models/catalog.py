@@ -112,3 +112,4 @@ class RecordingRelease(Base):
     )
     disc: Mapped[str | None] = mapped_column(String(20), nullable=True)
     position: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    track_number: Mapped[str | None] = mapped_column(String(20), nullable=True)

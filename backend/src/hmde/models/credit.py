@@ -11,8 +11,10 @@ from sqlalchemy import (
     Float,
     ForeignKey,
     Index,
+    Integer,
     String,
     Text,
+    UniqueConstraint,
     Uuid,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -23,7 +25,15 @@ from hmde.db.base import Base
 
 class SourceRecord(Base):
     __tablename__ = "source_record"
-    __table_args__ = (Index("ix_source_record_source_external_id", "source", "external_id"),)
+    __table_args__ = (
+        CheckConstraint(
+            "http_status IS NULL OR http_status BETWEEN 100 AND 599",
+            name="ck_source_record_http_status",
+        ),
+        UniqueConstraint("raw_response_id", name="uq_source_record_raw_response"),
+        Index("ix_source_record_source_external_id", "source", "external_id"),
+        Index("ix_source_record_dataset_version", "dataset_version"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True)
     source: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -33,7 +43,20 @@ class SourceRecord(Base):
     fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     license: Mapped[str] = mapped_column(String(100), nullable=False)
     payload_hash: Mapped[str] = mapped_column(String(64), nullable=False)
-    fixture_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    fixture_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    raw_response_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid,
+        ForeignKey("raw_response.id", ondelete="RESTRICT"),
+        nullable=True,
+    )
+    http_status: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    api_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    dataset_version: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    ingest_run_id: Mapped[uuid.UUID | None] = mapped_column(
+        Uuid,
+        ForeignKey("ingest_run.id", ondelete="RESTRICT"),
+        nullable=True,
+    )
 
 
 class Role(Base):

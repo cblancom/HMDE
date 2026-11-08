@@ -77,6 +77,22 @@ def test_api_runtime_does_not_import_ingestion_packages() -> None:
     assert {path: modules for path, modules in offenders.items() if modules} == {}
 
 
+def test_normalization_does_not_import_api_or_analytics_packages() -> None:
+    hmde_root = REPO_ROOT / "backend" / "src" / "hmde"
+    paths = list((hmde_root / "normalization").rglob("*.py"))
+    forbidden = ("hmde.api", "hmde.main", "hmde.services")
+
+    offenders = {
+        str(path.relative_to(REPO_ROOT)): sorted(
+            module
+            for module in _imported_modules(path.read_text(encoding="utf-8"))
+            if module == "hmde" or any(module.startswith(prefix) for prefix in forbidden)
+        )
+        for path in paths
+    }
+    assert {path: modules for path, modules in offenders.items() if modules} == {}
+
+
 def test_frontend_does_not_add_deferred_e2_dependencies() -> None:
     package = json.loads((REPO_ROOT / "frontend" / "package.json").read_text(encoding="utf-8"))
     dependencies = set(package.get("dependencies", {})) | set(package.get("devDependencies", {}))

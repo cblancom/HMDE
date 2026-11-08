@@ -22,8 +22,8 @@ Operational entry points:
 | [Roadmap](00-vision/roadmap.md) | Long-term plan by stage, dependencies and exit gates |
 | [Glossary](00-vision/glossary.md) | Domain and methodology vocabulary |
 | [Architecture](01-architecture/overview.md) | Architectural style, components, flows and technology |
-| [Data model v0](01-architecture/data-model.md) | Conceptual model; E2 physical schema plus planned E4 taxonomy/lifecycle |
-| [ER diagram](01-architecture/er-diagram.md) | Physical E2 tables, relationships and delete rules |
+| [Data model v0](01-architecture/data-model.md) | Conceptual model; E2/E4 physical schema and taxonomy/lifecycle |
+| [ER diagram](01-architecture/er-diagram.md) | Physical E2/E4 tables, relationships and delete rules |
 | [Conventions](01-architecture/conventions.md) | Detailed code style, testing and working boundaries |
 | [ADRs](01-architecture/adr/README.md) | Architecture decisions and their rationale |
 | [Sources](03-data/sources.md) | Evaluation of MusicBrainz, Wikidata, Wikipedia, Discogs and Metallum |
@@ -52,6 +52,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-001 and SPEC-002 are validated. SPEC-003 is validated; remote CI run 42396996612 passed. ADR-0008 defines the corpus v0.2 direction, and SPEC-004 is validated: the active v0.2.0 corpus has 57 bands, 1960–2026, and a reproducible dataset. Remote CI run 42411597186 passed. E4 follows as SPEC-005.
+E0–E3 are complete and validated. SPEC-004 validated the 57-band v0.2 corpus and dataset. SPEC-005 is implemented locally: canonical load, taxonomy, classification, aggregates and membership. Remote CI and formal validation remain; E5 follows as SPEC-006.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

@@ -5,17 +5,33 @@ from hmde.models.catalog import Recording, RecordingRelease, Release, ReleaseGro
 from hmde.models.credit import Credit, Role, SourceRecord
 from hmde.models.fixture import FixtureLoad
 from hmde.models.ingestion import IngestError, IngestRun, RawResponse
+from hmde.models.normalization import (
+    ArtistSubgenreClassification,
+    DatasetMembership,
+    NormalizationIssue,
+    NormalizationIssueAction,
+    NormalizationRun,
+    ReleaseGroupSubgenre,
+    TaxonomyNode,
+    TaxonomyVersion,
+)
 from hmde.models.subgenre import ArtistSubgenre, Subgenre
 
 __all__ = [
     "Artist",
     "ArtistSubgenre",
+    "ArtistSubgenreClassification",
     "Credit",
+    "DatasetMembership",
     "ExternalId",
     "FixtureLoad",
     "IngestError",
     "IngestRun",
+    "NormalizationIssue",
+    "NormalizationIssueAction",
+    "NormalizationRun",
     "RawResponse",
+    "ReleaseGroupSubgenre",
     "Recording",
     "RecordingRelease",
     "Release",
@@ -23,4 +39,6 @@ __all__ = [
     "Role",
     "SourceRecord",
     "Subgenre",
+    "TaxonomyNode",
+    "TaxonomyVersion",
 ]

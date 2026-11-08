@@ -1,11 +1,11 @@
-# E2 Entity-Relationship Diagram
+# Physical entity-relationship diagram
 
 - **Status:** Current
-- **Date:** 2026-11-06
-- **Stage:** E2
-- **Schema:** Alembic `0003` (`credit` target FKs use `RESTRICT`)
+- **Date:** 2026-11-08
+- **Stage:** E2–E4
+- **Schema:** Alembic `0005`
 
-This diagram shows the physical E2 catalog schema. It includes only real foreign-key relationships. `alembic_version` is omitted because Alembic owns it.
+This diagram shows the physical catalog and normalization schema. It includes only real foreign-key relationships. `alembic_version` is omitted because Alembic owns it.
 
 ## Diagram
 
@@ -33,6 +33,19 @@ erDiagram
     RELEASE |o--o{ CREDIT : "edition context"
     RECORDING |o--o{ CREDIT : "recording context"
 
+    TAXONOMY_VERSION ||--o{ TAXONOMY_NODE : "contains"
+    TAXONOMY_VERSION ||--o{ NORMALIZATION_RUN : "used by"
+    NORMALIZATION_RUN ||--o{ NORMALIZATION_ISSUE : "reports"
+    NORMALIZATION_ISSUE ||--o{ NORMALIZATION_ISSUE_ACTION : "audits"
+    RELEASE_GROUP ||--o{ RELEASE_GROUP_SUBGENRE : "classified as"
+    TAXONOMY_NODE ||--o{ RELEASE_GROUP_SUBGENRE : "labels"
+    ARTIST ||--o{ ARTIST_SUBGENRE_CLASSIFICATION : "aggregate history"
+    TAXONOMY_NODE ||--o{ ARTIST_SUBGENRE_CLASSIFICATION : "labels"
+    ARTIST ||--o{ DATASET_MEMBERSHIP : "member of"
+    SOURCE_RECORD ||--o{ RELEASE_GROUP_SUBGENRE : "classification provenance"
+    SOURCE_RECORD ||--o{ ARTIST_SUBGENRE_CLASSIFICATION : "aggregate provenance"
+    SOURCE_RECORD ||--o{ DATASET_MEMBERSHIP : "membership provenance"
+
     SOURCE_RECORD {
         uuid id PK
         string source
@@ -43,6 +56,11 @@ erDiagram
         string license
         string payload_hash
         string fixture_version
+        uuid raw_response_id FK
+        int http_status
+        string api_version
+        string dataset_version
+        uuid ingest_run_id FK
     }
 
     ARTIST {
@@ -60,6 +78,10 @@ erDiagram
         boolean is_primary
         float confidence
         uuid source_record_id FK
+        string taxonomy_version FK
+        string status
+        string mapping_rule
+        datetime updated_at
     }
 
     SUBGENRE {
@@ -104,6 +126,7 @@ erDiagram
         uuid recording_id FK
         string disc
         string position
+        string track_number
     }
 
     ROLE {
@@ -142,6 +165,102 @@ erDiagram
         int band_count
         int album_count
         int credit_count
+    }
+
+    TAXONOMY_VERSION {
+        string version PK
+        string status
+        string source_hash
+        string source_path
+        boolean is_current
+        datetime created_at
+    }
+
+    TAXONOMY_NODE {
+        string taxonomy_version PK,FK
+        string code PK
+        string name
+        string parent_code FK
+        boolean assignable
+        int display_order
+    }
+
+    NORMALIZATION_RUN {
+        uuid id PK
+        string dataset_version
+        string manifest_sha256
+        string seed_list_version
+        string taxonomy_version FK
+        string tag_map_version
+        string overrides_version
+        string status
+        datetime started_at
+        datetime finished_at
+        string code_version
+        jsonb parameters
+        jsonb counters
+        text report_path
+    }
+
+    NORMALIZATION_ISSUE {
+        uuid id PK
+        string issue_key UK
+        uuid normalization_run_id FK
+        string entity_type
+        string entity_mbid
+        string taxonomy_version FK
+        string issue_type
+        string severity
+        string status
+        text reason
+        jsonb evidence
+    }
+
+    NORMALIZATION_ISSUE_ACTION {
+        uuid id PK
+        uuid issue_id FK
+        string action
+        string actor
+        text source_file
+        jsonb previous_value
+        jsonb new_value
+        datetime created_at
+    }
+
+    RELEASE_GROUP_SUBGENRE {
+        uuid release_group_id PK,FK
+        string taxonomy_version PK,FK
+        string subgenre_code PK,FK
+        boolean is_primary
+        float confidence
+        string status
+        string mapping_rule
+        uuid source_record_id FK
+        jsonb evidence
+    }
+
+    ARTIST_SUBGENRE_CLASSIFICATION {
+        uuid artist_id PK,FK
+        string taxonomy_version PK,FK
+        string subgenre_code PK,FK
+        boolean is_primary
+        float confidence
+        string status
+        string mapping_rule
+        uuid source_record_id FK
+        jsonb evidence
+    }
+
+    DATASET_MEMBERSHIP {
+        string dataset_version PK
+        uuid artist_id PK,FK
+        string seed_list_version
+        string batch_id
+        string lifecycle
+        string added_in_version
+        string retired_in_version
+        uuid replaced_by_artist_id FK
+        uuid source_record_id FK
     }
 ```
 
@@ -204,16 +323,15 @@ The `credit` table supports three scopes:
 
 `release_group_id` is always present so every credit can be aggregated at album level. Recording-scoped credits are aggregated later with supporting-recording counts and ratios.
 
-## Planned E4 additions
+## E4 additions (migration `0005`)
 
-The E2 diagram above is historical and only shows the physical schema through `0003`. E4 will add:
-
-- `release_group_subgenre` with one primary and multiple secondary taxonomy leaves;
-- taxonomy parent relationships in `subgenre`;
-- classification confidence, status, mapping rule and taxonomy version;
-- dataset membership/lifecycle tables for active and retired bands.
-
-These additions must not delete or rewrite historical E2/E3 data. The final physical diagram will be updated with the E4 migration.
+- `taxonomy_version` and `taxonomy_node` preserve versioned taxonomy history; `subgenre` remains the current projection used by E2 read paths.
+- `release_group_subgenre` stores versioned album classifications with one primary and optional secondary leaves.
+- `artist_subgenre_classification` stores versioned band aggregate history; `artist_subgenre` remains the current projection.
+- `dataset_membership` records active/retired membership per dataset.
+- `normalization_run`, `normalization_issue` and `normalization_issue_action` record run lifecycle, review queue and audit actions.
+- `source_record` gained optional E3 raw-response provenance fields; `recording_release` gained `track_number`.
+- These additions do not rewrite historical E2/E3 data.
 
 ## Related documents
 

@@ -8,7 +8,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
 - **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
-- **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed. E4 follows as SPEC-005.
+- **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed.
+- **Normalization v0.2:** SPEC-005 implemented locally. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI is pending. E5 follows as SPEC-006.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -201,6 +202,24 @@ docker compose --profile ingest run --rm ingest \
 
 Exit codes: `0` completed, `2` completed with band failures, `1` fatal configuration or execution error.
 
+## E4 normalization
+
+E4 normalizes the active E3 dataset into canonical PostgreSQL entities, album-level taxonomy classifications, band aggregates and dataset membership. It does not call MusicBrainz, change the API contract or modify the frontend.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.normalization run \
+    --dataset ../data/ingestions/musicbrainz/mb-20261107T194927Z-0d6cedd5c261 \
+    --taxonomy ../data/taxonomy.json \
+    --tag-map ../data/classifications/tag-map-v0.1.0.json \
+    --overrides ../data/classifications/manual-overrides-v0.1.0.json \
+    --seed-list ../data/seed-list.json \
+    --output ../data/normalization
+```
+
+The command writes versioned JSON/Markdown reports under `data/normalization/<run_id>/`, records a `normalization_run`, and exits with `0` completed, `2` completed with review, or `1` fatal error. `--dry-run` validates inputs without writing canonical rows. The validated local run `54d66992-643b-49ec-bac4-fe514ea39e94` processed 57 bands and 731 albums; 690 albums were accepted, 17 are in review and 24 bootleg/live/demo release groups were explicitly quarantined.
+
 ## Test database
 
 Integration tests require an isolated `hmde_test` database. Create it once with the Compose database running:
@@ -351,6 +370,7 @@ Use Node.js 20 and ensure `frontend/package-lock.json` exists. Do not edit the l
 | [`docs/03-data/sources.md`](docs/03-data/sources.md) | Source evaluation |
 | [`docs/03-data/spike-report.md`](docs/03-data/spike-report.md) | MusicBrainz feasibility results |
 | [`docs/03-data/seed-list.md`](docs/03-data/seed-list.md) | Historical 42-band seed list and active 57-band v0.2.0 corpus |
+| [`docs/03-data/normalization-rules.md`](docs/03-data/normalization-rules.md) | E4 identity, provenance, credit, taxonomy and classification rules |
 | [`data/seed-list.json`](data/seed-list.json) | Active-version pointer; versioned files live in `data/seed-lists/` |
 
 ## Repository layout

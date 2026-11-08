@@ -1,0 +1,42 @@
+{
+  "band_count": 1,
+  "batch_ids": [
+    "v0.1.0"
+  ],
+  "dataset_version": "mini-20261108",
+  "files": {
+    "artists.ndjson": {
+      "count": 1,
+      "sha256": "cf6c773f2164b54578041977102b527eb5b5a3e77cfadc31c28798d72ee8497b"
+    },
+    "credits.ndjson": {
+      "count": 2,
+      "sha256": "67831b892fa697ae9b2ddfea745989461e9a9384deda8d7de066e5a8a977efac"
+    },
+    "external_ids.ndjson": {
+      "count": 1,
+      "sha256": "9b7b3ad74088948712443f1c09c65e942f1a3fb5aa5a4b8927e7cc845c739ba4"
+    },
+    "recordings.ndjson": {
+      "count": 1,
+      "sha256": "6ebb908df0923a33552846d9aac5b0a965fb35448247d331edd79cf13c849cdf"
+    },
+    "release_groups.ndjson": {
+      "count": 1,
+      "sha256": "b5c01157c7b5905160e241c6e1732cfd22dea31fb214e658c75116e9f03ce367"
+    },
+    "release_recordings.ndjson": {
+      "count": 1,
+      "sha256": "c5f5657c2eb376e868c04b03da1af8647c51b04ed8f5f26779bdaaa2df5da766"
+    },
+    "releases.ndjson": {
+      "count": 1,
+      "sha256": "48b4b7ad235268dd21c2b3ce7c28474f1ce1cf1ec6e5664ff7bf72df4fb5be15"
+    }
+  },
+  "period_end": "2026-12-31",
+  "period_start": "1960-01-01",
+  "seed_list_version": "0.2.0",
+  "source_snapshot_at": "2026-11-08T00:00:00+00:00",
+  "taxonomy_version": "0.2.0"
+}

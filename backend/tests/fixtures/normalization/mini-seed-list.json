@@ -1,0 +1,32 @@
+{
+  "schema_version": 2,
+  "version": "0.2.0",
+  "taxonomy_version": "0.2.0",
+  "period_start": "1960-01-01",
+  "period_end": "2026-12-31",
+  "generated_at": "2026-11-08",
+  "description": "Mini normalization fixture.",
+  "source": "MusicBrainz",
+  "total_bands": 1,
+  "subgenre_distribution": {"heavy-metal": 1},
+  "batches": [
+    {"batch_id": "v0.1.0", "version": "0.1.0", "band_count": 1, "status": "active", "description": "Mini base."}
+  ],
+  "bands": [
+    {
+      "name": "Mini Band",
+      "mbid": "11111111-1111-4111-8111-111111111111",
+      "subgenre": "Heavy Metal",
+      "country": "GB",
+      "seed_subgenre_code": "heavy-metal",
+      "batch_id": "v0.1.0",
+      "added_in_version": "0.1.0",
+      "lifecycle": "active",
+      "status": "verified",
+      "source": "MusicBrainz",
+      "source_url": "https://musicbrainz.org/artist/11111111-1111-4111-8111-111111111111",
+      "verified_at": "2026-11-08",
+      "sequence": 1
+    }
+  ]
+}

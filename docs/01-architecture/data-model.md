@@ -1,6 +1,6 @@
 # Data model v0
 
-- **Status:** Draft; E2 physical schema consolidated; E4 taxonomy and lifecycle planned
+- **Status:** Draft; E2/E3 physical schemas consolidated; E4 normalization implemented locally
 - **Version:** 0.2
 - **Date:** 2026-11-06
 - **Stage:** E0

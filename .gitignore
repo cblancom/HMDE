@@ -24,6 +24,7 @@ coverage/
 # Raw data and research cache
 data/raw/
 data/ingestions/
+data/normalization/
 spike/output/raw/
 
 # Editors and OS

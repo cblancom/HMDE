@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "taxonomy_version": "0.2.0",
+  "description": "Manual album classification overrides for problematic corpus v0.2 cases.",
+  "overrides": [
+    {
+      "release_group_mbid": "028655c5-773a-3fb9-9eb2-5ce5198c0f9a",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Fates Warning - A Pleasant Shade of Gray has only the broad tag rock; assigned the band leaf.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "170bd638-00f6-4992-8e42-2dbd41f6b023",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Anathema - Distant Satellites has no exact taxonomy leaf; assigned progressive metal after review.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "17ec88d1-4009-4360-9c1c-1498394b383a",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Anathema - Weather Systems has only progressive/alternative rock labels; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "6e3c34c4-3e0d-4dbf-841a-1ad1eabee9eb",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Anathema - We’re Here Because We’re Here has only alternative/rock labels; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "b52c0fd7-a819-4f86-8f7e-d12eb4dc39d4",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Anathema - The Optimist has only alternative/atmospheric rock labels; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "2864ec02-5e6a-36d8-9960-ccd959b9a618",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Opeth - Damnation has only progressive/acoustic/folk rock labels; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "e7aff5e2-6efb-4f36-ac83-a975bdcc68f3",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Pain of Salvation - Road Salt Two has only progressive rock; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "fcb7f127-74da-4fc5-8fa3-75e78e75e0f7",
+      "primary_code": "progressive-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Pain of Salvation - Falling Home has only progressive/rock labels; assigned progressive metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "597bcce2-5e06-4753-9f8b-822d058a174c",
+      "primary_code": "black-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Darkthrone - Pre-Historic Metal has only chart/review tags; assigned black metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "6644850c-c120-4d38-b0bb-44f9c8d09897",
+      "primary_code": "black-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Darkthrone - Goatlord: Original has no tags; assigned black metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "fe629a38-a88e-4e15-b426-ef858419a0b4",
+      "primary_code": "black-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Darkthrone - It Beckons Us All has only chart/language tags; assigned black metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "e67fe079-daef-490b-9f2d-fbc4b68e4466",
+      "primary_code": "hard-rock",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Deep Purple - SPLAT! has only chart/review tags; assigned hard rock.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    },
+    {
+      "release_group_mbid": "7654e1da-948f-450b-916e-271ece2efbd7",
+      "primary_code": "black-metal",
+      "secondary_codes": [],
+      "confidence": 1.0,
+      "reason": "Rotting Christ - Aealo has no tags; assigned black metal.",
+      "reviewer": "HMDE E4 curation",
+      "reviewed_at": "2026-11-08"
+    }
+  ]
+}

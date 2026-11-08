@@ -23,7 +23,7 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 is validated. SPEC-004 is validated: the active corpus is v0.2.0 with 57 bands, 1960–2026 and a reproducible ingestion dataset. Remote CI run 42411597186 passed. E4 follows as SPEC-005.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is implemented locally for E4 normalization, identity, album taxonomy and provenance; remote CI and formal validation are pending.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
@@ -31,7 +31,7 @@ E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are v
 | 002 | [`002-seed-band-explorer`](002-seed-band-explorer/spec.md) | E2 | `catalog` | Data model v0, seed fixtures, read API, band explorer, mini-graph | 001 | Validated |
 | 003 | [`003-musicbrainz-ingestion`](003-musicbrainz-ingestion/spec.md) | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Validated |
 | 004 | [`004-corpus-v0-2`](004-corpus-v0-2/spec.md) | E3 | `ingestion` | 15-band corpus v0.2 seed list, 1960–2026 period and new E3 dataset | 003 | Validated |
-| 005 | `005-normalization-identity` | E4 | `normalization` | Canonical entities, album-level taxonomy, role mapping, credit scope, provenance, dataset lifecycle | 004 | Pending |
+| 005 | [`005-normalization-identity`](005-normalization-identity/spec.md) | E4 | `normalization` | Canonical entities, album-level taxonomy, role mapping, credit scope, provenance, dataset lifecycle | 004 | Implemented |
 | 006 | `006-data-quality` | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 005 | Pending |
 | 007 | `007-eda-metrics` | E6 | `analytics` | Exploratory analysis and metric definitions | 006 | Pending |
 | 008 | `008-network-analysis` | E7 | `analytics` | Graph snapshots, metrics and communities | 007 | Pending |
@@ -110,4 +110,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-002 and SPEC-003 are validated. SPEC-004 is validated with the 57-band corpus and reproducible dataset. E4 follows as SPEC-005.
+E0, E1 and E2 are complete. SPEC-002, SPEC-003 and SPEC-004 are validated. SPEC-005 is implemented locally for E4; remote CI and formal validation are the next gate.
