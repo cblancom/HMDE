@@ -8,7 +8,7 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
 - **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
-- **Corpus v0.2:** SPEC-004 implemented locally. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI for SPEC-004 is pending. E4 follows as SPEC-005.
+- **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed. E4 follows as SPEC-005.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide

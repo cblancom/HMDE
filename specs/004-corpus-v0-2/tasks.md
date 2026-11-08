@@ -1,6 +1,6 @@
 # Tasks — SPEC-004 Corpus v0.2 seed-list expansion
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -153,7 +153,7 @@ T-002 creates the versioned seed-list files. T-003–T-006 adapt E3 validation, 
 
 - **Requirements:** FR-010, FR-011, NFR-004, NFR-005, NFR-006.
 - **Dependencies:** T-007.
-- **Status:** Completed locally (2026-11-06); remote CI pending.
+- **Status:** Completed (2026-11-08).
 - **Description:** complete unit/integration coverage for versioned seed files, taxonomy, lifecycle, period, manifest and replay; run full backend checks and CI; update README/AGENTS/seed-list documentation and validation evidence.
 - **Done when:** tests and CI pass; OpenAPI drift is absent; canonical E2 counts are unchanged; documentation describes the new active pointer, batch, taxonomy and period; spec/tasks reflect validation evidence.
 - **Verification:**
@@ -168,7 +168,7 @@ T-002 creates the versioned seed-list files. T-003–T-006 adapt E3 validation, 
   docker compose config -q
   ```
 - **Files:** `backend/tests/`, `README.md`, `AGENTS.md`, `data/README.md`, `docs/03-data/seed-list.md`, `specs/004-corpus-v0-2/`.
-- **Evidence:** 2026-11-06: full backend suite passed 157 tests with PostgreSQL; Ruff check and format passed; OpenAPI drift was absent; `docker compose config -q` passed. Added integration coverage for archive immutability, pointer resolution and exact 42+15 composition. Remote GitHub Actions CI was not run because no commit/push was requested.
+- **Evidence:** 2026-11-08: full backend suite passed 157 tests with PostgreSQL; Ruff check and format passed; OpenAPI drift was absent; `docker compose config -q` passed. Added integration coverage for archive immutability, pointer resolution and exact 42+15 composition. Remote GitHub Actions CI run [42411597186](https://github.com/cblancom/HMDE/actions/runs/42411597186) passed for commit `10c9ab2`.
 
 ## 3. Coverage matrix
 
@@ -212,7 +212,7 @@ T-002 creates the versioned seed-list files. T-003–T-006 adapt E3 validation, 
 | AC-007 | Passed | Cache-only run reproduced `mb-20261107T194927Z-0d6cedd5c261` with 0 new responses |
 | AC-008 | Passed | Coverage includes 1960s–2020s; report includes versions and status |
 | AC-009 | Passed | Historical dataset 12-file checksum set unchanged |
-| AC-010 | Passed locally | 157 tests, Ruff, format and OpenAPI drift pass; remote CI pending |
+| AC-010 | Passed | 157 tests, Ruff, format and OpenAPI drift pass; remote CI run 42411597186 passed |
 | AC-011 | Passed | OpenAPI drift none; full API/contract and E2 fixture suite passed; no schema migration |
 
 ## 5. Notes

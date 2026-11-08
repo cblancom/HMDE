@@ -211,7 +211,7 @@ Before closing any stage:
 | E0 | Completed | Documents, spike, amended ADRs, data-model updates and the 42-band seed list are complete |
 | E1 | Completed | SPEC-001 validated; CI green |
 | E2 | Validated | SPEC-002 validated; local and remote CI evidence complete |
-| E3 | Implemented | SPEC-003 validated with remote CI. SPEC-004 corpus v0.2 implemented locally: 57 bands, 1960–2026 and reproducible dataset; remote CI pending before E4. |
+| E3 | Validated | SPEC-003 and SPEC-004 validated with remote CI. The v0.2.0 corpus has 57 bands, 1960–2026 and a reproducible dataset. |
 | E4–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -243,4 +243,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete. SPEC-003 is validated; SPEC-004 is implemented locally with the 57-band v0.2.0 corpus and reproducible dataset. Remote CI and formal SPEC-004 validation remain; E4 follows as SPEC-005.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 follows as SPEC-005.

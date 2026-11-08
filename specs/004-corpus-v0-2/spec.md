@@ -1,6 +1,6 @@
 # SPEC-004 — Corpus v0.2 seed-list expansion
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E3
 - **Iteration:** MVP
 - **Module:** `ingestion`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-003 validated; [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md); [taxonomy](../../data/taxonomy.json) v0.2.0; seed list v0.1.0
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (implemented locally; remote CI pending)
+- **Tasks:** [tasks.md](tasks.md) (validated)
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -20,6 +20,7 @@
 | 2 | 2026-11-06 | Plan and tasks drafted; T-001 batch selection gate defined |
 | 3 | 2026-11-06 | Plan/tasks approved; T-001 implemented |
 | 4 | 2026-11-06 | T-001–T-008 executed; 57-band dataset and local validation complete; remote CI pending |
+| 5 | 2026-11-08 | Remote CI run 42411597186 passed; SPEC-004 validated |
 
 ## 1. Context and problem
 
@@ -341,9 +342,9 @@ All code, documentation, reports and error messages are in English.
 
 ## 11. Validation result
 
-- **Date:** 2026-11-06
-- **Verdict:** Implemented; local validation passed; remote CI and formal validation pending
-- **Evidence:** 157 backend tests passed with PostgreSQL; Ruff check/format and OpenAPI drift checks passed; dataset `mb-20261107T194927Z-0d6cedd5c261` reproduced cache-only; historical dataset checksums unchanged. See `tasks.md`.
+- **Date:** 2026-11-08
+- **Verdict:** Validated
+- **Evidence:** 157 backend tests passed with PostgreSQL; Ruff check/format and OpenAPI drift checks passed; dataset `mb-20261107T194927Z-0d6cedd5c261` reproduced cache-only; historical dataset checksums unchanged. Remote CI run [42411597186](https://github.com/cblancom/HMDE/actions/runs/42411597186) passed for commit `10c9ab2`. See `tasks.md`.
 
 ## 12. References
 

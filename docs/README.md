@@ -52,6 +52,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-001 and SPEC-002 are validated. SPEC-003 is validated; remote CI run 42396996612 passed. ADR-0008 defines the corpus v0.2 direction, and SPEC-004 is implemented locally: the active v0.2.0 corpus has 57 bands, 1960–2026, and a reproducible dataset. Remote CI and formal validation remain. E4 follows as SPEC-005.
+E0, E1 and E2 are complete. SPEC-001 and SPEC-002 are validated. SPEC-003 is validated; remote CI run 42396996612 passed. ADR-0008 defines the corpus v0.2 direction, and SPEC-004 is validated: the active v0.2.0 corpus has 57 bands, 1960–2026, and a reproducible dataset. Remote CI run 42411597186 passed. E4 follows as SPEC-005.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).

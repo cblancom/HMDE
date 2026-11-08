@@ -258,4 +258,4 @@ No live network in automated tests.
 
 ## 15. Approval and next step
 
-This plan was approved together with `tasks.md` before implementation. T-001 was the mandatory batch-selection gate; the 15-band list and distribution are approved, and the v0.2.0 implementation is complete locally.
+This plan was approved together with `tasks.md` before implementation. T-001 was the mandatory batch-selection gate; the 15-band list and distribution are approved, and the v0.2.0 implementation is validated.
