@@ -214,7 +214,7 @@ Before closing any stage:
 | E3 | Validated | SPEC-003 and SPEC-004 validated with remote CI. The v0.2.0 corpus has 57 bands, 1960–2026 and a reproducible dataset. |
 | E4 | Validated | SPEC-005 normalization, identity, taxonomy, classification, aggregates and membership. Remote CI run 42535752532 passed. |
 | E5 | Validated | SPEC-006 quality rules, persisted findings/exceptions/metrics and two-level CI/full-corpus gate. Remote CI run 42545153696 passed. |
-| E6 | In planning | SPEC-007 draft for exploratory analysis and metric definition; plan and tasks pending. |
+| E6 | Implemented locally | SPEC-007 EDA, metric catalogue, coverage and concentration report. Remote CI pending. |
 | E7–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -246,4 +246,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is in draft for E6; its plan and tasks are the next gate.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is implemented locally for E6; remote CI and formal validation remain. E7 follows as SPEC-008.

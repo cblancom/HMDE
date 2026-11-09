@@ -10,7 +10,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
 - **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed.
 - **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed.
-- **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed. E6 follows as SPEC-007.
+- **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed.
+- **EDA v0.1:** SPEC-007 implemented locally. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI and formal validation are pending. E7 follows as SPEC-008.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -237,6 +238,23 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
 
 The full-corpus run is a batch operation because the E3 dataset and raw cache are not in Git. CI runs structural checks against fixtures. Exit codes are `0` pass, `2` advisory findings, `3` blocked by an unexcepted blocking finding, and `1` fatal error. The initial quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` persisted 58 findings, 58 approved exceptions and 51 metrics; no blocking finding was left unexcepted.
 
+## E6 exploratory analysis
+
+E6 produces a report-only EDA over explicit normalized and quality runs. It writes versioned JSON/Markdown reports under `data/analysis/<analysis_version>/` without modifying the database.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.analytics run \
+    --normalization-run 54d66992-643b-49ec-bac4-fe514ea39e94 \
+    --quality-run 341824ea-5d6f-4279-bae0-f66a1e696e05 \
+    --taxonomy ../data/taxonomy.json \
+    --metric-catalogue ../data/metrics/catalogue-v0.1.0.json \
+    --output ../data/analysis
+```
+
+The local report `eda-1267fdcced62b7da` contains 354 metric rows, including decade/taxonomy distributions, producer participation/concentration and descriptive co-credit pairs. Exit code `2` indicates completed with disclosed limitations. New corpus versions create new analysis directories; old reports are never overwritten.
+
 ## Test database
 
 Integration tests require an isolated `hmde_test` database. Create it once with the Compose database running:
@@ -389,6 +407,7 @@ Use Node.js 20 and ensure `frontend/package-lock.json` exists. Do not edit the l
 | [`docs/03-data/seed-list.md`](docs/03-data/seed-list.md) | Historical 42-band seed list and active 57-band v0.2.0 corpus |
 | [`docs/03-data/normalization-rules.md`](docs/03-data/normalization-rules.md) | E4 identity, provenance, credit, taxonomy and classification rules |
 | [`docs/03-data/data-quality.md`](docs/03-data/data-quality.md) | E5 quality dimensions, gates and exception baseline |
+| [`docs/03-data/eda-metrics.md`](docs/03-data/eda-metrics.md) | E6 exploratory metric catalogue and analysis rules |
 | [`data/seed-list.json`](data/seed-list.json) | Active-version pointer; versioned files live in `data/seed-lists/` |
 
 ## Repository layout

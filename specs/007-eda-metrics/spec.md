@@ -1,14 +1,14 @@
 # SPEC-007 — Exploratory analysis and metric definition
 
-- **Status:** Draft
+- **Status:** Implemented
 - **Stage:** E6
 - **Iteration:** MVP
 - **Module:** `analytics`
 - **Date:** 2026-11-09
 - **Depends on:** SPEC-006 validated; normalized run `54d66992-643b-49ec-bac4-fe514ea39e94`; quality run `341824ea-5d6f-4279-bae0-f66a1e696e05`; E3 dataset `mb-20261107T194927Z-0d6cedd5c261`; [taxonomy](../../data/taxonomy.json) v0.2.0
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
-- **Plan:** Not created yet.
-- **Tasks:** Not created yet.
+- **Plan:** [plan.md](plan.md) (approved)
+- **Tasks:** [tasks.md](tasks.md) (implemented locally; remote CI pending)
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -17,6 +17,9 @@
 | Revision | Date | Change |
 |---|---|---|
 | 1 | 2026-11-09 | Initial draft; E6 exploratory scope, Pandas authorization and report-only persistence decision |
+| 2 | 2026-11-09 | Spec approved; technical plan and tasks drafted for review |
+| 3 | 2026-11-09 | T-001–T-010 implemented locally; full EDA report completed; remote CI pending |
+| 3 | 2026-11-09 | T-001–T-010 implemented locally; full EDA report completed; remote CI pending |
 
 ## 1. Context and problem
 
@@ -421,9 +424,9 @@ No blocking question remains for planning.
 
 ## 11. Validation result
 
-- **Date:** —
-- **Verdict:** Not validated
-- **Evidence:** `tasks.md` validation table, once the plan and tasks are approved and executed
+- **Date:** 2026-11-09
+- **Verdict:** Implemented; local validation passed; remote CI and formal validation pending
+- **Evidence:** Full EDA report `eda-1267fdcced62b7da` contains 354 metric rows for 57 bands and 731 albums, with known quality limitations disclosed. 250 tests passed; Ruff/format, OpenAPI drift and Compose validation passed locally. Remote CI and formal validation are pending. See `tasks.md`.
 
 ## 12. References
 

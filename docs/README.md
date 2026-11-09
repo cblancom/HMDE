@@ -30,6 +30,7 @@ Operational entry points:
 | [Spike report](03-data/spike-report.md) | MusicBrainz feasibility results and design implications |
 | [Seed list](03-data/seed-list.md) | Historical 42-band seed list and active 57-band v0.2.0 corpus |
 | [Data quality](03-data/data-quality.md) | E5 quality rules, gates and exception baseline |
+| [EDA metrics](03-data/eda-metrics.md) | E6 exploratory analysis and metric definitions |
 
 ## Sources of truth
 
@@ -53,6 +54,6 @@ Active work is tracked in `specs/`. Reference documents explain and constrain it
 
 ## Next step
 
-E0–E3 are complete and validated. SPEC-004 validated the 57-band v0.2 corpus and dataset. SPEC-005 is validated: canonical load, taxonomy, classification, aggregates and membership. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 quality. Remote CI run 42545153696 passed. SPEC-007 is in draft for E6; plan and tasks are next.
+E0–E3 are complete and validated. SPEC-004 validated the 57-band v0.2 corpus and dataset. SPEC-005 is validated: canonical load, taxonomy, classification, aggregates and membership. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 quality. Remote CI run 42545153696 passed. SPEC-007 is implemented locally for E6; remote CI and formal validation remain. E7 follows as SPEC-008.
 
 The detailed plan is in [00-vision/roadmap.md](00-vision/roadmap.md). The spike results are in [03-data/spike-report.md](03-data/spike-report.md).
