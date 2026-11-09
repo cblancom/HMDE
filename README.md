@@ -10,7 +10,7 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
 - **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed.
 - **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed.
-- **Data quality v0.1:** SPEC-006 implemented locally. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI is pending. E6 follows as SPEC-007.
+- **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed. E6 follows as SPEC-007.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide

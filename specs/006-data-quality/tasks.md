@@ -1,6 +1,6 @@
 # Tasks — SPEC-006 Data quality and validation
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -175,7 +175,7 @@ T-001 and T-002 define the rule/exception inputs and persistence layer. T-003–
 
 - **Requirements:** FR-010–FR-012, NFR-004–NFR-009.
 - **Dependencies:** T-009.
-- **Status:** Completed locally (2026-11-08); remote CI pending.
+- **Status:** Completed (2026-11-09).
 - **Description:** Complete unit/integration coverage, update README/AGENTS/data docs/ER diagram/quality rules, run full backend checks, OpenAPI drift and compose validation, and record remote CI evidence.
 - **Done when:** full suite, Ruff, format and OpenAPI drift pass; no API/frontend/canonical change; docs describe quality tables, rules, exceptions and two-level gates; remote CI passes after push.
 - **Verification:**
@@ -190,7 +190,7 @@ T-001 and T-002 define the rule/exception inputs and persistence layer. T-003–
   docker compose config -q
   ```
 - **Files:** `backend/tests/`, `README.md`, `AGENTS.md`, `data/README.md`, `docs/03-data/data-quality.md`, `docs/01-architecture/er-diagram.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/006-data-quality/`, `.gitignore`.
-- **Evidence:** 2026-11-08: full PostgreSQL-backed suite passed 234 tests; Ruff check/format passed; OpenAPI drift was absent; `docker compose config -q` passed; documentation and ER schema updated. Remote CI is pending because no commit/push was requested.
+- **Evidence:** 2026-11-09: full PostgreSQL-backed suite passed 234 tests; Ruff check/format passed; OpenAPI drift was absent; `docker compose config -q` passed; documentation and ER schema updated. Remote GitHub Actions CI run [42545153696](https://github.com/cblancom/HMDE/actions/runs/42545153696) passed for commit `8a485f5`.
 
 ## 3. Coverage matrix
 
@@ -242,7 +242,7 @@ T-001 and T-002 define the rule/exception inputs and persistence layer. T-003–
 | AC-011 | Passed | Full-corpus run 45e0ef56 |
 | AC-012 | Passed | Deterministic finding keys and repeat quality runs |
 | AC-013 | Passed | Scope guards, canonical no-mutation and OpenAPI drift |
-| AC-014 | Passed locally; remote CI pending | 234 tests, Ruff, format |
+| AC-014 | Passed | 234 tests, Ruff, format and remote CI run 42545153696 |
 
 ## 5. Notes
 

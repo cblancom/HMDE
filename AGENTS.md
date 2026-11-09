@@ -27,7 +27,7 @@ Stack:
 - E3 is validated; SPEC-003 has T-001–T-012 complete and the remote CI run passed.
 - ADR-0008 is accepted. SPEC-004 is validated: taxonomy v0.2.0, 42 + 15 active bands, 1960–2026, data-driven seed validation, expanded-decade reports and corpus metadata in E3 runs. The v0.2.0 dataset is `mb-20261107T194927Z-0d6cedd5c261` and cache-only replay is stable. Remote CI run 42411597186 passed.
 - SPEC-005 is validated: canonical load from the v0.2 dataset, versioned taxonomy, hybrid album classification, band aggregates, review/quarantine issues and dataset membership. Local run `54d66992-643b-49ec-bac4-fe514ea39e94` processed 57 bands and 731 albums. Remote CI run 42535752532 passed.
-- SPEC-006 is implemented locally: persisted quality rules/runs/findings/exceptions/metrics, structural checks, coverage reports and the two-level CI/full-corpus model. Local quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` has 58 findings covered by 58 approved exceptions and no unexcepted blocker. Remote CI and formal validation are pending. E6 follows as SPEC-007.
+- SPEC-006 is validated: persisted quality rules/runs/findings/exceptions/metrics, structural checks, coverage reports and the two-level CI/full-corpus model. Local quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` has 58 findings covered by 58 approved exceptions and no unexcepted blocker. Remote CI run 42545153696 passed. SPEC-007 is in draft for E6; its plan and tasks are the next gate.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure

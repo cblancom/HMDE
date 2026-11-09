@@ -1,6 +1,6 @@
 # SPEC-006 — Data quality and validation
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E5
 - **Iteration:** MVP
 - **Module:** `quality`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-005 validated; normalized corpus run `54d66992-643b-49ec-bac4-fe514ea39e94`; E3 dataset `mb-20261107T194927Z-0d6cedd5c261`; [taxonomy](../../data/taxonomy.json) v0.2.0; [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md); [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (implemented locally; remote CI pending)
+- **Tasks:** [tasks.md](tasks.md) (validated)
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -19,6 +19,7 @@
 | 1 | 2026-11-08 | Initial draft; E5 quality dimensions, persisted findings and two-level CI model |
 | 2 | 2026-11-08 | Spec approved; technical plan and tasks drafted for review |
 | 3 | 2026-11-08 | T-001–T-010 implemented locally; full quality run completed; remote CI pending |
+| 4 | 2026-11-09 | Remote CI run 42545153696 passed; SPEC-006 validated |
 
 ## 1. Context and problem
 
@@ -423,9 +424,9 @@ No blocking question remains for planning.
 
 ## 11. Validation result
 
-- **Date:** 2026-11-08
-- **Verdict:** Implemented; local validation passed; remote CI and formal validation pending
-- **Evidence:** 234 backend tests passed with PostgreSQL; Ruff check/format, OpenAPI drift and compose validation passed. Quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` persisted 58 findings, 58 approved exceptions, 20 rules and 51 metrics with no unexcepted blocking finding. See `tasks.md`.
+- **Date:** 2026-11-09
+- **Verdict:** Validated
+- **Evidence:** 234 backend tests passed with PostgreSQL; Ruff check/format, OpenAPI drift and compose validation passed. Quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` persisted 58 findings, 58 approved exceptions, 20 rules and 51 metrics with no unexcepted blocking finding. Remote CI run [42545153696](https://github.com/cblancom/HMDE/actions/runs/42545153696) passed for commit `8a485f5`. See `tasks.md`.
 
 ## 12. References
 

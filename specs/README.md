@@ -23,7 +23,7 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is implemented locally for E5 data quality and validation; remote CI and formal validation are pending.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 data quality and validation. Remote CI run 42545153696 passed. SPEC-007 is in draft for E6 exploratory analysis and metric definition; its plan and tasks are the next gate.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
@@ -32,8 +32,8 @@ E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are v
 | 003 | [`003-musicbrainz-ingestion`](003-musicbrainz-ingestion/spec.md) | E3 | `ingestion` | Source client, raw layer, ingestion runs, seed-list extraction | 002 | Validated |
 | 004 | [`004-corpus-v0-2`](004-corpus-v0-2/spec.md) | E3 | `ingestion` | 15-band corpus v0.2 seed list, 1960–2026 period and new E3 dataset | 003 | Validated |
 | 005 | [`005-normalization-identity`](005-normalization-identity/spec.md) | E4 | `normalization` | Canonical entities, album-level taxonomy, role mapping, credit scope, provenance, dataset lifecycle | 004 | Validated |
-| 006 | [`006-data-quality`](006-data-quality/spec.md) | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 005 | Implemented |
-| 007 | `007-eda-metrics` | E6 | `analytics` | Exploratory analysis and metric definitions | 006 | Pending |
+| 006 | [`006-data-quality`](006-data-quality/spec.md) | E5 | `quality` | Quality rules, coverage reports, low-confidence review | 005 | Validated |
+| 007 | [`007-eda-metrics`](007-eda-metrics/spec.md) | E6 | `analytics` | Exploratory analysis and metric definitions | 006 | Draft |
 | 008 | `008-network-analysis` | E7 | `analytics` | Graph snapshots, metrics and communities | 007 | Pending |
 | 009 | `009-read-api` | E8 | `api` | Read API v1, filters, pagination, subgraphs, precomputed metrics | 002, 005, 008 | Pending |
 | 010 | `010-entity-explorer` | E9 | `web` | Band, album and producer exploration UI | 009 | Pending |
@@ -110,4 +110,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0, E1 and E2 are complete. SPEC-002, SPEC-003 and SPEC-004 are validated. SPEC-005 is validated. SPEC-006 is implemented locally for E5; remote CI and formal validation are the next gate.
+E0, E1 and E2 are complete. SPEC-002, SPEC-003 and SPEC-004 are validated. SPEC-005 is validated. SPEC-006 is validated. SPEC-007 is in draft for E6; its plan and tasks are the next gate.
