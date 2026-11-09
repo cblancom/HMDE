@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "description": "HMDE E5 data-quality rule catalogue.",
+  "rules": [
+    {
+      "code": "Q-FK-001",
+      "name": "No orphan canonical rows",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "database",
+      "description": "Canonical, classification, credit and membership rows must not have broken foreign keys.",
+      "expected": "0 orphan rows",
+      "threshold": 0,
+      "remediation": "Repair the normalization or migration that produced the orphan row."
+    },
+    {
+      "code": "Q-PROV-001",
+      "name": "Canonical provenance is mandatory",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "canonical",
+      "description": "Every canonical entity, credit, classification and aggregate must reference a source record.",
+      "expected": "100% provenance coverage",
+      "threshold": 1.0,
+      "remediation": "Re-run normalization with a complete raw-response cache."
+    },
+    {
+      "code": "Q-MBID-001",
+      "name": "MBIDs are canonical UUIDs",
+      "dimension": "validity",
+      "severity": "blocking",
+      "entity_scope": "canonical",
+      "description": "Every external MBID used by canonical entities must be a valid UUID.",
+      "expected": "0 invalid MBIDs",
+      "threshold": 0,
+      "remediation": "Quarantine or correct the source record in the normalization input."
+    },
+    {
+      "code": "Q-MBID-002",
+      "name": "Canonical MBIDs are unique",
+      "dimension": "consistency",
+      "severity": "blocking",
+      "entity_scope": "canonical",
+      "description": "Artist, album, release and recording tables must not contain duplicate MBIDs.",
+      "expected": "0 duplicate MBIDs",
+      "threshold": 0,
+      "remediation": "Resolve the identity conflict in E4 with deterministic evidence."
+    },
+    {
+      "code": "Q-TAX-001",
+      "name": "Classification labels are taxonomy leaves",
+      "dimension": "validity",
+      "severity": "blocking",
+      "entity_scope": "classification",
+      "description": "Every album and band classification must reference an assignable taxonomy leaf.",
+      "expected": "0 non-leaf labels",
+      "threshold": 0,
+      "remediation": "Correct the classification or taxonomy version."
+    },
+    {
+      "code": "Q-TAX-002",
+      "name": "Taxonomy versions align",
+      "dimension": "consistency",
+      "severity": "blocking",
+      "entity_scope": "classification",
+      "description": "Classifications and aggregates must use a persisted taxonomy version.",
+      "expected": "100% version alignment",
+      "threshold": 1.0,
+      "remediation": "Rebuild classifications for the active taxonomy version."
+    },
+    {
+      "code": "Q-CLS-001",
+      "name": "Every canonical album has a primary classification",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "release_group",
+      "description": "Each canonical album must have one primary leaf or an explicit approved exception.",
+      "expected": "0 unexcepted albums without a primary label",
+      "threshold": 0,
+      "remediation": "Classify the album or register a reviewed quarantine exception."
+    },
+    {
+      "code": "Q-CLS-002",
+      "name": "Album classification review is visible",
+      "dimension": "consistency",
+      "severity": "medium",
+      "entity_scope": "release_group",
+      "description": "Medium-confidence album classifications must be visible in the exception/review registry.",
+      "expected": "All review classifications explicit",
+      "threshold": 0,
+      "remediation": "Review the album or record an approved exception."
+    },
+    {
+      "code": "Q-CLS-003",
+      "name": "One primary album classification",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "release_group",
+      "description": "A canonical album must have at most one primary label per taxonomy version.",
+      "expected": "0 duplicate primary labels",
+      "threshold": 0,
+      "remediation": "Resolve the classification conflict in E4."
+    },
+    {
+      "code": "Q-AGG-001",
+      "name": "Band aggregate review is visible",
+      "dimension": "consistency",
+      "severity": "medium",
+      "entity_scope": "artist",
+      "description": "Review or low-confidence band aggregates must be visible in the exception registry.",
+      "expected": "All aggregate review cases explicit",
+      "threshold": 0,
+      "remediation": "Review the aggregate or record an approved exception."
+    },
+    {
+      "code": "Q-AGG-002",
+      "name": "One primary band aggregate",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "artist",
+      "description": "An artist must have at most one primary aggregate per taxonomy version.",
+      "expected": "0 duplicate primary aggregates",
+      "threshold": 0,
+      "remediation": "Rebuild the aggregate projection in E4."
+    },
+    {
+      "code": "Q-CRD-001",
+      "name": "Credit scope and targets are consistent",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "credit",
+      "description": "Credit scope must match its release-group, release and recording targets.",
+      "expected": "0 invalid credit targets",
+      "threshold": 0,
+      "remediation": "Correct credit context in E4."
+    },
+    {
+      "code": "Q-MEM-001",
+      "name": "Dataset membership is consistent",
+      "dimension": "structural",
+      "severity": "blocking",
+      "entity_scope": "dataset_membership",
+      "description": "Membership lifecycle and active seed bands must be consistent with the selected dataset.",
+      "expected": "57 active v0.2 memberships",
+      "threshold": 57,
+      "remediation": "Re-run membership synchronization."
+    },
+    {
+      "code": "Q-RUN-001",
+      "name": "Normalization run metadata aligns",
+      "dimension": "consistency",
+      "severity": "blocking",
+      "entity_scope": "normalization_run",
+      "description": "The selected normalization run must be complete and match dataset, taxonomy and seed-list versions.",
+      "expected": "complete matching run",
+      "threshold": 1,
+      "remediation": "Select the correct completed normalization run."
+    },
+    {
+      "code": "Q-CMP-001",
+      "name": "Canonical provenance completeness",
+      "dimension": "completeness",
+      "severity": "info",
+      "entity_scope": "canonical",
+      "description": "Measures the proportion of canonical rows with provenance.",
+      "expected": "reported with denominator",
+      "threshold": 1.0,
+      "remediation": "Advisory metric; structural provenance rule is blocking."
+    },
+    {
+      "code": "Q-CMP-002",
+      "name": "Album date completeness",
+      "dimension": "completeness",
+      "severity": "info",
+      "entity_scope": "release_group",
+      "description": "Measures albums with a first release date and date precision.",
+      "expected": "reported with denominator",
+      "threshold": 1.0,
+      "remediation": "Advisory metric; report source gaps."
+    },
+    {
+      "code": "Q-CMP-003",
+      "name": "Band metadata completeness",
+      "dimension": "completeness",
+      "severity": "info",
+      "entity_scope": "artist",
+      "description": "Measures seed bands with country and Wikidata QID.",
+      "expected": "reported with denominator",
+      "threshold": 1.0,
+      "remediation": "Advisory metric; report missing metadata."
+    },
+    {
+      "code": "Q-CMP-004",
+      "name": "Producer coverage",
+      "dimension": "completeness",
+      "severity": "info",
+      "entity_scope": "credit",
+      "description": "Measures albums and bands with producer or co-producer credits.",
+      "expected": "reported with denominator",
+      "threshold": null,
+      "remediation": "Advisory metric; missing credits are not negative evidence."
+    },
+    {
+      "code": "Q-COV-001",
+      "name": "Coverage by analysis dimension",
+      "dimension": "coverage",
+      "severity": "info",
+      "entity_scope": "dataset",
+      "description": "Reports coverage by band, decade, taxonomy leaf, role, scope, country, source and batch.",
+      "expected": "all dimensions reported",
+      "threshold": null,
+      "remediation": "Advisory metric; use denominators in analysis."
+    },
+    {
+      "code": "Q-COV-002",
+      "name": "Missing data visibility",
+      "dimension": "coverage",
+      "severity": "info",
+      "entity_scope": "dataset",
+      "description": "Missing values are reported explicitly and are not treated as negative evidence.",
+      "expected": "missing counts present",
+      "threshold": null,
+      "remediation": "Keep the interpretation warning in every report."
+    }
+  ]
+}

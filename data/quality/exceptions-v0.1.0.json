@@ -1,0 +1,471 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "catalogue_version": "0.1.0",
+  "exceptions": [
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "c28ee416-9ae2-3584-bb24-acc18c035ea6",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "0f332ed4-1745-32cd-b5a4-49b8b58d5d7a",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "2424df9a-46b5-3632-99e9-12de7235cac6",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "5a072aef-bfdb-4dfd-83a0-72b150e8fd96",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "8c9b7275-47bf-36ff-a1eb-cd1624a7809e",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "a07cbaff-aa79-35a9-9932-af7335f306eb",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "b2ba1301-34f3-3d55-9f08-912801529110",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "c13adb43-63c7-3b26-88fa-fe84631a1bef",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "6ef92924-c769-3fdd-a7c9-c698a5371677",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "f55ee434-dd85-4d2d-ba7d-bb2030f49330",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "53d3015e-0a04-47da-99a7-422692d60b04",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "717ffd39-881e-41d8-a8cc-1aa6dfec62ed",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "6d8ec570-22fc-4e47-b8a3-e4483b3651bf",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "6c337c12-993f-463e-a925-44f11ebc17c6",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "715ed6d5-1e39-461a-acd6-461dceee0071",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "7ac28c31-ed36-4176-bc98-7f20c54c85b4",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "764615a1-a99d-4a27-8eec-d1fce52f0777",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "a56c90c3-2554-4dc1-9c00-845017ef232e",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "c9ba90e5-9560-4d9f-bfa0-2e9fe10e5891",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "cb438078-e147-3ffb-868b-0b3ad811bfb0",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "266d841b-60d8-4908-aaaf-298b5f639878",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "54e5d366-05e8-42dd-9942-77d2060673c1",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "a653cf12-cdbd-4fea-8fed-c12124633b9e",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "097af7bf-4ce0-4c33-8d8b-a467ddc1dee2",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "2ec0dda7-15dd-4a05-83c9-694e93f0e1af",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "b5f08919-c07f-4606-9b9a-2ec0aa485773",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "b6470bb0-0617-4cee-84cf-c21071c0f7b3",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "dbd22b5c-758f-4d8c-982d-d33cea0ae92d",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "de76a527-7ec6-4912-9a1b-3b46e7f3fb78",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "6ff0ce32-df86-4422-ac82-f37de5ef69ba",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "09e69d2e-a6fd-48a4-b508-5dcc7949edca",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "190e1d6e-f206-4e4a-8333-3b78d194fbce",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "92df43c5-5ac1-4f61-93f3-9d217b6d9b9c",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "c4f93b95-be82-43fb-a00c-3303cbfd004b",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "09f66dd4-ae28-4360-b994-cd3c5987bfb6",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "177082cc-c521-4527-9c53-0b0e0210e2ef",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "161f8b51-ee8f-387b-bd73-ff64d6ab8cdf",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "4a44763a-c47e-373e-adc9-adba695c6a27",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "010fd6d0-8c5f-4531-a0b5-a531f3ae94f2",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-002",
+      "entity_type": "release_group",
+      "entity_mbid": "6d015238-53a5-4dc6-8c83-0afd2b6e350a",
+      "reason": "mapping confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-CLS-001",
+      "entity_type": "release_group",
+      "entity_mbid": "966fe275-a91d-3f1e-a81b-1c68fc92b1f4",
+      "reason": "no exact tag/genre mapping",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "1c5efd53-d6b6-4d63-9d22-a15025cf5f07",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "1d93c839-22e7-4f76-ad84-d27039efc048",
+      "reason": "low-confidence album plurality; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "20aa23e3-3532-42ca-acf6-e8c2e9df2688",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "2bcf2e02-5bc3-4c76-bf76-41126cb11444",
+      "reason": "band aggregate is tied; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "2f04ad1f-9f97-41d0-a09c-59c40dfe9cd1",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "5182c1d9-c7d2-4dad-afa0-ccfeada921a8",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "523b52d7-a819-4111-9085-69fc269c9638",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "79491354-3d83-40e3-9d8e-7592d58d790a",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "7f179acc-d6eb-4ca9-af90-c14e397fb613",
+      "reason": "band aggregate is tied; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "8a0e10a9-80c7-40e0-bf5b-89f1d57f9537",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "b669c53e-5a1f-4adc-80be-755e64e8115e",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "c14b4180-dc87-481e-b17a-64e4150f90f6",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "c7423e0c-ab3e-4ab4-be10-cdff5a9d3062",
+      "reason": "band aggregate confidence is in the review band",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "ca891d65-d9b0-4258-89f7-e6ba29d83767",
+      "reason": "low-confidence album plurality; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "d292b4cd-37bd-4a88-a823-8710f273cc31",
+      "reason": "low-confidence album plurality; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    },
+    {
+      "rule_code": "Q-AGG-001",
+      "entity_type": "artist",
+      "entity_mbid": "deeea939-7f89-4762-b09f-79269cd70d3b",
+      "reason": "low-confidence album plurality; using approved seed-list leaf",
+      "approved_by": "Cristian",
+      "approved_at": "2026-11-08"
+    }
+  ]
+}
