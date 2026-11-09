@@ -1,6 +1,6 @@
 # SPEC-005 — Normalization, identity and provenance
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E4
 - **Iteration:** MVP
 - **Module:** `normalization`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-004 validated; E3 dataset `mb-20261107T194927Z-0d6cedd5c261`; [taxonomy](../../data/taxonomy.json) v0.2.0; [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md); [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md); [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md) (approved)
-- **Tasks:** [tasks.md](tasks.md) (implemented locally; remote CI pending)
+- **Tasks:** [tasks.md](tasks.md) (validated)
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -23,6 +23,7 @@
 | 5 | 2026-11-08 | T-007–T-010 completed: classification, aggregates, membership and CLI/report |
 | 6 | 2026-11-08 | T-011 completed: full 57-band normalization with 58 review/quarantine issues |
 | 7 | 2026-11-08 | T-012 completed locally: tests, docs, scope guards and OpenAPI checks; remote CI pending |
+| 8 | 2026-11-08 | Remote CI run 42535752532 passed; SPEC-005 validated |
 
 ## 1. Context and problem
 
@@ -460,8 +461,8 @@ No blocking question remains for planning. The next step is `plan.md`, followed 
 ## 11. Validation result
 
 - **Date:** 2026-11-08
-- **Verdict:** Implemented; local validation passed; remote CI and formal validation pending
-- **Evidence:** 210 backend tests passed with PostgreSQL; Ruff check/format, OpenAPI drift and compose validation passed. Full run `54d66992-643b-49ec-bac4-fe514ea39e94` produced 57 bands, 731 albums and 32,665 credit contexts. See `tasks.md`.
+- **Verdict:** Validated
+- **Evidence:** 210 backend tests passed with PostgreSQL; Ruff check/format, OpenAPI drift and compose validation passed. Full run `54d66992-643b-49ec-bac4-fe514ea39e94` produced 57 bands, 731 albums and 32,665 credit contexts. Remote CI run [42535752532](https://github.com/cblancom/HMDE/actions/runs/42535752532) passed for commit `683e022`. See `tasks.md`.
 
 ## 12. References
 

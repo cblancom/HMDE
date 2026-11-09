@@ -1,6 +1,6 @@
 # Tasks — SPEC-005 Normalization, identity and provenance
 
-- **Status:** In implementation
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -203,6 +203,7 @@ T-001 is the first gate and T-002 requires it. T-003 requires T-002. T-004 requi
 
 ### T-012 — Complete tests, scope guards, docs and CI
 
+- **Status:** Completed (2026-11-08).
 - **Requirements:** FR-014, FR-015, NFR-004–NFR-010.
 - **Dependencies:** T-011.
 - **Description:** Complete unit/integration coverage, add scope-guard tests for API/frontend/analysis boundaries, update README/AGENTS/data docs/ER diagram, run full backend checks and remote CI, and update the spec/tasks validation evidence.
@@ -219,7 +220,7 @@ T-001 is the first gate and T-002 requires it. T-003 requires T-002. T-004 requi
   docker compose config -q
   ```
 - **Files:** `backend/tests/`, `README.md`, `AGENTS.md`, `data/README.md`, `docs/03-data/normalization-rules.md`, `docs/01-architecture/er-diagram.md`, `docs/01-architecture/data-model.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/005-normalization-identity/`.
-- **Evidence:** 2026-11-08: added normalization scope-guard coverage; full PostgreSQL-backed suite passed 210 tests; Ruff check/format passed; OpenAPI drift was absent; `docker compose config -q` passed; README, AGENTS, data docs, roadmap, spec index and ER diagram updated. Remote GitHub Actions CI is pending because no commit/push was requested.
+- **Evidence:** 2026-11-08: added normalization scope-guard coverage; full PostgreSQL-backed suite passed 210 tests; Ruff check/format passed; OpenAPI drift was absent; `docker compose config -q` passed; README, AGENTS, data docs, roadmap, spec index and ER diagram updated. Remote GitHub Actions CI run [42535752532](https://github.com/cblancom/HMDE/actions/runs/42535752532) passed for commit `683e022`.
 
 ## 3. Coverage matrix
 
@@ -276,7 +277,7 @@ T-001 is the first gate and T-002 requires it. T-003 requires T-002. T-004 requi
 | AC-012 | Passed | Credit tests |
 | AC-013 | Passed | CLI/report tests |
 | AC-014 | Passed | OpenAPI drift, scope guards and canonical contract tests |
-| AC-015 | Passed locally; remote CI pending | 210 tests, Ruff and format pass |
+| AC-015 | Passed | 210 tests, Ruff, format and remote CI run 42535752532 |
 
 ## 5. Notes
 
