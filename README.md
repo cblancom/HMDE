@@ -9,7 +9,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **E0:** complete. Documents, MusicBrainz feasibility spike and the 42-band seed list are ready.
 - **Application code:** E1, E2 and E3 validated. SPEC-003 and T-001–T-012 complete; remote CI run 42396996612 passed.
 - **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed.
-- **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed. E5 follows as SPEC-006.
+- **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed.
+- **Data quality v0.1:** SPEC-006 implemented locally. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI is pending. E6 follows as SPEC-007.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -220,6 +221,22 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
 
 The command writes versioned JSON/Markdown reports under `data/normalization/<run_id>/`, records a `normalization_run`, and exits with `0` completed, `2` completed with review, or `1` fatal error. `--dry-run` validates inputs without writing canonical rows. The validated local run `54d66992-643b-49ec-bac4-fe514ea39e94` processed 57 bands and 731 albums; 690 albums were accepted, 17 are in review and 24 bootleg/live/demo release groups were explicitly quarantined.
 
+## E5 data quality
+
+E5 measures the normalized corpus without changing it. It checks structural invariants, completeness and coverage, persists findings/exceptions/metrics, and writes JSON/Markdown reports.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.quality run \
+    --normalization-run 54d66992-643b-49ec-bac4-fe514ea39e94 \
+    --rules ../data/quality/rules-v0.1.0.json \
+    --exceptions ../data/quality/exceptions-v0.1.0.json \
+    --output ../data/quality --strict
+```
+
+The full-corpus run is a batch operation because the E3 dataset and raw cache are not in Git. CI runs structural checks against fixtures. Exit codes are `0` pass, `2` advisory findings, `3` blocked by an unexcepted blocking finding, and `1` fatal error. The initial quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` persisted 58 findings, 58 approved exceptions and 51 metrics; no blocking finding was left unexcepted.
+
 ## Test database
 
 Integration tests require an isolated `hmde_test` database. Create it once with the Compose database running:
@@ -371,6 +388,7 @@ Use Node.js 20 and ensure `frontend/package-lock.json` exists. Do not edit the l
 | [`docs/03-data/spike-report.md`](docs/03-data/spike-report.md) | MusicBrainz feasibility results |
 | [`docs/03-data/seed-list.md`](docs/03-data/seed-list.md) | Historical 42-band seed list and active 57-band v0.2.0 corpus |
 | [`docs/03-data/normalization-rules.md`](docs/03-data/normalization-rules.md) | E4 identity, provenance, credit, taxonomy and classification rules |
+| [`docs/03-data/data-quality.md`](docs/03-data/data-quality.md) | E5 quality dimensions, gates and exception baseline |
 | [`data/seed-list.json`](data/seed-list.json) | Active-version pointer; versioned files live in `data/seed-lists/` |
 
 ## Repository layout

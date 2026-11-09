@@ -7,6 +7,7 @@ This directory contains versioned curated data used by the project.
 - `seed-lists/` — immutable versioned seed lists and batch artifacts. `v0.1.0.json` is the validated historical corpus; `v0.2.0.json` adds the approved 15-band batch.
 - `seed-lists/batches/v0.2.0-batch-01.json` — approved batch of 15 new bands, three per expanded decade.
 - `classifications/` — versioned exact tag/genre-to-leaf mappings and manual album overrides for E4 normalization.
+- `quality/` — versioned quality rule catalogue and initial exception baseline for E5.
 - `fixtures/e2/` — versioned E2 fixture dataset (`e2-v0.1.0`) for 14 seed bands.
 - `raw/` — local raw snapshots and caches. It is ignored by Git and must not be edited by hand.
 - `ingestions/` — versioned extracted datasets and coverage reports produced by the ingestion pipeline. It is ignored by Git.

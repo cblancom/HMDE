@@ -3,7 +3,7 @@
 - **Status:** Current
 - **Date:** 2026-11-08
 - **Stage:** E2–E4
-- **Schema:** Alembic `0005`
+- **Schema:** Alembic `0006`
 
 This diagram shows the physical catalog and normalization schema. It includes only real foreign-key relationships. `alembic_version` is omitted because Alembic owns it.
 
@@ -332,6 +332,15 @@ The `credit` table supports three scopes:
 - `normalization_run`, `normalization_issue` and `normalization_issue_action` record run lifecycle, review queue and audit actions.
 - `source_record` gained optional E3 raw-response provenance fields; `recording_release` gained `track_number`.
 - These additions do not rewrite historical E2/E3 data.
+
+## E5 quality additions (migration `0006`)
+
+- `quality_rule_catalogue` and `quality_rule` persist versioned quality rule metadata.
+- `quality_run` records the selected normalization run, versions, status and counters.
+- `quality_finding` records rule results and observations.
+- `quality_exception` stores approved rule/entity exceptions with reason, approver and date.
+- `quality_metric` stores completeness/coverage numerators, denominators and missing counts.
+- Quality tables are read/write only to the quality batch; canonical and normalization tables are untouched.
 
 ## Related documents
 

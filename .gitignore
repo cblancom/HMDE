@@ -25,6 +25,7 @@ coverage/
 data/raw/
 data/ingestions/
 data/normalization/
+data/quality/
 spike/output/raw/
 
 # Editors and OS

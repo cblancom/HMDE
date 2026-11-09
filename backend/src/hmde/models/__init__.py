@@ -15,6 +15,14 @@ from hmde.models.normalization import (
     TaxonomyNode,
     TaxonomyVersion,
 )
+from hmde.models.quality import (
+    QualityException,
+    QualityFinding,
+    QualityMetric,
+    QualityRule,
+    QualityRuleCatalogue,
+    QualityRun,
+)
 from hmde.models.subgenre import ArtistSubgenre, Subgenre
 
 __all__ = [
@@ -30,6 +38,12 @@ __all__ = [
     "NormalizationIssue",
     "NormalizationIssueAction",
     "NormalizationRun",
+    "QualityException",
+    "QualityFinding",
+    "QualityMetric",
+    "QualityRule",
+    "QualityRuleCatalogue",
+    "QualityRun",
     "RawResponse",
     "ReleaseGroupSubgenre",
     "Recording",
