@@ -1,14 +1,14 @@
 # SPEC-010 — Entity explorer frontend
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E9
 - **Iteration:** MVP
 - **Module:** `web`
 - **Date:** 2026-11-10
 - **Depends on:** SPEC-009 validated; read-only API v1; [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
-- **Plan:** [plan.md](plan.md) (draft).
-- **Tasks:** [tasks.md](tasks.md) (draft).
+- **Plan:** [plan.md](plan.md) (approved).
+- **Tasks:** [tasks.md](tasks.md) (validated).
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -18,7 +18,8 @@
 |---|---|---|
 | 1 | 2026-11-10 | Initial draft; E9 entity explorer with existing CSS and Tailwind deferred |
 | 2 | 2026-11-10 | Design/technical plan and tasks drafted for review |
-| 3 | 2026-11-10 | T-001–T-010 implemented locally; frontend/backend checks passed; remote CI pending |
+| 3 | 2026-11-10 | T-001–T-010 implemented locally; frontend/backend checks passed |
+| 4 | 2026-11-10 | Remote CI run 42747146170 passed; SPEC-010 validated |
 
 ## 1. Context and problem
 
@@ -453,8 +454,8 @@ No blocking question remains for planning. Exact component split, mobile table b
 ## 14. Validation result
 
 - **Date:** 2026-11-10
-- **Verdict:** Implemented; local validation passed; remote CI pending
-- **Evidence:** 42 frontend tests, lint, typecheck and production build passed; backend 313 tests, Ruff/format, OpenAPI/type generation and Compose passed. No Tailwind/Plotly/UI kit, no producer graph calls and no hard-coded taxonomy arrays. Remote CI is pending because no commit or push was performed. See `tasks.md`.
+- **Verdict:** Validated
+- **Evidence:** 42 frontend tests, lint, typecheck and production build passed; backend 313 tests, Ruff/format, OpenAPI/type generation and Compose passed. No Tailwind/Plotly/UI kit, no producer graph calls and no hard-coded taxonomy arrays. Remote CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) passed for commit `afb5c04`. See `tasks.md`.
 
 ## 15. References
 

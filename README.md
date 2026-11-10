@@ -14,7 +14,7 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
 - **Network v0.1:** SPEC-008 validated. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed.
 - **API v1:** SPEC-009 validated. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`. Remote CI run 42741669410 passed.
-- **Explorer v0.1:** SPEC-010 implemented locally. Band, album, producer and search views use the E8 API and existing CSS; Tailwind is deferred. Remote CI is pending.
+- **Explorer v0.1:** SPEC-010 validated. Band, album, producer and search views use the E8 API and existing CSS; Tailwind is deferred. Remote CI run 42747146170 passed.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -407,6 +407,35 @@ curl http://127.0.0.1:8001/health
 ```
 
 Inside Compose, `VITE_API_PROXY_TARGET` must be `http://api:8000`. Outside Compose, the default is `http://localhost:8001`.
+
+### The frontend shows a blank screen after dependency changes
+
+`docker compose up -d --build` does not recreate the `web` service because it uses the published `node:20-alpine` image and runs `npm ci` only when the container is created. The old `node_modules` can then miss newly added packages and Vite shows `Failed to resolve import`.
+
+Recreate the web container so `npm ci` runs again:
+
+```bash
+docker compose up -d --force-recreate web
+docker compose logs -f web
+```
+
+Wait for `VITE ready`, then hard-refresh the browser with `Ctrl+Shift+R`. Verify the dependency exists:
+
+```bash
+docker compose exec web ls node_modules/@fontsource-variable
+```
+
+If Vite still fails, remove only the frontend dependency volume and recreate the service:
+
+```bash
+docker compose down
+docker volume rm hmde_frontend_node_modules
+docker compose up -d
+```
+
+Do not use `docker compose down -v` unless you explicitly want to delete PostgreSQL data.
+
+Healthchecks of `/` can still return `200` while Vite fails to transform a module. Check `docker compose logs web` for the actual browser-side error.
 
 ### A container is unhealthy
 

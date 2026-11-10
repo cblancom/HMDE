@@ -1,6 +1,6 @@
 # Frontend: entity explorer
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Stage:** E9
 - **Spec:** [SPEC-010](../../specs/010-entity-explorer/spec.md)
 - **Design plan:** [plan.md](../../specs/010-entity-explorer/plan.md)
@@ -89,4 +89,4 @@ Local checks on 2026-11-10:
 - no hard-coded taxonomy arrays;
 - no producer graph endpoint calls.
 
-Remote CI is pending because no commit or push was performed.
+Remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) passed for commit `afb5c04`.

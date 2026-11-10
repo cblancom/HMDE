@@ -23,7 +23,7 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 data quality and validation. Remote CI run 42545153696 passed. SPEC-007 is validated for E6 exploratory analysis and metric definition. Remote CI run 42548567359 passed. SPEC-008 is validated for E7 producer-centric graph and network analysis; remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is implemented locally for E9; remote CI is pending.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 data quality and validation. Remote CI run 42545153696 passed. SPEC-007 is validated for E6 exploratory analysis and metric definition. Remote CI run 42548567359 passed. SPEC-008 is validated for E7 producer-centric graph and network analysis; remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is validated for E9; remote CI run 42747146170 passed.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
@@ -36,7 +36,7 @@ E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are v
 | 007 | [`007-eda-metrics`](007-eda-metrics/spec.md) | E6 | `analytics` | Exploratory analysis and metric definitions | 006 | Validated |
 | 008 | [`008-network-analysis`](008-network-analysis/spec.md) | E7 | `analytics` | Producer–album and producer–band snapshots, support-aware metrics and communities | 007 | Validated |
 | 009 | [`009-read-api`](009-read-api/spec.md) | E8 | `api` | Read API v1, filters, pagination, subgraphs, precomputed metrics | 002, 005, 008 | Validated |
-| 010 | [`010-entity-explorer`](010-entity-explorer/spec.md) | E9 | `web` | Band, album and producer exploration UI | 009 | Implemented |
+| 010 | [`010-entity-explorer`](010-entity-explorer/spec.md) | E9 | `web` | Band, album and producer exploration UI | 009 | Validated |
 | 011 | `011-graph-visualization` | E10 | `web` | Interactive collaboration graph and accessible fallback | 008, 009, 010 | Pending |
 | 012 | `012-integration-qa` | E11 | `platform` | End-to-end tests, performance, accessibility and security review | 010, 011 | Pending |
 | 013 | `013-release-v0.1` | E12 | `platform` | Deployment, attribution, runbooks and release | 012 | Pending |

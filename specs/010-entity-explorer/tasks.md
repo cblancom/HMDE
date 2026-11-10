@@ -1,6 +1,6 @@
 # Tasks — SPEC-010 Entity explorer frontend
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -174,7 +174,7 @@ T-001 establishes the visual foundation. T-002 adds the typed client. T-003 buil
 
 ### T-010 — Complete documentation, full checks and CI
 
-- **Status:** Completed locally (2026-11-10); remote CI pending.
+- **Status:** Completed (2026-11-10).
 - **Requirements:** FR-020, NFR-009, NFR-010.
 - **Dependencies:** T-009.
 - **Description:** Document the explorer routes, filters, taxonomy behavior, design tokens and accessibility. Update README/AGENTS/docs/roadmap/spec index. Run full frontend and backend checks, OpenAPI type generation and Compose validation. Push only with explicit authorization and record remote CI.
@@ -198,7 +198,7 @@ T-001 establishes the visual foundation. T-002 adds the typed client. T-003 buil
   docker compose config -q
   ```
 - **Files:** `README.md`, `AGENTS.md`, `docs/01-architecture/frontend.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/010-entity-explorer/`.
-- **Evidence:** 2026-11-10: frontend 42 tests, lint, typecheck and build passed; backend 313 tests, Ruff/format, OpenAPI/type generation and Compose passed; documentation updated. Remote CI is pending because no commit or push was performed.
+- **Evidence:** 2026-11-10: frontend 42 tests, lint, typecheck and build passed; backend 313 tests, Ruff/format, OpenAPI/type generation and Compose passed; documentation updated. Remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) passed for commit `afb5c04`.
 
 ## 3. Coverage matrix
 
@@ -265,7 +265,7 @@ T-001 establishes the visual foundation. T-002 adds the typed client. T-003 buil
 | AC-017 | Passed | Generated types inspection |
 | AC-018 | Passed | Main flow tests |
 | AC-019 | Passed | 42 frontend tests, lint, typecheck, build |
-| AC-020 | Passed locally; remote CI pending | 313 backend tests, frontend checks, Compose |
+| AC-020 | Passed | 313 backend tests, frontend checks, Compose and remote CI run 42747146170 |
 
 ## 5. Notes
 
