@@ -27,6 +27,7 @@ data/ingestions/
 data/normalization/
 data/quality/*/
 data/analysis/
+data/network/*/
 spike/output/raw/
 
 # Editors and OS

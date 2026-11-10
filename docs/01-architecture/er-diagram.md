@@ -1,9 +1,9 @@
 # Physical entity-relationship diagram
 
 - **Status:** Current
-- **Date:** 2026-11-08
-- **Stage:** E2–E4
-- **Schema:** Alembic `0006`
+- **Date:** 2026-11-10
+- **Stage:** E2–E7
+- **Schema:** Alembic `0007`
 
 This diagram shows the physical catalog and normalization schema. It includes only real foreign-key relationships. `alembic_version` is omitted because Alembic owns it.
 
@@ -341,6 +341,15 @@ The `credit` table supports three scopes:
 - `quality_exception` stores approved rule/entity exceptions with reason, approver and date.
 - `quality_metric` stores completeness/coverage numerators, denominators and missing counts.
 - Quality tables are read/write only to the quality batch; canonical and normalization tables are untouched.
+
+## E7 analytical additions (migration `0007`)
+
+- `analysis_run` records dataset/normalization/quality/taxonomy/graph/code versions, parameters, counters and status.
+- `graph_node` stores canonical artist/album identities with roles and layer metadata.
+- `graph_edge` stores `producer_album` and `producer_band` edges with role, weight, support counts/ratio and evidence.
+- `node_metric`, `producer_metric` and `temporal_metric` persist degree, centrality, concentration and decade metrics.
+- `community` and `community_membership` persist the internal producer–producer community result.
+- Analytical tables are append/versioned and never mutate canonical or normalization data.
 
 ## Related documents
 

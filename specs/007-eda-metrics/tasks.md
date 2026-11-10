@@ -1,6 +1,6 @@
 # Tasks — SPEC-007 Exploratory analysis and metric definition
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -162,7 +162,7 @@ T-001 and T-002 define inputs and dependencies. T-003 loads data. T-004–T-007 
 
 ### T-010 — Run the full EDA, document results and close CI
 
-- **Status:** Completed locally (2026-11-09); remote CI pending.
+- **Status:** Completed (2026-11-09).
 - **Requirements:** FR-001–FR-014, NFR-001–NFR-008.
 - **Dependencies:** T-009.
 - **Description:** Run E6 against normalization run `54d66992-643b-49ec-bac4-fe514ea39e94` and quality run `341824ea-5d6f-4279-bae0-f66a1e696e05`, review distributions/coverage/concentration/collaboration, update README/AGENTS/docs/roadmap/spec index, run full checks and record remote CI.
@@ -187,7 +187,7 @@ T-001 and T-002 define inputs and dependencies. T-003 loads data. T-004–T-007 
   docker compose config -q
   ```
 - **Files:** `data/analysis/` runtime artifacts, `README.md`, `AGENTS.md`, `data/README.md`, `docs/03-data/eda-metrics.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/007-eda-metrics/`, `.gitignore`.
-- **Evidence:** 2026-11-09: full EDA `eda-1267fdcced62b7da` completed against normalization run `54d66992-643b-49ec-bac4-fe514ea39e94` and quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` with 354 metric rows; report/manifest generated. Full suite passed 250 tests; Ruff/format, OpenAPI drift and Compose validation passed. Remote CI is pending.
+- **Evidence:** 2026-11-09: full EDA `eda-1267fdcced62b7da` completed against normalization run `54d66992-643b-49ec-bac4-fe514ea39e94` and quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` with 354 metric rows; report/manifest generated. Full suite passed 250 tests; Ruff/format, OpenAPI drift and Compose validation passed. Remote GitHub Actions CI run [42548567359](https://github.com/cblancom/HMDE/actions/runs/42548567359) passed for commit `bed26b5`.
 
 ## 3. Coverage matrix
 
@@ -240,7 +240,7 @@ T-001 and T-002 define inputs and dependencies. T-003 loads data. T-004–T-007 
 | AC-011 | Passed | Catalogue tests |
 | AC-012 | Passed | CLI/determinism tests |
 | AC-013 | Passed | Scope guards and OpenAPI drift |
-| AC-014 | Passed locally; remote CI pending | 250 tests, Ruff, format |
+| AC-014 | Passed | 250 tests, Ruff, format and remote CI run 42548567359 |
 
 ## 5. Notes
 

@@ -114,8 +114,8 @@
 ### E7 — Graph construction and network analysis
 
 - **Objective:** build network snapshots and persist reproducible analytical results.
-- **Scope:** bipartite credit graph, projections, centrality, communities and temporal analysis by decade (1960s–2020s).
-- **Activities:** define node and edge types; build the graph from a snapshot; compute metrics; persist `analysis_run`, metrics, communities, dataset version and taxonomy version; review results with control visualizations.
+- **Scope:** producer–album evidence graph, derived producer–band view, support-aware edges, centrality, communities and temporal analysis by decade (1960s–2020s).
+- **Activities:** define producer, album and band/artist node contracts; build the evidence snapshot; compute support metrics; derive the producer–band layer; persist `analysis_run`, graph layers, metrics, communities, dataset version and taxonomy version; review top-k and ego-network results with control visualizations.
 - **Deliverables:** graph builder; results tables; network report; reproducibility metadata; **SPEC-008**.
 - **Depends on:** E6.
 - **Done when:** a run is reproducible with the same data and parameters; results are persisted and versioned; performance is acceptable for the MVP volume.
@@ -141,7 +141,7 @@
 ### E10 — Graph visualization and interaction
 
 - **Objective:** allow exploration of collaboration networks without degrading performance.
-- **Scope:** Cytoscape view; layouts; filters by role, decade and hierarchical subgenre; neighbor expansion; node and edge details; legend; accessible table fallback.
+- **Scope:** Cytoscape view; separate producer–album and producer–band modes; album-year color scale; producer type encoding; role and support edge styles; top-k overview; producer ego networks; filters by role, decade and hierarchical subgenre; neighbor expansion; node and edge details; legend; accessible table fallback.
 - **Activities:** integrate the subgraph endpoint; set node and edge limits; expand on demand; URL state; interaction tests; performance budget; taxonomy-versioned filters.
 - **Deliverables:** graph page; interactions; UX and performance documentation; **SPEC-011**.
 - **Depends on:** E7, E8 and E9.
@@ -214,8 +214,9 @@ Before closing any stage:
 | E3 | Validated | SPEC-003 and SPEC-004 validated with remote CI. The v0.2.0 corpus has 57 bands, 1960–2026 and a reproducible dataset. |
 | E4 | Validated | SPEC-005 normalization, identity, taxonomy, classification, aggregates and membership. Remote CI run 42535752532 passed. |
 | E5 | Validated | SPEC-006 quality rules, persisted findings/exceptions/metrics and two-level CI/full-corpus gate. Remote CI run 42545153696 passed. |
-| E6 | Implemented locally | SPEC-007 EDA, metric catalogue, coverage and concentration report. Remote CI pending. |
-| E7–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
+| E6 | Validated | SPEC-007 EDA, metric catalogue, coverage and concentration report. Remote CI run 42548567359 passed. |
+| E7 | Implemented locally | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI pending. |
+| E8–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
 
@@ -246,4 +247,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is implemented locally for E6; remote CI and formal validation remain. E7 follows as SPEC-008.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is implemented locally with run `net-a0b7c1f41ac5c92d`; remote CI is pending. E8 follows after E7 validation.

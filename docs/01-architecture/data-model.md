@@ -169,16 +169,16 @@ Results are not recomputed on every request. They are persisted in versioned tab
 
 | Conceptual table | Content |
 |---|---|
-| `analysis_run` | Dataset, parameters, code version, date and status |
-| `graph_node` | Snapshot nodes with type and metrics |
-| `graph_edge` | Snapshot edges with type and weight |
+| `analysis_run` | Dataset, graph layers, parameters, code version, date and status |
+| `graph_node` | Snapshot nodes by canonical identity, role and metrics |
+| `graph_edge` | Snapshot edges by layer, role, weight and support |
 | `node_metric` | Centrality, degree and other metrics per run |
 | `community` | Detected communities and parameters |
 | `community_membership` | Node membership in communities |
 | `producer_metric` | Participation and concentration aggregates |
 | `temporal_metric` | Aggregates by decade or period |
 
-Every analytical row must reference an `analysis_run`. A result without an identifiable run is not valid. Each analysis run must also record its source `dataset_version` and `taxonomy_version`.
+Every analytical row must reference an `analysis_run`. A result without an identifiable run is not valid. Each analysis run must also record its source `dataset_version` and `taxonomy_version`. E7 uses a producer–album evidence layer and a derived producer–band layer; album and band nodes are never mixed in the same product view.
 
 ## 10. Open questions for E2
 

@@ -11,7 +11,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **Corpus v0.2:** SPEC-004 validated. The active seed list is v0.2.0 (57 bands, 1960–2026), the approved batch adds 15 bands, and dataset `mb-20261107T194927Z-0d6cedd5c261` was reproduced cache-only. Remote CI run 42411597186 passed.
 - **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed.
 - **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed.
-- **EDA v0.1:** SPEC-007 implemented locally. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI and formal validation are pending. E7 follows as SPEC-008.
+- **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
+- **Network v0.1:** SPEC-008 implemented locally. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI is pending.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -255,6 +256,22 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
 
 The local report `eda-1267fdcced62b7da` contains 354 metric rows, including decade/taxonomy distributions, producer participation/concentration and descriptive co-credit pairs. Exit code `2` indicates completed with disclosed limitations. New corpus versions create new analysis directories; old reports are never overwritten.
 
+## E7 producer network analysis
+
+E7 builds persisted, producer-centric graph layers over explicit normalized and quality runs. It writes `analysis_run`, node/edge/metric/community rows and versioned reports under `data/network/<analysis_version>/`.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.network run \
+    --normalization-run 54d66992-643b-49ec-bac4-fe514ea39e94 \
+    --quality-run 341824ea-5d6f-4279-bae0-f66a1e696e05 \
+    --taxonomy ../data/taxonomy.json \
+    --output ../data/network
+```
+
+The local run `net-a0b7c1f41ac5c92d` produced 968 producer–album nodes, 1,134 simple edges (1,151 role edges), 398 producer–band nodes and 426 band edges. It found 78 communities and 62 temporal metric rows. Exit code `2` indicates completed with disclosed limitations. See [producer network analysis](docs/03-data/network-analysis.md).
+
 ## Test database
 
 Integration tests require an isolated `hmde_test` database. Create it once with the Compose database running:
@@ -328,7 +345,7 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
   uv run alembic upgrade head
 ```
 
-`0001_baseline` is an empty reversible baseline. `0002_catalog_v0` adds the E2 catalog tables and `0003_credit_target_restrict` tightens credit target delete rules.
+`0001_baseline` is an empty reversible baseline. `0002_catalog_v0` adds the E2 catalog tables and `0003_credit_target_restrict` tightens credit target delete rules. `0004`–`0007` add ingestion, normalization, quality and analytical graph tables.
 
 ## Troubleshooting
 
