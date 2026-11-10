@@ -18,6 +18,7 @@ class Settings:
     musicbrainz_base_url: str = "https://musicbrainz.org/ws/2"
     musicbrainz_timeout_seconds: float = 30.0
     musicbrainz_min_interval_seconds: float = 1.0
+    cors_origins: tuple[str, ...] = ("http://localhost:5173", "http://127.0.0.1:5173")
 
 
 def load_settings(env: Mapping[str, str] | None = None) -> Settings:
@@ -38,6 +39,7 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
     musicbrainz_min_interval_seconds = _positive_float(
         values, "MUSICBRAINZ_MIN_INTERVAL_SECONDS", 1.0
     )
+    cors_origins = _origins(values.get("CORS_ORIGINS", ""))
     if musicbrainz_min_interval_seconds < 1.0:
         raise RuntimeError(
             "MUSICBRAINZ_MIN_INTERVAL_SECONDS must be at least 1.0 to respect "
@@ -53,7 +55,13 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         musicbrainz_base_url=musicbrainz_base_url,
         musicbrainz_timeout_seconds=musicbrainz_timeout_seconds,
         musicbrainz_min_interval_seconds=musicbrainz_min_interval_seconds,
+        cors_origins=cors_origins,
     )
+
+
+def _origins(raw: str) -> tuple[str, ...]:
+    values = tuple(item.strip().rstrip("/") for item in raw.split(",") if item.strip())
+    return values or ("http://localhost:5173", "http://127.0.0.1:5173")
 
 
 def _positive_float(values: Mapping[str, str], key: str, default: float) -> float:

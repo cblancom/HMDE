@@ -215,8 +215,9 @@ Before closing any stage:
 | E4 | Validated | SPEC-005 normalization, identity, taxonomy, classification, aggregates and membership. Remote CI run 42535752532 passed. |
 | E5 | Validated | SPEC-006 quality rules, persisted findings/exceptions/metrics and two-level CI/full-corpus gate. Remote CI run 42545153696 passed. |
 | E6 | Validated | SPEC-007 EDA, metric catalogue, coverage and concentration report. Remote CI run 42548567359 passed. |
-| E7 | Implemented locally | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI pending. |
-| E8–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
+| E7 | Validated | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI run 42738375416 passed. |
+| E8 | Implemented locally | SPEC-009 read-only API v1; local tests and full-corpus smoke passed; remote CI pending. |
+| E9–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
 
@@ -247,4 +248,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is implemented locally with run `net-a0b7c1f41ac5c92d`; remote CI is pending. E8 follows after E7 validation.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is implemented locally for E8; remote CI is pending. E9 follows after E8 validation.

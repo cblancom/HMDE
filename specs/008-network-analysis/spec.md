@@ -1,14 +1,14 @@
 # SPEC-008 — Graph construction and network analysis
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E7
 - **Iteration:** MVP
 - **Module:** `analytics`
 - **Date:** 2026-11-09
 - **Depends on:** SPEC-007 validated; normalized run `54d66992-643b-49ec-bac4-fe514ea39e94`; quality run `341824ea-5d6f-4279-bae0-f66a1e696e05`; EDA report `eda-1267fdcced62b7da`; E3 dataset `mb-20261107T194927Z-0d6cedd5c261`; [taxonomy](../../data/taxonomy.json) v0.2.0; [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md); [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0004](../../docs/01-architecture/adr/ADR-0004-release-group-model.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
-- **Plan:** [plan.md](plan.md) (draft).
-- **Tasks:** [tasks.md](tasks.md) (draft).
+- **Plan:** [plan.md](plan.md) (approved).
+- **Tasks:** [tasks.md](tasks.md) (validated).
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -19,7 +19,8 @@
 | 1 | 2026-11-09 | Initial draft; E7 graph snapshots, metrics, communities and temporal analysis |
 | 2 | 2026-11-09 | Reframed around producer–album and producer–band views; support-aware edges; identity, solo-artist and self-production rules; NetworkX approved |
 | 3 | 2026-11-09 | Technical plan and tasks drafted for review |
-| 4 | 2026-11-10 | T-001–T-012 implemented locally; full E7 run completed; remote CI pending |
+| 4 | 2026-11-10 | T-001–T-012 implemented locally; full E7 run completed |
+| 5 | 2026-11-10 | Remote CI run 42738375416 passed; SPEC-008 validated |
 
 ## 1. Context and problem
 
@@ -618,8 +619,8 @@ All code, documentation, report labels, legends and warnings are in English. Vis
 ## 12. Validation result
 
 - **Date:** 2026-11-10
-- **Verdict:** Implemented; local validation passed; remote CI pending
-- **Evidence:** Full E7 run `net-a0b7c1f41ac5c92d` persisted 1,151 producer–album role edges, 1,134 simple edges, 426 producer–band edges and 78 communities. 286 backend tests, Ruff/format, migration replay, OpenAPI drift and Compose validation passed locally. Remote CI is pending because no commit or push was performed. See `tasks.md`.
+- **Verdict:** Validated
+- **Evidence:** Full E7 run `net-a0b7c1f41ac5c92d` persisted 1,151 producer–album role edges, 1,134 simple edges, 426 producer–band edges and 78 communities. 286 backend tests, Ruff/format, migration replay, OpenAPI drift and Compose validation passed locally. Remote CI run [42738375416](https://github.com/cblancom/HMDE/actions/runs/42738375416) passed for commit `5001552`. See `tasks.md`.
 
 ## 13. References
 

@@ -5,25 +5,29 @@ from __future__ import annotations
 from collections import defaultdict
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import exists, extract, func, select
 from sqlalchemy.orm import Session
 
 from hmde.models import (
     Artist,
     ArtistSubgenre,
     Credit,
+    DatasetMembership,
+    NormalizationRun,
     RecordingRelease,
     Release,
     ReleaseGroup,
     Role,
     Subgenre,
 )
+from hmde.schemas.api import ArtistDetailResponse
 from hmde.schemas.band import (
     AlbumResponse,
     BandDetailResponse,
     BandListItem,
     CreditResponse,
 )
+from hmde.services.taxonomy import descendant_codes
 
 
 def list_bands(
@@ -32,13 +36,40 @@ def list_bands(
     subgenre: str | None,
     limit: int,
     offset: int,
+    *,
+    decade: str | None = None,
+    year_from: int | None = None,
+    year_to: int | None = None,
+    include_retired: bool = False,
 ) -> tuple[list[BandListItem], int]:
     conditions = [ArtistSubgenre.is_primary.is_(True)]
     query_text = (q or "").strip()
     if query_text:
         conditions.append(Artist.name.ilike(f"%{query_text}%"))
     if subgenre:
-        conditions.append(ArtistSubgenre.subgenre_code == subgenre)
+        codes = descendant_codes(session, subgenre) or {subgenre}
+        conditions.append(ArtistSubgenre.subgenre_code.in_(codes))
+    if decade or year_from is not None or year_to is not None:
+        start = int(decade[:-1]) if decade else year_from
+        end = start + 9 if decade else year_to
+        album_conditions = [ReleaseGroup.artist_id == Artist.id]
+        if start is not None:
+            album_conditions.append(extract("year", ReleaseGroup.first_release_date) >= start)
+        if end is not None:
+            album_conditions.append(extract("year", ReleaseGroup.first_release_date) <= end)
+        conditions.append(exists(select(ReleaseGroup.id).where(*album_conditions)))
+    if not include_retired:
+        dataset_version = _latest_dataset_version(session)
+        if dataset_version is not None:
+            conditions.append(
+                ~exists(
+                    select(DatasetMembership.artist_id).where(
+                        DatasetMembership.artist_id == Artist.id,
+                        DatasetMembership.dataset_version == dataset_version,
+                        DatasetMembership.lifecycle == "retired",
+                    )
+                )
+            )
 
     album_counts = (
         select(
@@ -90,6 +121,20 @@ def list_bands(
         for row in rows
     ]
     return items, total
+
+
+def get_artist_detail(session: Session, artist_id: UUID) -> ArtistDetailResponse | None:
+    artist = session.get(Artist, artist_id)
+    if artist is None:
+        return None
+    return ArtistDetailResponse(
+        id=artist.id,
+        mbid=artist.mbid,
+        name=artist.name,
+        type=artist.type,
+        country=artist.country,
+        disambiguation=artist.disambiguation,
+    )
 
 
 def get_band_detail(session: Session, band_id: UUID) -> BandDetailResponse | None:
@@ -205,4 +250,13 @@ def get_band_detail(session: Session, band_id: UUID) -> BandDetailResponse | Non
         country=artist.country,
         subgenre=subgenre_name,
         albums=albums,
+    )
+
+
+def _latest_dataset_version(session: Session) -> str | None:
+    return session.scalar(
+        select(NormalizationRun.dataset_version)
+        .where(NormalizationRun.status.in_(("completed", "completed_with_review")))
+        .order_by(NormalizationRun.finished_at.desc(), NormalizationRun.started_at.desc())
+        .limit(1)
     )

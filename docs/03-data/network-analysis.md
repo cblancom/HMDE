@@ -1,6 +1,6 @@
 # Producer network analysis (E7)
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Stage:** E7
 - **Spec:** [SPEC-008](../../specs/008-network-analysis/spec.md)
 - **Migration:** `0007_analytics_layer`
@@ -172,4 +172,4 @@ Local checks on 2026-11-10:
 - `docker compose config -q`: passed;
 - full E7 run completed with limitations disclosed.
 
-Remote CI is pending because no commit or push was performed.
+Remote GitHub Actions CI run [42738375416](https://github.com/cblancom/HMDE/actions/runs/42738375416) passed for commit `5001552`.

@@ -1,6 +1,6 @@
 # Tasks — SPEC-008 Graph construction and network analysis
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -195,7 +195,7 @@ T-001 and T-002 can run in parallel. T-003 loads read-only evidence. T-004 build
 
 ### T-012 — Complete documentation, checks and remote CI
 
-- **Status:** Completed locally (2026-11-10); remote CI pending.
+- **Status:** Completed (2026-11-10).
 - **Requirements:** FR-001–FR-016, NFR-001–NFR-009.
 - **Dependencies:** T-011.
 - **Description:** Add `docs/03-data/network-analysis.md` with graph definitions, support formulas, identity rules, self-production, view contract, limitations and CLI. Update README/AGENTS/data docs/roadmap/spec index. Run Ruff, format, full PostgreSQL suite, OpenAPI drift and Compose validation. Push only with explicit owner authorization and record remote CI.
@@ -212,7 +212,7 @@ T-001 and T-002 can run in parallel. T-003 loads read-only evidence. T-004 build
   docker compose config -q
   ```
 - **Files:** `README.md`, `AGENTS.md`, `data/README.md`, `docs/03-data/network-analysis.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `docs/01-architecture/er-diagram.md`, `specs/README.md`, `specs/008-network-analysis/`, `.gitignore`.
-- **Evidence:** 2026-11-10: full backend suite passed 286 tests; Ruff check/format passed; migration replay passed; OpenAPI drift none; `docker compose config -q` passed; full E7 run `net-a0b7c1f41ac5c92d` documented. Remote CI is pending because no commit or push was performed.
+- **Evidence:** 2026-11-10: full backend suite passed 286 tests; Ruff check/format passed; migration replay passed; OpenAPI drift none; `docker compose config -q` passed; full E7 run `net-a0b7c1f41ac5c92d` documented. Remote GitHub Actions CI run [42738375416](https://github.com/cblancom/HMDE/actions/runs/42738375416) passed for commit `5001552`.
 
 ## 3. Coverage matrix
 
@@ -276,7 +276,7 @@ T-001 and T-002 can run in parallel. T-003 loads read-only evidence. T-004 build
 | AC-019 | Passed | CLI tests |
 | AC-020 | Passed | Full run net-a0b7c1f41ac5c92d |
 | AC-021 | Passed | Scope guards and OpenAPI drift |
-| AC-022 | Passed locally; remote CI pending | 286 tests, Ruff, format, Compose |
+| AC-022 | Passed | 286 tests, Ruff, format, Compose and remote CI run 42738375416 |
 
 ## 5. Notes
 

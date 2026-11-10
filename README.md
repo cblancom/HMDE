@@ -12,7 +12,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **Normalization v0.2:** SPEC-005 validated. The normalized corpus has 57 bands, 731 albums, 32,665 credit contexts and 57 band aggregates. The review queue contains 24 explicitly quarantined bootleg/live/demo albums and 34 medium-review classifications/aggregates. Remote CI run 42535752532 passed.
 - **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed.
 - **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
-- **Network v0.1:** SPEC-008 implemented locally. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI is pending.
+- **Network v0.1:** SPEC-008 validated. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed.
+- **API v1:** SPEC-009 implemented locally. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`; remote CI is pending.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -69,6 +70,12 @@ The API container listens on port `8000` internally and PostgreSQL on `5432`; on
 | `GET` | `/api/v1/bands` | List/search bands with `q`, `subgenre`, `limit` and `offset` |
 | `GET` | `/api/v1/bands/{band_id}` | Band metadata, albums and aggregated credits |
 | `GET` | `/api/v1/bands/{band_id}/graph` | One-hop band–producer graph |
+| `GET` | `/api/v1/producers` | Producer rankings and filters |
+| `GET` | `/api/v1/producers/{producer_id}/graph` | Bounded producer–album or producer–band graph |
+| `GET` | `/api/v1/albums` | Album list/search |
+| `GET` | `/api/v1/analytics/summary` | E7 graph/support summary |
+
+See [API v1](docs/03-data/api-v1.md) for the full resource list.
 
 ### Frontend routes
 

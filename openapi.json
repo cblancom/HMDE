@@ -1,6 +1,273 @@
 {
   "components": {
     "schemas": {
+      "AlbumCreditResponse": {
+        "properties": {
+          "artist_id": {
+            "format": "uuid",
+            "title": "Artist Id",
+            "type": "string"
+          },
+          "artist_name": {
+            "title": "Artist Name",
+            "type": "string"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "recording_count": {
+            "title": "Recording Count",
+            "type": "integer"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "role_name": {
+            "title": "Role Name",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "support_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Support Ratio"
+          },
+          "supporting_recording_count": {
+            "title": "Supporting Recording Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "artist_id",
+          "artist_name",
+          "role",
+          "role_name",
+          "scope",
+          "supporting_recording_count",
+          "recording_count",
+          "support_ratio",
+          "confidence",
+          "status"
+        ],
+        "title": "AlbumCreditResponse",
+        "type": "object"
+      },
+      "AlbumDetailResponse": {
+        "properties": {
+          "band_id": {
+            "format": "uuid",
+            "title": "Band Id",
+            "type": "string"
+          },
+          "band_name": {
+            "title": "Band Name",
+            "type": "string"
+          },
+          "credits": {
+            "items": {
+              "$ref": "#/components/schemas/AlbumCreditResponse"
+            },
+            "title": "Credits",
+            "type": "array"
+          },
+          "first_release_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Release Date"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mbid": {
+            "title": "Mbid",
+            "type": "string"
+          },
+          "primary_subgenre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Subgenre"
+          },
+          "secondary_subgenres": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Secondary Subgenres",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "id",
+          "mbid",
+          "title",
+          "band_id",
+          "band_name",
+          "year",
+          "first_release_date",
+          "primary_subgenre",
+          "secondary_subgenres",
+          "credits"
+        ],
+        "title": "AlbumDetailResponse",
+        "type": "object"
+      },
+      "AlbumListItem": {
+        "properties": {
+          "band_id": {
+            "format": "uuid",
+            "title": "Band Id",
+            "type": "string"
+          },
+          "band_name": {
+            "title": "Band Name",
+            "type": "string"
+          },
+          "credit_count": {
+            "title": "Credit Count",
+            "type": "integer"
+          },
+          "first_release_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Release Date"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mbid": {
+            "title": "Mbid",
+            "type": "string"
+          },
+          "primary_subgenre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primary Subgenre"
+          },
+          "producer_count": {
+            "title": "Producer Count",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "id",
+          "mbid",
+          "title",
+          "band_id",
+          "band_name",
+          "year",
+          "first_release_date",
+          "primary_subgenre",
+          "producer_count",
+          "credit_count"
+        ],
+        "title": "AlbumListItem",
+        "type": "object"
+      },
+      "AlbumListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AlbumListItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "AlbumListResponse",
+        "type": "object"
+      },
       "AlbumResponse": {
         "properties": {
           "credits": {
@@ -56,6 +323,261 @@
           "credits"
         ],
         "title": "AlbumResponse",
+        "type": "object"
+      },
+      "AnalysisRunListItem": {
+        "properties": {
+          "analysis_run_id": {
+            "format": "uuid",
+            "title": "Analysis Run Id",
+            "type": "string"
+          },
+          "analysis_version": {
+            "title": "Analysis Version",
+            "type": "string"
+          },
+          "code_version": {
+            "title": "Code Version",
+            "type": "string"
+          },
+          "dataset_version": {
+            "title": "Dataset Version",
+            "type": "string"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "graph_version": {
+            "title": "Graph Version",
+            "type": "string"
+          },
+          "report_path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Path"
+          },
+          "started_at": {
+            "format": "date-time",
+            "title": "Started At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "taxonomy_version": {
+            "title": "Taxonomy Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "analysis_run_id",
+          "analysis_version",
+          "dataset_version",
+          "taxonomy_version",
+          "graph_version",
+          "finished_at",
+          "status",
+          "code_version",
+          "started_at",
+          "report_path"
+        ],
+        "title": "AnalysisRunListItem",
+        "type": "object"
+      },
+      "AnalysisRunListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AnalysisRunListItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "AnalysisRunListResponse",
+        "type": "object"
+      },
+      "AnalysisRunMeta": {
+        "properties": {
+          "analysis_run_id": {
+            "format": "uuid",
+            "title": "Analysis Run Id",
+            "type": "string"
+          },
+          "analysis_version": {
+            "title": "Analysis Version",
+            "type": "string"
+          },
+          "dataset_version": {
+            "title": "Dataset Version",
+            "type": "string"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "graph_version": {
+            "title": "Graph Version",
+            "type": "string"
+          },
+          "taxonomy_version": {
+            "title": "Taxonomy Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "analysis_run_id",
+          "analysis_version",
+          "dataset_version",
+          "taxonomy_version",
+          "graph_version",
+          "finished_at"
+        ],
+        "title": "AnalysisRunMeta",
+        "type": "object"
+      },
+      "AnalyticsSummaryResponse": {
+        "properties": {
+          "community_count": {
+            "title": "Community Count",
+            "type": "integer"
+          },
+          "graph_counts": {
+            "additionalProperties": true,
+            "title": "Graph Counts",
+            "type": "object"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AnalysisRunMeta"
+          },
+          "support": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Support",
+            "type": "object"
+          },
+          "top_albums": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Top Albums",
+            "type": "array"
+          },
+          "top_bands": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Top Bands",
+            "type": "array"
+          }
+        },
+        "required": [
+          "graph_counts",
+          "support",
+          "top_albums",
+          "top_bands",
+          "community_count",
+          "meta"
+        ],
+        "title": "AnalyticsSummaryResponse",
+        "type": "object"
+      },
+      "ArtistDetailResponse": {
+        "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "disambiguation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Disambiguation"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mbid": {
+            "title": "Mbid",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "mbid",
+          "name",
+          "type",
+          "country",
+          "disambiguation"
+        ],
+        "title": "ArtistDetailResponse",
         "type": "object"
       },
       "BandDetailResponse": {
@@ -226,6 +748,231 @@
         "title": "BandListResponse",
         "type": "object"
       },
+      "CommunityDetailResponse": {
+        "properties": {
+          "algorithm": {
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "community_key": {
+            "title": "Community Key",
+            "type": "string"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/CommunityMember"
+            },
+            "title": "Members",
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AnalysisRunMeta"
+          },
+          "resolution": {
+            "title": "Resolution",
+            "type": "number"
+          },
+          "size": {
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "community_key",
+          "algorithm",
+          "resolution",
+          "size",
+          "members",
+          "meta"
+        ],
+        "title": "CommunityDetailResponse",
+        "type": "object"
+      },
+      "CommunityListItem": {
+        "properties": {
+          "algorithm": {
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "community_key": {
+            "title": "Community Key",
+            "type": "string"
+          },
+          "resolution": {
+            "title": "Resolution",
+            "type": "number"
+          },
+          "size": {
+            "title": "Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "community_key",
+          "algorithm",
+          "resolution",
+          "size"
+        ],
+        "title": "CommunityListItem",
+        "type": "object"
+      },
+      "CommunityListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CommunityListItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AnalysisRunMeta"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset",
+          "meta"
+        ],
+        "title": "CommunityListResponse",
+        "type": "object"
+      },
+      "CommunityMember": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "producer_id": {
+            "format": "uuid",
+            "title": "Producer Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "producer_id",
+          "name"
+        ],
+        "title": "CommunityMember",
+        "type": "object"
+      },
+      "CreditListItem": {
+        "properties": {
+          "album_id": {
+            "format": "uuid",
+            "title": "Album Id",
+            "type": "string"
+          },
+          "album_title": {
+            "title": "Album Title",
+            "type": "string"
+          },
+          "artist_id": {
+            "format": "uuid",
+            "title": "Artist Id",
+            "type": "string"
+          },
+          "artist_name": {
+            "title": "Artist Name",
+            "type": "string"
+          },
+          "band_id": {
+            "format": "uuid",
+            "title": "Band Id",
+            "type": "string"
+          },
+          "band_name": {
+            "title": "Band Name",
+            "type": "string"
+          },
+          "confidence": {
+            "title": "Confidence",
+            "type": "number"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "role_name": {
+            "title": "Role Name",
+            "type": "string"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "album_id",
+          "album_title",
+          "band_id",
+          "band_name",
+          "artist_id",
+          "artist_name",
+          "role",
+          "role_name",
+          "scope",
+          "confidence",
+          "status"
+        ],
+        "title": "CreditListItem",
+        "type": "object"
+      },
+      "CreditListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CreditListItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "CreditListResponse",
+        "type": "object"
+      },
       "CreditResponse": {
         "properties": {
           "artist_id": {
@@ -278,6 +1025,83 @@
           "status"
         ],
         "title": "CreditResponse",
+        "type": "object"
+      },
+      "DecadeMetricItem": {
+        "properties": {
+          "denominator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Denominator"
+          },
+          "layer_code": {
+            "title": "Layer Code",
+            "type": "string"
+          },
+          "metric_code": {
+            "title": "Metric Code",
+            "type": "string"
+          },
+          "numerator": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Numerator"
+          },
+          "scope_key": {
+            "title": "Scope Key",
+            "type": "string"
+          },
+          "unit": {
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "layer_code",
+          "scope_key",
+          "metric_code",
+          "numerator",
+          "denominator",
+          "value",
+          "unit"
+        ],
+        "title": "DecadeMetricItem",
+        "type": "object"
+      },
+      "DecadeMetricResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DecadeMetricItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AnalysisRunMeta"
+          }
+        },
+        "required": [
+          "items",
+          "meta"
+        ],
+        "title": "DecadeMetricResponse",
         "type": "object"
       },
       "GraphEdge": {
@@ -405,6 +1229,741 @@
         "title": "HealthResponse",
         "type": "object"
       },
+      "ProducerAlbumSummary": {
+        "properties": {
+          "album_id": {
+            "format": "uuid",
+            "title": "Album Id",
+            "type": "string"
+          },
+          "band_name": {
+            "title": "Band Name",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "support_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Support Ratio"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "album_id",
+          "title",
+          "band_name",
+          "year",
+          "role",
+          "support_ratio"
+        ],
+        "title": "ProducerAlbumSummary",
+        "type": "object"
+      },
+      "ProducerBandSummary": {
+        "properties": {
+          "album_count": {
+            "title": "Album Count",
+            "type": "integer"
+          },
+          "band_id": {
+            "format": "uuid",
+            "title": "Band Id",
+            "type": "string"
+          },
+          "first_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Year"
+          },
+          "last_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Year"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "band_id",
+          "name",
+          "album_count",
+          "first_year",
+          "last_year"
+        ],
+        "title": "ProducerBandSummary",
+        "type": "object"
+      },
+      "ProducerDetailResponse": {
+        "properties": {
+          "album_count": {
+            "title": "Album Count",
+            "type": "integer"
+          },
+          "artist_type": {
+            "title": "Artist Type",
+            "type": "string"
+          },
+          "band_count": {
+            "title": "Band Count",
+            "type": "integer"
+          },
+          "betweenness": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Betweenness"
+          },
+          "community_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Community Key"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mbid": {
+            "title": "Mbid",
+            "type": "string"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/AnalysisRunMeta"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "self_produced_albums": {
+            "title": "Self Produced Albums",
+            "type": "integer"
+          },
+          "top_albums": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerAlbumSummary"
+            },
+            "title": "Top Albums",
+            "type": "array"
+          },
+          "top_bands": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerBandSummary"
+            },
+            "title": "Top Bands",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "mbid",
+          "name",
+          "country",
+          "artist_type",
+          "album_count",
+          "band_count",
+          "self_produced_albums",
+          "betweenness",
+          "community_key",
+          "top_albums",
+          "top_bands",
+          "meta"
+        ],
+        "title": "ProducerDetailResponse",
+        "type": "object"
+      },
+      "ProducerGraphEdge": {
+        "properties": {
+          "album_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Album Count"
+          },
+          "album_recordings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Album Recordings"
+          },
+          "evidence": {
+            "additionalProperties": true,
+            "title": "Evidence",
+            "type": "object"
+          },
+          "layer": {
+            "enum": [
+              "producer_album",
+              "producer_band"
+            ],
+            "title": "Layer",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "source": {
+            "format": "uuid",
+            "title": "Source",
+            "type": "string"
+          },
+          "support_ratio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Support Ratio"
+          },
+          "supporting_recordings": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Supporting Recordings"
+          },
+          "target": {
+            "format": "uuid",
+            "title": "Target",
+            "type": "string"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "number"
+          }
+        },
+        "required": [
+          "source",
+          "target",
+          "layer",
+          "role",
+          "weight",
+          "support_ratio",
+          "supporting_recordings",
+          "album_recordings",
+          "album_count",
+          "evidence"
+        ],
+        "title": "ProducerGraphEdge",
+        "type": "object"
+      },
+      "ProducerGraphLimits": {
+        "properties": {
+          "depth": {
+            "title": "Depth",
+            "type": "integer"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "max_edges": {
+            "title": "Max Edges",
+            "type": "integer"
+          },
+          "max_nodes": {
+            "title": "Max Nodes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "limit",
+          "depth",
+          "max_nodes",
+          "max_edges"
+        ],
+        "title": "ProducerGraphLimits",
+        "type": "object"
+      },
+      "ProducerGraphMeta": {
+        "properties": {
+          "analysis_run_id": {
+            "format": "uuid",
+            "title": "Analysis Run Id",
+            "type": "string"
+          },
+          "analysis_version": {
+            "title": "Analysis Version",
+            "type": "string"
+          },
+          "dataset_version": {
+            "title": "Dataset Version",
+            "type": "string"
+          },
+          "graph_version": {
+            "title": "Graph Version",
+            "type": "string"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/ProducerGraphLimits"
+          },
+          "taxonomy_version": {
+            "title": "Taxonomy Version",
+            "type": "string"
+          },
+          "truncated": {
+            "title": "Truncated",
+            "type": "boolean"
+          },
+          "view": {
+            "enum": [
+              "albums",
+              "bands"
+            ],
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "view",
+          "analysis_run_id",
+          "analysis_version",
+          "dataset_version",
+          "taxonomy_version",
+          "graph_version",
+          "truncated",
+          "limits"
+        ],
+        "title": "ProducerGraphMeta",
+        "type": "object"
+      },
+      "ProducerGraphNode": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": true,
+            "title": "Attributes",
+            "type": "object"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "roles": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          },
+          "type": {
+            "enum": [
+              "producer",
+              "album",
+              "band"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "label",
+          "roles",
+          "attributes"
+        ],
+        "title": "ProducerGraphNode",
+        "type": "object"
+      },
+      "ProducerGraphResponse": {
+        "properties": {
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerGraphEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ProducerGraphMeta"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerGraphNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "nodes",
+          "edges",
+          "meta"
+        ],
+        "title": "ProducerGraphResponse",
+        "type": "object"
+      },
+      "ProducerListItem": {
+        "properties": {
+          "album_count": {
+            "title": "Album Count",
+            "type": "integer"
+          },
+          "artist_type": {
+            "title": "Artist Type",
+            "type": "string"
+          },
+          "band_count": {
+            "title": "Band Count",
+            "type": "integer"
+          },
+          "betweenness": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Betweenness"
+          },
+          "community_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Community Key"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mbid": {
+            "title": "Mbid",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "self_produced_albums": {
+            "title": "Self Produced Albums",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "mbid",
+          "name",
+          "country",
+          "artist_type",
+          "album_count",
+          "band_count",
+          "self_produced_albums",
+          "betweenness",
+          "community_key"
+        ],
+        "title": "ProducerListItem",
+        "type": "object"
+      },
+      "ProducerListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerListItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "ProducerListResponse",
+        "type": "object"
+      },
+      "SearchAlbumItem": {
+        "properties": {
+          "band_name": {
+            "title": "Band Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "band_name",
+          "year"
+        ],
+        "title": "SearchAlbumItem",
+        "type": "object"
+      },
+      "SearchBandItem": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "subgenre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subgenre"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "subgenre"
+        ],
+        "title": "SearchBandItem",
+        "type": "object"
+      },
+      "SearchProducerItem": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "SearchProducerItem",
+        "type": "object"
+      },
+      "SearchResponse": {
+        "properties": {
+          "albums": {
+            "items": {
+              "$ref": "#/components/schemas/SearchAlbumItem"
+            },
+            "title": "Albums",
+            "type": "array"
+          },
+          "bands": {
+            "items": {
+              "$ref": "#/components/schemas/SearchBandItem"
+            },
+            "title": "Bands",
+            "type": "array"
+          },
+          "producers": {
+            "items": {
+              "$ref": "#/components/schemas/SearchProducerItem"
+            },
+            "title": "Producers",
+            "type": "array"
+          },
+          "query": {
+            "title": "Query",
+            "type": "string"
+          }
+        },
+        "required": [
+          "query",
+          "bands",
+          "albums",
+          "producers"
+        ],
+        "title": "SearchResponse",
+        "type": "object"
+      },
+      "TaxonomyNodeResponse": {
+        "properties": {
+          "assignable": {
+            "title": "Assignable",
+            "type": "boolean"
+          },
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Code"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "parent_code",
+          "assignable"
+        ],
+        "title": "TaxonomyNodeResponse",
+        "type": "object"
+      },
+      "TaxonomyResponse": {
+        "properties": {
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/TaxonomyNodeResponse"
+            },
+            "title": "Nodes",
+            "type": "array"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "nodes"
+        ],
+        "title": "TaxonomyResponse",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -453,6 +2012,478 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/albums": {
+      "get": {
+        "operationId": "list_albums_endpoint_api_v1_albums_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "band_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Band Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "producer_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Producer Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "decade",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}s$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Decade"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2026,
+                  "minimum": 1960,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2026,
+                  "minimum": 1960,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subgenre",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subgenre"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_unclassified",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Include Unclassified",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Albums Endpoint",
+        "tags": [
+          "albums"
+        ]
+      }
+    },
+    "/api/v1/albums/{album_id}": {
+      "get": {
+        "operationId": "get_album_endpoint_api_v1_albums__album_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "album_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Album Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlbumDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Album Endpoint",
+        "tags": [
+          "albums"
+        ]
+      }
+    },
+    "/api/v1/analysis-runs": {
+      "get": {
+        "operationId": "list_analysis_runs_endpoint_api_v1_analysis_runs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisRunListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Analysis Runs Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analysis-runs/{run_id}": {
+      "get": {
+        "operationId": "get_analysis_run_endpoint_api_v1_analysis_runs__run_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "run_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Run Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisRunListItem"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Analysis Run Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/decades": {
+      "get": {
+        "operationId": "analytics_decades_endpoint_api_v1_analytics_decades_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecadeMetricResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Analytics Decades Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/analytics/summary": {
+      "get": {
+        "operationId": "analytics_summary_endpoint_api_v1_analytics_summary_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalyticsSummaryResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Analytics Summary Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/artists/{artist_id}": {
+      "get": {
+        "operationId": "get_artist_endpoint_api_v1_artists__artist_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "artist_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Artist Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArtistDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Artist Endpoint",
+        "tags": [
+          "artists"
+        ]
+      }
+    },
     "/api/v1/bands": {
       "get": {
         "operationId": "list_bands_endpoint_api_v1_bands_get",
@@ -493,11 +2524,74 @@
           },
           {
             "in": "query",
+            "name": "decade",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}s$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Decade"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2026,
+                  "minimum": 1960,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "year_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 2026,
+                  "minimum": 1960,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Year To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_retired",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Retired",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
               "default": 20,
-              "maximum": 100,
+              "maximum": 200,
               "minimum": 1,
               "title": "Limit",
               "type": "integer"
@@ -626,6 +2720,731 @@
         "summary": "Get Band Graph Endpoint",
         "tags": [
           "bands"
+        ]
+      }
+    },
+    "/api/v1/communities": {
+      "get": {
+        "operationId": "communities_endpoint_api_v1_communities_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommunityListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Communities Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/communities/{community_key}": {
+      "get": {
+        "operationId": "community_endpoint_api_v1_communities__community_key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "community_key",
+            "required": true,
+            "schema": {
+              "title": "Community Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommunityDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Community Endpoint",
+        "tags": [
+          "analytics"
+        ]
+      }
+    },
+    "/api/v1/credits": {
+      "get": {
+        "operationId": "list_credits_endpoint_api_v1_credits_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "album_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Album Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "band_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Band Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "artist_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Artist Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(release_group|release|recording)$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Scope"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Credits Endpoint",
+        "tags": [
+          "credits"
+        ]
+      }
+    },
+    "/api/v1/producers": {
+      "get": {
+        "operationId": "list_producers_endpoint_api_v1_producers_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "decade",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}s$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Decade"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subgenre",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subgenre"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "album_count",
+              "enum": [
+                "album_count",
+                "band_count",
+                "betweenness",
+                "name"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "title": "Order",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerListResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Producers Endpoint",
+        "tags": [
+          "producers"
+        ]
+      }
+    },
+    "/api/v1/producers/{producer_id}": {
+      "get": {
+        "operationId": "get_producer_endpoint_api_v1_producers__producer_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "producer_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Producer Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerDetailResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Producer Endpoint",
+        "tags": [
+          "producers"
+        ]
+      }
+    },
+    "/api/v1/producers/{producer_id}/graph": {
+      "get": {
+        "operationId": "get_producer_graph_endpoint_api_v1_producers__producer_id__graph_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "producer_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Producer Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view",
+            "required": false,
+            "schema": {
+              "default": "bands",
+              "enum": [
+                "albums",
+                "bands"
+              ],
+              "title": "View",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "depth",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 2,
+              "minimum": 1,
+              "title": "Depth",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_nodes",
+            "required": false,
+            "schema": {
+              "default": 500,
+              "maximum": 500,
+              "minimum": 1,
+              "title": "Max Nodes",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_edges",
+            "required": false,
+            "schema": {
+              "default": 2000,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Max Edges",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_evidence",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Evidence",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerGraphResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Producer Graph Endpoint",
+        "tags": [
+          "producers"
+        ]
+      }
+    },
+    "/api/v1/search": {
+      "get": {
+        "operationId": "search_endpoint_api_v1_search_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "maxLength": 200,
+              "minLength": 1,
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Search Endpoint",
+        "tags": [
+          "search"
+        ]
+      }
+    },
+    "/api/v1/taxonomy": {
+      "get": {
+        "operationId": "taxonomy_endpoint_api_v1_taxonomy_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaxonomyResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Taxonomy Endpoint",
+        "tags": [
+          "taxonomy"
         ]
       }
     },

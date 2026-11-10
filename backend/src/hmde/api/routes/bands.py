@@ -22,10 +22,24 @@ def list_bands_endpoint(
     db: Annotated[Session, Depends(get_db)],
     q: Annotated[str | None, Query(max_length=200)] = None,
     subgenre: Annotated[str | None, Query(max_length=50)] = None,
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    decade: Annotated[str | None, Query(pattern=r"^\d{4}s$")] = None,
+    year_from: Annotated[int | None, Query(ge=1960, le=2026)] = None,
+    year_to: Annotated[int | None, Query(ge=1960, le=2026)] = None,
+    include_retired: bool = False,
+    limit: Annotated[int, Query(ge=1, le=200)] = 20,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> BandListResponse:
-    items, total = list_bands(db, q, subgenre, limit, offset)
+    items, total = list_bands(
+        db,
+        q,
+        subgenre,
+        limit,
+        offset,
+        decade=decade,
+        year_from=year_from,
+        year_to=year_to,
+        include_retired=include_retired,
+    )
     return BandListResponse(items=items, total=total, limit=limit, offset=offset)
 
 
