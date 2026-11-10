@@ -11,7 +11,7 @@ Stack:
 - Backend: Python, FastAPI, Pydantic v2, synchronous SQLAlchemy 2.0, psycopg, Alembic.
 - Database: PostgreSQL.
 - Data and analysis: httpx, Pandas, NetworkX.
-- Frontend: React, TypeScript, Vite, TanStack Query, React Router, Tailwind, Cytoscape.js, Plotly.
+- Frontend: React, TypeScript, Vite, TanStack Query, React Router, custom CSS (Tailwind deferred), Cytoscape.js, Plotly.
 - Infrastructure: Docker Compose, uv, GitHub Actions.
 - Tests: pytest, Vitest, React Testing Library, Playwright (later).
 
@@ -29,7 +29,7 @@ Stack:
 - SPEC-005 is validated: canonical load from the v0.2 dataset, versioned taxonomy, hybrid album classification, band aggregates, review/quarantine issues and dataset membership. Local run `54d66992-643b-49ec-bac4-fe514ea39e94` processed 57 bands and 731 albums. Remote CI run 42535752532 passed.
 - SPEC-006 is validated: persisted quality rules/runs/findings/exceptions/metrics, structural checks, coverage reports and the two-level CI/full-corpus model. Local quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` has 58 findings covered by 58 approved exceptions and no unexcepted blocker. Remote CI run 42545153696 passed.
 - SPEC-007 is validated: versioned EDA over the normalized corpus with distributions, coverage, producer concentration and descriptive co-credit frequencies. Local report `eda-1267fdcced62b7da` has 354 metric rows. Remote CI run 42548567359 passed.
-- SPEC-008 is validated: producer–album evidence and derived producer–band/artist layers, persisted analysis runs/nodes/edges/metrics/communities, support-aware edges and versioned reports. Local run `net-a0b7c1f41ac5c92d` has 1,134 simple producer–album edges, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed. SPEC-009 is implemented locally for E8; remote CI is pending.
+- SPEC-008 is validated: producer–album evidence and derived producer–band/artist layers, persisted analysis runs/nodes/edges/metrics/communities, support-aware edges and versioned reports. Local run `net-a0b7c1f41ac5c92d` has 1,134 simple producer–album edges, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is implemented locally for E9; remote CI is pending.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -184,6 +184,9 @@ Web:
 - `/` redirects to `/bands`
 - `/bands` list/search/filter
 - `/bands/:bandId` detail, credits and producer graph
+- `/albums` and `/albums/:albumId`
+- `/producers` and `/producers/:producerId`
+- `/search`
 
 ### Host ports
 

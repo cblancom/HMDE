@@ -1,5 +1,5 @@
 import type { components } from './schema'
-import { getJson } from './client'
+import { buildQuery, getJson } from './client'
 
 type Schemas = components['schemas']
 
@@ -13,19 +13,25 @@ export type AlbumResponse = Schemas['AlbumResponse']
 export type BandFilters = {
   q?: string
   subgenre?: string
+  decade?: string
+  yearFrom?: number
+  yearTo?: number
+  limit?: number
+  offset?: number
 }
 
 export function getBands(filters: BandFilters = {}): Promise<BandListResponse> {
-  const params = new URLSearchParams()
-  if (filters.q) {
-    params.set('q', filters.q)
-  }
-  if (filters.subgenre) {
-    params.set('subgenre', filters.subgenre)
-  }
-  const query = params.toString()
-
-  return getJson<BandListResponse>(`/api/v1/bands${query ? `?${query}` : ''}`)
+  return getJson<BandListResponse>(
+    `/api/v1/bands${buildQuery({
+      q: filters.q,
+      subgenre: filters.subgenre,
+      decade: filters.decade,
+      year_from: filters.yearFrom,
+      year_to: filters.yearTo,
+      limit: filters.limit,
+      offset: filters.offset,
+    })}`,
+  )
 }
 
 export function getBand(bandId: string): Promise<BandDetailResponse> {

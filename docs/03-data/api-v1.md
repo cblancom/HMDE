@@ -1,6 +1,6 @@
 # Read-only API v1 (E8)
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [SPEC-009](../../specs/009-read-api/spec.md)
 - **Base path:** `/api/v1`
 
@@ -63,4 +63,4 @@ Retired bands are excluded from default lists/search and remain accessible by di
 - OpenAPI drift check: passed.
 - Frontend lint/typecheck/tests/build: passed.
 - Full-corpus API smoke: 384 producers; graph response 5 nodes/4 edges in 25.8 ms.
-- Remote CI: pending until commit/push.
+- Remote CI: [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) passed for commit `bb4ca1a`.

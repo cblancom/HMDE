@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 import type { CreditResponse } from '../api/bands'
 
 function formatScope(scope: string) {
@@ -56,7 +58,13 @@ export function CreditList({
         <tbody>
           {credits.map((credit) => (
             <tr key={`${credit.artist_id}-${credit.role}-${credit.scope}`}>
-              <th scope="row">{credit.artist_name}</th>
+              <th scope="row">
+                {credit.role === 'producer' || credit.role === 'co-producer' ? (
+                  <Link to={`/producers/${credit.artist_id}`}>{credit.artist_name}</Link>
+                ) : (
+                  credit.artist_name
+                )}
+              </th>
               <td>{credit.role_name}</td>
               <td>{formatScope(credit.scope)}</td>
               <td>{supportText(credit)}</td>

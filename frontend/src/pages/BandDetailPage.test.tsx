@@ -124,6 +124,24 @@ describe('BandDetailPage', () => {
     ).toBeInTheDocument()
   })
 
+
+  it('links albums and producer credits to their detail pages', async () => {
+    mockFetchRoutes({
+      '/api/v1/bands/band-1': { body: detail },
+      '/api/v1/bands/band-1/graph': { body: graph },
+    })
+    renderDetail()
+
+    expect(await screen.findByRole('link', { name: 'Iron Maiden' })).toHaveAttribute(
+      'href',
+      '/albums/album-1',
+    )
+    expect(await screen.findByRole('link', { name: 'Martin Birch' })).toHaveAttribute(
+      'href',
+      '/producers/artist-1',
+    )
+  })
+
   it('shows an empty state when a band has no albums', async () => {
     mockFetchRoutes({
       '/api/v1/bands/band-1': { body: { ...detail, albums: [] } },

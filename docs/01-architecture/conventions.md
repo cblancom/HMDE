@@ -57,7 +57,7 @@ Confirmed in E1; they are not considered available until then.
 - Avoid `any`; if unavoidable, justify it.
 - Server state with TanStack Query; local UI state when appropriate.
 - Shareable filters in the URL.
-- Tailwind for styling; no UI libraries without justification.
+- Existing CSS for styling; no UI libraries or styling frameworks without justification. Tailwind is deferred.
 
 ### SQL and data
 

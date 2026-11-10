@@ -34,65 +34,70 @@ export function BandGraph({ graph }: { graph: BandGraphResponse }) {
       })),
     ]
 
-    const cy = cytoscape({
-      container,
-      elements,
-      style: [
-        {
-          selector: 'node',
-          style: {
-            label: 'data(label)',
-            color: '#f5f5f4',
-            'font-size': 10,
-            'text-valign': 'bottom',
-            'text-margin-y': 4,
-            'text-wrap': 'wrap',
-            'text-max-width': '120px',
+    let cy: cytoscape.Core
+    try {
+      cy = cytoscape({
+        container,
+        elements,
+        style: [
+          {
+            selector: 'node',
+            style: {
+              label: 'data(label)',
+              color: '#14201e',
+              'font-size': 10,
+              'text-valign': 'bottom',
+              'text-margin-y': 4,
+              'text-wrap': 'wrap',
+              'text-max-width': '120px',
+            },
           },
-        },
-        {
-          selector: 'node[kind = "band"]',
-          style: {
-            shape: 'round-rectangle',
-            width: 64,
-            height: 30,
-            'background-color': '#f59e0b',
+          {
+            selector: 'node[kind = "band"]',
+            style: {
+              shape: 'round-rectangle',
+              width: 64,
+              height: 30,
+              'background-color': '#7a5a20',
+            },
           },
-        },
-        {
-          selector: 'node[kind = "producer"]',
-          style: {
-            shape: 'ellipse',
-            width: 28,
-            height: 28,
-            'background-color': '#38bdf8',
+          {
+            selector: 'node[kind = "producer"]',
+            style: {
+              shape: 'ellipse',
+              width: 28,
+              height: 28,
+              'background-color': '#8f3b28',
+            },
           },
-        },
-        {
-          selector: 'edge',
-          style: {
-            width: 2,
-            'line-color': '#6b7280',
-            'target-arrow-color': '#6b7280',
-            'target-arrow-shape': 'triangle',
-            'curve-style': 'bezier',
-            label: 'data(label)',
-            color: '#d1d5db',
-            'font-size': 9,
-            'text-rotation': 'autorotate',
-            'text-background-color': '#111827',
-            'text-background-opacity': 0.8,
-            'text-background-padding': '2px',
+          {
+            selector: 'edge',
+            style: {
+              width: 2,
+              'line-color': '#66736d',
+              'target-arrow-color': '#66736d',
+              'target-arrow-shape': 'triangle',
+              'curve-style': 'bezier',
+              label: 'data(label)',
+              color: '#14201e',
+              'font-size': 9,
+              'text-rotation': 'autorotate',
+              'text-background-color': '#f4f4ee',
+              'text-background-opacity': 0.8,
+              'text-background-padding': '2px',
+            },
           },
+        ],
+        layout: {
+          name: 'breadthfirst',
+          directed: true,
+          padding: 24,
+          animate: false,
         },
-      ],
-      layout: {
-        name: 'breadthfirst',
-        directed: true,
-        padding: 24,
-        animate: false,
-      },
-    })
+      })
+    } catch {
+      return
+    }
 
     return () => {
       cy.destroy()

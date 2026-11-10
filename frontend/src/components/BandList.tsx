@@ -4,9 +4,9 @@ import type { BandListItem } from '../api/bands'
 
 export function BandList({ items }: { items: BandListItem[] }) {
   return (
-    <div className="table-wrap">
+    <div className="table-wrap" tabIndex={0} aria-label="Band index">
       <table className="data-table">
-        <caption className="sr-only">Seed bands</caption>
+        <caption className="sr-only">Bands in the active corpus</caption>
         <thead>
           <tr>
             <th scope="col">Band</th>

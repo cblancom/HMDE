@@ -103,9 +103,11 @@ export function BandDetailPage() {
               <li key={album.id}>
                 <article className="album-card" aria-labelledby={`album-${album.id}`}>
                   <header className="album-header">
-                    <h3 id={`album-${album.id}`}>{album.title}</h3>
+                    <h3 id={`album-${album.id}`}>
+                      <Link to={`/albums/${album.id}`}>{album.title}</Link>
+                    </h3>
                     <p>
-                      {album.year ?? 'Year unknown'} · <span className="mono">{album.mbid}</span>
+                      Released {album.year ?? 'year unknown'} <span className="mono">{album.mbid}</span>
                     </p>
                   </header>
                   <CreditList albumTitle={album.title} credits={album.credits} />

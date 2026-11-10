@@ -1,14 +1,14 @@
 # SPEC-009 — Read-only API v1
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E8
 - **Iteration:** MVP
 - **Module:** `api`
 - **Date:** 2026-11-10
 - **Depends on:** SPEC-002 validated; SPEC-005 validated; SPEC-008 validated; [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md); E7 analysis tables and reports
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0003](../../docs/01-architecture/adr/ADR-0003-synchronous-sqlalchemy.md), [ADR-0005](../../docs/01-architecture/adr/ADR-0005-identity-and-provenance.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0007](../../docs/01-architecture/adr/ADR-0007-credit-scope-and-recording-level-aggregation.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
-- **Plan:** [plan.md](plan.md) (draft).
-- **Tasks:** [tasks.md](tasks.md) (draft).
+- **Plan:** [plan.md](plan.md) (approved).
+- **Tasks:** [tasks.md](tasks.md) (validated).
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -18,7 +18,8 @@
 |---|---|---|
 | 1 | 2026-11-10 | Initial draft; read-only v1 entity, graph, analytics, taxonomy and run-selection contract |
 | 2 | 2026-11-10 | Technical plan and tasks drafted for review |
-| 3 | 2026-11-10 | T-001–T-011 implemented locally; full API checks passed; remote CI pending |
+| 3 | 2026-11-10 | T-001–T-011 implemented locally; full API checks passed |
+| 4 | 2026-11-10 | Remote CI run 42741669410 passed; SPEC-009 validated |
 
 ## 1. Context and problem
 
@@ -544,8 +545,8 @@ No blocking question remains for planning. Exact response field names and servic
 ## 14. Validation result
 
 - **Date:** 2026-11-10
-- **Verdict:** Implemented; local validation passed; remote CI pending
-- **Evidence:** 313 backend tests passed; frontend lint/typecheck/21 tests/build passed; OpenAPI regenerated and drift-free; full-corpus API smoke passed with 384 producers and a 25.8 ms bounded graph response. Remote CI is pending because no commit or push was performed. See `tasks.md`.
+- **Verdict:** Validated
+- **Evidence:** 313 backend tests passed; frontend lint/typecheck/21 tests/build passed; OpenAPI regenerated and drift-free; full-corpus API smoke passed with 384 producers and a 25.8 ms bounded graph response. Remote CI run [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) passed for commit `bb4ca1a`. See `tasks.md`.
 
 ## 15. References
 

@@ -1,6 +1,6 @@
 # Tasks — SPEC-009 Read-only API v1
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Validated
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -180,7 +180,7 @@ T-001 and T-002 establish shared middleware, dependencies, pagination and schema
 
 ### T-011 — Complete API documentation, full checks and CI
 
-- **Status:** Completed locally (2026-11-10); remote CI pending.
+- **Status:** Completed (2026-11-10).
 - **Requirements:** FR-020, NFR-001–NFR-010.
 - **Dependencies:** T-010.
 - **Description:** Document endpoints, run selection, graph limits, taxonomy filters and retired-band behavior in README/AGENTS/docs. Run backend and frontend checks, migration/OpenAPI drift and Compose validation. Push only with explicit owner authorization and record remote CI.
@@ -204,7 +204,7 @@ T-001 and T-002 establish shared middleware, dependencies, pagination and schema
   docker compose config -q
   ```
 - **Files:** `README.md`, `AGENTS.md`, `docs/03-data/api-v1.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/009-read-api/`.
-- **Evidence:** 2026-11-10: API documentation added; backend 313 tests, Ruff check/format, OpenAPI drift and Compose passed; frontend lint/typecheck/21 tests/build passed; full-corpus API smoke passed. Remote CI is pending because no commit or push was performed.
+- **Evidence:** 2026-11-10: API documentation added; backend 313 tests, Ruff check/format, OpenAPI drift and Compose passed; frontend lint/typecheck/21 tests/build passed; full-corpus API smoke passed. Remote GitHub Actions CI run [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) passed for commit `bb4ca1a`.
 
 ## 3. Coverage matrix
 
@@ -273,7 +273,7 @@ T-001 and T-002 establish shared middleware, dependencies, pagination and schema
 | AC-019 | Passed | Performance/query-count tests |
 | AC-020 | Passed | CORS tests |
 | AC-021 | Passed | Documentation review |
-| AC-022 | Passed locally; remote CI pending | 313 backend tests, frontend checks, OpenAPI, Compose |
+| AC-022 | Passed | 313 backend tests, frontend checks, OpenAPI, Compose and remote CI run 42741669410 |
 
 ## 5. Notes
 

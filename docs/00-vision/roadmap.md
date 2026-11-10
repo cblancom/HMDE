@@ -133,7 +133,7 @@
 
 - **Objective:** build the main exploration interface with real data.
 - **Scope:** application shell; routing; search; band, album and producer list and detail views; loading, error and empty states; URL filters; dynamic taxonomy, period filters and album-level subgenres.
-- **Activities:** Tailwind; React Router; TanStack Query; generated types; responsive design; basic accessibility; consume taxonomy metadata instead of hard-coded subgenre lists.
+- **Activities:** React Router; TanStack Query; generated types; responsive design; basic accessibility; consume taxonomy metadata instead of hard-coded subgenre lists; reuse the existing CSS (Tailwind deferred).
 - **Deliverables:** working explorer; typed client; component tests; main flow; **SPEC-010**.
 - **Depends on:** E8.
 - **Done when:** the list → detail → relationship flow works end to end; typecheck, lint, tests and build pass.
@@ -216,8 +216,9 @@ Before closing any stage:
 | E5 | Validated | SPEC-006 quality rules, persisted findings/exceptions/metrics and two-level CI/full-corpus gate. Remote CI run 42545153696 passed. |
 | E6 | Validated | SPEC-007 EDA, metric catalogue, coverage and concentration report. Remote CI run 42548567359 passed. |
 | E7 | Validated | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI run 42738375416 passed. |
-| E8 | Implemented locally | SPEC-009 read-only API v1; local tests and full-corpus smoke passed; remote CI pending. |
-| E9–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
+| E8 | Validated | SPEC-009 read-only API v1; remote CI run 42741669410 passed. |
+| E9 | Implemented locally | SPEC-010 band, album, producer and search explorer; existing CSS; remote CI pending. |
+| E10–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
 
@@ -248,4 +249,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is implemented locally for E8; remote CI is pending. E9 follows after E8 validation.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is implemented locally for E9; remote CI is pending. E10 follows after E9 validation.

@@ -1,38 +1,46 @@
 import { useQuery } from '@tanstack/react-query'
-import type { ChangeEvent, FormEvent } from 'react'
+import type { FormEvent } from 'react'
 import { useSearchParams } from 'react-router'
 
 import { getBands } from '../api/bands'
+import { queryKeys } from '../api/queryKeys'
 import { AsyncState } from '../components/AsyncState'
 import { BandList } from '../components/BandList'
+import { Pagination } from '../components/Pagination'
+import { PeriodFilter } from '../components/PeriodFilter'
+import { TaxonomySelect } from '../components/TaxonomySelect'
 
-const SUBGENRES = [
-  { code: 'heavy-metal', name: 'Heavy Metal' },
-  { code: 'thrash-metal', name: 'Thrash Metal' },
-  { code: 'death-metal', name: 'Death Metal' },
-  { code: 'black-metal', name: 'Black Metal' },
-  { code: 'power-metal', name: 'Power Metal' },
-  { code: 'doom-metal', name: 'Doom Metal' },
-  { code: 'progressive-metal', name: 'Progressive Metal' },
-]
+const PAGE_SIZE = 20
 
 export function BandsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const q = searchParams.get('q') ?? ''
   const subgenre = searchParams.get('subgenre') ?? ''
+  const decade = searchParams.get('decade') ?? ''
+  const offset = Number(searchParams.get('offset') ?? 0)
 
+  const filters = {
+    q: q || undefined,
+    subgenre: subgenre || undefined,
+    decade: decade || undefined,
+    limit: PAGE_SIZE,
+    offset,
+  }
   const bandsQuery = useQuery({
-    queryKey: ['bands', { q, subgenre }],
-    queryFn: () => getBands({ q: q || undefined, subgenre: subgenre || undefined }),
+    queryKey: queryKeys.bands(filters),
+    queryFn: () => getBands(filters),
   })
 
-  function updateFilters(next: { q: string; subgenre: string }) {
+  function updateFilters(next: { q: string; subgenre: string; decade: string }) {
     const params = new URLSearchParams()
     if (next.q) {
       params.set('q', next.q)
     }
     if (next.subgenre) {
       params.set('subgenre', next.subgenre)
+    }
+    if (next.decade) {
+      params.set('decade', next.decade)
     }
     setSearchParams(params)
   }
@@ -41,25 +49,28 @@ export function BandsPage() {
     event.preventDefault()
     const field = event.currentTarget.elements.namedItem('q')
     const search = field instanceof HTMLInputElement ? field.value.trim() : ''
-    updateFilters({ q: search, subgenre })
+    updateFilters({ q: search, subgenre, decade })
   }
 
-  function handleSubgenreChange(event: ChangeEvent<HTMLSelectElement>) {
-    updateFilters({ q, subgenre: event.target.value })
+  function handleSubgenreChange(value: string) {
+    updateFilters({ q, subgenre: value, decade })
+  }
+
+  function handleDecadeChange(value: string) {
+    updateFilters({ q, subgenre, decade: value })
   }
 
   function handleClear() {
     setSearchParams(new URLSearchParams())
   }
 
-  const hasFilters = Boolean(q || subgenre)
+  const hasFilters = Boolean(q || subgenre || decade)
 
   return (
     <section className="page" aria-labelledby="bands-heading">
       <header className="page-header">
-        <p className="eyebrow">E2 seed dataset</p>
         <h1 id="bands-heading">Bands</h1>
-        <p>Explore documented production relationships across the seed dataset.</p>
+        <p>Explore documented production relationships across the active corpus.</p>
       </header>
 
       <form className="filters" role="search" onSubmit={handleSubmit}>
@@ -74,22 +85,8 @@ export function BandsPage() {
             placeholder="Iron Maiden"
           />
         </div>
-        <div className="field">
-          <label htmlFor="band-subgenre">Subgenre</label>
-          <select
-            id="band-subgenre"
-            name="subgenre"
-            value={subgenre}
-            onChange={handleSubgenreChange}
-          >
-            <option value="">All subgenres</option>
-            {SUBGENRES.map((option) => (
-              <option key={option.code} value={option.code}>
-                {option.name}
-              </option>
-            ))}
-          </select>
-        </div>
+        <TaxonomySelect value={subgenre} onChange={handleSubgenreChange} />
+        <PeriodFilter value={decade} onChange={handleDecadeChange} />
         <div className="filter-actions">
           <button type="submit" className="button">
             Search
@@ -121,6 +118,11 @@ export function BandsPage() {
               {bandsQuery.data.total} {bandsQuery.data.total === 1 ? 'band' : 'bands'}
             </p>
             <BandList items={bandsQuery.data.items} />
+            <Pagination
+              total={bandsQuery.data.total}
+              limit={bandsQuery.data.limit}
+              offset={bandsQuery.data.offset}
+            />
           </>
         )
       ) : null}

@@ -136,7 +136,7 @@ No generic repository layer is created over SQLAlchemy. API services encapsulate
 | React + TypeScript + Vite | Frontend |
 | TanStack Query | Server state and caching |
 | React Router | Navigation |
-| Tailwind CSS | Styling |
+| Custom CSS | Styling; Tailwind is deferred until justified |
 | Cytoscape.js | Graph visualization |
 | Plotly | Statistical and temporal charts |
 | Docker Compose | PostgreSQL, backend and development profiles |
@@ -151,7 +151,7 @@ No generic repository layer is created over SQLAlchemy. API services encapsulate
 | SciPy / scikit-learn | Only if a concrete metric requires them |
 | BeautifulSoup | Only if HTML extraction is approved; prefer APIs |
 | Playwright | Added in E11 for end-to-end tests |
-| Vitest / React Testing Library | Added in E9 for frontend tests |
+| Vitest / React Testing Library | Frontend component and page tests |
 | Redis / Celery | No asynchronous user jobs in the MVP |
 | Neo4j | PostgreSQL + NetworkX are enough for the expected volume |
 | Airflow / Prefect / Dagster | An idempotent CLI and a Makefile are enough |

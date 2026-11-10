@@ -13,7 +13,8 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **Data quality v0.1:** SPEC-006 validated. Structural checks found no unexcepted blocker: 58 findings (24 album quarantine, 17 album review, 17 aggregate review) are covered by 58 approved exceptions; 51 completeness/coverage metrics were persisted. Remote CI run 42545153696 passed.
 - **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
 - **Network v0.1:** SPEC-008 validated. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed.
-- **API v1:** SPEC-009 implemented locally. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`; remote CI is pending.
+- **API v1:** SPEC-009 validated. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`. Remote CI run 42741669410 passed.
+- **Explorer v0.1:** SPEC-010 implemented locally. Band, album, producer and search views use the E8 API and existing CSS; Tailwind is deferred. Remote CI is pending.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
 ## What the MVP will provide
@@ -84,6 +85,13 @@ See [API v1](docs/03-data/api-v1.md) for the full resource list.
 | `/` | Redirects to `/bands` |
 | `/bands` | Band search, subgenre filter and list |
 | `/bands/:bandId` | Band detail, credits and producer graph |
+| `/albums` | Album list/search |
+| `/albums/:albumId` | Album detail and credits |
+| `/producers` | Producer rankings |
+| `/producers/:producerId` | Producer detail and metrics |
+| `/search` | Grouped search |
+
+See [Frontend explorer](docs/01-architecture/frontend.md) for routes and design notes.
 
 Stop the environment without deleting data:
 
