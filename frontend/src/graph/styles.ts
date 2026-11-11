@@ -136,4 +136,48 @@ export const graphStyles: cytoscape.StylesheetJson = [
       'text-rotation': 'autorotate',
     },
   },
+  {
+    selector: 'node.overview-node',
+    style: {
+      width: 'data(size)',
+      height: 'data(size)',
+      'font-size': 8,
+      'text-max-width': '80px',
+      'min-zoomed-font-size': 12,
+    },
+  },
+  {
+    selector: 'node.overview-node.node-band',
+    style: {
+      'font-size': 9,
+      'min-zoomed-font-size': 0,
+    },
+  },
+  {
+    selector: 'node.overview-node:selected',
+    style: {
+      'min-zoomed-font-size': 0,
+    },
+  },
+  {
+    selector: 'node.overview-node.search-match',
+    style: {
+      'min-zoomed-font-size': 0,
+      'border-color': '#7a5a20',
+      'border-width': 4,
+      opacity: 1,
+    },
+  },
+  {
+    selector: 'node.overview-node.isolated-producer',
+    style: {
+      opacity: 0.45,
+    },
+  },
+  {
+    selector: 'node.overview-node.searchable-producer',
+    style: {
+      opacity: 0.3,
+    },
+  },
 ]

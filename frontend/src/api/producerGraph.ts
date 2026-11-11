@@ -6,7 +6,10 @@ type Schemas = components['schemas']
 export type ProducerGraphResponse = Schemas['ProducerGraphResponse']
 export type ProducerGraphNode = Schemas['ProducerGraphNode']
 export type ProducerGraphEdge = Schemas['ProducerGraphEdge']
+export type ProducerOverviewGraphResponse = Schemas['ProducerOverviewGraphResponse']
+export type ProducerOverviewGraphMeta = Schemas['ProducerOverviewGraphMeta']
 export type ProducerGraphView = 'albums' | 'bands'
+export type ProducerOverviewSort = 'album_count' | 'band_count' | 'betweenness' | 'name'
 
 export type ProducerGraphOptions = {
   producerId: string
@@ -17,6 +20,50 @@ export type ProducerGraphOptions = {
   maxEdges?: number
   includeEvidence?: boolean
   analysisRun?: string
+}
+
+export type ProducerOverviewGraphOptions = {
+  view: ProducerGraphView
+  producerLimit?: number
+  producerSort?: ProducerOverviewSort
+  order?: 'asc' | 'desc'
+  decade?: string
+  subgenre?: string
+  includeIsolated?: boolean
+  includeEvidence?: boolean
+  maxNodes?: number
+  maxEdges?: number
+  analysisRun?: string
+}
+
+export function getProducerOverviewGraph({
+  view,
+  producerLimit = 0,
+  producerSort = 'album_count',
+  order = 'desc',
+  decade,
+  subgenre,
+  includeIsolated = true,
+  includeEvidence = false,
+  maxNodes = 1000,
+  maxEdges = 2000,
+  analysisRun,
+}: ProducerOverviewGraphOptions): Promise<ProducerOverviewGraphResponse> {
+  return getJson<ProducerOverviewGraphResponse>(
+    `/api/v1/graph/producers${buildQuery({
+      view,
+      producer_limit: producerLimit,
+      producer_sort: producerSort,
+      order,
+      decade,
+      subgenre,
+      include_isolated: includeIsolated,
+      include_evidence: includeEvidence,
+      max_nodes: maxNodes,
+      max_edges: maxEdges,
+      analysis_run: analysisRun,
+    })}`,
+  )
 }
 
 export function getProducerGraph({

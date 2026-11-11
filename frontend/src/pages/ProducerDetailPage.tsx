@@ -32,7 +32,12 @@ export function ProducerDetailPage() {
       <p><Link to="/producers">← Back to producers</Link></p>
       <header className="detail-header">
         <h1 id="producer-heading">{producer.name}</h1>
-        <p><Link className="button" to={`/producers/${producer.id}/graph`}>Open graph</Link></p>
+        <p>
+          <Link className="button" to={`/producers/${producer.id}/graph`}>Open graph</Link>{' '}
+          <Link className="button button--secondary" to={`/graph?selected=${producer.id}`}>
+            Open in network
+          </Link>
+        </p>
         <dl className="metadata">
           <div><dt>Albums</dt><dd>{producer.album_count}</dd></div>
           <div><dt>Bands</dt><dd>{producer.band_count}</dd></div>

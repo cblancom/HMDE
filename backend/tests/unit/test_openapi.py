@@ -15,6 +15,7 @@ def test_openapi_includes_catalog_paths() -> None:
     assert "/api/v1/credits" in schema["paths"]
     assert "/api/v1/producers" in schema["paths"]
     assert "/api/v1/producers/{producer_id}/graph" in schema["paths"]
+    assert "/api/v1/graph/producers" in schema["paths"]
     assert "/api/v1/analysis-runs" in schema["paths"]
     assert "/api/v1/analytics/summary" in schema["paths"]
     assert "/api/v1/communities" in schema["paths"]
@@ -30,6 +31,9 @@ def test_openapi_includes_generated_response_schemas() -> None:
     assert "BandDetailResponse" in schemas
     assert "BandGraphResponse" in schemas
     assert "ProducerGraphResponse" in schemas
+    assert "ProducerOverviewGraphResponse" in schemas
+    assert "ProducerOverviewGraphMeta" in schemas
+    assert "ProducerOverviewGraphLimits" in schemas
     assert "AnalyticsSummaryResponse" in schemas
     assert "TaxonomyResponse" in schemas
     assert "AlbumDetailResponse" in schemas

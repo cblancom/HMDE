@@ -1785,6 +1785,130 @@
         "title": "ProducerListResponse",
         "type": "object"
       },
+      "ProducerOverviewGraphLimits": {
+        "properties": {
+          "max_edges": {
+            "title": "Max Edges",
+            "type": "integer"
+          },
+          "max_nodes": {
+            "title": "Max Nodes",
+            "type": "integer"
+          },
+          "producer_limit": {
+            "title": "Producer Limit",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "producer_limit",
+          "max_nodes",
+          "max_edges"
+        ],
+        "title": "ProducerOverviewGraphLimits",
+        "type": "object"
+      },
+      "ProducerOverviewGraphMeta": {
+        "properties": {
+          "analysis_run_id": {
+            "format": "uuid",
+            "title": "Analysis Run Id",
+            "type": "string"
+          },
+          "analysis_version": {
+            "title": "Analysis Version",
+            "type": "string"
+          },
+          "dataset_version": {
+            "title": "Dataset Version",
+            "type": "string"
+          },
+          "graph_version": {
+            "title": "Graph Version",
+            "type": "string"
+          },
+          "include_isolated": {
+            "title": "Include Isolated",
+            "type": "boolean"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/ProducerOverviewGraphLimits"
+          },
+          "matched_producers": {
+            "title": "Matched Producers",
+            "type": "integer"
+          },
+          "scope": {
+            "const": "overview",
+            "title": "Scope",
+            "type": "string"
+          },
+          "selected_producers": {
+            "title": "Selected Producers",
+            "type": "integer"
+          },
+          "taxonomy_version": {
+            "title": "Taxonomy Version",
+            "type": "string"
+          },
+          "truncated": {
+            "title": "Truncated",
+            "type": "boolean"
+          },
+          "view": {
+            "enum": [
+              "albums",
+              "bands"
+            ],
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "scope",
+          "view",
+          "analysis_run_id",
+          "analysis_version",
+          "dataset_version",
+          "taxonomy_version",
+          "graph_version",
+          "truncated",
+          "matched_producers",
+          "selected_producers",
+          "include_isolated",
+          "limits"
+        ],
+        "title": "ProducerOverviewGraphMeta",
+        "type": "object"
+      },
+      "ProducerOverviewGraphResponse": {
+        "properties": {
+          "edges": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerGraphEdge"
+            },
+            "title": "Edges",
+            "type": "array"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ProducerOverviewGraphMeta"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerGraphNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "nodes",
+          "edges",
+          "meta"
+        ],
+        "title": "ProducerOverviewGraphResponse",
+        "type": "object"
+      },
       "SearchAlbumItem": {
         "properties": {
           "band_name": {
@@ -2993,6 +3117,190 @@
         "summary": "List Credits Endpoint",
         "tags": [
           "credits"
+        ]
+      }
+    },
+    "/api/v1/graph/producers": {
+      "get": {
+        "operationId": "get_producer_overview_graph_endpoint_api_v1_graph_producers_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "view",
+            "required": false,
+            "schema": {
+              "default": "bands",
+              "enum": [
+                "albums",
+                "bands"
+              ],
+              "title": "View",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "producer_limit",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 1000,
+              "minimum": 0,
+              "title": "Producer Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "producer_sort",
+            "required": false,
+            "schema": {
+              "default": "album_count",
+              "enum": [
+                "album_count",
+                "band_count",
+                "betweenness",
+                "name"
+              ],
+              "title": "Producer Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "order",
+            "required": false,
+            "schema": {
+              "default": "desc",
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "title": "Order",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "decade",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}s$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Decade"
+            }
+          },
+          {
+            "in": "query",
+            "name": "subgenre",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 50,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Subgenre"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_isolated",
+            "required": false,
+            "schema": {
+              "default": true,
+              "title": "Include Isolated",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_evidence",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Evidence",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_nodes",
+            "required": false,
+            "schema": {
+              "default": 1000,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Max Nodes",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_edges",
+            "required": false,
+            "schema": {
+              "default": 2000,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Max Edges",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "analysis_run",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProducerOverviewGraphResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Producer Overview Graph Endpoint",
+        "tags": [
+          "graph"
         ]
       }
     },

@@ -20,4 +20,14 @@ describe('graph styles', () => {
   it('does not hide album labels when selected', () => {
     expect(styleFor('node.node-album:selected')?.label).not.toBe('')
   })
+
+  it('sizes overview nodes by degree and declutters labels by zoom', () => {
+    expect(styleFor('node.overview-node')?.width).toBe('data(size)')
+    expect(styleFor('node.overview-node')?.height).toBe('data(size)')
+    expect(styleFor('node.overview-node')?.['min-zoomed-font-size']).toBe(12)
+    expect(styleFor('node.overview-node.node-band')?.['min-zoomed-font-size']).toBe(0)
+    expect(styleFor('node.overview-node:selected')?.['min-zoomed-font-size']).toBe(0)
+    expect(styleFor('node.overview-node.search-match')?.['min-zoomed-font-size']).toBe(0)
+    expect(styleFor('node.overview-node.isolated-producer')?.opacity).toBe(0.45)
+  })
 })

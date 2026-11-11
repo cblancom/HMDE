@@ -10,6 +10,7 @@ const NAV_ITEMS = [
   { to: '/bands', label: 'Bands' },
   { to: '/albums', label: 'Albums' },
   { to: '/producers', label: 'Producers' },
+  { to: '/graph', label: 'Graph' },
 ]
 
 export function AppShell() {

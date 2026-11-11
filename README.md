@@ -14,7 +14,7 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
 - **Network v0.1:** SPEC-008 validated. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed.
 - **API v1:** SPEC-009 validated. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`. Remote CI run 42741669410 passed.
-- **Graph v0.1:** SPEC-011 implemented locally. The producer graph uses Cytoscape with `cytoscape-d3-force`, separate album/band views and a 500-node v0.1 cap; the force layout uses canonical node ids, type-sized collision and a canvas-aware link distance, and falls back to a frozen static layout on failure. Album titles are always visible. Headless browser physics, spacing and label checks passed; manual interaction and remote CI are pending.
+- **Graph v0.1:** SPEC-011 implemented locally. `/graph` is the global producer overview over 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges, with shared band/album nodes, a 1,000-node cap, producer top-k/sort, filters, isolated-producer toggle, overview physics and zoom-decluttered labels. The producer ego graph remains at `/producers/:id/graph` with a 500-node cap, type-sized collision, always-visible album titles and a static fallback. Headless browser physics, spacing, labels and overview checks passed; manual ego interaction and remote CI are pending.
 - **Explorer v0.1:** SPEC-010 validated. Band, album, producer and search views use the E8 API and existing CSS; Tailwind is deferred. Remote CI run 42747146170 passed.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
@@ -74,6 +74,7 @@ The API container listens on port `8000` internally and PostgreSQL on `5432`; on
 | `GET` | `/api/v1/bands/{band_id}/graph` | One-hop band–producer graph |
 | `GET` | `/api/v1/producers` | Producer rankings and filters |
 | `GET` | `/api/v1/producers/{producer_id}/graph` | Bounded producer–album or producer–band graph |
+| `GET` | `/api/v1/graph/producers` | Global producer overview over the E7 graph layers |
 | `GET` | `/api/v1/albums` | Album list/search |
 | `GET` | `/api/v1/analytics/summary` | E7 graph/support summary |
 
@@ -90,7 +91,8 @@ See [API v1](docs/03-data/api-v1.md) for the full resource list.
 | `/albums/:albumId` | Album detail and credits |
 | `/producers` | Producer rankings |
 | `/producers/:producerId` | Producer detail and metrics |
-| `/producers/:producerId/graph` | Producer graph with force physics |
+| `/producers/:producerId/graph` | Producer ego graph with force physics |
+| `/graph` | Global producer overview and ego drill-down |
 | `/search` | Grouped search |
 
 See [Frontend explorer](docs/01-architecture/frontend.md) for routes and design notes.

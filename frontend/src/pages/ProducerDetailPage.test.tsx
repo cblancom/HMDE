@@ -55,6 +55,10 @@ describe('ProducerDetailPage', () => {
       'href',
       '/producers/producer-1/graph',
     )
+    expect(screen.getByRole('link', { name: 'Open in network' })).toHaveAttribute(
+      'href',
+      '/graph?selected=producer-1',
+    )
     const links = await screen.findAllByRole('link', { name: 'Iron Maiden' })
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/albums/album-1',

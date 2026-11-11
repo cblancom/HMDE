@@ -10,6 +10,7 @@ from hmde.api.routes.analytics import router as analytics_router
 from hmde.api.routes.artists import router as artists_router
 from hmde.api.routes.bands import router as bands_router
 from hmde.api.routes.credits import router as credits_router
+from hmde.api.routes.graph import router as graph_router
 from hmde.api.routes.health import router as health_router
 from hmde.api.routes.producers import router as producers_router
 from hmde.api.routes.search import router as search_router
@@ -40,6 +41,7 @@ def create_app() -> FastAPI:
     app.include_router(albums_router)
     app.include_router(credits_router)
     app.include_router(producers_router)
+    app.include_router(graph_router)
     app.include_router(analytics_router)
     app.include_router(search_router)
     app.include_router(taxonomy_router)

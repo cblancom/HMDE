@@ -141,11 +141,11 @@
 ### E10 — Graph visualization and interaction
 
 - **Objective:** allow exploration of collaboration networks without degrading performance.
-- **Scope:** Cytoscape view; separate producer–album and producer–band modes; album-year color scale; producer type encoding; role and support edge styles; `cytoscape-d3-force` simulation with freeze/resume/reheat; single-producer ego networks; client-side filters by role, decade and hierarchical subgenre; depth/neighbor expansion; node and edge details; legend; accessible table fallback.
-- **Activities:** integrate the subgraph endpoint; set node and edge limits; tune d3-force physics; freeze/resume/reheat controls; expand on demand; URL state; interaction tests; performance budget; taxonomy-versioned filters.
-- **Deliverables:** graph page; interactions; UX and performance documentation; **SPEC-011**.
+- **Scope:** Cytoscape global producer overview and single-producer ego graphs; separate producer–album and producer–band modes; shared band/album nodes; album-year color scale; producer type encoding; role and support edge styles; `cytoscape-d3-force` simulation with freeze/resume/reheat; all-producer view within a 1,000-node cap; isolated-producer toggle; client-side filters by role, decade and hierarchical subgenre; node and edge details; legend; accessible table fallback.
+- **Activities:** integrate the E8 ego endpoint and the E10 overview endpoint; set node and edge limits; tune ego and overview physics; freeze/resume/reheat controls; URL state; interaction tests; performance budget; taxonomy-versioned filters.
+- **Deliverables:** global graph page; ego drill-down; interactions; UX and performance documentation; **SPEC-011**.
 - **Depends on:** E7, E8 and E9.
-- **Done when:** a 500-node subgraph is usable in v0.1; the interface does not freeze; an accessible table alternative exists. The 2,000-node target moves to E13/API revision.
+- **Done when:** the global overview is usable within 1,000 nodes and a 500-node ego subgraph is usable; the interface does not freeze; an accessible table alternative exists. The 2,000-node target moves to E13/API revision.
 
 ### E11 — Integration, QA and performance
 
@@ -218,7 +218,7 @@ Before closing any stage:
 | E7 | Validated | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI run 42738375416 passed. |
 | E8 | Validated | SPEC-009 read-only API v1; remote CI run 42741669410 passed. |
 | E9 | Validated | SPEC-010 band, album, producer and search explorer; existing CSS; remote CI run 42747146170 passed. |
-| E10 | Implemented locally | SPEC-011 producer graph visualization; d3-force physics with canonical node ids, type-sized collision, spread-out neighbors and always-visible album titles; static fallback; 500-node v0.1 cap; headless checks passed; manual interaction and remote CI pending. |
+| E10 | Implemented locally | SPEC-011 global producer overview and ego graph are implemented locally. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels and an accessible table. The ego graph keeps its 500-node cap and static fallback. Headless browser checks passed; manual ego interaction and remote CI remain pending. |
 | E11–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -250,4 +250,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is validated for E9 with remote CI run 42747146170. SPEC-011 is implemented locally for E10 with d3-force physics, canonical node ids, type-sized collision, spread-out neighbors, always-visible album titles and a static-layout fallback; a headless browser verified physics startup, spacing and labels. Manual interaction review and remote CI are pending.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is validated for E9 with remote CI run 42747146170. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and headless checks confirmed the 398-node bands view, 968-node albums view, physics controls, labels, isolated toggle and reduced-motion fallback. Manual ego interaction and remote CI are pending.

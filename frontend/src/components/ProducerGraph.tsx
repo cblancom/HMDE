@@ -8,47 +8,90 @@ import { graphStyles } from '../graph/styles'
 cytoscape.use(d3Force)
 
 type PhysicsState = 'running' | 'frozen'
+export type GraphVariant = 'ego' | 'overview'
 
 type ProducerGraphProps = {
   graph: AdaptedGraph
+  variant?: GraphVariant
+  highlightSearch?: string
   onSelect?: (id: string, kind: 'node' | 'edge') => void
 }
 
-function collideRadiusFor(node: { type?: string }): number {
+function collideRadiusFor(
+  variant: GraphVariant,
+  node: { type?: string },
+): number {
+  if (variant === 'overview') {
+    if (node.type === 'band') return 10
+    if (node.type === 'album') return 7
+    return 8
+  }
   if (node.type === 'band') return 34
   if (node.type === 'album') return 28
   return 22
 }
 
-function linkDistanceFor(nodeCount: number, canvasHeight: number): number {
+function linkDistanceFor(
+  variant: GraphVariant,
+  nodeCount: number,
+  canvasHeight: number,
+): number {
+  if (variant === 'overview') {
+    const desired = Math.max(42, Math.min(90, 44 + nodeCount / 40))
+    return Math.max(30, Math.min(desired, canvasHeight / 6))
+  }
   const desired = Math.max(180, Math.min(300, 70 + nodeCount * 11))
   return Math.max(120, Math.min(desired, canvasHeight / 2 - 60))
 }
 
-const FORCE_OPTIONS = {
-  name: 'd3-force',
-  infinite: true,
-  fixedAfterDragging: false,
-  ungrabifyWhileSimulating: false,
-  animate: true,
-  fit: false,
-  padding: 40,
-  randomize: false,
-  alpha: 1,
-  alphaMin: 0.001,
-  alphaDecay: 0.0228,
-  velocityDecay: 0.4,
-  collideRadius: collideRadiusFor,
-  collideStrength: 0.9,
-  collideIterations: 2,
-  manyBodyStrength: -320,
-  linkId: (node: { id: string }) => node.id,
+function forceOptions(variant: GraphVariant, nodeCount: number, canvasHeight: number) {
+  const shared = {
+    name: 'd3-force',
+    infinite: true,
+    fixedAfterDragging: false,
+    ungrabifyWhileSimulating: false,
+    animate: true,
+    fit: false,
+    padding: 40,
+    randomize: false,
+    alpha: 1,
+    alphaMin: 0.001,
+    linkId: (node: { id: string }) => node.id,
+    linkDistance: linkDistanceFor(variant, nodeCount, canvasHeight),
+    collideRadius: (node: { type?: string }) => collideRadiusFor(variant, node),
+  }
+  if (variant === 'overview') {
+    return {
+      ...shared,
+      alphaDecay: 0.035,
+      velocityDecay: 0.55,
+      collideStrength: 0.6,
+      collideIterations: 1,
+      manyBodyStrength: -45,
+      manyBodyTheta: 0.9,
+      manyBodyDistanceMin: 8,
+    }
+  }
+  return {
+    ...shared,
+    alphaDecay: 0.0228,
+    velocityDecay: 0.4,
+    collideStrength: 0.9,
+    collideIterations: 2,
+    manyBodyStrength: -320,
+  }
 }
 
-export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
+export function ProducerGraph({
+  graph,
+  variant = 'ego',
+  highlightSearch = '',
+  onSelect,
+}: ProducerGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const cyRef = useRef<cytoscape.Core | null>(null)
   const layoutRef = useRef<cytoscape.Layouts | null>(null)
+  const fitTimerRef = useRef<number | null>(null)
   const physicsRef = useRef<PhysicsState>('running')
   const onSelectRef = useRef(onSelect)
   const [physics, setPhysics] = useState<PhysicsState>('running')
@@ -68,6 +111,27 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
     setPhysics(next)
   }, [])
 
+  const fitOverview = useCallback(() => {
+    const cy = cyRef.current
+    if (!cy || typeof cy.fit !== 'function') return
+    try {
+      cy.fit(undefined, 40)
+    } catch {
+      // A failed initial fit must not interrupt the simulation.
+    }
+    if (fitTimerRef.current !== null) window.clearTimeout(fitTimerRef.current)
+    fitTimerRef.current = window.setTimeout(() => {
+      fitTimerRef.current = null
+      const current = cyRef.current
+      if (!current || typeof current.fit !== 'function') return
+      try {
+        current.fit(undefined, 40)
+      } catch {
+        // Keep the current viewport if the second fit fails.
+      }
+    }, 1200)
+  }, [])
+
   const runForce = useCallback(
     (reheat = false) => {
       const cy = cyRef.current
@@ -75,13 +139,13 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
       layoutRef.current?.stop()
       try {
         const layout = cy.layout({
-          ...FORCE_OPTIONS,
-          linkDistance: linkDistanceFor(nodeCount, cy.height()),
+          ...forceOptions(variant, nodeCount, cy.height()),
           randomize: reheat,
         } as unknown as cytoscape.LayoutOptions)
         layout.run()
         layoutRef.current = layout
         setPhysicsState('running')
+        if (variant === 'overview' && !reheat) fitOverview()
       } catch {
         layoutRef.current = null
         try {
@@ -92,7 +156,7 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
         setPhysicsState('frozen')
       }
     },
-    [nodeCount, setPhysicsState],
+    [fitOverview, nodeCount, setPhysicsState, variant],
   )
 
   const freeze = useCallback(() => {
@@ -145,6 +209,10 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
 
     return () => {
       document.removeEventListener('visibilitychange', onVisibility)
+      if (fitTimerRef.current !== null) {
+        window.clearTimeout(fitTimerRef.current)
+        fitTimerRef.current = null
+      }
       cy.removeListener('select', 'node, edge', onSelectEvent)
       cy.removeListener('unselect', 'node, edge', onUnselectEvent)
       layoutRef.current?.stop()
@@ -153,6 +221,18 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
       layoutRef.current = null
     }
   }, [graph, freeze, runForce, setPhysicsState])
+
+  useEffect(() => {
+    const cy = cyRef.current
+    if (!cy || typeof cy.nodes !== 'function') return
+    const term = highlightSearch.trim().toLocaleLowerCase()
+    cy.nodes().forEach((node) => {
+      const producer = node.hasClass('node-producer')
+      const label = String(node.data('label') ?? '').toLocaleLowerCase()
+      node.toggleClass('searchable-producer', producer && term.length > 0)
+      node.toggleClass('search-match', producer && term.length > 0 && label.includes(term))
+    })
+  }, [graph, highlightSearch])
 
   return (
     <section className="producer-graph" data-testid="producer-graph" aria-labelledby="producer-graph-heading">
@@ -182,9 +262,13 @@ export function ProducerGraph({ graph, onSelect }: ProducerGraphProps) {
       </div>
       <div
         ref={containerRef}
-        className="graph-canvas producer-graph-canvas"
+        className={`graph-canvas producer-graph-canvas${
+          variant === 'overview' ? ' overview-graph-canvas' : ''
+        }`}
         role="img"
-        aria-label="Producer network graph"
+        aria-label={
+          variant === 'overview' ? 'Global producer network graph' : 'Producer network graph'
+        }
         data-testid="producer-graph-canvas"
       />
       <p className="graph-meta" role="status">

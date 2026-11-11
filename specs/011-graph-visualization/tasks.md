@@ -1,6 +1,6 @@
 # Tasks — SPEC-011 Producer graph visualization and interaction
 
-- **Status:** Implemented locally; headless physics, spacing and label checks passed; manual interaction and remote CI pending
+- **Status:** Implemented locally; T-001–T-016 completed; remote CI and manual ego interaction/performance checks pending
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -9,10 +9,12 @@
 ```text
 T-001 ─► T-002 ─┬─► T-003 ─┬─► T-004 ─┐
                 │          └─► T-005 ─┼─► T-006 ─► T-007 ─► T-008 ─► T-009 ─► T-010
-                └─► T-004 ────────────┘
+                └─► T-004 ────────────┘                                              │
+                                                                                     ▼
+T-011 ─► T-012 ─► T-013 ─► T-014 ─► T-015 ─► T-016
 ```
 
-T-001 establishes the typed client and adapter. T-002 adds the route/page shell. T-003 adds the physics canvas. T-004 adds visual mapping, legend, details and filter controls. T-005 hardens states and truncation. T-006 completes accessibility. T-007 proves physics lifecycle and scope with tests. T-008 closes documentation, manual checklist, full checks and CI. T-009 fixes d3-force node identity and guards layout startup failures. T-010 tunes neighbor spacing and makes album titles permanently visible.
+T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global producer overview: backend schemas/service, API route/tests, frontend client/adapter, page/controls/details, physics/labels, then documentation and full CI.
 
 ## 2. Tasks
 
@@ -125,8 +127,8 @@ T-001 establishes the typed client and adapter. T-002 adds the route/page shell.
 - **Status:** Completed (2026-11-10).
 - **Requirements:** FR-004, FR-005, FR-006, FR-014, FR-015, NFR-005, NFR-006.
 - **Dependencies:** T-006.
-- **Description:** Add unit/component tests with mocked Cytoscape and d3-force for layout registration, infinite physics options, drag handling, freeze/resume/reheat, visibility pause and cleanup. Update the E9 scope guard so graph/`cytoscape-d3-force` is allowed in E10 but API/schema/Tailwind/Plotly/new-renderer changes remain rejected.
-- **Done when:** physics lifecycle and options are asserted; scope guards reflect E10; no API/schema changes; tests pass.
+- **Description:** Add unit/component tests with mocked Cytoscape and d3-force for layout registration, infinite physics options, drag handling, freeze/resume/reheat, visibility pause and cleanup. Update the E9 scope guard so graph/`cytoscape-d3-force` is allowed in E10 but Tailwind/Plotly/new-renderer changes remain rejected.
+- **Done when:** physics lifecycle and options are asserted; scope guards reflect E10; tests pass.
 - **Verification:**
   ```bash
   cd frontend
@@ -201,40 +203,168 @@ T-001 establishes the typed client and adapter. T-002 adds the route/page shell.
 - **Files:** `frontend/src/components/ProducerGraph.tsx`, `frontend/src/graph/styles.ts`, `frontend/src/graph/styles.test.ts`, `frontend/src/components/ProducerGraph.test.tsx`, `frontend/src/index.css`, spec/tasks/plan documentation.
 - **Evidence:** 2026-11-10: added type-sized collision radii (producer 22, album 28, band 34), `collideStrength: 0.9`, `collideIterations: 2`, `manyBodyStrength: -320` and a node-count-based `linkDistance` (180–300) capped by the canvas height. The canvas min-height is now `clamp(32rem, 65vh, 48rem)`. Album labels always render with `font-size: 10px`, wrapping at 100px and a 90% background. Frontend lint, typecheck, 62 tests and build passed. A headless Chromium runtime probe on the 21-node album graph measured producer-to-album distances of 276–290 px (average 285), centered in a 1136×723 canvas, with album labels rendered at 10px and full opacity; at a 900px viewport the layout adapted to 199–202 px and remained centered without clipping. The bands view also rendered without console errors.
 
+### T-011 — Add overview schemas and producer graph service
+
+- **Status:** Completed (2026-11-11).
+- **Requirements:** FR-016, FR-018, FR-019, FR-020, NFR-004, NFR-010.
+- **Dependencies:** Revision 6 spec/plan/tasks approved; T-010.
+- **Description:** Add `ProducerOverviewGraphLimits`, `ProducerOverviewGraphMeta` and `ProducerOverviewGraphResponse` to `schemas/api.py`. Implement `get_producer_overview_graph` in `services/producers.py`: producer ranking/filter reuse, view-specific edge selection, shared-neighbor edges, album role deduplication, isolated-producer handling, node metric enrichment, deterministic caps/truncation and run metadata.
+- **Done when:** both views return one node per shared band/album with one edge per credited producer; no producer–producer edges; all producers fit the 1,000-node cap in the current corpus; top-k, filters, isolated toggle and truncation are deterministic.
+- **Verification:**
+  ```bash
+  cd backend
+  uv run ruff check .
+  uv run ruff format --check .
+  uv run pytest
+  ```
+- **Files:** `backend/src/hmde/schemas/api.py`, `backend/src/hmde/services/producers.py`, service tests.
+- **Evidence:** 2026-11-11: added the overview limits, meta and response schemas and implemented `get_producer_overview_graph` with producer ranking reuse, shared band/album nodes, album role deduplication, isolated handling, metric enrichment, deterministic caps and run metadata. Band targets are typed `band` even when the artist also has a producer role, so no producer–producer edge is exposed. Added five integration service tests covering shared nodes, role deduplication, isolated toggle, top-k ordering and filters/caps. `uv run ruff check .`, `uv run ruff format --check .` and `uv run pytest` passed (220 passed, 98 skipped). The new integration suite passed 5/5 with `TEST_DATABASE_URL`; the full-corpus v0.2 run returns 398 nodes / 426 edges in `bands` (341 producer sources + 57 bands, 384 matched producers) and 968 nodes / 1,134 edges in `albums`, with no truncation at the 1,000-node cap.
+
+### T-012 — Add overview API route, OpenAPI and integration tests
+
+- **Status:** Pending.
+- **Requirements:** FR-016, FR-014, NFR-005, NFR-010.
+- **Dependencies:** T-011.
+- **Description:** Add `api/routes/graph.py` with `GET /api/v1/graph/producers`, query validation and the existing analysis-run dependency. Register the router in `main.py`. Add integration tests for both views, shared band/album fixtures, isolated toggle, top-k/sort, decade/subgenre, caps/truncation, invalid run and OpenAPI path/schema presence.
+- **Done when:** endpoint and parameters match the spec; shared-node and isolated behavior are proven; OpenAPI exposes the new path and schemas; no migration is added.
+- **Verification:**
+  ```bash
+  cd backend
+  uv run ruff check .
+  uv run ruff format --check .
+  uv run --env-file ../.env pytest
+  ```
+  plus `uv run python -m hmde.openapi --output ../openapi.json`.
+- **Files:** `backend/src/hmde/api/routes/graph.py`, `backend/src/hmde/main.py`, `backend/tests/integration/test_api_producer_overview_graph.py`, `backend/tests/unit/test_openapi.py`, `openapi.json`.
+- **Evidence:** Pending.
+
+### T-013 — Add overview client and adapter
+
+- **Status:** Completed (2026-11-11).
+- **Requirements:** FR-002, FR-007, FR-018, NFR-006.
+- **Dependencies:** T-012.
+- **Description:** Add `getProducerOverviewGraph` and the overview query key. Add `adaptOverviewGraph` for producer, band and album nodes: validate view, merge metric attributes, compute degree-based sizes, derive incident producer lists for shared nodes, build details/table data and expose filtered counts.
+- **Done when:** generated API types compile; adapter rejects mixed views; shared nodes list every incident producer; table and details match the canvas; unit tests cover both views and filters.
+- **Verification:**
+  ```bash
+  cd frontend
+  npm run generate:api
+  npm run lint
+  npm run typecheck
+  npm run test
+  ```
+- **Files:** `frontend/src/api/producerGraph.ts`, `frontend/src/api/queryKeys.ts`, `frontend/src/graph/adapter.ts`, `frontend/src/graph/adapter.test.ts`.
+- **Evidence:** 2026-11-11: added the generated overview response type, `getProducerOverviewGraph`, the overview query key and `adaptOverviewGraph`. The adapter validates the view, filters by role/decade/subgenre, removes isolated producers on request, computes degree sizes, incident-producer lists and post-filter counts, marks producer search matches and adds producer names to the shared-node table detail. Unit tests cover both views, shared nodes, role/taxonomy/decade filters, isolated hiding and the API query mapping. Frontend lint, typecheck and 73 tests passed.
+
+### T-014 — Add `/graph` page, navigation, controls, details and table
+
+- **Status:** Completed (2026-11-11).
+- **Requirements:** FR-001, FR-003, FR-006, FR-008, FR-009, FR-010, FR-011, FR-017, FR-019, FR-020, FR-021, NFR-003, NFR-008.
+- **Dependencies:** T-013.
+- **Description:** Add the `/graph` route and primary `Graph` navigation. Build `ProducerOverviewPage` and `ProducerOverviewControls` with view tabs, producer selection/sort, decade/subgenre, isolated toggle, physics controls, URL state, counts, truncation, details and accessible table. Add producer and ego drill-down links.
+- **Done when:** global bands/albums views load, filters and toggle update counts/table immediately, shared-node selection lists connected producers, producer selection links to its ego graph, and empty/error/truncated states are recoverable.
+- **Verification:**
+  ```bash
+  cd frontend
+  npm run lint
+  npm run typecheck
+  npm run test
+  npm run build
+  ```
+- **Files:** `frontend/src/App.tsx`, `frontend/src/components/AppShell.tsx`, `frontend/src/pages/ProducerOverviewPage.tsx`, `frontend/src/components/ProducerOverviewControls.tsx`, `frontend/src/pages/ProducersPage.tsx`, `frontend/src/pages/ProducerDetailPage.tsx`, tests.
+- **Evidence:** 2026-11-11: added `/graph`, the primary `Graph` navigation item, producer-page and producer-detail entry links, the overview page and controls. The page carries view, producer limit/sort/order, decade, subgenre, isolated and selection URL state; shows post-filter counts, truncation and invalid-view notices; renders legend, canvas, accessible tables and a details panel with incident producers, entity links and ego-graph drill-down. Tests cover route/navigation links, server parameter updates, isolated hiding, shared-node details, drill-down links, truncation, empty and error states. Frontend lint, typecheck, 73 tests and build passed.
+
+### T-015 — Tune overview physics, labels and browser behavior
+
+- **Status:** Completed (2026-11-11).
+- **Requirements:** FR-004, FR-005, FR-012, FR-013, FR-015, FR-022, NFR-001, NFR-002, NFR-004, NFR-007, NFR-009.
+- **Dependencies:** T-014.
+- **Description:** Add the overview force preset and label decluttering. Verify initial fit, shared hubs, isolated producers, producer/album label visibility by zoom, dragging, freeze/resume/reheat, reduced motion, hidden-tab pause and the 398/968-node views in a headless browser. Use a documented finite settle if infinite physics is not usable.
+- **Done when:** the global network is readable and responsive, labels follow the contract, physics failures keep the table/details visible, and the chosen preset/mode is recorded.
+- **Verification:**
+  ```bash
+  cd frontend
+  npm run lint
+  npm run typecheck
+  npm run test
+  npm run build
+  ```
+  plus headless browser screenshots/probes for both views.
+- **Files:** `frontend/src/components/ProducerGraph.tsx`, `frontend/src/graph/styles.ts`, `frontend/src/index.css`, tests and docs.
+- **Evidence:** 2026-11-11: added an infinite overview force preset (`manyBodyStrength=-45`, `linkDistance=42–90`, type collision 8/7/10, `collideStrength=0.6`, `alphaDecay=0.035`, `velocityDecay=0.55`), a stable initial fit, degree-sized nodes, zoom-decluttered labels (bands always; producers/albums at 12px; selected/search matches always), muted isolated producers and search highlighting without recreating the graph. A headless Chromium probe on the v0.2 corpus loaded 398 nodes / 426 edges in `bands` (341 producers + 57 bands, 43 isolated producer entities represented by their shared band nodes) and 968 nodes / 1,134 edges in `albums` (384 producers + 584 albums, 43 isolated producers); the initial fit kept the networks inside the canvas, physics moved nodes, freeze/resume/reheat and dragging kept the page stable, search matched 5 producers, reduced motion started frozen with the table available, and shared-node selection listed all 32 producers for Motörhead. The albums isolated toggle reduced the loaded network to 893 nodes / 951 edges and 341 producers. Frontend lint, typecheck, 76 tests and build passed. Bands-view isolated producers share band entities, so they remain visible as band nodes to avoid deleting shared bands; the albums view hides them as producer nodes.
+
+### T-016 — Update documentation, run full checks and close CI
+
+- **Status:** Completed locally (2026-11-11); remote CI pending explicit authorization.
+- **Requirements:** FR-014, FR-015, FR-022, NFR-005.
+- **Dependencies:** T-012, T-014, T-015.
+- **Description:** Update API, frontend, roadmap, README, AGENTS, docs index and specs index. Record the overview endpoint, routes, limits, shared-neighbor rule, isolated toggle, physics preset and current corpus counts. Run full backend/frontend checks and Compose validation. Push only with explicit authorization and record remote CI.
+- **Done when:** docs match behavior; current-state docs reflect revision 6; full checks pass; remote CI passes; spec/tasks evidence and statuses are updated.
+- **Verification:**
+  ```bash
+  cd backend
+  uv sync
+  uv run ruff check .
+  uv run ruff format --check .
+  uv run pytest
+
+  cd ../frontend
+  npm ci
+  npm run generate:api
+  npm run lint
+  npm run typecheck
+  npm run test
+  npm run build
+
+  cd ..
+  docker compose config -q
+  ```
+- **Files:** `README.md`, `AGENTS.md`, `docs/03-data/api-v1.md`, `docs/01-architecture/frontend.md`, `docs/00-vision/roadmap.md`, `docs/README.md`, `specs/README.md`, `specs/011-graph-visualization/`.
+- **Evidence:** 2026-11-11: updated the API, frontend, roadmap, README, AGENTS, docs and spec indexes with the overview endpoint, `/graph`, shared-neighbor rule, 1,000-node cap, isolated semantics, overview physics preset and current corpus counts (398 band-view nodes, 968 album-view nodes; 893/951 with isolated producers hidden in the albums view). Full checks passed: backend 220 unit + 325 integration tests, Ruff and format; frontend `npm ci`, OpenAPI generation, lint, typecheck, 76 tests and production build; `docker compose config -q`. Remote CI was not run because pushing requires explicit authorization; the manual ego 500-node/drag feel review remains pending.
+
 ## 3. Coverage matrix
 
 ### Functional requirements
 
 | Requirement | Tasks |
 |---|---|
-| FR-001 | T-002 |
-| FR-002 | T-001, T-003 |
-| FR-003 | T-001, T-002, T-005 |
-| FR-004 | T-003, T-007, T-009, T-010 |
-| FR-005 | T-003, T-007 |
-| FR-006 | T-003, T-007, T-009 |
-| FR-007 | T-001, T-004, T-010 |
-| FR-008 | T-002, T-004, T-005 |
-| FR-009 | T-004 |
-| FR-010 | T-006 |
-| FR-011 | T-002, T-005, T-009 |
-| FR-012 | T-003, T-006 |
-| FR-013 | T-003, T-007 |
-| FR-014 | T-007 |
-| FR-015 | T-007, T-008, T-009, T-010 |
+| FR-001 | T-002, T-014 |
+| FR-002 | T-001, T-003, T-013 |
+| FR-003 | T-001, T-002, T-005, T-014 |
+| FR-004 | T-003, T-007, T-009, T-010, T-015 |
+| FR-005 | T-003, T-007, T-015 |
+| FR-006 | T-003, T-007, T-009, T-014 |
+| FR-007 | T-001, T-004, T-010, T-013, T-015 |
+| FR-008 | T-002, T-004, T-005, T-014 |
+| FR-009 | T-004, T-014 |
+| FR-010 | T-006, T-014 |
+| FR-011 | T-002, T-005, T-009, T-014 |
+| FR-012 | T-003, T-006, T-015 |
+| FR-013 | T-003, T-007, T-015 |
+| FR-014 | T-007, T-012, T-016 |
+| FR-015 | T-007, T-008, T-009, T-010, T-015, T-016 |
+| FR-016 | T-011, T-012 |
+| FR-017 | T-014 |
+| FR-018 | T-011, T-013 |
+| FR-019 | T-011, T-014 |
+| FR-020 | T-011, T-014 |
+| FR-021 | T-014 |
+| FR-022 | T-012, T-015, T-016 |
 
 ### Non-functional requirements
 
 | Requirement | Tasks |
 |---|---|
-| NFR-001 | T-002, T-003, T-005, T-008, T-009, T-010 |
-| NFR-002 | T-003, T-006 |
-| NFR-003 | T-006, T-010 |
-| NFR-004 | T-004 |
-| NFR-005 | T-007 |
-| NFR-006 | T-001, T-007 |
-| NFR-007 | T-003, T-006, T-009 |
-| NFR-008 | T-004, T-005, T-008 |
+| NFR-001 | T-002, T-003, T-005, T-008, T-009, T-010, T-015 |
+| NFR-002 | T-003, T-006, T-015 |
+| NFR-003 | T-006, T-010, T-014 |
+| NFR-004 | T-004, T-011, T-015 |
+| NFR-005 | T-007, T-012, T-016 |
+| NFR-006 | T-001, T-007, T-013, T-014 |
+| NFR-007 | T-003, T-006, T-009, T-015 |
+| NFR-008 | T-004, T-005, T-008, T-014 |
+| NFR-009 | T-015 |
+| NFR-010 | T-011, T-012 |
 
 ## 4. Validation evidence
 
@@ -244,7 +374,7 @@ T-001 establishes the typed client and adapter. T-002 adds the route/page shell.
 | AC-002 | Passed | Adapter tests |
 | AC-003 | Passed | Limit/truncation tests |
 | AC-004 | Passed | Physics config tests and headless browser smoke |
-| AC-005 | Pending manual | Drag/neighbor physics check |
+| AC-005 | Partial | Headless drag kept the page stable; manual neighbor-response review pending |
 | AC-006 | Passed | Control tests |
 | AC-007 | Passed | Style/adapter tests |
 | AC-008 | Passed | Filter tests |
@@ -254,19 +384,33 @@ T-001 establishes the typed client and adapter. T-002 adds the route/page shell.
 | AC-012 | Passed | Reduced-motion test |
 | AC-013 | Passed | Visibility test |
 | AC-014 | Pending manual | 500-node browser check |
-| AC-015 | Passed | Scope inspection |
-| AC-016 | Passed | 62 frontend tests, lint, typecheck and build |
+| AC-015 | Passed | Scope inspection; no schema changes |
+| AC-016 | Passed | 76 frontend tests, lint, typecheck and build |
 | AC-017 | Passed | Docs review |
 | AC-018 | Pending | Remote CI |
 | AC-019 | Passed | Album label style test and headless browser |
 | AC-020 | Passed | Layout config test and headless distance probe |
+| AC-021 | Passed | API/page tests; headless bands view 398 nodes / 426 edges |
+| AC-022 | Passed | API/page tests; headless albums view 968 nodes / 1,134 edges |
+| AC-023 | Passed | Shared-node API and adapter tests; no producer–producer edges |
+| AC-024 | Passed locally | Albums view hides 43 isolated producer nodes and leaves 893 nodes / 951 edges; bands-view isolated producers share band entities and remain visible as bands |
+| AC-025 | Passed | Route/navigation tests and producer entry links |
+| AC-026 | Passed | Overview details/accessibility tests; Motörhead details listed 32 producers |
+| AC-027 | Passed | Limits, truncation, filter and count tests |
+| AC-028 | Passed locally | Full backend/frontend checks and docs review |
+| AC-029 | Passed locally | 968-node album overview stayed responsive in headless Chromium |
 
 ## 5. Notes
 
 - Physics is presentation, not evidence.
 - d3-force links resolve endpoints through `linkId: (node) => node.id`; omitting it throws `node not found` and can blank the React root.
 - Layout errors must stay inside the canvas component and fall back to a frozen static layout.
-- E10 v1 uses E8 limits and client-side filters.
-- No full graph, API changes or new renderer.
+- The global overview is bounded to 1,000 nodes / 2,000 edges; the ego graph remains 500 / 2,000.
+- Shared band/album nodes are the only relationship encoding; no producer–producer edges.
+- The current bands view has 398 unique nodes / 426 edges; the albums view has 968 nodes / 1,134 simple edges. Both fit the cap without truncation.
+- Isolated producer nodes are visible by default. The albums view hides them client-side (968 → 893 nodes, 1,134 → 951 edges). In the bands view the 43 isolated producer entities are the same shared band nodes, so they remain visible as bands rather than deleting documented band connections.
+- The overview uses infinite physics with a compact preset: `manyBodyStrength=-45`, `linkDistance=42–90`, collision 8/7/10 by type, `collideStrength=0.6`, `alphaDecay=0.035`, `velocityDecay=0.55`; the initial view fits immediately and again after 1.2 s.
+- Overview labels are decluttered by zoom: bands always visible, producers/albums at 12 px, selected and search-matched labels always visible.
+- The only API change is the additive read-only overview endpoint; no schema migration or writes.
 - Manual physics/performance checks are required; jsdom cannot validate the feel.
 - Do not mark a task complete until its verification is executed.

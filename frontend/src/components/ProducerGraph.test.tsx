@@ -7,13 +7,15 @@ import { ProducerGraph } from './ProducerGraph'
 
 const originalMatchMedia = window.matchMedia
 
-const { cytoscapeMock, layoutRun, layoutStop, destroyMock } = vi.hoisted(() => {
+const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock } = vi.hoisted(() => {
   const run = vi.fn()
   const stop = vi.fn()
   const destroy = vi.fn()
+  const fit = vi.fn()
   const layout = vi.fn(() => ({ run, stop }))
   const cy = {
     layout,
+    fit,
     on: vi.fn(),
     removeListener: vi.fn(),
     height: vi.fn(() => 720),
@@ -26,6 +28,7 @@ const { cytoscapeMock, layoutRun, layoutStop, destroyMock } = vi.hoisted(() => {
     layoutRun: run,
     layoutStop: stop,
     destroyMock: destroy,
+    fitMock: fit,
   }
 })
 
@@ -66,6 +69,7 @@ beforeEach(() => {
   layoutRun.mockClear()
   layoutStop.mockClear()
   destroyMock.mockClear()
+  fitMock.mockClear()
 })
 
 describe('ProducerGraph', () => {
@@ -99,6 +103,22 @@ describe('ProducerGraph', () => {
     expect(layoutRun).toHaveBeenCalledTimes(3)
   })
 
+
+  it('uses a compact overview preset and fits the initial network', () => {
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} variant="overview" />)
+
+    const layoutOptions = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout.mock.calls.at(-1)?.[0]
+    expect(layoutOptions.manyBodyStrength).toBeGreaterThan(-100)
+    expect(layoutOptions.manyBodyStrength).toBeLessThan(0)
+    expect(layoutOptions.linkDistance).toBeLessThan(180)
+    expect(layoutOptions.collideStrength).toBeLessThan(0.8)
+    expect(layoutOptions.collideRadius({ type: 'producer' })).toBe(8)
+    expect(layoutOptions.collideRadius({ type: 'album' })).toBe(7)
+    expect(layoutOptions.collideRadius({ type: 'band' })).toBe(10)
+    expect(fitMock).toHaveBeenCalled()
+    expect(screen.getByLabelText('Global producer network graph')).toBeInTheDocument()
+  })
 
   it('uses infinite d3-force options and starts frozen under reduced motion', () => {
     Object.defineProperty(window, 'matchMedia', {

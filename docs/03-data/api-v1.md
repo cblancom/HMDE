@@ -1,7 +1,7 @@
 # Read-only API v1 (E8)
 
-- **Status:** Validated
-- **Spec:** [SPEC-009](../../specs/009-read-api/spec.md)
+- **Status:** Validated for E8; the additive producer overview endpoint is implemented locally for E10 (SPEC-011) with remote CI pending
+- **Specs:** [SPEC-009](../../specs/009-read-api/spec.md), [SPEC-011](../../specs/011-graph-visualization/spec.md)
 - **Base path:** `/api/v1`
 
 ## Entity endpoints
@@ -26,6 +26,7 @@
 | GET | `/api/v1/producers` | Producer ranking by albums, bands, betweenness or name |
 | GET | `/api/v1/producers/{producer_id}` | Producer metrics, community and top albums/bands |
 | GET | `/api/v1/producers/{producer_id}/graph` | Bounded `albums` or `bands` producer graph |
+| GET | `/api/v1/graph/producers` | Global producer overview over the E7 graph layers |
 | GET | `/api/v1/analysis-runs` | E7 run history |
 | GET | `/api/v1/analysis-runs/{run_id}` | E7 run detail |
 | GET | `/api/v1/analytics/summary` | Graph/support/concentration summary |
@@ -50,6 +51,33 @@ If no completed run exists, analytics/graph/producer endpoints return `503`. A r
 - `include_evidence=true` adds bounded album evidence.
 - Responses include `meta.analysis_run_id`, versions, limits and `truncated`.
 
+## Global producer overview
+
+`GET /api/v1/graph/producers?view=albums|bands`
+
+- `view`: `bands` default; `albums` alternative.
+- `producer_limit`: `0` (all) default; positive values select the top-k after sorting.
+- `producer_sort`: `album_count`, `band_count`, `betweenness` or `name`; `order`: `asc` or `desc`.
+- `decade` and `subgenre` select producers through album credits; the albums view also restricts album targets.
+- `include_isolated`: `true` default; `false` omits producer rows with no outgoing producer–band edges.
+- `include_evidence`: bounded edge evidence, mainly for band-view role mixes.
+- `max_nodes`: 1,000; `max_edges`: 2,000.
+- `analysis_run`: optional E7 run selection.
+
+The response reuses `ProducerGraphNode` and `ProducerGraphEdge` and adds overview meta with `scope=overview`, `matched_producers`, `selected_producers`, `include_isolated`, `truncated` and the limits. Producer nodes include `album_count`, `band_count`, `betweenness` and `community_key`.
+
+Shared semantics:
+
+- a band or album node appears once and connects to every credited producer;
+- album role rows are deduplicated to one edge per producer–album pair (`role` is the single role or `mixed`);
+- no producer–producer edges are synthesized.
+
+Current v0.2 corpus:
+
+- bands view: 398 unique nodes / 426 edges (341 producer sources + 57 bands; 384 producer entities because 43 bands also carry the producer role);
+- albums view: 968 nodes / 1,134 simple edges (1,151 role rows);
+- the API can omit isolated producer rows with `include_isolated=false`; client-side hiding in the albums view also removes their producer nodes and orphaned albums, leaving 893 nodes / 951 edges.
+
 ## Pagination and filters
 
 List endpoints use `limit` (default 20, max 200), `offset`, a resource-specific whitelist `sort` and `order`. Invalid values return `422`.
@@ -58,9 +86,9 @@ Retired bands are excluded from default lists/search and remain accessible by di
 
 ## Local verification
 
-- Backend suite: 313 tests passed.
+- Backend suite: 220 unit tests passed with 105 integration tests skipped; 325 integration tests passed with `TEST_DATABASE_URL`.
 - Ruff check/format: passed.
-- OpenAPI drift check: passed.
-- Frontend lint/typecheck/tests/build: passed.
-- Full-corpus API smoke: 384 producers; graph response 5 nodes/4 edges in 25.8 ms.
-- Remote CI: [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) passed for commit `bb4ca1a`.
+- OpenAPI generation includes `/api/v1/graph/producers` and the overview schemas; generated TypeScript types compile.
+- Frontend lint, typecheck, 76 tests and production build: passed.
+- Full-corpus overview smoke: 398 nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`; no truncation at the 1,000-node cap.
+- E10 remote CI: pending. The last passed E8 run is [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) for commit `bb4ca1a`.

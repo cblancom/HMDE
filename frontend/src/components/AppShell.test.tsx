@@ -32,6 +32,7 @@ describe('AppShell', () => {
     expect(screen.getByRole('main')).toHaveAttribute('id', 'main-content')
     expect(screen.getByRole('link', { name: 'Bands' })).toHaveAttribute('href', '/bands')
     expect(screen.getByRole('link', { name: 'Producers' })).toHaveAttribute('href', '/producers')
+    expect(screen.getByRole('link', { name: 'Graph' })).toHaveAttribute('href', '/graph')
 
     fireEvent.change(screen.getByLabelText('Search the archive'), {
       target: { value: 'iron' },

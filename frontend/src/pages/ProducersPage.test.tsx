@@ -39,6 +39,10 @@ describe('ProducersPage', () => {
       'href',
       '/producers/producer-1',
     )
+    expect(screen.getByRole('link', { name: 'Open producer network' })).toHaveAttribute(
+      'href',
+      '/graph',
+    )
     expect(screen.getByText('1 producer')).toBeInTheDocument()
   })
 

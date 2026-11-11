@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { FormEvent } from 'react'
-import { useSearchParams } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 
 import { getProducers, type ProducerSort } from '../api/producers'
 import { queryKeys } from '../api/queryKeys'
@@ -57,6 +57,7 @@ export function ProducersPage() {
       <header className="page-header">
         <h1 id="producers-heading">Producers</h1>
         <p>See who shaped the records, how often they worked and where they connect.</p>
+        <p><Link className="button" to="/graph">Open producer network</Link></p>
       </header>
 
       <form className="filters" role="search" onSubmit={handleSubmit}>

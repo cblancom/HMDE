@@ -207,6 +207,33 @@ class ProducerGraphResponse(BaseModel):
     meta: ProducerGraphMeta
 
 
+class ProducerOverviewGraphLimits(BaseModel):
+    producer_limit: int
+    max_nodes: int
+    max_edges: int
+
+
+class ProducerOverviewGraphMeta(BaseModel):
+    scope: Literal["overview"]
+    view: Literal["albums", "bands"]
+    analysis_run_id: UUID
+    analysis_version: str
+    dataset_version: str
+    taxonomy_version: str
+    graph_version: str
+    truncated: bool
+    matched_producers: int
+    selected_producers: int
+    include_isolated: bool
+    limits: ProducerOverviewGraphLimits
+
+
+class ProducerOverviewGraphResponse(BaseModel):
+    nodes: list[ProducerGraphNode]
+    edges: list[ProducerGraphEdge]
+    meta: ProducerOverviewGraphMeta
+
+
 class TaxonomyNodeResponse(BaseModel):
     code: str
     name: str

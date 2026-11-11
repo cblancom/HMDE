@@ -1,9 +1,9 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 graph implemented locally; headless physics, spacing and album-label checks passed; manual interaction and remote CI pending
-- **Stage:** E9
-- **Spec:** [SPEC-010](../../specs/010-entity-explorer/spec.md)
-- **Design plan:** [plan.md](../../specs/010-entity-explorer/plan.md)
+- **Status:** E9 validated; E10 global overview and ego graph implemented locally; headless physics, spacing, labels and overview checks passed; manual interaction and remote CI pending
+- **Stage:** E10
+- **Spec:** [SPEC-011](../../specs/011-graph-visualization/spec.md)
+- **Design plan:** [plan.md](../../specs/011-graph-visualization/plan.md)
 
 ## 1. Routes
 
@@ -16,7 +16,8 @@
 | `/albums/:albumId` | Album detail, taxonomy and support-aware credits |
 | `/producers` | Producer rankings with sort, search and filters |
 | `/producers/:producerId` | Producer metrics, community, top albums and bands |
-| `/producers/:producerId/graph` | Producer graph, album/band views and force physics |
+| `/producers/:producerId/graph` | Producer ego graph, album/band views and force physics |
+| `/graph` | Global producer overview, shared band/album nodes and ego drill-down |
 | `/search?q=` | Grouped bounded search |
 | `*` | Not-found page |
 
@@ -50,6 +51,7 @@ Typed modules under `frontend/src/api/` import response types from the generated
 - `albums.ts`
 - `artists.ts`
 - `producers.ts`
+- `producerGraph.ts` (ego and global overview clients)
 - `search.ts`
 - `taxonomy.ts`
 - `queryKeys.ts`
@@ -70,43 +72,48 @@ No hand-written duplicate entity interfaces.
 
 ## 6. Graph views
 
-E10 adds a producer graph page with two separate views:
+E10 has two graph scopes built on separate endpoints and the same `cytoscape-d3-force` lifecycle:
 
-- `view=bands`: producer and band/artist nodes.
-- `view=albums`: producer and album nodes.
+- `/graph` is the global overview over `GET /api/v1/graph/producers`.
+- `/producers/:producerId/graph` is the ego drill-down over the bounded E8 endpoint.
 
-The page uses the bounded E8 graph endpoint, `cytoscape-d3-force` and the same studio-ledger visual system. Physics can be frozen, resumed or reheated; it pauses when the tab is hidden and starts frozen under `prefers-reduced-motion`.
+Both use `view=bands` (producer + band/artist nodes) or `view=albums` (producer + album nodes). Shared band/album nodes connect to every credited producer; no producer–producer edges are synthesized. The overview has a 1,000-node / 2,000-edge cap and the ego graph keeps 500 / 2,000.
 
 The force layout must pass `linkId: (node) => node.id`. d3-force links carry canonical UUID endpoints, while its default accessor assumes array indices; omitting the accessor throws `node not found: <uuid>` and, because the layout starts inside a React effect, can unmount the root and blank the page. If a layout cannot start, the component catches the error, applies a static `breadthfirst` layout and freezes physics so the page and table fallback remain available.
 
-Neighbors use type-sized collision radii, stronger repulsion and a link distance computed from the loaded node count and canvas height (180–300, capped to avoid clipping), so they spread around the producer instead of bunching. The canvas grows with the viewport (`clamp(32rem, 65vh, 48rem)`). Album titles are always visible below the node with wrapping and a subtle background; selection adds a border and details, not the label.
+Ego preset: type-sized collision radii (22/28/34), `collideStrength=0.9`, `collideIterations=2`, `manyBodyStrength=-320` and a node-count link distance of 180–300, capped by the canvas height. The canvas grows with the viewport (`clamp(32rem, 65vh, 48rem)`) and album titles are always visible.
 
-Client-side filters cover role, and decade/taxonomy in the album view. Band-view decade/taxonomy controls are disabled because E8 band nodes do not carry album taxonomy/year metadata. API truncation remains visible.
+Overview preset: infinite physics with `manyBodyStrength=-45`, `linkDistance=42–90`, collision 8/7/10 by producer/album/band, `collideStrength=0.6`, `collideIterations=1`, `alphaDecay=0.035` and `velocityDecay=0.55`. The initial view fits immediately and again after 1.2 s. Node size reflects filtered degree. Labels declutter by zoom: bands are always visible, producer and album labels appear at a 12 px rendered font size, and selected or search-matched labels always show. Search highlights matching producers without recreating the Cytoscape instance. Isolated producer nodes are muted.
 
-The v0.1 cap is 500 nodes and 2,000 edges. A table fallback lists the loaded nodes and edges.
+Both scopes can be frozen, resumed or reheated; physics pauses when the tab is hidden and starts frozen under `prefers-reduced-motion`.
+
+Overview controls cover view, producer top-k, sort/order, decade, subgenre, role, producer search/highlight and the isolated toggle. Server-side selection uses producer limit/sort/decade/subgenre; role, search and the toggle are client-side over the loaded network. Counts and API truncation remain visible. The accessible table lists the filtered nodes and edges, and details list incident producers with ego-graph links.
+
+Current v0.2 corpus: 398 unique nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`. The albums isolated toggle reduces the loaded network to 893 nodes / 951 edges. In the bands view the 43 isolated producer entities share band entities and remain visible as bands.
 
 ## 7. Boundary
 
 E10 does not include:
 
-- E8 API or schema changes;
+- database schema changes or migrations;
 - Tailwind, Plotly or a component library;
 - a new graph renderer;
-- backend changes, writes or authentication;
+- writes or authentication;
 - Playwright, performance, accessibility audit or deployment (E11);
 - corpus expansion (E13).
 
+The only API change is the additive read-only overview endpoint.
+
 ## 8. Verification
 
-Local checks on 2026-11-10:
+Local checks on 2026-11-11:
 
-- frontend lint, typecheck, **62 tests**, production build;
-- headless Chromium smoke on the `bands` and `albums` graph views (populated root, physics running, table fallback, no console errors); the runtime probe confirmed centered, evenly spaced neighbors and visible album labels;
-- backend 313 tests, Ruff and format;
-- OpenAPI/type generation;
+- frontend `npm ci`, OpenAPI generation, lint, typecheck, **76 tests**, production build;
+- headless Chromium on `/graph`: 398-node bands and 968-node albums views, initial fit, live physics, freeze/resume/reheat, dragging, search highlight, isolated toggle, reduced-motion frozen start and accessible table;
+- shared-node selection for Motörhead listed 32 producers;
+- backend 220 unit tests with 105 integration tests skipped; 325 integration tests with `TEST_DATABASE_URL`; Ruff and format;
 - `docker compose config -q`;
 - no Tailwind/Plotly/UI-kit dependencies;
-- no hard-coded taxonomy arrays;
-- graph API calls limited to the E8 endpoint.
+- no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 remote CI is pending.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 remote CI and the manual ego interaction review are pending.

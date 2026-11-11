@@ -27,6 +27,9 @@ from hmde.schemas.api import (
     ProducerGraphNode,
     ProducerGraphResponse,
     ProducerListItem,
+    ProducerOverviewGraphLimits,
+    ProducerOverviewGraphMeta,
+    ProducerOverviewGraphResponse,
 )
 
 PRODUCER_ALBUM = "producer_album"
@@ -236,6 +239,221 @@ def get_producer_graph(
         ),
     )
     return ProducerGraphResponse(nodes=node_payload, edges=edge_payload, meta=meta)
+
+
+def get_producer_overview_graph(
+    session: Session,
+    run: AnalysisRun,
+    *,
+    view: str,
+    producer_limit: int,
+    producer_sort: str,
+    order: str,
+    decade: str | None,
+    subgenre: str | None,
+    include_isolated: bool,
+    include_evidence: bool,
+    max_nodes: int,
+    max_edges: int,
+) -> ProducerOverviewGraphResponse:
+    all_nodes = {
+        node.id: node
+        for node in session.scalars(select(GraphNode).where(GraphNode.analysis_run_id == run.id))
+    }
+    nodes_by_entity = {
+        node.entity_id: node
+        for node in all_nodes.values()
+        if node.node_type == "artist" and _is_producer_node(node)
+    }
+    ranking, matched = list_producers(
+        session,
+        run,
+        q=None,
+        decade=decade,
+        subgenre=subgenre,
+        sort=producer_sort,
+        order=order,
+        limit=1_000_000,
+        offset=0,
+    )
+    selected_rows = ranking[:producer_limit] if producer_limit else ranking
+    producer_rows = {item.id: item for item in selected_rows if item.id in nodes_by_entity}
+    producer_order = [
+        nodes_by_entity[item.id].id for item in selected_rows if item.id in producer_rows
+    ]
+    producer_ids = set(producer_order)
+
+    layer = PRODUCER_ALBUM if view == "albums" else PRODUCER_BAND
+    edge_rows: list[GraphEdge] = []
+    if producer_ids:
+        edge_rows = list(
+            session.scalars(
+                select(GraphEdge).where(
+                    GraphEdge.analysis_run_id == run.id,
+                    GraphEdge.layer_code == layer,
+                    GraphEdge.source_node_id.in_(producer_ids),
+                )
+            )
+        )
+
+    filtered_edges: list[GraphEdge] = []
+    for edge in edge_rows:
+        target = all_nodes.get(edge.target_node_id)
+        if target is None:
+            continue
+        if view == "albums":
+            attributes = target.attributes if isinstance(target.attributes, dict) else {}
+            if decade and attributes.get("decade") != decade:
+                continue
+            if subgenre and attributes.get("primary_code") != subgenre:
+                continue
+        filtered_edges.append(edge)
+
+    grouped: dict[tuple[UUID, UUID], list[GraphEdge]] = defaultdict(list)
+    for edge in filtered_edges:
+        grouped[(edge.source_node_id, edge.target_node_id)].append(edge)
+
+    if not include_isolated:
+        connected = {source_id for source_id, _ in grouped}
+        producer_order = [node_id for node_id in producer_order if node_id in connected]
+
+    truncated = matched > len(selected_rows)
+    if len(producer_order) > max_nodes:
+        producer_order = producer_order[:max_nodes]
+        truncated = True
+    selected_nodes = set(producer_order)
+
+    merged_edges: list[tuple[GraphEdge, list[str]]] = []
+    for rows in grouped.values():
+        source_id = rows[0].source_node_id
+        if source_id not in selected_nodes:
+            continue
+        best = max(
+            rows,
+            key=lambda item: (
+                item.support_ratio if item.support_ratio is not None else -1.0,
+                item.weight,
+                str(item.id),
+            ),
+        )
+        merged_edges.append((best, sorted({item.role_code for item in rows})))
+    merged_edges.sort(
+        key=lambda item: (
+            -item[0].weight,
+            str(all_nodes[item[0].source_node_id].entity_id),
+            str(all_nodes[item[0].target_node_id].entity_id),
+        )
+    )
+
+    selected_edges: list[GraphEdge] = []
+    edge_roles: dict[UUID, list[str]] = {}
+    selected_producer_ids = set(producer_order)
+    for edge, roles in merged_edges:
+        if len(selected_edges) >= max_edges:
+            truncated = True
+            break
+        if edge.target_node_id not in selected_nodes:
+            if len(selected_nodes) >= max_nodes:
+                truncated = True
+                continue
+            selected_nodes.add(edge.target_node_id)
+        selected_edges.append(edge)
+        edge_roles[edge.id] = roles
+
+    target_ids = {edge.target_node_id for edge in selected_edges}
+    edge_source_ids = {edge.source_node_id for edge in selected_edges}
+    node_payload = [
+        _overview_node_payload(
+            all_nodes[node_id],
+            view=view,
+            producer_row=producer_rows.get(all_nodes[node_id].entity_id),
+            display_type=(
+                "band"
+                if view == "bands" and node_id in target_ids and node_id not in edge_source_ids
+                else None
+            ),
+        )
+        for node_id in sorted(selected_nodes, key=str)
+        if node_id in all_nodes
+    ]
+    edge_payload = [
+        _overview_edge_payload(
+            edge,
+            nodes_by_id=all_nodes,
+            roles=edge_roles[edge.id],
+            include_evidence=include_evidence,
+        )
+        for edge in selected_edges
+    ]
+    meta = ProducerOverviewGraphMeta(
+        scope="overview",
+        view=view,
+        analysis_run_id=run.id,
+        analysis_version=run.analysis_version,
+        dataset_version=run.dataset_version,
+        taxonomy_version=run.taxonomy_version,
+        graph_version=run.graph_version,
+        truncated=truncated,
+        matched_producers=matched,
+        selected_producers=sum(1 for node_id in selected_nodes if node_id in selected_producer_ids),
+        include_isolated=include_isolated,
+        limits=ProducerOverviewGraphLimits(
+            producer_limit=producer_limit,
+            max_nodes=max_nodes,
+            max_edges=max_edges,
+        ),
+    )
+    return ProducerOverviewGraphResponse(nodes=node_payload, edges=edge_payload, meta=meta)
+
+
+def _overview_node_payload(
+    node: GraphNode,
+    *,
+    view: str,
+    producer_row: ProducerListItem | None,
+    display_type: str | None,
+) -> ProducerGraphNode:
+    payload = _node_payload(node, view=view)
+    if producer_row is not None and "producer" in node.roles:
+        attributes = dict(payload.attributes)
+        attributes.update(
+            {
+                "album_count": producer_row.album_count,
+                "band_count": producer_row.band_count,
+                "betweenness": producer_row.betweenness,
+                "community_key": producer_row.community_key,
+            }
+        )
+        payload = payload.model_copy(update={"attributes": attributes})
+    if display_type is not None and payload.type != display_type:
+        payload = payload.model_copy(update={"type": display_type})
+    return payload
+
+
+def _overview_edge_payload(
+    edge: GraphEdge,
+    *,
+    nodes_by_id: dict[UUID, GraphNode],
+    roles: list[str],
+    include_evidence: bool,
+) -> ProducerGraphEdge:
+    source = nodes_by_id[edge.source_node_id]
+    target = nodes_by_id[edge.target_node_id]
+    evidence = dict(edge.evidence) if include_evidence else {}
+    if include_evidence and len(roles) > 1:
+        evidence["roles"] = roles
+    return ProducerGraphEdge(
+        source=source.entity_id,
+        target=target.entity_id,
+        layer=edge.layer_code,
+        role=roles[0] if len(roles) == 1 else "mixed",
+        weight=edge.weight,
+        support_ratio=edge.support_ratio,
+        supporting_recordings=edge.supporting_recordings,
+        album_recordings=edge.album_recordings,
+        album_count=edge.evidence.get("album_count") if isinstance(edge.evidence, dict) else None,
+        evidence=evidence,
+    )
 
 
 def _producer_node(session: Session, *, run: AnalysisRun, producer_id: UUID) -> GraphNode | None:
