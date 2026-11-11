@@ -137,7 +137,7 @@ No generic repository layer is created over SQLAlchemy. API services encapsulate
 | TanStack Query | Server state and caching |
 | React Router | Navigation |
 | Custom CSS | Styling; Tailwind is deferred until justified |
-| Cytoscape.js | Graph visualization |
+| Cytoscape.js + cytoscape-d3-force | Graph visualization and live force physics |
 | Plotly | Statistical and temporal charts |
 | Docker Compose | PostgreSQL, backend and development profiles |
 | GitHub Actions | CI |

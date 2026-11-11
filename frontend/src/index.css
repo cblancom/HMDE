@@ -721,3 +721,163 @@ select:focus {
   font-family: var(--reading);
   font-size: 0.9rem;
 }
+
+.graph-page {
+  max-width: 80rem;
+}
+
+.graph-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  background: var(--sheet);
+}
+
+.view-tabs {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.graph-field {
+  min-width: 7rem;
+}
+
+.producer-graph {
+  margin-top: 1rem;
+}
+
+.graph-toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  background: var(--sheet);
+}
+
+.graph-toolbar h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.graph-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.producer-graph-canvas {
+  min-height: clamp(32rem, 65vh, 48rem);
+  margin: 0;
+  border: 1px solid var(--line);
+  background: #dde2dc;
+}
+
+.graph-legend-panel,
+.graph-filters,
+.graph-details {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  background: var(--sheet);
+}
+
+.graph-legend-panel h2,
+.graph-details h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 0.8rem;
+  list-style: none;
+}
+
+.graph-legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.legend-swatch--person,
+.legend-swatch--group,
+.legend-swatch--album,
+.legend-swatch--band {
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+.legend-swatch--person { border-radius: 50%; background: var(--oxide); }
+.legend-swatch--group { clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%); background: var(--brass); }
+.legend-swatch--album { background: #22a884; }
+.legend-year { gap: 0.45rem; }
+.legend-year__scale {
+  width: 4.5rem;
+  height: 0.5rem;
+  background: linear-gradient(90deg, #440154, #414487, #2a788e, #22a884, #7ad151, #c7d64f, #fde725);
+}
+.legend-swatch--band { background: var(--petrol); border-radius: 0.2rem; }
+.legend-swatch--solid { width: 1.4rem; height: 2px; background: var(--petrol); }
+.legend-swatch--dashed { width: 1.4rem; height: 2px; background: repeating-linear-gradient(90deg, var(--petrol) 0 3px, transparent 3px 6px); }
+
+.graph-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+}
+
+.graph-note {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 0.75rem;
+}
+
+.graph-empty {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-left: 4px solid var(--brass);
+  background: var(--sheet);
+}
+
+.graph-empty p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 0.85rem;
+}
+
+.graph-table-fallback {
+  margin-top: 1rem;
+  border-top: 2px solid var(--ink);
+}
+
+.graph-table-fallback summary {
+  padding: 0.8rem 0;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.graph-table-fallback .table-wrap {
+  margin-bottom: 1rem;
+}

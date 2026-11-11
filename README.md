@@ -14,6 +14,7 @@ The canonical E2 fixture dataset covers 42 bands and 1980–2000. The active E3 
 - **EDA v0.1:** SPEC-007 validated. The report `eda-1267fdcced62b7da` analyzes 57 bands, 731 albums, 32,665 credit contexts, taxonomy distributions, producer concentration and descriptive co-credit frequencies. Remote CI run 42548567359 passed.
 - **Network v0.1:** SPEC-008 validated. The full run `net-a0b7c1f41ac5c92d` persists producer–album and producer–band layers: 1,134 simple producer–album edges, 1,151 role records, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed.
 - **API v1:** SPEC-009 validated. Entity, producer, analytics, taxonomy, search and bounded graph endpoints are available under `/api/v1`. Remote CI run 42741669410 passed.
+- **Graph v0.1:** SPEC-011 implemented locally. The producer graph uses Cytoscape with `cytoscape-d3-force`, separate album/band views and a 500-node v0.1 cap; the force layout uses canonical node ids, type-sized collision and a canvas-aware link distance, and falls back to a frozen static layout on failure. Album titles are always visible. Headless browser physics, spacing and label checks passed; manual interaction and remote CI are pending.
 - **Explorer v0.1:** SPEC-010 validated. Band, album, producer and search views use the E8 API and existing CSS; Tailwind is deferred. Remote CI run 42747146170 passed.
 - **Current SDD index:** [`specs/README.md`](specs/README.md).
 
@@ -89,6 +90,7 @@ See [API v1](docs/03-data/api-v1.md) for the full resource list.
 | `/albums/:albumId` | Album detail and credits |
 | `/producers` | Producer rankings |
 | `/producers/:producerId` | Producer detail and metrics |
+| `/producers/:producerId/graph` | Producer graph with force physics |
 | `/search` | Grouped search |
 
 See [Frontend explorer](docs/01-architecture/frontend.md) for routes and design notes.

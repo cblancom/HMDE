@@ -51,6 +51,10 @@ describe('ProducerDetailPage', () => {
 
     expect(await screen.findByRole('heading', { name: 'Martin Birch', level: 1 })).toBeInTheDocument()
     expect(screen.getByText('community-001')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Open graph' })).toHaveAttribute(
+      'href',
+      '/producers/producer-1/graph',
+    )
     const links = await screen.findAllByRole('link', { name: 'Iron Maiden' })
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/albums/album-1',

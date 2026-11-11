@@ -7,6 +7,7 @@ import { BandDetailPage } from './pages/BandDetailPage'
 import { BandsPage } from './pages/BandsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 import { ProducerDetailPage } from './pages/ProducerDetailPage'
+import { ProducerGraphPage } from './pages/ProducerGraphPage'
 import { ProducersPage } from './pages/ProducersPage'
 import { SearchPage } from './pages/SearchPage'
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/albums/:albumId" element={<AlbumDetailPage />} />
         <Route path="/producers" element={<ProducersPage />} />
         <Route path="/producers/:producerId" element={<ProducerDetailPage />} />
+        <Route path="/producers/:producerId/graph" element={<ProducerGraphPage />} />
         <Route path="/search" element={<SearchPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>

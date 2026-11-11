@@ -1,6 +1,6 @@
 # Frontend: entity explorer
 
-- **Status:** Validated
+- **Status:** E9 validated; E10 graph implemented locally; headless physics, spacing and album-label checks passed; manual interaction and remote CI pending
 - **Stage:** E9
 - **Spec:** [SPEC-010](../../specs/010-entity-explorer/spec.md)
 - **Design plan:** [plan.md](../../specs/010-entity-explorer/plan.md)
@@ -16,6 +16,7 @@
 | `/albums/:albumId` | Album detail, taxonomy and support-aware credits |
 | `/producers` | Producer rankings with sort, search and filters |
 | `/producers/:producerId` | Producer metrics, community, top albums and bands |
+| `/producers/:producerId/graph` | Producer graph, album/band views and force physics |
 | `/search?q=` | Grouped bounded search |
 | `*` | Not-found page |
 
@@ -67,26 +68,45 @@ No hand-written duplicate entity interfaces.
 - Reduced-motion media query.
 - Cytoscape initialization is guarded when canvas is unavailable.
 
-## 6. Boundary
+## 6. Graph views
 
-E9 does not include:
+E10 adds a producer graph page with two separate views:
 
-- the full producer graph page (E10);
-- producer graph API calls;
+- `view=bands`: producer and band/artist nodes.
+- `view=albums`: producer and album nodes.
+
+The page uses the bounded E8 graph endpoint, `cytoscape-d3-force` and the same studio-ledger visual system. Physics can be frozen, resumed or reheated; it pauses when the tab is hidden and starts frozen under `prefers-reduced-motion`.
+
+The force layout must pass `linkId: (node) => node.id`. d3-force links carry canonical UUID endpoints, while its default accessor assumes array indices; omitting the accessor throws `node not found: <uuid>` and, because the layout starts inside a React effect, can unmount the root and blank the page. If a layout cannot start, the component catches the error, applies a static `breadthfirst` layout and freezes physics so the page and table fallback remain available.
+
+Neighbors use type-sized collision radii, stronger repulsion and a link distance computed from the loaded node count and canvas height (180–300, capped to avoid clipping), so they spread around the producer instead of bunching. The canvas grows with the viewport (`clamp(32rem, 65vh, 48rem)`). Album titles are always visible below the node with wrapping and a subtle background; selection adds a border and details, not the label.
+
+Client-side filters cover role, and decade/taxonomy in the album view. Band-view decade/taxonomy controls are disabled because E8 band nodes do not carry album taxonomy/year metadata. API truncation remains visible.
+
+The v0.1 cap is 500 nodes and 2,000 edges. A table fallback lists the loaded nodes and edges.
+
+## 7. Boundary
+
+E10 does not include:
+
+- E8 API or schema changes;
 - Tailwind, Plotly or a component library;
-- backend, API or schema changes;
-- writes or authentication.
+- a new graph renderer;
+- backend changes, writes or authentication;
+- Playwright, performance, accessibility audit or deployment (E11);
+- corpus expansion (E13).
 
-## 7. Verification
+## 8. Verification
 
 Local checks on 2026-11-10:
 
-- frontend lint, typecheck, **42 tests**, production build;
+- frontend lint, typecheck, **62 tests**, production build;
+- headless Chromium smoke on the `bands` and `albums` graph views (populated root, physics running, table fallback, no console errors); the runtime probe confirmed centered, evenly spaced neighbors and visible album labels;
 - backend 313 tests, Ruff and format;
 - OpenAPI/type generation;
 - `docker compose config -q`;
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays;
-- no producer graph endpoint calls.
+- graph API calls limited to the E8 endpoint.
 
-Remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) passed for commit `afb5c04`.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 remote CI is pending.

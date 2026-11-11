@@ -9,5 +9,7 @@ export const queryKeys = {
   artists: (id: string) => ['artist', id] as const,
   producers: (params: Record<string, unknown>) => ['producers', params] as const,
   producer: (id: string) => ['producer', id] as const,
+  producerGraph: (id: string, params: Record<string, unknown>) =>
+    ['producer-graph', id, params] as const,
   search: (q: string, limit: number) => ['search', q, limit] as const,
 }

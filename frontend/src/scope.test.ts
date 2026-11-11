@@ -29,12 +29,14 @@ describe('E9 scope guards', () => {
       devDependencies?: Record<string, string>
     }
     const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies }
-    expect(Object.keys(dependencies).filter((name) => /tailwind|plotly|mui|chakra|antd/i.test(name))).toEqual([])
+    expect(
+      Object.keys(dependencies).filter((name) => /tailwind|plotly|mui|chakra|antd|react-force-graph/i.test(name)),
+    ).toEqual([])
+    expect(dependencies['cytoscape-d3-force']).toBeDefined()
   })
 
-  it('does not call producer graph endpoints or hardcode taxonomy options', () => {
+  it('does not hardcode taxonomy options', () => {
     const text = sourceText()
-    expect(text).not.toMatch(/producers\/.*graph|getProducerGraph|ProducerGraph/)
     expect(text).not.toContain('SUBGENRES')
     expect(text).not.toMatch(/heavy-metal|thrash-metal|death-metal/)
   })
