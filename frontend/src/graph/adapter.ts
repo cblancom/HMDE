@@ -58,11 +58,28 @@ export type OverviewCounts = {
   hiddenIsolatedProducers: number
 }
 
+export type YearRange = {
+  min: number
+  max: number
+}
+
+export type OverviewIndexRow = {
+  id: string
+  label: string
+  count: number
+}
+
 export type AdaptedOverviewGraph = AdaptedGraph & {
   counts: OverviewCounts
   degreeById: Record<string, number>
   incidentProducersById: Record<string, ProducerGraphNode[]>
+  allIncidentProducersById: Record<string, ProducerGraphNode[]>
+  yearRange: YearRange | null
 }
+
+const OVERVIEW_YEAR_LIGHT = '#bcd8c2'
+const OVERVIEW_YEAR_DARK = '#123c38'
+export const OVERVIEW_YEAR_GRADIENT = `linear-gradient(90deg, ${OVERVIEW_YEAR_LIGHT}, ${OVERVIEW_YEAR_DARK})`
 
 const YEAR_COLORS: Array<[number, string]> = [
   [1960, '#440154'],
@@ -161,6 +178,7 @@ export function adaptOverviewGraph(
   }
   const filteredNodes = response.nodes.filter((node) => visibleNodeIds.has(node.id))
 
+  const yearRange = visibleYearRange(filteredNodes)
   const degreeById: Record<string, number> = {}
   const incidentProducersById: Record<string, ProducerGraphNode[]> = {}
   for (const edge of filteredEdges) {
@@ -176,6 +194,18 @@ export function adaptOverviewGraph(
     incident.sort((left, right) => left.label.localeCompare(right.label) || left.id.localeCompare(right.id))
   }
 
+  const allIncidentProducersById: Record<string, ProducerGraphNode[]> = {}
+  for (const edge of response.edges) {
+    const producer = nodeById.get(edge.source)
+    if (!producer || producer.type !== 'producer') continue
+    const incident = allIncidentProducersById[edge.target] ?? []
+    if (!incident.some((item) => item.id === producer.id)) incident.push(producer)
+    allIncidentProducersById[edge.target] = incident
+  }
+  for (const incident of Object.values(allIncidentProducersById)) {
+    incident.sort((left, right) => left.label.localeCompare(right.label) || left.id.localeCompare(right.id))
+  }
+
   const counts: OverviewCounts = {
     nodes: filteredNodes.length,
     edges: filteredEdges.length,
@@ -188,7 +218,9 @@ export function adaptOverviewGraph(
 
   return {
     elements: [
-      ...filteredNodes.map((node) => nodeElement(node, degreeById[node.id] ?? 0, true)),
+      ...filteredNodes.map((node) =>
+        nodeElement(node, degreeById[node.id] ?? 0, true, yearRange),
+      ),
       ...filteredEdges.map((edge) => edgeElement(edge)),
     ],
     nodes: filteredNodes,
@@ -204,11 +236,51 @@ export function adaptOverviewGraph(
     counts,
     degreeById,
     incidentProducersById,
+    allIncidentProducersById,
+    yearRange,
   }
+}
+
+export function buildProducerIndex(nodes: ProducerGraphNode[]): OverviewIndexRow[] {
+  return sortIndexRows(
+    nodes
+      .filter((node) => node.roles.includes('producer'))
+      .map((node) => ({
+        id: node.id,
+        label: node.label,
+        count: attributeNumber(node, 'album_count') ?? 0,
+      })),
+  )
+}
+
+export function buildBandIndex(
+  bands: Array<{ id: string; name: string; album_count: number }>,
+): OverviewIndexRow[] {
+  return sortIndexRows(
+    bands.map((band) => ({ id: band.id, label: band.name, count: band.album_count })),
+  )
+}
+
+function sortIndexRows(rows: OverviewIndexRow[]): OverviewIndexRow[] {
+  return [...rows].sort(
+    (left, right) =>
+      right.count - left.count ||
+      left.label.localeCompare(right.label) ||
+      left.id.localeCompare(right.id),
+  )
 }
 
 export function isIsolatedProducer(node: ProducerGraphNode): boolean {
   return node.type === 'producer' && attributeNumber(node, 'band_count') === 0
+}
+
+function visibleYearRange(nodes: ProducerGraphNode[]): YearRange | null {
+  const years = nodes
+    .filter((node) => node.type === 'album')
+    .map(nodeYear)
+    .filter((year): year is number => year !== null)
+  if (years.length === 0) return null
+  return { min: Math.min(...years), max: Math.max(...years) }
 }
 
 export function yearColor(year: number | null): string {
@@ -222,6 +294,13 @@ export function yearColor(year: number | null): string {
     }
   }
   return YEAR_COLORS[YEAR_COLORS.length - 1][1]
+}
+
+export function overviewYearColor(year: number | null, range: YearRange | null): string {
+  if (year === null || range === null) return '#66736d'
+  if (range.min === range.max) return interpolateColor(OVERVIEW_YEAR_LIGHT, OVERVIEW_YEAR_DARK, 0.5)
+  const ratio = (year - range.min) / (range.max - range.min)
+  return interpolateColor(OVERVIEW_YEAR_LIGHT, OVERVIEW_YEAR_DARK, Math.min(1, Math.max(0, ratio)))
 }
 
 export function nodeYear(node: ProducerGraphNode): number | null {
@@ -263,6 +342,7 @@ function nodeElement(
   node: ProducerGraphNode,
   degree = 0,
   overview = false,
+  yearRange: YearRange | null = null,
 ): ElementDefinition {
   const artistType = attributeString(node, 'artist_type')
   const selfProduced = node.attributes.self_produced_albums
@@ -276,7 +356,12 @@ function nodeElement(
       type: node.type,
       kind: node.type === 'producer' ? `producer-${artistType || 'unknown'}` : node.type,
       year,
-      color: node.type === 'album' ? yearColor(year) : undefined,
+      color:
+        node.type === 'album'
+          ? overview
+            ? overviewYearColor(year, yearRange)
+            : yearColor(year)
+          : undefined,
       selfProduced: typeof selfProduced === 'number' && selfProduced > 0,
       degree,
       size: overview ? overviewNodeSize(node, degree) : undefined,

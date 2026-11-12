@@ -1,9 +1,13 @@
 import { fireEvent, screen, within } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import App from '../App'
 import { mockFetchRoutes } from '../test/fetch'
 import { renderWithProviders } from '../test/render'
+
+beforeEach(() => {
+  window.localStorage.clear()
+})
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -16,6 +20,7 @@ function mockShell() {
     '/api/v1/bands': { body: { items: [], total: 0, limit: 20, offset: 0 } },
     '/api/v1/albums': { body: { items: [], total: 0, limit: 20, offset: 0 } },
     '/api/v1/search': { body: { query: 'iron', bands: [], albums: [], producers: [] } },
+    '/api/v1/graph/producers': { status: 500, body: {} },
   })
 }
 
@@ -42,5 +47,39 @@ describe('AppShell', () => {
     fireEvent.click(within(searchForm as HTMLElement).getByRole('button', { name: 'Search' }))
 
     expect(await screen.findByRole('heading', { name: 'Search' })).toBeInTheDocument()
+  })
+
+  it('collapses the navigation rail and persists the preference', () => {
+    mockShell()
+    const { unmount } = renderWithProviders(<App />, { route: '/albums' })
+
+    const collapse = screen.getByRole('button', { name: 'Collapse navigation' })
+    expect(collapse).toHaveAttribute('aria-expanded', 'true')
+    fireEvent.click(collapse)
+    expect(screen.getByRole('button', { name: 'Expand navigation' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(screen.getByRole('main').closest('.app-shell')).toHaveClass(
+      'app-shell--rail-collapsed',
+    )
+    expect(window.localStorage.getItem('hmde:rail-collapsed')).toBe('true')
+
+    unmount()
+    renderWithProviders(<App />, { route: '/bands' })
+    expect(screen.getByRole('button', { name: 'Expand navigation' })).toBeInTheDocument()
+  })
+
+  it('starts with the rail collapsed on /graph without a stored preference', async () => {
+    mockShell()
+    renderWithProviders(<App />, { route: '/graph' })
+
+    expect(await screen.findByRole('button', { name: 'Expand navigation' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    )
+    expect(screen.getByRole('main').closest('.app-shell')).toHaveClass(
+      'app-shell--rail-collapsed',
+    )
   })
 })

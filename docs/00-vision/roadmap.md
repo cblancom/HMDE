@@ -152,7 +152,7 @@
 - **Objective:** validate the complete system before release.
 - **Scope:** end-to-end tests, performance, accessibility, basic security, backup restoration and dependency review.
 - **Activities:** Playwright for critical flows; simple load tests; accessibility audit; review of CORS, secrets and input validation; restore test.
-- **Deliverables:** QA report; fixes; performance report; accessibility and security checklists; **SPEC-012**.
+- **Deliverables:** QA report; fixes; performance report; accessibility and security checklists; **SPEC-013**.
 - **Depends on:** E9 and E10.
 - **Done when:** critical flows pass; there are no P1/P2 bugs; agreed performance and accessibility targets are met.
 
@@ -161,7 +161,7 @@
 - **Objective:** publish a reproducible and documented version.
 - **Scope:** production Compose; reverse proxy; TLS; migrations; backups; runbooks; source attribution; release notes.
 - **Activities:** deploy to the chosen environment; document operation and rollback; licenses and attribution page; post-deployment smoke test; version tag.
-- **Deliverables:** deployed v0.1; runbook; deployment documentation; visible attribution; release notes; **SPEC-013**.
+- **Deliverables:** deployed v0.1; runbook; deployment documentation; visible attribution; release notes; **SPEC-014**.
 - **Depends on:** E11.
 - **Done when:** the application is accessible; deployment is reproducible; rollback is documented; licenses are displayed correctly.
 
@@ -170,7 +170,7 @@
 - **Objective:** expand the dataset without changing the architecture and validate that patterns hold.
 - **Scope:** new seed-list batches; re-run ingestion, normalization, quality, analysis and result publication across 1960–2026.
 - **Activities:** expand the list using the same criteria; run E3–E5 in batches; compare coverage and bias; recompute analyses with dataset and taxonomy versions; review API and graph performance; update the limitations report.
-- **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-014**.
+- **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-015**.
 - **Depends on:** E12.
 - **Done when:** the expanded corpus passes the same quality gates; API and UI maintain performance; results are documented with their limitations.
 
@@ -218,7 +218,7 @@ Before closing any stage:
 | E7 | Validated | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI run 42738375416 passed. |
 | E8 | Validated | SPEC-009 read-only API v1; remote CI run 42741669410 passed. |
 | E9 | Validated | SPEC-010 band, album, producer and search explorer; existing CSS; remote CI run 42747146170 passed. |
-| E10 | Implemented locally | SPEC-011 global producer overview and ego graph are implemented locally. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels and an accessible table. The ego graph keeps its 500-node cap and static fallback. Headless browser checks passed; manual ego interaction and remote CI remain pending. |
+| E10 | Implemented locally | SPEC-011 global producer overview and ego graph are implemented locally. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels and an accessible table. SPEC-012 adds a collapsible producer/band index, equal-height scrollable side panels, a dynamic light-to-dark year scale and node-type detail panels; revision 3 adds a persisted collapsible navigation rail, full-width layout, collapsible graph panels and canvas resizing without API or schema changes. The ego graph keeps its 500-node cap and static fallback. Headless browser checks passed; manual ego interaction and remote CI remain pending. |
 | E11–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
 
 ## 8. Scope growth
@@ -250,4 +250,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is validated for E9 with remote CI run 42747146170. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and headless checks confirmed the 398-node bands view, 968-node albums view, physics controls, labels, isolated toggle and reduced-motion fallback. Manual ego interaction and remote CI are pending.
+E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is validated for E9 with remote CI run 42747146170. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and headless checks confirmed the 398-node bands view, 968-node albums view, physics controls, labels, isolated toggle and reduced-motion fallback. SPEC-012 is implemented locally: the overview has a producer/band index, equal-height scrollable panels, a dynamic light-to-dark year scale, node detail panels, a collapsible navigation rail, full-width layout and collapsible graph panels. Manual ego interaction and remote CI are pending.

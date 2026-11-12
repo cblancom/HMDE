@@ -1,4 +1,4 @@
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Route, Routes } from 'react-router'
 
@@ -101,6 +101,79 @@ const overview = {
 }
 
 const taxonomy = { version: '0.2.0', nodes: [] }
+const producerGraph = {
+  nodes: [
+    overview.nodes[0],
+    overview.nodes[3],
+    {
+      id: 'album-1',
+      type: 'album',
+      label: 'Shared Album',
+      roles: ['album'],
+      attributes: { band_id: 'band-1', band_name: 'Shared Band', year: 1991 },
+    },
+  ],
+  edges: [],
+  meta: {
+    view: 'bands',
+    analysis_run_id: 'run-1',
+    analysis_version: 'net-test',
+    dataset_version: 'mb-test',
+    taxonomy_version: '0.2.0',
+    graph_version: '0.1.0',
+    truncated: false,
+    limits: { limit: 100, depth: 1, max_nodes: 500, max_edges: 2000 },
+  },
+}
+const bandDetail = {
+  id: 'band-1',
+  mbid: 'mbid-1',
+  name: 'Shared Band',
+  country: 'GB',
+  subgenre: 'heavy-metal',
+  albums: [
+    {
+      id: 'album-1',
+      mbid: 'mbid-album-1',
+      title: 'Shared Album',
+      year: 1991,
+      first_release_date: '1991-01-01',
+      credits: [
+        {
+          artist_id: 'producer-1',
+          artist_name: 'Alice Producer',
+          role: 'producer',
+          role_name: 'Producer',
+          scope: 'release',
+          supporting_recording_count: 8,
+          recording_count: 8,
+          confidence: 1,
+          status: 'confirmed',
+        },
+        {
+          artist_id: 'producer-2',
+          artist_name: 'Bob Producer',
+          role: 'co-producer',
+          role_name: 'Co-producer',
+          scope: 'release',
+          supporting_recording_count: 4,
+          recording_count: 8,
+          confidence: 1,
+          status: 'confirmed',
+        },
+      ],
+    },
+  ],
+}
+const bands = {
+  items: [
+    { id: 'band-1', mbid: 'mbid-1', name: 'Shared Band', country: 'GB', subgenre: 'heavy-metal', album_count: 5 },
+    { id: 'band-2', mbid: 'mbid-2', name: 'Other Band', country: 'US', subgenre: 'thrash-metal', album_count: 2 },
+  ],
+  total: 2,
+  limit: 200,
+  offset: 0,
+}
 
 function renderOverview(route = '/graph') {
   return renderWithProviders(
@@ -112,6 +185,9 @@ function renderOverview(route = '/graph') {
 function mockOverview(body: unknown = overview, status = 200) {
   return mockFetchRoutes({
     '/api/v1/taxonomy': { body: taxonomy },
+    '/api/v1/bands': { body: bands },
+    '/api/v1/bands/band-1': { body: bandDetail },
+    '/api/v1/producers/producer-1/graph': { body: producerGraph },
     '/api/v1/graph/producers': { body, status },
   })
 }
@@ -129,7 +205,30 @@ describe('ProducerOverviewPage', () => {
     expect(screen.getByText(/3 edges/)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'How to read the network' })).toBeInTheDocument()
     expect(screen.getByText('View the network as tables')).toBeInTheDocument()
-    expect(screen.getByText('Carol Isolated')).toBeInTheDocument()
+    expect(screen.getAllByText('Carol Isolated').length).toBeGreaterThan(0)
+
+    const index = screen.getByRole('complementary', { name: 'Network index' })
+    expect(within(index).getByText('Producers')).toBeInTheDocument()
+    expect(within(index).getByText('Bands')).toBeInTheDocument()
+    fireEvent.click(within(index).getByText('Bands'))
+    expect(within(index).getByRole('link', { name: 'Shared Band' })).toHaveAttribute(
+      'href',
+      '/bands/band-1',
+    )
+    expect(screen.queryByText('1960 to 2026')).not.toBeInTheDocument()
+  })
+
+  it('requests bands with the active server filters', async () => {
+    const fetchMock = mockOverview()
+    renderOverview('/graph?decade=1990s&subgenre=heavy-metal')
+
+    await screen.findByRole('heading', { name: 'Producer network' })
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        '/api/v1/bands?subgenre=heavy-metal&decade=1990s&limit=200',
+        expect.anything(),
+      )
+    })
   })
 
   it('updates server parameters and keeps the URL state', async () => {
@@ -152,9 +251,11 @@ describe('ProducerOverviewPage', () => {
     renderOverview()
     await screen.findByRole('heading', { name: 'Producer network' })
 
-    expect(screen.getByText('Carol Isolated')).toBeInTheDocument()
+    const table = screen.getByText('View the network as tables').closest('details')
+    expect(table).not.toBeNull()
+    expect(within(table as HTMLElement).getByText('Carol Isolated')).toBeInTheDocument()
     fireEvent.click(screen.getByLabelText('Show isolated producers'))
-    expect(screen.queryByText('Carol Isolated')).not.toBeInTheDocument()
+    expect(within(table as HTMLElement).queryByText('Carol Isolated')).not.toBeInTheDocument()
     expect(screen.getByText(/1 isolated producer hidden/)).toBeInTheDocument()
   })
 
@@ -163,10 +264,14 @@ describe('ProducerOverviewPage', () => {
     const { unmount } = renderOverview('/graph?selected=band-1')
 
     expect(await screen.findByRole('heading', { name: 'Shared Band' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Connected producers' })).toBeInTheDocument()
-    const alice = screen.getByRole('link', { name: 'Alice Producer' })
+    const details = screen.getByRole('complementary', { name: 'Graph details' })
+    expect(await within(details).findByRole('heading', { name: 'Producers' })).toBeInTheDocument()
+    const alice = within(details).getByRole('link', { name: 'Alice Producer' })
     expect(alice).toHaveAttribute('href', '/graph?selected=producer-1')
-    expect(screen.getAllByRole('link', { name: 'Ego graph' })).toHaveLength(2)
+    expect(within(details).getByRole('link', { name: 'Shared Album (1991)' })).toHaveAttribute(
+      'href',
+      '/albums/album-1',
+    )
 
     unmount()
     renderOverview('/graph?selected=producer-1')
@@ -174,6 +279,35 @@ describe('ProducerOverviewPage', () => {
       'href',
       '/producers/producer-1/graph',
     )
+  })
+
+  it('toggles the index and details panels independently', async () => {
+    mockOverview()
+    renderOverview()
+    await screen.findByRole('heading', { name: 'Producer network' })
+
+    expect(screen.getByRole('complementary', { name: 'Network index' })).toBeInTheDocument()
+    expect(screen.getByRole('complementary', { name: 'Graph details' })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Index' }))
+    expect(screen.queryByRole('complementary', { name: 'Network index' })).not.toBeInTheDocument()
+    expect(screen.getByTestId('producer-graph')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Index' }))
+    expect(screen.getByRole('complementary', { name: 'Network index' })).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Details' }))
+    expect(screen.queryByRole('complementary', { name: 'Graph details' })).not.toBeInTheDocument()
+    expect(screen.getByTestId('producer-graph')).toBeInTheDocument()
+  })
+
+  it('explains a selected entity that is not in the current view', async () => {
+    mockOverview()
+    renderOverview('/graph?selected=missing')
+
+    expect(
+      await screen.findByText(/The selected entity is not in the current view/),
+    ).toBeInTheDocument()
   })
 
   it('shows truncation and invalid-view notices', async () => {

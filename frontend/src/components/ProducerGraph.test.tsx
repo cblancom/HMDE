@@ -7,15 +7,17 @@ import { ProducerGraph } from './ProducerGraph'
 
 const originalMatchMedia = window.matchMedia
 
-const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock } = vi.hoisted(() => {
+const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock, resizeMock } = vi.hoisted(() => {
   const run = vi.fn()
   const stop = vi.fn()
   const destroy = vi.fn()
   const fit = vi.fn()
+  const resize = vi.fn()
   const layout = vi.fn(() => ({ run, stop }))
   const cy = {
     layout,
     fit,
+    resize,
     on: vi.fn(),
     removeListener: vi.fn(),
     height: vi.fn(() => 720),
@@ -29,6 +31,7 @@ const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock } = vi.hoiste
     layoutStop: stop,
     destroyMock: destroy,
     fitMock: fit,
+    resizeMock: resize,
   }
 })
 
@@ -70,6 +73,7 @@ beforeEach(() => {
   layoutStop.mockClear()
   destroyMock.mockClear()
   fitMock.mockClear()
+  resizeMock.mockClear()
 })
 
 describe('ProducerGraph', () => {
@@ -155,6 +159,32 @@ describe('ProducerGraph', () => {
     document.dispatchEvent(new Event('visibilitychange'))
     expect(layoutStop).toHaveBeenCalled()
     Object.defineProperty(document, 'hidden', { configurable: true, value: false })
+  })
+
+  it('resizes the canvas when its container changes', () => {
+    let resizeCallback: (() => void) | undefined
+    const observe = vi.fn()
+    const disconnect = vi.fn()
+    class ResizeObserverMock {
+      constructor(callback: () => void) {
+        resizeCallback = callback
+      }
+
+      observe = observe
+      disconnect = disconnect
+      unobserve = vi.fn()
+    }
+    vi.stubGlobal('ResizeObserver', ResizeObserverMock)
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    const { unmount } = render(<ProducerGraph graph={graph} />)
+
+    expect(observe).toHaveBeenCalled()
+    resizeCallback?.()
+    expect(resizeMock).toHaveBeenCalled()
+
+    unmount()
+    expect(disconnect).toHaveBeenCalled()
+    vi.unstubAllGlobals()
   })
 
   it('destroys the graph on unmount', () => {

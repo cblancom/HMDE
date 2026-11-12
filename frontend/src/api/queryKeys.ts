@@ -11,6 +11,7 @@ export const queryKeys = {
   producer: (id: string) => ['producer', id] as const,
   producerGraph: (id: string, params: Record<string, unknown>) =>
     ['producer-graph', id, params] as const,
+  producerNeighbors: (id: string) => ['producer-neighbors', id] as const,
   producerOverviewGraph: (params: Record<string, unknown>) =>
     ['producer-overview-graph', params] as const,
   search: (q: string, limit: number) => ['search', q, limit] as const,

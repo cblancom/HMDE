@@ -223,6 +223,22 @@ export function ProducerGraph({
   }, [graph, freeze, runForce, setPhysicsState])
 
   useEffect(() => {
+    const container = containerRef.current
+    if (!container || typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(() => {
+      const cy = cyRef.current
+      if (!cy || typeof cy.resize !== 'function') return
+      try {
+        cy.resize()
+      } catch {
+        // Keep the current graph if a resize is not available.
+      }
+    })
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
     const cy = cyRef.current
     if (!cy || typeof cy.nodes !== 'function') return
     const term = highlightSearch.trim().toLocaleLowerCase()

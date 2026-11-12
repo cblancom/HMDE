@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 
+import { getBands } from '../api/bands'
 import { ApiError } from '../api/client'
 import {
   getProducerOverviewGraph,
@@ -12,6 +13,7 @@ import { queryKeys } from '../api/queryKeys'
 import { AsyncState } from '../components/AsyncState'
 import { GraphFallbackTable } from '../components/GraphFallbackTable'
 import { GraphLegend } from '../components/GraphLegend'
+import { OverviewIndex } from '../components/OverviewIndex'
 import { ProducerGraph } from '../components/ProducerGraph'
 import {
   ProducerOverviewControls,
@@ -19,7 +21,12 @@ import {
   type OverviewOptions,
 } from '../components/ProducerOverviewControls'
 import { ProducerOverviewDetails } from '../components/ProducerOverviewDetails'
-import { adaptOverviewGraph, type GraphRole } from '../graph/adapter'
+import {
+  adaptOverviewGraph,
+  buildBandIndex,
+  buildProducerIndex,
+  type GraphRole,
+} from '../graph/adapter'
 
 const SORTS: ProducerOverviewSort[] = ['album_count', 'band_count', 'betweenness', 'name']
 
@@ -81,6 +88,8 @@ export function ProducerOverviewPage() {
     role: GraphRole
     producerSearch: string
   }>({ role: 'all', producerSearch: '' })
+  const [indexOpen, setIndexOpen] = useState(true)
+  const [detailsOpen, setDetailsOpen] = useState(true)
   const display: OverviewDisplayOptions = {
     ...displayState,
     hideIsolated: searchParams.get('isolated') === '0',
@@ -107,6 +116,20 @@ export function ProducerOverviewPage() {
         includeEvidence: options.view === 'bands',
         maxNodes: 1000,
         maxEdges: 2000,
+      }),
+  })
+
+  const bandsQuery = useQuery({
+    queryKey: queryKeys.bands({
+      limit: 200,
+      decade: options.decade || undefined,
+      subgenre: options.subgenre || undefined,
+    }),
+    queryFn: () =>
+      getBands({
+        limit: 200,
+        decade: options.decade || undefined,
+        subgenre: options.subgenre || undefined,
       }),
   })
 
@@ -148,6 +171,7 @@ export function ProducerOverviewPage() {
   }
 
   function updateSelected(id: string) {
+    if (id) setDetailsOpen(true)
     replaceParams({ selected: id || null })
   }
 
@@ -192,12 +216,14 @@ export function ProducerOverviewPage() {
     )
   }
 
+  const producerIndex = buildProducerIndex(graph.nodes)
+  const bandIndex = bandsQuery.data ? buildBandIndex(bandsQuery.data.items) : []
   const adaptationFailed = !adapted
   const selectedId = searchParams.get('selected') ?? ''
   const selectedNode = adapted?.nodes.find((node) => node.id === selectedId) ?? null
   const selectedEdge = adapted?.edges.find((edge) => edgeId(edge) === selectedId) ?? null
   const incidentProducers = selectedNode
-    ? (adapted?.incidentProducersById[selectedNode.id] ?? [])
+    ? (adapted?.allIncidentProducersById[selectedNode.id] ?? [])
     : []
   const search = display.producerSearch.trim().toLocaleLowerCase()
   const searchMatches =
@@ -255,16 +281,36 @@ export function ProducerOverviewPage() {
         </p>
       ) : null}
 
-      <p className="graph-meta" role="status">
-        {adapted?.counts.nodes ?? graph.nodes.length} nodes ·{' '}
-        {adapted?.counts.edges ?? graph.edges.length} edges ·{' '}
-        {adapted?.counts.producers ?? 0} producers · {graph.meta.analysis_version}
-        {display.hideIsolated && adapted
-          ? ` · ${adapted.counts.hiddenIsolatedProducers} isolated ${
-              adapted.counts.hiddenIsolatedProducers === 1 ? 'producer' : 'producers'
-            } hidden`
-          : ''}
-      </p>
+      <div className="overview-toolbar">
+        <p className="graph-meta" role="status">
+          {adapted?.counts.nodes ?? graph.nodes.length} nodes ·{' '}
+          {adapted?.counts.edges ?? graph.edges.length} edges ·{' '}
+          {adapted?.counts.producers ?? 0} producers · {graph.meta.analysis_version}
+          {display.hideIsolated && adapted
+            ? ` · ${adapted.counts.hiddenIsolatedProducers} isolated ${
+                adapted.counts.hiddenIsolatedProducers === 1 ? 'producer' : 'producers'
+              } hidden`
+            : ''}
+        </p>
+        <div className="overview-panel-toggles" role="group" aria-label="Workspace panels">
+          <button
+            type="button"
+            className={indexOpen ? 'button' : 'button button--secondary'}
+            aria-pressed={indexOpen}
+            onClick={() => setIndexOpen((open) => !open)}
+          >
+            Index
+          </button>
+          <button
+            type="button"
+            className={detailsOpen ? 'button' : 'button button--secondary'}
+            aria-pressed={detailsOpen}
+            onClick={() => setDetailsOpen((open) => !open)}
+          >
+            Details
+          </button>
+        </div>
+      </div>
       {search.length > 0 ? (
         <p className="graph-meta" role="status">
           {searchMatches} {searchMatches === 1 ? 'producer matches' : 'producers match'} the
@@ -288,22 +334,44 @@ export function ProducerOverviewPage() {
         </div>
       ) : null}
 
-      {adapted ? (
-        <ProducerGraph
-          graph={adapted}
-          variant="overview"
-          highlightSearch={display.producerSearch}
-          onSelect={(id) => updateSelected(id)}
-        />
-      ) : null}
-      <GraphLegend />
+      <div
+        className={`overview-workspace${
+          indexOpen ? '' : ' overview-workspace--index-closed'
+        }${detailsOpen ? '' : ' overview-workspace--details-closed'}`}
+      >
+        {indexOpen ? (
+          <OverviewIndex
+            producers={producerIndex}
+            bands={bandIndex}
+            bandsLoading={bandsQuery.isPending}
+            bandsError={bandsQuery.isError}
+            onRetryBands={() => void bandsQuery.refetch()}
+          />
+        ) : null}
+        <div className="overview-graph-column">
+          {adapted ? (
+            <ProducerGraph
+              graph={adapted}
+              variant="overview"
+              highlightSearch={display.producerSearch}
+              onSelect={(id) => updateSelected(id)}
+            />
+          ) : null}
+        </div>
+        {detailsOpen ? (
+          <div className="overview-details-column">
+            <ProducerOverviewDetails
+              node={selectedNode}
+              edge={selectedEdge}
+              nodes={adapted?.nodes ?? []}
+              incidentProducers={incidentProducers}
+              selectionMissing={selectedId.length > 0 && !selectedNode && !selectedEdge}
+            />
+          </div>
+        ) : null}
+      </div>
+      <GraphLegend yearRange={adapted?.yearRange} />
       <GraphFallbackTable nodes={adapted?.tableNodes ?? []} edges={adapted?.tableEdges ?? []} />
-      <ProducerOverviewDetails
-        node={selectedNode}
-        edge={selectedEdge}
-        nodes={adapted?.nodes ?? []}
-        incidentProducers={incidentProducers}
-      />
       <p>
         <Link to="/producers">← Back to producers</Link>
       </p>

@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
 import type { ProducerGraphResponse, ProducerOverviewGraphResponse } from '../api/producerGraph'
-import { adaptGraph, adaptOverviewGraph, isIsolatedProducer, yearColor } from './adapter'
+import {
+  adaptGraph,
+  adaptOverviewGraph,
+  buildBandIndex,
+  buildProducerIndex,
+  isIsolatedProducer,
+  overviewYearColor,
+  yearColor,
+} from './adapter'
 
 const response: ProducerGraphResponse = {
   nodes: [
@@ -288,6 +296,7 @@ describe('overview adapter', () => {
     expect(graph.counts.edges).toBe(3)
     expect(graph.counts.producers).toBe(3)
     expect(graph.counts.bands).toBe(2)
+    expect(graph.yearRange).toBeNull()
     expect(graph.tableNodes.find((node) => node.id === 'band-1')?.detail).toContain(
       'Producers: Alice Producer, Bob Producer',
     )
@@ -359,6 +368,11 @@ describe('overview adapter', () => {
     })
     expect(graph.edges.map((edge) => edge.target)).toEqual(['band-1'])
     expect(graph.nodes.map((node) => node.id)).toEqual(['producer-2', 'producer-3', 'band-1'])
+    expect(graph.incidentProducersById['band-1'].map((node) => node.id)).toEqual(['producer-2'])
+    expect(graph.allIncidentProducersById['band-1'].map((node) => node.id)).toEqual([
+      'producer-1',
+      'producer-2',
+    ])
 
     expect(() =>
       adaptOverviewGraph(
@@ -367,6 +381,31 @@ describe('overview adapter', () => {
         { role: 'all', decade: '', subgenre: '' },
       ),
     ).toThrow('Band graph contains album nodes')
+  })
+
+  it('builds sorted producer and band index rows', () => {
+    const bandProducer = {
+      id: 'band-producer',
+      type: 'band' as const,
+      label: 'Self-produced Band',
+      roles: ['band', 'producer'],
+      attributes: { band_type: 'group', album_count: 3 },
+    }
+    const producers = buildProducerIndex([...overviewResponse.nodes, bandProducer])
+    expect(producers.map((row) => row.id)).toEqual([
+      'band-producer',
+      'producer-1',
+      'producer-2',
+      'producer-3',
+    ])
+    expect(producers.map((row) => row.count)).toEqual([3, 2, 1, 1])
+
+    const bands = buildBandIndex([
+      { id: 'band-b', name: 'Beta', album_count: 2 },
+      { id: 'band-a', name: 'Alpha', album_count: 2 },
+      { id: 'band-c', name: 'Gamma', album_count: 5 },
+    ])
+    expect(bands.map((row) => row.label)).toEqual(['Gamma', 'Alpha', 'Beta'])
   })
 
   it('lists incident producers and filters albums by decade and taxonomy', () => {
@@ -379,7 +418,12 @@ describe('overview adapter', () => {
       'producer-1',
       'producer-2',
     ])
+    expect(graph.allIncidentProducersById['album-1'].map((node) => node.id)).toEqual([
+      'producer-1',
+      'producer-2',
+    ])
     expect(graph.supportsDecade).toBe(true)
+    expect(graph.yearRange).toEqual({ min: 1985, max: 1991 })
     expect(graph.availableSubgenres).toEqual(['heavy-metal', 'thrash-metal'])
 
     const filtered = adaptOverviewGraph(albumsOverviewResponse, 'albums', {
@@ -395,5 +439,18 @@ describe('overview adapter', () => {
     ])
     expect(filtered.counts.albums).toBe(1)
     expect(filtered.counts.edges).toBe(2)
+    expect(filtered.yearRange).toEqual({ min: 1991, max: 1991 })
+  })
+
+  it('maps the visible album years to a light-to-dark overview scale', () => {
+    const range = { min: 1985, max: 1991 }
+    expect(overviewYearColor(1985, range)).toBe('#bcd8c2')
+    expect(overviewYearColor(1991, range)).toBe('#123c38')
+    expect(overviewYearColor(1988, range)).not.toBe(overviewYearColor(1985, range))
+    expect(overviewYearColor(null, range)).toBe('#66736d')
+    expect(overviewYearColor(1991, null)).toBe('#66736d')
+    const singleYear = overviewYearColor(1991, { min: 1991, max: 1991 })
+    expect(singleYear).not.toBe('#bcd8c2')
+    expect(singleYear).not.toBe('#123c38')
   })
 })

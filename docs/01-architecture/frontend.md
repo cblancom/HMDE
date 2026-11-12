@@ -1,9 +1,9 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 global overview and ego graph implemented locally; headless physics, spacing, labels and overview checks passed; manual interaction and remote CI pending
+- **Status:** E9 validated; E10 global overview, ego graph and space-efficient workspace implemented locally; headless checks passed; manual ego interaction and remote CI pending
 - **Stage:** E10
-- **Spec:** [SPEC-011](../../specs/011-graph-visualization/spec.md)
-- **Design plan:** [plan.md](../../specs/011-graph-visualization/plan.md)
+- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md)
+- **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
 
 ## 1. Routes
 
@@ -42,6 +42,7 @@ Tailwind is deferred. The app uses the existing CSS architecture with custom pro
 - Changing a filter resets `offset`.
 - Browser back/forward restores list views.
 - No global state store.
+- The navigation-rail preference is stored in localStorage; graph panel toggles are local page state.
 
 ## 4. API clients
 
@@ -89,6 +90,23 @@ Both scopes can be frozen, resumed or reheated; physics pauses when the tab is h
 
 Overview controls cover view, producer top-k, sort/order, decade, subgenre, role, producer search/highlight and the isolated toggle. Server-side selection uses producer limit/sort/decade/subgenre; role, search and the toggle are client-side over the loaded network. Counts and API truncation remain visible. The accessible table lists the filtered nodes and edges, and details list incident producers with ego-graph links.
 
+SPEC-012 turns the overview into a three-region workspace:
+
+- the left index has native collapsible producer and band lists with documented album counts, sorted descending and linked to entity pages;
+- the center keeps the graph;
+- the right panel shows producer bands/albums from the two bounded ego graphs, band albums and producer credits from the band detail endpoint, or album band/year/producers from the loaded overview.
+
+On wide screens the graph column defines the workspace height and both side panels stretch to it, scrolling independently. Below 1280 px the regions stack. The overview year scale runs from pale lichen `#bcd8c2` for the oldest visible album to deep petrol `#123c38` for the newest; the range is recomputed from the visible albums after filters and the isolated toggle. The legend shows the real minimum and maximum. The ego graph keeps its existing scale.
+
+Revision 3 makes the layout space-efficient:
+
+- the global rail collapses to a 3rem strip with an accessible toggle and `HMDE` monogram; the preference is stored in localStorage, `/graph` starts collapsed without a stored preference and other routes start expanded;
+- the shell has no `96rem` ceiling, horizontal main padding is `clamp(0.75rem, 1.5vw, 1.5rem)`, reading pages stay centered and `/graph` uses the full width;
+- the overview has `Index` and `Details` toggles; both panels start open and closing one or both gives the column width to the graph;
+- selecting a node reopens the details panel;
+- a `ResizeObserver` calls `cy.resize()` when the graph column changes width, without recreating Cytoscape or restarting physics;
+- panel widths are `minmax(10rem,12rem)` and `minmax(14rem,16rem)` with 0.75rem gaps.
+
 Current v0.2 corpus: 398 unique nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`. The albums isolated toggle reduces the loaded network to 893 nodes / 951 edges. In the bands view the 43 isolated producer entities share band entities and remain visible as bands.
 
 ## 7. Boundary
@@ -102,18 +120,19 @@ E10 does not include:
 - Playwright, performance, accessibility audit or deployment (E11);
 - corpus expansion (E13).
 
-The only API change is the additive read-only overview endpoint.
+The only E10 API change is the additive read-only overview endpoint. SPEC-012 adds no endpoint, schema or dependency.
 
 ## 8. Verification
 
 Local checks on 2026-11-11:
 
-- frontend `npm ci`, OpenAPI generation, lint, typecheck, **76 tests**, production build;
+- frontend `npm ci`, OpenAPI generation, lint, typecheck, **94 tests**, production build;
 - headless Chromium on `/graph`: 398-node bands and 968-node albums views, initial fit, live physics, freeze/resume/reheat, dragging, search highlight, isolated toggle, reduced-motion frozen start and accessible table;
-- shared-node selection for Motörhead listed 32 producers;
-- backend 220 unit tests with 105 integration tests skipped; 325 integration tests with `TEST_DATABASE_URL`; Ruff and format;
+- SPEC-012 headless checks: equal 858 px panel heights, independent panel scroll, 384 producer and 57 band index rows, dynamic `1968 to 2026` year scale, producer/album/band detail flows and stacked 900/1200 px layouts without horizontal overflow;
+- revision 3 headless checks: 48 px collapsed and 272 px expanded rail with persisted state, 876/1,144/1,348 px graph widths at 1440 px for open/one-closed/both-closed panels, 1,352 px graph at 1920 px with both panels open, canvas width following the column after every toggle; `/bands`, `/albums`, `/producers`, `/graph` and `/search` had no horizontal overflow at 1440/1920 px;
+- backend 220 unit tests with 105 integration tests skipped; Ruff and format;
 - `docker compose config -q`;
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 remote CI and the manual ego interaction review are pending.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 and SPEC-012 remote CI and the manual ego interaction review are pending.
