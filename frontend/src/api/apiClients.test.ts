@@ -62,6 +62,11 @@ describe('API query builders', () => {
       '/api/v1/graph/producers?view=bands&producer_limit=5&producer_sort=album_count&order=desc&decade=1990s&include_isolated=false&include_evidence=false&max_nodes=1000&max_edges=2000',
       expect.anything(),
     )
+    await getProducerOverviewGraph({ view: 'bands', layout: 'community' })
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.stringContaining('layout=community'),
+      expect.anything(),
+    )
   })
 
   it('requests producer rankings and grouped search', async () => {

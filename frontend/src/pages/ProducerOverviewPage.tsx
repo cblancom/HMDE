@@ -6,6 +6,7 @@ import { getBands } from '../api/bands'
 import { ApiError } from '../api/client'
 import {
   getProducerOverviewGraph,
+  type GraphLayoutMode,
   type ProducerGraphView,
   type ProducerOverviewSort,
 } from '../api/producerGraph'
@@ -50,6 +51,10 @@ function parseDecade(value: string | null): string {
   return value && /^\d{4}s$/.test(value) ? value : ''
 }
 
+function parseLayout(value: string | null): GraphLayoutMode {
+  return value === 'bipartite' || value === 'community' ? value : 'force'
+}
+
 function edgeId(edge: { source: string; target: string; role: string }): string {
   return `${edge.source}->${edge.target}:${edge.role}`
 }
@@ -83,6 +88,7 @@ export function ProducerOverviewPage() {
     order: searchParams.get('order') === 'asc' ? 'asc' : 'desc',
     decade: parseDecade(searchParams.get('decade')),
     subgenre: searchParams.get('subgenre') ?? '',
+    layout: parseLayout(searchParams.get('layout')),
   }
   const [displayState, setDisplayState] = useState<{
     role: GraphRole
@@ -103,6 +109,7 @@ export function ProducerOverviewPage() {
       order: options.order,
       decade: options.decade,
       subgenre: options.subgenre,
+      layout: options.layout,
     }),
     queryFn: () =>
       getProducerOverviewGraph({
@@ -116,6 +123,7 @@ export function ProducerOverviewPage() {
         includeEvidence: options.view === 'bands',
         maxNodes: 1000,
         maxEdges: 2000,
+        layout: options.layout === 'force' ? undefined : options.layout,
       }),
   })
 
@@ -158,6 +166,7 @@ export function ProducerOverviewPage() {
       order: next.order === 'desc' ? null : next.order,
       decade: next.decade || null,
       subgenre: next.subgenre || null,
+      layout: next.layout === 'force' ? null : next.layout,
       selected: null,
     })
   }
@@ -324,6 +333,11 @@ export function ProducerOverviewPage() {
           message="The overview response does not match the selected view."
           onRetry={() => void graphQuery.refetch()}
         />
+      ) : null}
+      {options.layout !== 'force' && adapted && adapted.layout === null ? (
+        <p className="async-state" role="status">
+          The requested layout is unavailable. Showing the Force layout.
+        </p>
       ) : null}
       {filteredEmpty ? (
         <div className="graph-empty">

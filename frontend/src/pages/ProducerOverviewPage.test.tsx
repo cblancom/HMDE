@@ -101,6 +101,17 @@ const overview = {
 }
 
 const taxonomy = { version: '0.2.0', nodes: [] }
+const overviewWithLayout = {
+  ...overview,
+  layout: {
+    algorithm: 'bipartite' as const,
+    nodes: overview.nodes.map((node, index) => ({
+      id: node.id,
+      x: node.type === 'producer' ? 100 : 900,
+      y: 100 + index * 60,
+    })),
+  },
+}
 const producerGraph = {
   nodes: [
     overview.nodes[0],
@@ -299,6 +310,35 @@ describe('ProducerOverviewPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Details' }))
     expect(screen.queryByRole('complementary', { name: 'Graph details' })).not.toBeInTheDocument()
     expect(screen.getByTestId('producer-graph')).toBeInTheDocument()
+  })
+
+  it('requests the selected layout and falls back when coordinates are missing', async () => {
+    const fetchMock = mockOverview()
+    renderOverview()
+    await screen.findByRole('heading', { name: 'Producer network' })
+
+    fireEvent.change(screen.getByLabelText('Layout'), { target: { value: 'bipartite' } })
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('layout=bipartite'),
+        expect.anything(),
+      )
+    })
+    expect(
+      await screen.findByText(/The requested layout is unavailable/),
+    ).toBeInTheDocument()
+  })
+
+  it('applies a static layout and disables the physics controls', async () => {
+    mockOverview(overviewWithLayout)
+    renderOverview('/graph?layout=bipartite')
+
+    expect(await screen.findByRole('heading', { name: 'Producer network' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Layout')).toHaveValue('bipartite')
+    expect(screen.getByText(/Static layout/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Freeze layout' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Resume physics' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Reheat' })).toBeDisabled()
   })
 
   it('explains a selected entity that is not in the current view', async () => {

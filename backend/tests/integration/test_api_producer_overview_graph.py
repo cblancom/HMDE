@@ -4,6 +4,8 @@ from collections import Counter
 
 import pytest
 
+from hmde.services import producers as producers_service
+
 
 def _overview(api_client, run_id, **params):
     query = {"analysis_run": str(run_id)}
@@ -107,12 +109,61 @@ def test_overview_album_filters_and_caps(api_client, network_analysis_run) -> No
     assert edge_capped.json()["meta"]["truncated"] is True
 
 
+def test_overview_layouts_are_optional_and_deterministic(api_client, network_analysis_run) -> None:
+    default = _overview(api_client, network_analysis_run, view="albums")
+    assert default.status_code == 200
+    assert default.json().get("layout") is None
+
+    bipartite = _overview(api_client, network_analysis_run, view="albums", layout="bipartite")
+    assert bipartite.status_code == 200
+    body = bipartite.json()
+    layout = body["layout"]
+    assert layout["algorithm"] == "bipartite"
+    assert {item["id"] for item in layout["nodes"]} == {node["id"] for node in body["nodes"]}
+    nodes = {node["id"]: node for node in body["nodes"]}
+    producer_ids = {node_id for node_id, node in nodes.items() if node["type"] == "producer"}
+    target_ids = {node_id for node_id, node in nodes.items() if node["type"] == "album"}
+    positions = {item["id"]: (item["x"], item["y"]) for item in layout["nodes"]}
+    assert all(
+        positions[producer][0] < positions[target][0]
+        for producer in producer_ids
+        for target in target_ids
+    )
+    assert (
+        layout
+        == _overview(api_client, network_analysis_run, view="albums", layout="bipartite").json()[
+            "layout"
+        ]
+    )
+
+    community = _overview(api_client, network_analysis_run, view="bands", layout="community")
+    assert community.status_code == 200
+    community_layout = community.json()["layout"]
+    assert community_layout["algorithm"] == "community"
+    assert {item["id"] for item in community_layout["nodes"]} == {
+        node["id"] for node in community.json()["nodes"]
+    }
+
+
+def test_overview_layout_failure_keeps_the_graph(
+    api_client, network_analysis_run, monkeypatch
+) -> None:
+    def fail(*args, **kwargs):
+        raise RuntimeError("layout failed")
+
+    monkeypatch.setattr(producers_service, "compute_community_layout", fail)
+    response = _overview(api_client, network_analysis_run, view="bands", layout="community")
+    assert response.status_code == 200
+    assert response.json()["layout"] is None
+
+
 def test_overview_rejects_invalid_parameters(api_client, network_analysis_run) -> None:
     assert _overview(api_client, network_analysis_run, view="mixed").status_code == 422
     assert _overview(api_client, network_analysis_run, producer_limit=1001).status_code == 422
     assert _overview(api_client, network_analysis_run, max_nodes=0).status_code == 422
     assert _overview(api_client, network_analysis_run, max_edges=2001).status_code == 422
     assert _overview(api_client, network_analysis_run, decade="1980").status_code == 422
+    assert _overview(api_client, network_analysis_run, layout="mixed").status_code == 422
 
     missing = api_client.get(
         "/api/v1/graph/producers",

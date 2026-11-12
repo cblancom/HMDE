@@ -8,7 +8,10 @@ export type ProducerGraphNode = Schemas['ProducerGraphNode']
 export type ProducerGraphEdge = Schemas['ProducerGraphEdge']
 export type ProducerOverviewGraphResponse = Schemas['ProducerOverviewGraphResponse']
 export type ProducerOverviewGraphMeta = Schemas['ProducerOverviewGraphMeta']
+export type ProducerOverviewGraphLayout = Schemas['ProducerOverviewGraphLayout']
 export type ProducerGraphView = 'albums' | 'bands'
+export type ProducerOverviewLayout = 'bipartite' | 'community'
+export type GraphLayoutMode = 'force' | ProducerOverviewLayout
 export type ProducerOverviewSort = 'album_count' | 'band_count' | 'betweenness' | 'name'
 
 export type ProducerGraphOptions = {
@@ -33,6 +36,7 @@ export type ProducerOverviewGraphOptions = {
   includeEvidence?: boolean
   maxNodes?: number
   maxEdges?: number
+  layout?: ProducerOverviewLayout
   analysisRun?: string
 }
 
@@ -47,6 +51,7 @@ export function getProducerOverviewGraph({
   includeEvidence = false,
   maxNodes = 1000,
   maxEdges = 2000,
+  layout,
   analysisRun,
 }: ProducerOverviewGraphOptions): Promise<ProducerOverviewGraphResponse> {
   return getJson<ProducerOverviewGraphResponse>(
@@ -61,6 +66,7 @@ export function getProducerOverviewGraph({
       include_evidence: includeEvidence,
       max_nodes: maxNodes,
       max_edges: maxEdges,
+      layout,
       analysis_run: analysisRun,
     })}`,
   )

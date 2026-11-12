@@ -280,6 +280,20 @@ const albumsOverviewResponse: ProducerOverviewGraphResponse = {
   },
 }
 
+
+const overviewWithLayout: ProducerOverviewGraphResponse = {
+  ...albumsOverviewResponse,
+  layout: {
+    algorithm: 'bipartite',
+    nodes: [
+      { id: 'producer-1', x: 100, y: 100 },
+      { id: 'producer-2', x: 100, y: 200 },
+      { id: 'album-1', x: 900, y: 150 },
+      { id: 'album-2', x: 900, y: 250 },
+    ],
+  },
+}
+
 describe('overview adapter', () => {
   it('lists every incident producer for a shared node and computes degree counts', () => {
     const graph = adaptOverviewGraph(overviewResponse, 'bands', {
@@ -406,6 +420,51 @@ describe('overview adapter', () => {
       { id: 'band-c', name: 'Gamma', album_count: 5 },
     ])
     expect(bands.map((row) => row.label)).toEqual(['Gamma', 'Alpha', 'Beta'])
+  })
+
+  it('maps complete layout coordinates and rejects incomplete or invalid layouts', () => {
+    const graph = adaptOverviewGraph(overviewWithLayout, 'albums', {
+      role: 'all',
+      decade: '',
+      subgenre: '',
+    })
+    expect(graph.layout?.algorithm).toBe('bipartite')
+    const producer = graph.elements.find(
+      (element) => element.group === 'nodes' && element.data.id === 'producer-1',
+    )
+    expect(producer?.position).toEqual({ x: 100, y: 100 })
+
+    const missing = adaptOverviewGraph(
+      {
+        ...overviewWithLayout,
+        layout: {
+          algorithm: 'bipartite',
+          nodes: [{ id: 'producer-1', x: 100, y: 100 }],
+        },
+      },
+      'albums',
+      { role: 'all', decade: '', subgenre: '' },
+    )
+    expect(missing.layout).toBeNull()
+
+    const duplicate = adaptOverviewGraph(
+      {
+        ...overviewWithLayout,
+        layout: {
+          algorithm: 'bipartite',
+          nodes: [
+            { id: 'producer-1', x: 100, y: 100 },
+            { id: 'producer-1', x: 200, y: 200 },
+            { id: 'producer-2', x: 100, y: 200 },
+            { id: 'album-1', x: 900, y: 150 },
+            { id: 'album-2', x: 900, y: 250 },
+          ],
+        },
+      },
+      'albums',
+      { role: 'all', decade: '', subgenre: '' },
+    )
+    expect(duplicate.layout).toBeNull()
   })
 
   it('lists incident producers and filters albums by decade and taxonomy', () => {

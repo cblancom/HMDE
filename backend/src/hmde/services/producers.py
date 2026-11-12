@@ -27,9 +27,15 @@ from hmde.schemas.api import (
     ProducerGraphNode,
     ProducerGraphResponse,
     ProducerListItem,
+    ProducerOverviewGraphLayout,
+    ProducerOverviewGraphLayoutNode,
     ProducerOverviewGraphLimits,
     ProducerOverviewGraphMeta,
     ProducerOverviewGraphResponse,
+)
+from hmde.services.graph_layouts import (
+    compute_bipartite_layout,
+    compute_community_layout,
 )
 
 PRODUCER_ALBUM = "producer_album"
@@ -255,6 +261,7 @@ def get_producer_overview_graph(
     include_evidence: bool,
     max_nodes: int,
     max_edges: int,
+    layout: str | None = None,
 ) -> ProducerOverviewGraphResponse:
     all_nodes = {
         node.id: node
@@ -385,6 +392,15 @@ def get_producer_overview_graph(
         )
         for edge in selected_edges
     ]
+    layout_payload = _overview_layout_payload(
+        session,
+        run,
+        layout=layout,
+        selected_nodes=selected_nodes,
+        selected_producer_ids=selected_producer_ids,
+        selected_edges=selected_edges,
+        all_nodes=all_nodes,
+    )
     meta = ProducerOverviewGraphMeta(
         scope="overview",
         view=view,
@@ -403,7 +419,69 @@ def get_producer_overview_graph(
             max_edges=max_edges,
         ),
     )
-    return ProducerOverviewGraphResponse(nodes=node_payload, edges=edge_payload, meta=meta)
+    return ProducerOverviewGraphResponse(
+        nodes=node_payload,
+        edges=edge_payload,
+        meta=meta,
+        layout=layout_payload,
+    )
+
+
+def _overview_layout_payload(
+    session: Session,
+    run: AnalysisRun,
+    *,
+    layout: str | None,
+    selected_nodes: set[UUID],
+    selected_producer_ids: set[UUID],
+    selected_edges: list[GraphEdge],
+    all_nodes: dict[UUID, GraphNode],
+) -> ProducerOverviewGraphLayout | None:
+    if layout is None:
+        return None
+    try:
+        node_ids = [
+            all_nodes[node_id].entity_id for node_id in selected_nodes if node_id in all_nodes
+        ]
+        producer_ids = {
+            all_nodes[node_id].entity_id
+            for node_id in selected_producer_ids
+            if node_id in all_nodes
+        }
+        edges = [
+            (
+                all_nodes[edge.source_node_id].entity_id,
+                all_nodes[edge.target_node_id].entity_id,
+            )
+            for edge in selected_edges
+        ]
+        if layout == "community":
+            community_by_node = _community_map(session, run=run)
+            positions = compute_community_layout(
+                node_ids,
+                producer_ids,
+                edges,
+                {
+                    all_nodes[node_id].entity_id: community_by_node.get(node_id, "unassigned")
+                    for node_id in selected_producer_ids
+                    if node_id in all_nodes
+                },
+            )
+        else:
+            positions = compute_bipartite_layout(node_ids, producer_ids, edges)
+        return ProducerOverviewGraphLayout(
+            algorithm=layout,
+            nodes=[
+                ProducerOverviewGraphLayoutNode(
+                    id=node_id,
+                    x=positions[node_id][0],
+                    y=positions[node_id][1],
+                )
+                for node_id in sorted(positions, key=str)
+            ],
+        )
+    except Exception:
+        return None
 
 
 def _overview_node_payload(

@@ -1,7 +1,7 @@
 # Read-only API v1 (E8)
 
 - **Status:** Validated for E8; the additive producer overview endpoint is implemented locally for E10 (SPEC-011) with remote CI pending
-- **Specs:** [SPEC-009](../../specs/009-read-api/spec.md), [SPEC-011](../../specs/011-graph-visualization/spec.md)
+- **Specs:** [SPEC-009](../../specs/009-read-api/spec.md), [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md)
 - **Base path:** `/api/v1`
 
 ## Entity endpoints
@@ -61,10 +61,25 @@ If no completed run exists, analytics/graph/producer endpoints return `503`. A r
 - `decade` and `subgenre` select producers through album credits; the albums view also restricts album targets.
 - `include_isolated`: `true` default; `false` omits producer rows with no outgoing producer–band edges.
 - `include_evidence`: bounded edge evidence, mainly for band-view role mixes.
+- `layout`: optional `bipartite` or `community`; absent means client-side Force.
 - `max_nodes`: 1,000; `max_edges`: 2,000.
 - `analysis_run`: optional E7 run selection.
 
 The response reuses `ProducerGraphNode` and `ProducerGraphEdge` and adds overview meta with `scope=overview`, `matched_producers`, `selected_producers`, `include_isolated`, `truncated` and the limits. Producer nodes include `album_count`, `band_count`, `betweenness` and `community_key`.
+
+When `layout=bipartite|community` is requested, the response also includes:
+
+```json
+"layout": {
+  "algorithm": "bipartite",
+  "nodes": [{ "id": "entity-uuid", "x": 0.0, "y": 0.0 }]
+}
+```
+
+- `bipartite` uses NetworkX `bipartite_layout` with producers left and bands/albums right.
+- `community` reuses the persisted E7 Louvain communities and cluster positions.
+- Coordinates are optional and additive; omitted `layout` keeps the current response shape for Force.
+- Layout errors return the graph without coordinates rather than failing the request.
 
 Shared semantics:
 
@@ -86,9 +101,9 @@ Retired bands are excluded from default lists/search and remain accessible by di
 
 ## Local verification
 
-- Backend suite: 220 unit tests passed with 105 integration tests skipped; 325 integration tests passed with `TEST_DATABASE_URL`.
+- Backend suite: 225 unit tests passed with 107 integration tests skipped; 332 full-suite tests passed with `TEST_DATABASE_URL`.
 - Ruff check/format: passed.
-- OpenAPI generation includes `/api/v1/graph/producers` and the overview schemas; generated TypeScript types compile.
-- Frontend lint, typecheck, 76 tests and production build: passed.
-- Full-corpus overview smoke: 398 nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`; no truncation at the 1,000-node cap.
+- OpenAPI generation includes `/api/v1/graph/producers`, the overview schemas and the optional layout block; generated TypeScript types compile.
+- Frontend lint, typecheck, 98 tests and production build: passed.
+- Full-corpus overview smoke: 398 nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`; no truncation at the 1,000-node cap. Layout requests took ~0.16 s (Bipartite) and ~0.25 s (Community) for the 968-node album view.
 - E10 remote CI: pending. The last passed E8 run is [42741669410](https://github.com/cblancom/HMDE/actions/runs/42741669410) for commit `bb4ca1a`.

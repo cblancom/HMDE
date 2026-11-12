@@ -1,4 +1,8 @@
-import type { ProducerGraphView, ProducerOverviewSort } from '../api/producerGraph'
+import type {
+  GraphLayoutMode,
+  ProducerGraphView,
+  ProducerOverviewSort,
+} from '../api/producerGraph'
 import type { GraphRole } from '../graph/adapter'
 import { PeriodFilter } from './PeriodFilter'
 import { TaxonomySelect } from './TaxonomySelect'
@@ -10,6 +14,7 @@ export type OverviewOptions = {
   order: 'asc' | 'desc'
   decade: string
   subgenre: string
+  layout: GraphLayoutMode
 }
 
 export type OverviewDisplayOptions = {
@@ -25,6 +30,12 @@ type ProducerOverviewControlsProps = {
   onDisplayChange: (display: OverviewDisplayOptions) => void
   onReset: () => void
 }
+
+const LAYOUTS: Array<{ value: GraphLayoutMode; label: string }> = [
+  { value: 'force', label: 'Force' },
+  { value: 'bipartite', label: 'Bipartite' },
+  { value: 'community', label: 'Community' },
+]
 
 const PRODUCER_LIMITS = [
   { value: 0, label: 'All producers' },
@@ -60,6 +71,26 @@ export function ProducerOverviewControls({
         >
           Albums
         </button>
+      </div>
+
+      <div className="field graph-field">
+        <label htmlFor="overview-layout">Layout</label>
+        <select
+          id="overview-layout"
+          value={options.layout}
+          onChange={(event) =>
+            onOptionsChange({
+              ...options,
+              layout: event.target.value as GraphLayoutMode,
+            })
+          }
+        >
+          {LAYOUTS.map((layout) => (
+            <option key={layout.value} value={layout.value}>
+              {layout.label}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="field graph-field">

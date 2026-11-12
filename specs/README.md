@@ -1,7 +1,7 @@
 # SDD specifications
 
 - **Status:** Active index
-- **Version:** 0.7
+- **Version:** 0.9
 - **Date:** 2026-11-11
 
 This directory contains the active Specification-Driven Development work. The long-term stage plan lives in [`docs/00-vision/roadmap.md`](../docs/00-vision/roadmap.md). This index tracks capability boundaries, spec status and dependencies.
@@ -23,7 +23,7 @@ Build order: `platform → catalog → ingestion → normalization → quality �
 
 ## Spec index
 
-E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 data quality and validation. Remote CI run 42545153696 passed. SPEC-007 is validated for E6 exploratory analysis and metric definition. Remote CI run 42548567359 passed. SPEC-008 is validated for E7 producer-centric graph and network analysis; remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is validated for E9; remote CI run 42747146170 passed. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview with shared band/album nodes, an additive read-only overview endpoint, a 1,000-node cap and an isolated-producer toggle; the producer ego graph remains the drill-down. Backend and frontend checks and headless browser verification passed. Manual ego interaction and remote CI are pending, so the spec is implemented but not yet validated. SPEC-012 is implemented locally for the E10 workspace refinements: producer and band indexes, equal-height scrollable panels, a dynamic light-to-dark year scale, node-type detail panels, a persisted collapsible navigation rail, full-width layout and collapsible graph panels. It reuses the existing read-only endpoints and changes no API or schema. Local tests and headless verification passed; remote CI is pending.
+E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are validated. SPEC-003 and SPEC-004 are validated. SPEC-005 is validated for E4 normalization, identity, album taxonomy and provenance. Remote CI run 42535752532 passed. SPEC-006 is validated for E5 data quality and validation. Remote CI run 42545153696 passed. SPEC-007 is validated for E6 exploratory analysis and metric definition. Remote CI run 42548567359 passed. SPEC-008 is validated for E7 producer-centric graph and network analysis; remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is validated for E9; remote CI run 42747146170 passed. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview with shared band/album nodes, an additive read-only overview endpoint, a 1,000-node cap and an isolated-producer toggle; the producer ego graph remains the drill-down. Backend and frontend checks and headless browser verification passed. Manual ego interaction and remote CI are pending, so the spec is implemented but not yet validated. SPEC-012 is implemented locally for the E10 workspace refinements: producer and band indexes, equal-height scrollable panels, a dynamic light-to-dark year scale, node-type detail panels, a persisted collapsible navigation rail, full-width layout and collapsible graph panels. It reuses the existing read-only endpoints and changes no API or schema. Local tests and headless verification passed; remote CI is pending. SPEC-013 is implemented locally: server-generated NetworkX bipartite and E7 Louvain community cluster layouts on `/graph`, with a Force/Bipartite/Community selector and static physics controls. It adds an optional layout parameter and coordinates block; local tests and headless checks passed, remote CI pending.
 
 | Order | Spec | Stage | Primary module | Scope | Depends on | Status |
 |---|---|---|---|---|---|---|
@@ -39,9 +39,10 @@ E0, E1 and E2 are complete. `001-foundations` and `002-seed-band-explorer` are v
 | 010 | [`010-entity-explorer`](010-entity-explorer/spec.md) | E9 | `web` | Band, album and producer exploration UI | 009 | Validated |
 | 011 | [`011-graph-visualization`](011-graph-visualization/spec.md) | E10 | `web`, `api` | Global producer overview, ego graph drill-down, force physics and accessible fallback | 008, 009, 010 | Implemented |
 | 012 | [`012-graph-overview-refinements`](012-graph-overview-refinements/spec.md) | E10 | `web` | Producer/band index, equal-height scrollable panels, dynamic year scale, node detail panel, collapsible rail and panels | 011 | Implemented |
-| 013 | `013-integration-qa` | E11 | `platform` | End-to-end tests, performance, accessibility and security review | 010, 012 | Pending |
-| 014 | `014-release-v0.1` | E12 | `platform` | Deployment, attribution, runbooks and release | 013 | Pending |
-| 015 | `015-corpus-expansion` | E13 | `ingestion` | Expansion to 200–500 bands and v1 validation | 014 | Pending |
+| 013 | [`013-graph-layout-modes`](013-graph-layout-modes/spec.md) | E10 | `api`, `web` | Bipartite and community layouts for the global overview with a Force/Bipartite/Community selector | 008, 011, 012 | Implemented |
+| 014 | `014-integration-qa` | E11 | `platform` | End-to-end tests, performance, accessibility and security review | 010, 012, 013 | Pending |
+| 015 | `015-release-v0.1` | E12 | `platform` | Deployment, attribution, runbooks and release | 014 | Pending |
+| 016 | `016-corpus-expansion` | E13 | `ingestion` | Expansion to 200–500 bands and v1 validation | 015 | Pending |
 
 The index is updated when a spec is created, approved, implemented or validated. A spec that is split or superseded keeps its number and is marked accordingly.
 
@@ -111,4 +112,4 @@ Templates are in [`_template/`](_template/).
 
 ## Next step
 
-E0–E9 are complete and validated through SPEC-010. SPEC-011 and SPEC-012 are implemented locally for E10; manual ego interaction and remote CI remain before SPEC-011 can be marked validated, and remote CI remains for SPEC-012. E11 (`013-integration-qa`) follows after that validation.
+E0–E9 are complete and validated through SPEC-010. SPEC-011 and SPEC-012 are implemented locally for E10; manual ego interaction and remote CI remain before SPEC-011 can be marked validated, and remote CI remains for SPEC-012. SPEC-013 is implemented locally for alternate graph layouts; remote CI is pending. E11 (`014-integration-qa`) follows after validation.

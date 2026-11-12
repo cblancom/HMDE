@@ -34,6 +34,8 @@ def test_openapi_includes_generated_response_schemas() -> None:
     assert "ProducerOverviewGraphResponse" in schemas
     assert "ProducerOverviewGraphMeta" in schemas
     assert "ProducerOverviewGraphLimits" in schemas
+    assert "ProducerOverviewGraphLayout" in schemas
+    assert "ProducerOverviewGraphLayoutNode" in schemas
     assert "AnalyticsSummaryResponse" in schemas
     assert "TaxonomyResponse" in schemas
     assert "AlbumDetailResponse" in schemas

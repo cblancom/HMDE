@@ -1785,6 +1785,55 @@
         "title": "ProducerListResponse",
         "type": "object"
       },
+      "ProducerOverviewGraphLayout": {
+        "properties": {
+          "algorithm": {
+            "enum": [
+              "bipartite",
+              "community"
+            ],
+            "title": "Algorithm",
+            "type": "string"
+          },
+          "nodes": {
+            "items": {
+              "$ref": "#/components/schemas/ProducerOverviewGraphLayoutNode"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "algorithm",
+          "nodes"
+        ],
+        "title": "ProducerOverviewGraphLayout",
+        "type": "object"
+      },
+      "ProducerOverviewGraphLayoutNode": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "title": "Y",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "x",
+          "y"
+        ],
+        "title": "ProducerOverviewGraphLayoutNode",
+        "type": "object"
+      },
       "ProducerOverviewGraphLimits": {
         "properties": {
           "max_edges": {
@@ -1889,6 +1938,16 @@
             },
             "title": "Edges",
             "type": "array"
+          },
+          "layout": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProducerOverviewGraphLayout"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "meta": {
             "$ref": "#/components/schemas/ProducerOverviewGraphMeta"
@@ -3256,6 +3315,26 @@
               "minimum": 1,
               "title": "Max Edges",
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "layout",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "bipartite",
+                    "community"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Layout"
             }
           },
           {

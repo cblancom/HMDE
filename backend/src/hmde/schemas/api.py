@@ -228,10 +228,22 @@ class ProducerOverviewGraphMeta(BaseModel):
     limits: ProducerOverviewGraphLimits
 
 
+class ProducerOverviewGraphLayoutNode(BaseModel):
+    id: UUID
+    x: float
+    y: float
+
+
+class ProducerOverviewGraphLayout(BaseModel):
+    algorithm: Literal["bipartite", "community"]
+    nodes: list[ProducerOverviewGraphLayoutNode]
+
+
 class ProducerOverviewGraphResponse(BaseModel):
     nodes: list[ProducerGraphNode]
     edges: list[ProducerGraphEdge]
     meta: ProducerOverviewGraphMeta
+    layout: ProducerOverviewGraphLayout | None = None
 
 
 class TaxonomyNodeResponse(BaseModel):

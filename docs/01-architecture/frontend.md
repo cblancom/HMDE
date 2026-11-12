@@ -1,8 +1,8 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 global overview, ego graph and space-efficient workspace implemented locally; headless checks passed; manual ego interaction and remote CI pending
+- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace and alternate layouts implemented locally; headless checks passed; manual ego interaction and remote CI pending
 - **Stage:** E10
-- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md)
+- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md)
 - **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
 
 ## 1. Routes
@@ -107,6 +107,15 @@ Revision 3 makes the layout space-efficient:
 - a `ResizeObserver` calls `cy.resize()` when the graph column changes width, without recreating Cytoscape or restarting physics;
 - panel widths are `minmax(10rem,12rem)` and `minmax(14rem,16rem)` with 0.75rem gaps.
 
+SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`:
+
+- Force is the default and keeps the current d3-force behavior.
+- Bipartite uses NetworkX `bipartite_layout` on the server: producers on the left, bands/albums on the right. The response includes deterministic coordinates and the graph applies a fitted static preset.
+- Community reuses the E7 Louvain `community_key`, assigns targets to the majority producer community, and positions community centers with a contracted graph plus seeded `spring_layout`; members are placed on deterministic rings.
+- Static modes disable Freeze/Resume/Reheat and show `Static layout`. Selecting Force restores physics.
+- Layouts are requested only for the overview, included in the URL as `layout=force|bipartite|community` and cached by query key. The ego graph is unchanged.
+- Missing or invalid coordinates fall back to Force with a visible notice.
+
 Current v0.2 corpus: 398 unique nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`. The albums isolated toggle reduces the loaded network to 893 nodes / 951 edges. In the bands view the 43 isolated producer entities share band entities and remain visible as bands.
 
 ## 7. Boundary
@@ -126,13 +135,14 @@ The only E10 API change is the additive read-only overview endpoint. SPEC-012 ad
 
 Local checks on 2026-11-11:
 
-- frontend `npm ci`, OpenAPI generation, lint, typecheck, **94 tests**, production build;
+- frontend `npm ci`, OpenAPI generation, lint, typecheck, **98 tests**, production build;
 - headless Chromium on `/graph`: 398-node bands and 968-node albums views, initial fit, live physics, freeze/resume/reheat, dragging, search highlight, isolated toggle, reduced-motion frozen start and accessible table;
 - SPEC-012 headless checks: equal 858 px panel heights, independent panel scroll, 384 producer and 57 band index rows, dynamic `1968 to 2026` year scale, producer/album/band detail flows and stacked 900/1200 px layouts without horizontal overflow;
 - revision 3 headless checks: 48 px collapsed and 272 px expanded rail with persisted state, 876/1,144/1,348 px graph widths at 1440 px for open/one-closed/both-closed panels, 1,352 px graph at 1920 px with both panels open, canvas width following the column after every toggle; `/bands`, `/albums`, `/producers`, `/graph` and `/search` had no horizontal overflow at 1440/1920 px;
+- SPEC-013 headless checks: Force physics, Bipartite producer x=80 / album x=920, Community clusters, disabled static controls and a fitted 968-node album view; layout API requests took ~0.16 s (Bipartite) and ~0.25 s (Community);
 - backend 220 unit tests with 105 integration tests skipped; Ruff and format;
 - `docker compose config -q`;
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011 and SPEC-012 remote CI and the manual ego interaction review are pending.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending.

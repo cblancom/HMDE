@@ -30,6 +30,7 @@ def get_producer_overview_graph_endpoint(
     include_evidence: bool = False,
     max_nodes: Annotated[int, Query(ge=1, le=1000)] = 1000,
     max_edges: Annotated[int, Query(ge=1, le=2000)] = 2000,
+    layout: Literal["bipartite", "community"] | None = None,
 ) -> ProducerOverviewGraphResponse:
     return get_producer_overview_graph(
         db,
@@ -44,4 +45,5 @@ def get_producer_overview_graph_endpoint(
         include_evidence=include_evidence,
         max_nodes=max_nodes,
         max_edges=max_edges,
+        layout=layout,
     )

@@ -36,6 +36,11 @@ export type GraphTableEdge = {
   albumCount: number | null
 }
 
+export type AdaptedGraphLayout = {
+  algorithm: 'bipartite' | 'community'
+  positions: Record<string, { x: number; y: number }>
+}
+
 export type AdaptedGraph = {
   elements: ElementDefinition[]
   nodes: ProducerGraphNode[]
@@ -46,6 +51,7 @@ export type AdaptedGraph = {
   availableSubgenres: string[]
   supportsDecade: boolean
   supportsSubgenre: boolean
+  layout?: AdaptedGraphLayout | null
 }
 
 export type OverviewCounts = {
@@ -179,6 +185,7 @@ export function adaptOverviewGraph(
   const filteredNodes = response.nodes.filter((node) => visibleNodeIds.has(node.id))
 
   const yearRange = visibleYearRange(filteredNodes)
+  const layout = adaptLayout(response)
   const degreeById: Record<string, number> = {}
   const incidentProducersById: Record<string, ProducerGraphNode[]> = {}
   for (const edge of filteredEdges) {
@@ -219,7 +226,13 @@ export function adaptOverviewGraph(
   return {
     elements: [
       ...filteredNodes.map((node) =>
-        nodeElement(node, degreeById[node.id] ?? 0, true, yearRange),
+        nodeElement(
+          node,
+          degreeById[node.id] ?? 0,
+          true,
+          yearRange,
+          layout?.positions[node.id],
+        ),
       ),
       ...filteredEdges.map((edge) => edgeElement(edge)),
     ],
@@ -238,6 +251,7 @@ export function adaptOverviewGraph(
     incidentProducersById,
     allIncidentProducersById,
     yearRange,
+    layout,
   }
 }
 
@@ -272,6 +286,28 @@ function sortIndexRows(rows: OverviewIndexRow[]): OverviewIndexRow[] {
 
 export function isIsolatedProducer(node: ProducerGraphNode): boolean {
   return node.type === 'producer' && attributeNumber(node, 'band_count') === 0
+}
+
+function adaptLayout(
+  response: ProducerOverviewGraphResponse,
+): AdaptedGraphLayout | null {
+  if (!response.layout) return null
+  const nodeIds = new Set(response.nodes.map((node) => node.id))
+  const positions: Record<string, { x: number; y: number }> = {}
+  for (const node of response.layout.nodes) {
+    if (
+      !nodeIds.has(node.id) ||
+      node.id in positions ||
+      !Number.isFinite(node.x) ||
+      !Number.isFinite(node.y)
+    ) {
+      return null
+    }
+    positions[node.id] = { x: node.x, y: node.y }
+  }
+  return Object.keys(positions).length === nodeIds.size
+    ? { algorithm: response.layout.algorithm, positions }
+    : null
 }
 
 function visibleYearRange(nodes: ProducerGraphNode[]): YearRange | null {
@@ -343,6 +379,7 @@ function nodeElement(
   degree = 0,
   overview = false,
   yearRange: YearRange | null = null,
+  position?: { x: number; y: number },
 ): ElementDefinition {
   const artistType = attributeString(node, 'artist_type')
   const selfProduced = node.attributes.self_produced_albums
@@ -350,6 +387,7 @@ function nodeElement(
   const isolated = overview && isIsolatedProducer(node)
   return {
     group: 'nodes',
+    ...(position ? { position } : {}),
     data: {
       id: node.id,
       label: node.label,

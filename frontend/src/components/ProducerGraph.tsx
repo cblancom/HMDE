@@ -92,15 +92,20 @@ export function ProducerGraph({
   const cyRef = useRef<cytoscape.Core | null>(null)
   const layoutRef = useRef<cytoscape.Layouts | null>(null)
   const fitTimerRef = useRef<number | null>(null)
-  const physicsRef = useRef<PhysicsState>('running')
-  const onSelectRef = useRef(onSelect)
-  const [physics, setPhysics] = useState<PhysicsState>('running')
-  const nodeCount = graph.nodes.length
-  const reducedMotion = useRef(
+  const staticLayout = Boolean(graph.layout)
+  const reducedMotion =
     typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const physicsRef = useRef<PhysicsState>(
+    staticLayout || reducedMotion ? 'frozen' : 'running',
   )
+  const onSelectRef = useRef(onSelect)
+  const [physics, setPhysics] = useState<PhysicsState>(
+    staticLayout || reducedMotion ? 'frozen' : 'running',
+  )
+  const nodeCount = graph.nodes.length
+  const displayPhysics = staticLayout || reducedMotion ? 'frozen' : physics
 
   useEffect(() => {
     onSelectRef.current = onSelect
@@ -174,7 +179,7 @@ export function ProducerGraph({
         container,
         elements: graph.elements,
         style: graphStyles,
-        layout: { name: 'preset', fit: false },
+        layout: { name: 'preset', fit: staticLayout },
       })
     } catch {
       return
@@ -188,19 +193,23 @@ export function ProducerGraph({
     cy.on('select', 'node, edge', onSelectEvent)
     cy.on('unselect', 'node, edge', onUnselectEvent)
 
-    if (reducedMotion.current) {
+    if (staticLayout) {
+      physicsRef.current = 'frozen'
+    } else if (reducedMotion) {
       cy.layout({ name: 'breadthfirst', directed: false, padding: 40, animate: false }).run()
-      setPhysicsState('frozen')
+      physicsRef.current = 'frozen'
     } else {
+      // The effect owns Cytoscape startup; runForce resets the derived physics status.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       runForce()
     }
 
-    let wasRunning = !reducedMotion.current
+    let wasRunning = !reducedMotion
     const onVisibility = () => {
       if (document.hidden) {
         wasRunning = physicsRef.current === 'running'
         freeze()
-      } else if (wasRunning && !reducedMotion.current) {
+      } else if (wasRunning && !reducedMotion) {
         runForce()
         wasRunning = false
       }
@@ -220,7 +229,7 @@ export function ProducerGraph({
       cyRef.current = null
       layoutRef.current = null
     }
-  }, [graph, freeze, runForce, setPhysicsState])
+  }, [graph, freeze, reducedMotion, runForce, setPhysicsState, staticLayout])
 
   useEffect(() => {
     const container = containerRef.current
@@ -259,7 +268,7 @@ export function ProducerGraph({
             type="button"
             className="button button--secondary"
             onClick={freeze}
-            disabled={physics === 'frozen'}
+            disabled={displayPhysics === 'frozen'}
           >
             Freeze layout
           </button>
@@ -267,11 +276,16 @@ export function ProducerGraph({
             type="button"
             className="button button--secondary"
             onClick={() => runForce(false)}
-            disabled={physics === 'running'}
+            disabled={staticLayout || displayPhysics === 'running'}
           >
             Resume physics
           </button>
-          <button type="button" className="button button--secondary" onClick={() => runForce(true)}>
+          <button
+            type="button"
+            className="button button--secondary"
+            onClick={() => runForce(true)}
+            disabled={staticLayout}
+          >
             Reheat
           </button>
         </div>
@@ -288,8 +302,9 @@ export function ProducerGraph({
         data-testid="producer-graph-canvas"
       />
       <p className="graph-meta" role="status">
-        {physics === 'running' ? 'Physics running' : 'Layout frozen'}. Drag a node to move the
-        network.
+        {staticLayout
+          ? 'Static layout. Drag a node to inspect the network.'
+          : `${displayPhysics === 'running' ? 'Physics running' : 'Layout frozen'}. Drag a node to move the network.`}
       </p>
     </section>
   )

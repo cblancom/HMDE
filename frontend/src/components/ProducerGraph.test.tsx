@@ -161,6 +161,29 @@ describe('ProducerGraph', () => {
     Object.defineProperty(document, 'hidden', { configurable: true, value: false })
   })
 
+  it('applies a static preset and disables physics when coordinates are present', () => {
+    const graph = {
+      ...adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1'),
+      layout: {
+        algorithm: 'bipartite' as const,
+        positions: {
+          'producer-1': { x: 100, y: 100 },
+          'album-1': { x: 900, y: 100 },
+        },
+      },
+    }
+    render(<ProducerGraph graph={graph} />)
+
+    expect(screen.getByText(/Static layout/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Freeze layout' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Resume physics' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Reheat' })).toBeDisabled()
+    expect(layoutRun).not.toHaveBeenCalled()
+    expect(cytoscapeMock.mock.calls.at(-1)?.[0]).toMatchObject({
+      layout: { name: 'preset', fit: true },
+    })
+  })
+
   it('resizes the canvas when its container changes', () => {
     let resizeCallback: (() => void) | undefined
     const observe = vi.fn()
