@@ -107,7 +107,7 @@ Revision 3 makes the layout space-efficient:
 - a `ResizeObserver` calls `cy.resize()` when the graph column changes width, without recreating Cytoscape or restarting physics;
 - panel widths are `minmax(10rem,12rem)` and `minmax(14rem,16rem)` with 0.75rem gaps.
 
-SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`:
+SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, while retaining the producer top-k selector. The baseline is revisions 1–2; a legibility revision was attempted and reverted and revision 3 is in clarification.
 
 - Force is the default and keeps the current d3-force behavior.
 - Bipartite uses NetworkX `bipartite_layout` on the server: producers on the left, bands/albums on the right. The response includes deterministic coordinates and the graph applies a fitted static preset.
@@ -145,4 +145,4 @@ Local checks on 2026-11-11:
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is in clarification; the baseline selector/static modes remain.

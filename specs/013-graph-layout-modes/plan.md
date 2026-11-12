@@ -1,6 +1,6 @@
 # Technical plan — SPEC-013 Graph overview layout modes
 
-- **Status:** Approved; implemented locally
+- **Status:** Approved for revisions 1–2; revision 3 reverted, redesign pending spec clarification
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
@@ -286,3 +286,9 @@ Backend and frontend can ship together. The API change is additive; older client
 ## 15. Approval and next step
 
 T-001–T-005 are implemented locally. The NetworkX layouts, API coordinates, selector and static controls passed the automated suite and headless Chromium checks. Remote CI remains pending.
+
+## 16. Revision 3 — reverted and pending clarification
+
+The legibility revision was attempted and reverted. The retained baseline is revisions 1–2: backend generation of bipartite and community layouts, the optional layout API, the Force/Bipartite/Community selector, the producer top-k selector, and static modes with Force as the default.
+
+Lanes, community ring spacing, size-aware collision, static node separation, edge separation, label toggles/Smart density, auto-freeze, Fit and wheel-sensitivity changes were removed. No plan or tasks are defined for revision 3; a new plan and tasks will be written after the spec open questions are resolved and approved.

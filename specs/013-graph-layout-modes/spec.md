@@ -1,6 +1,6 @@
 # SPEC-013 — Graph overview layout modes
 
-- **Status:** Implemented
+- **Status:** In clarification (revision 3)
 - **Stage:** E10
 - **Iteration:** MVP
 - **Modules:** `api`, `web`
@@ -18,6 +18,7 @@
 |---|---|---|
 | 1 | 2026-11-11 | Initial draft: Force/Bipartite/Community selector with server-generated NetworkX layouts and static controls |
 | 2 | 2026-11-12 | T-001–T-005 implemented locally; NetworkX layouts, API coordinates, selector, static controls and headless verification passed |
+| 3 | 2026-11-12 | Legibility attempts (bipartite lanes, community spacing, size-aware collision, label toggles/Smart density, auto-freeze, edge separation, Fit, wheel sensitivity) were reverted; baseline revisions 1–2 retained; redesign in clarification |
 
 ## 1. Context and problem
 
@@ -31,6 +32,35 @@ This spec adds two additional layout modes:
 The current **Force** layout remains the default. Both new layouts are server-generated and static. The user can return to Force to restore live physics.
 
 NetworkX has `bipartite_layout` but no dedicated community layout. The community mode therefore reuses the E7 Louvain partition and builds a deterministic cluster layout from a contracted community graph plus `spring_layout` for community centers.
+
+### Revision 3 — status and retained baseline
+
+A legibility revision was attempted and reverted. The retained baseline is revisions 1–2:
+
+- backend generation of bipartite and community layouts;
+- the optional `layout` API parameter, schemas and coordinates;
+- the Force/Bipartite/Community selector and URL state;
+- the producer top-k selector and existing filters;
+- static layouts with physics controls disabled and Force as the default.
+
+The following attempts were removed because they did not meet the readability goal:
+
+- bipartite lane wrapping;
+- community ring spacing and translate-only coordinates;
+- size-aware Force collision;
+- deterministic static node separation;
+- post-settle edge separation;
+- label type toggles and Smart density;
+- auto-freeze, Fit, minimum initial zoom and wheel-sensitivity changes.
+
+The observed problems that revision 3 must solve are:
+
+- Force hub spokes overlap and the graph is difficult to read without manually dragging nodes;
+- shared nodes and edges create visual clutter around hubs;
+- Community uses concentric rings whose radii grow with the group, so large groups overlap other groups and their edges;
+- the composition of a Community group is not readable at the fitted view.
+
+Revision 3 must keep the layout selector, the top-k selector, the backend layout generation/API and the existing filters. Lanes and community ring spacing are explicitly discarded. Any solution that reintroduces labels, auto-freeze, zoom changes or edge routing needs a new approved requirement.
 
 ## 2. Users and actors
 
@@ -207,6 +237,7 @@ The selector has a visible label, keyboard focus and an explicit current value. 
 - User-resizable nodes or manual layout editing.
 - New dependencies, database schema, migrations or writes.
 - Layout persistence across sessions or analysis runs.
+- Reintroducing lanes, community ring spacing, label toggles/Smart density, auto-freeze, Fit, wheel-sensitivity changes or static edge separation without a new approved requirement.
 
 ## 9. Acceptance criteria
 
@@ -231,19 +262,28 @@ The selector has a visible label, keyboard focus and an explicit current value. 
 
 - The E7 Louvain communities are the canonical producer communities for this iteration.
 - NetworkX `bipartite_layout` and `spring_layout` are sufficient for the MVP; no specialized third-party layout is added.
-- Static layouts are acceptable for the two new modes; Force remains the interactive physics mode.
-- The layout selector is a `Force`/`Bipartite`/`Community` select, not two independent toggles.
+- The Force/Bipartite/Community selector and the producer top-k selector are retained.
+- Static layouts are acceptable for the two new modes; Force remains the default.
 - Client-only display filters do not trigger a server layout recalculation.
-- The new spec is `013`; planned E11–E13 placeholder specs move to `014`–`016`.
+- Revision 3 is a rewrite of SPEC-013, not a new spec identifier.
+- Lanes and community ring spacing are discarded; any reintroduction needs a new approved requirement.
 
 ### Open questions
 
-No blocking question remains. Exact spring constants, cluster radii and visual tuning are plan-level details.
+Revision 3 is in clarification. The following decisions are needed before a plan and tasks can be written:
+
+1. **Force direction:** replace the free force cloud with a deterministic or constrained layout, or keep live physics and add a separate readability mechanism?
+2. **Community direction:** replace concentric rings with non-overlapping packed regions, or use a different representation of community membership?
+3. **Edge target:** is the priority focus/highlight on selection and hover, routing around nodes, bundling, or only reducing crossings? Zero crossings are impossible for a non-planar graph.
+4. **Labels:** should revision 3 revisit labels at all, or keep the baseline label behavior?
+5. **Initial viewport:** should the graph fit the whole network, start at a readable minimum zoom, or start focused on a selected producer or community?
+6. **Density control:** is the top-k producer selector the primary density control for all modes?
+7. **Success measure:** what must be readable without manual dragging? For example, a hub's spokes, a community's composition, or cross-community links.
 
 ## 11. Validation result
 
 - **Date:** 2026-11-12
-- **Verdict:** Implemented locally; remote CI pending. All acceptance criteria have local automated or headless evidence.
+- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is in clarification, so the spec is not currently implemented for revision 3. Remote CI remains pending.
 - **Evidence:**
   - backend 225 unit and 332 full-suite tests passed; Ruff/format passed; OpenAPI drift unchanged;
   - backend layout tests cover deterministic bipartite ordering, disconnected/isolated nodes, community majority/unassigned handling, single-community/no-edge cases and empty graphs;

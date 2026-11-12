@@ -1,6 +1,6 @@
 # Tasks — SPEC-013 Graph overview layout modes
 
-- **Status:** Implemented locally; T-001–T-005 completed; remote CI pending
+- **Status:** Revisions 1–2 completed; revision 3 reverted; redesign pending spec clarification
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -157,10 +157,15 @@ T-001 implements and tests the NetworkX layout functions. T-002 adds the API con
 | AC-011 | Passed | Details/table/resize remain available; headless static mode |
 | AC-012 | Passed | Full backend/frontend checks and OpenAPI generation |
 
-## 5. Notes
+## 5. Revision 3 — pending
+
+No revision 3 tasks are defined. T-001–T-005 remain the completed baseline. New tasks will be added after `spec.md` revision 3 is clarified and `plan.md` is approved.
+
+## 6. Notes
 
 - NetworkX has `bipartite_layout`; it has no community layout, so Community is a documented custom cluster layout on top of E7 Louvain.
 - Static layouts are not force simulations; Force remains the interactive mode.
+- Revision 3 was reverted; lanes, community spacing, labels, auto-freeze, Fit and edge separation are not active.
 - Client-only role/search/isolated filters do not recompute server coordinates.
 - No DB migration or new dependency belongs in this spec.
 - Do not mark a task complete until its verification has been executed.
