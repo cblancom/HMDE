@@ -1,6 +1,6 @@
 # SPEC-013 — Graph overview layout modes
 
-- **Status:** In clarification (revision 3)
+- **Status:** Plan/tasks in review (revision 4; revision 3 legibility redesign deferred; coreness/radial and orthogonal routing split into SPEC-017/SPEC-018)
 - **Stage:** E10
 - **Iteration:** MVP
 - **Modules:** `api`, `web`
@@ -18,7 +18,9 @@
 |---|---|---|
 | 1 | 2026-11-11 | Initial draft: Force/Bipartite/Community selector with server-generated NetworkX layouts and static controls |
 | 2 | 2026-11-12 | T-001–T-005 implemented locally; NetworkX layouts, API coordinates, selector, static controls and headless verification passed |
-| 3 | 2026-11-12 | Legibility attempts (bipartite lanes, community spacing, size-aware collision, label toggles/Smart density, auto-freeze, edge separation, Fit, wheel sensitivity) were reverted; baseline revisions 1–2 retained; redesign in clarification |
+| 3 | 2026-11-12 | Legibility attempts (bipartite lanes, community spacing, size-aware collision, label toggles/Smart density, auto-freeze, edge separation, Fit, wheel sensitivity) were reverted; baseline revisions 1–2 retained; redesign deferred |
+| 4 | 2026-11-13 | Add a client-side Force engine selector for d3-force, CoSE and fCoSE; approve the fCoSE frontend dependency; keep revision 3 deferred |
+| 5 | 2026-11-13 | Split coreness/radial layouts and orthogonal edge routing into SPEC-017 and SPEC-018; revision 4 behavior is unchanged |
 
 ## 1. Context and problem
 
@@ -61,6 +63,31 @@ The observed problems that revision 3 must solve are:
 - the composition of a Community group is not readable at the fitted view.
 
 Revision 3 must keep the layout selector, the top-k selector, the backend layout generation/API and the existing filters. Lanes and community ring spacing are explicitly discarded. Any solution that reintroduces labels, auto-freeze, zoom changes or edge routing needs a new approved requirement.
+
+Revision 3 is deferred and does not block revision 4.
+
+### Revision 4 — Force engine selector
+
+Revision 4 adds a focused control to the existing Force mode:
+
+- when `layout=force`, the overview shows a Force engine selector below the Layout selector;
+- the available engines are `d3-force` (default), `CoSE` and `fCoSE`;
+- `d3-force` keeps the current infinite simulation;
+- `CoSE` uses the Cytoscape built-in `cose` layout;
+- `fCoSE` uses the approved `cytoscape-fcose` extension;
+- engine selection is client-side and does not change the API, the graph data or the backend layouts;
+- `Bipartite`, `Community` and the producer ego graph remain unchanged.
+
+The control is disabled when the Layout selector is not `Force`. The selected engine is stored in the URL as `engine=d3-force|cose|fcose`; the default is omitted. Changing the engine must not issue a new overview request.
+
+### Revision 5 — follow-up scope split
+
+Two additional graph ideas are intentionally **not** part of SPEC-013 revision 4:
+
+- [SPEC-017](../017-graph-coreness-radial-layouts/spec.md) adds separate client-side Coreness and Rings modes with a Rings metric selector.
+- [SPEC-018](../018-orthogonal-edge-routing/spec.md) adds a global curved/orthogonal edge-routing toggle.
+
+Revision 5 is a documentation-only split. It does not change revision 4 behavior, the Force engine selector, the API, the backend or the ego graph. The follow-up specs have their own plans, tasks, acceptance criteria and approval gates.
 
 ## 2. Users and actors
 
@@ -106,6 +133,19 @@ As a researcher, I want the graph to remain usable if a requested layout cannot 
 2. The frontend falls back to the Force layout.
 3. A non-blocking notice explains that the requested layout was unavailable.
 4. Selection, filters, details and the accessible table remain usable.
+
+### US-004 — Choose a Force engine
+
+As a researcher, I want to switch between force-directed engines so that I can compare how the same network is arranged.
+
+**Expected flow:**
+
+1. The user selects `Force` in the Layout selector.
+2. The Force engine group below the selector becomes enabled.
+3. The user selects `d3-force`, `CoSE` or `fCoSE`.
+4. The graph re-runs the selected client-side layout without reloading graph data.
+5. The URL records the engine; reloading preserves it.
+6. Selecting `Bipartite` or `Community` disables the group and leaves the static layout unchanged.
 
 ## 4. Functional requirements
 
@@ -165,7 +205,7 @@ When the response includes layout coordinates, Cytoscape applies them as a stati
 
 ### FR-006 — Force remains available
 
-Selecting `Force` removes the layout parameter, uses the existing d3-force preset, and re-enables Freeze/Resume/Reheat. No existing force behavior regresses.
+Selecting `Force` removes the layout parameter, uses the selected Force engine (`d3-force` by default with the existing preset), and re-enables Freeze/Resume/Reheat. No existing force behavior regresses.
 
 **Verification:** existing graph tests plus a new Force-mode test.
 
@@ -190,11 +230,57 @@ The new layouts apply only to `/graph`. The producer ego graph at `/producers/:i
 
 **Verification:** route/client scope inspection.
 
+### FR-010 — Force engine selector
+
+When the overview layout is `force`, the UI must show an accessible Force engine selector below the Layout selector. It must offer `d3-force`, `CoSE` and `fCoSE`, expose the active engine, and be disabled when the layout is `bipartite` or `community`. `d3-force` is the default.
+
+**Verification:** control/page tests and URL assertions.
+
+### FR-011 — d3-force remains the default
+
+The default engine is `d3-force`. With no `engine` parameter, the graph must use the existing infinite d3-force preset and preserve current Freeze/Resume/Reheat behavior. Changing only the engine must not add a `layout` parameter or issue a new graph request.
+
+**Verification:** existing and new ProducerGraph tests; page request assertions.
+
+### FR-012 — CoSE engine
+
+Selecting `CoSE` must run Cytoscape's built-in `cose` layout on the current Cytoscape elements. CoSE is client-side, finite, and requires no additional dependency. It must use bounded options and expose the same selection, details, table and resize behavior as the other layouts.
+
+**Verification:** component test asserting `name: 'cose'`; headless check.
+
+### FR-013 — fCoSE engine
+
+Selecting `fCoSE` must run the `cytoscape-fcose` extension registered once at graph setup. fCoSE is client-side and finite. The implementation must use the approved dependency and type package, and must not add a backend dependency.
+
+**Verification:** registration/component test asserting `name: 'fcose'`; build and typecheck.
+
+### FR-014 — Force engine lifecycle and controls
+
+The force engine lifecycle must distinguish infinite and finite layouts:
+
+- d3-force runs continuously until frozen;
+- CoSE and fCoSE run to completion or until frozen;
+- Freeze stops the active layout;
+- Resume re-runs the selected engine from current positions;
+- Reheat re-runs it with randomized initial positions;
+- switching engines stops the previous layout before starting the new one;
+- the graph status must describe the active engine without claiming that finite layouts are infinite physics.
+
+Reduced motion must not animate the graph. CoSE/fCoSE may compute a static result with `animate: false`; d3-force retains the existing frozen fallback.
+
+**Verification:** component lifecycle tests, reduced-motion test and headless interaction check.
+
+### FR-015 — Fallback and scope
+
+If the selected engine fails, the frontend must fall back to `d3-force` and then to the static `breadthfirst` fallback if needed; the canvas must never be left blank. Invalid `engine` URL values resolve to `d3-force`. The selector applies only to `/graph`; the ego graph and its API remain unchanged. Bipartite and Community never run a force engine.
+
+**Verification:** fallback tests, URL parsing tests and scope inspection.
+
 ## 5. Non-functional requirements
 
 ### NFR-001 — Determinism
 
-For the same analysis run, view, filters, node set and layout mode, the coordinates must be identical across requests. Community and spring calculations use fixed seeds and sorted inputs.
+For the same analysis run, view, filters, node set and server layout mode, the server coordinates must be identical across requests. Community and spring calculations use fixed seeds and sorted inputs. The revision 4 client force engines are interactive and are not part of this server determinism requirement.
 
 ### NFR-002 — Performance
 
@@ -202,19 +288,24 @@ The layout must complete acceptably for the current 398-node bands view and 968-
 
 ### NFR-003 — Scope and dependencies
 
-NetworkX is already a backend dependency. This spec adds no new dependency, database table, migration, write operation or graph renderer. The API change is additive.
+NetworkX is already a backend dependency. Revisions 1–2 add no new dependency, database table, migration, write operation or graph renderer. Revision 4 adds one approved frontend dependency, `cytoscape-fcose`, plus its TypeScript definitions. The backend dependency set and the API contract remain unchanged.
 
 ### NFR-004 — Accessibility and responsive behavior
 
-The selector has a visible label, keyboard focus and an explicit current value. Static-mode controls expose their disabled state and the reason. The graph remains usable with the existing responsive workspace and table fallback. Color is not used to encode communities in this spec.
+The selectors have visible labels, keyboard focus and an explicit current value. Static-mode and disabled engine controls expose their disabled state and the reason. The graph remains usable with the existing responsive workspace and table fallback. Color is not used to encode communities in this spec.
+
+### NFR-005 — Client-side layout performance
+
+The selected force engine must remain usable with the current 398-node bands view and 968-node albums view. The UI must not block navigation, and switching engines must not issue a new API request. CoSE and fCoSE must be measured in a headless browser before validation.
 
 ## 6. Business rules
 
 - **BR-001:** Producer nodes are the left partition; band and album nodes are the right partition.
 - **BR-002:** The community partition is the persisted E7 Louvain `community_key` of each producer.
 - **BR-003:** A shared band or album is assigned to the community with the highest number of incident producers; ties are broken by community key.
-- **BR-004:** Static layouts do not run d3-force. Force is restored only by selecting `Force`.
+- **BR-004:** Static layouts do not run a force engine. Force is restored only by selecting `Force`.
 - **BR-005:** Client-only display filters do not trigger a new server layout; server-selected filters do.
+- **BR-006:** A force engine applies only when the overview layout is `Force`; `Bipartite` and `Community` use their server coordinates and never run a force engine.
 
 ## 7. Edge cases and errors
 
@@ -228,16 +319,26 @@ The selector has a visible label, keyboard focus and an explicit current value. 
 - Truncated overview: layout only covers the returned/truncated node set; truncation remains visible.
 - Static layout while the user changes role or isolated filters: positions remain stable; hidden nodes are simply removed.
 - Reduced motion: static layouts have no motion; Force retains the existing frozen start.
+- Force engine selected while Bipartite/Community is active: the control is disabled and the engine is ignored until Force is selected.
+- Engine change while a layout is running: the previous layout is stopped before the new one starts.
+- fCoSE unavailable or throws: fall back to d3-force, then breadthfirst, with a usable graph.
+- Invalid or unknown `engine` URL value: use d3-force.
+- Reduced motion with a force engine: no animation; CoSE/fCoSE may compute a static result, d3-force keeps the frozen fallback.
+- Isolated or disconnected nodes under CoSE/fCoSE: the layout must remain usable; packing is evaluated during validation.
 
 ## 8. Out of scope
 
 - Changing the producer ego graph or its API.
+- Adding the force engine selector to the producer ego graph.
+- ForceAtlas2 or any force engine beyond d3-force, CoSE and fCoSE.
 - New community detection algorithms or new community persistence.
 - Recoloring nodes by community or drawing community hulls.
 - User-resizable nodes or manual layout editing.
-- New dependencies, database schema, migrations or writes.
+- New backend dependencies, database schema, migrations or writes.
 - Layout persistence across sessions or analysis runs.
 - Reintroducing lanes, community ring spacing, label toggles/Smart density, auto-freeze, Fit, wheel-sensitivity changes or static edge separation without a new approved requirement.
+- Coreness and radial ring modes; see [SPEC-017](../017-graph-coreness-radial-layouts/spec.md).
+- Orthogonal edge routing; see [SPEC-018](../018-orthogonal-edge-routing/spec.md).
 
 ## 9. Acceptance criteria
 
@@ -255,22 +356,36 @@ The selector has a visible label, keyboard focus and an explicit current value. 
 | AC-010 | The ego graph and its API remain unchanged. | Scope inspection |
 | AC-011 | The existing accessible table, selection, details and resize behavior remain available in static modes. | Component/headless tests |
 | AC-012 | Backend/frontend lint, tests, OpenAPI generation and build pass. | Local commands |
+| AC-013 | `Force` exposes an enabled engine selector with `d3-force`, `CoSE` and `fCoSE`; other layouts disable it. | Page/control tests |
+| AC-014 | The selected engine is stored in the URL and does not trigger a new overview request. | Page/URL/request tests |
+| AC-015 | `d3-force` remains the default and preserves the existing infinite physics behavior. | Component tests |
+| AC-016 | `CoSE` runs the built-in `cose` layout without a new dependency. | Component test and build inspection |
+| AC-017 | `fCoSE` runs the registered `fcose` extension with the approved dependency. | Component/typecheck/build tests |
+| AC-018 | Freeze, Resume, Reheat, fallback and reduced-motion behavior are defined for infinite and finite engines. | Component/headless tests |
+| AC-019 | The ego graph, Bipartite and Community remain unchanged. | Scope/component/page tests |
+| AC-020 | Frontend lint, typecheck, tests and build pass, and the 398/968-node corpus is usable in a headless check. | Local commands and headless probe |
 
 ## 10. Assumptions and open questions
 
 ### Assumptions
 
 - The E7 Louvain communities are the canonical producer communities for this iteration.
-- NetworkX `bipartite_layout` and `spring_layout` are sufficient for the MVP; no specialized third-party layout is added.
+- NetworkX `bipartite_layout` and `spring_layout` are sufficient for the server-generated layouts; revision 4 adds only the approved client-side fCoSE engine.
 - The Force/Bipartite/Community selector and the producer top-k selector are retained.
 - Static layouts are acceptable for the two new modes; Force remains the default.
 - Client-only display filters do not trigger a server layout recalculation.
 - Revision 3 is a rewrite of SPEC-013, not a new spec identifier.
+- Revision 4 is a focused addition to SPEC-013, not a replacement for revision 3.
+- Coreness/radial modes and orthogonal edge routing are separate follow-up specs, not part of revision 4.
+- The Force engine selector applies only to the global overview.
+- `CoSE` means Cytoscape's built-in `cose` layout; `fCoSE` means the `cytoscape-fcose` extension.
+- A three-button group below the Layout selector is the approved UI.
+- The owner approved the `cytoscape-fcose` and `@types/cytoscape-fcose` dependencies on 2026-11-13.
 - Lanes and community ring spacing are discarded; any reintroduction needs a new approved requirement.
 
 ### Open questions
 
-Revision 3 is in clarification. The following decisions are needed before a plan and tasks can be written:
+Revision 3 is deferred. Revision 4 has no blocking open questions; its decisions are documented above. The revision 3 questions remain open only for the deferred legibility redesign and do not block revision 4:
 
 1. **Force direction:** replace the free force cloud with a deterministic or constrained layout, or keep live physics and add a separate readability mechanism?
 2. **Community direction:** replace concentric rings with non-overlapping packed regions, or use a different representation of community membership?
@@ -282,9 +397,10 @@ Revision 3 is in clarification. The following decisions are needed before a plan
 
 ## 11. Validation result
 
-- **Date:** 2026-11-12
-- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is in clarification, so the spec is not currently implemented for revision 3. Remote CI remains pending.
+- **Date:** 2026-11-13 (revisions 1–2 evidence from 2026-11-12)
+- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is deferred. Revision 4 is documented here, its plan is approved and its tasks are in review, and no revision 4 code has been implemented. Revision 5 is a documentation-only split; its follow-up specs are in plan/tasks review. Remote CI remains pending.
 - **Evidence:**
+  - revision 4: not implemented; plan/tasks pending approval;
   - backend 225 unit and 332 full-suite tests passed; Ruff/format passed; OpenAPI drift unchanged;
   - backend layout tests cover deterministic bipartite ordering, disconnected/isolated nodes, community majority/unassigned handling, single-community/no-edge cases and empty graphs;
   - integration tests cover both layout modes, optional/absent coordinates, invalid values, determinism and a computation-error fallback;

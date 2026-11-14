@@ -2,6 +2,7 @@
 
 - **Status:** Validated for E8; the additive producer overview endpoint is implemented locally for E10 (SPEC-011) with remote CI pending
 - **Specs:** [SPEC-009](../../specs/009-read-api/spec.md), [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md)
+- **Related frontend follow-ups:** [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md); both are client-only and do not change this contract.
 - **Base path:** `/api/v1`
 
 ## Entity endpoints
@@ -61,7 +62,7 @@ If no completed run exists, analytics/graph/producer endpoints return `503`. A r
 - `decade` and `subgenre` select producers through album credits; the albums view also restricts album targets.
 - `include_isolated`: `true` default; `false` omits producer rows with no outgoing producer–band edges.
 - `include_evidence`: bounded edge evidence, mainly for band-view role mixes.
-- `layout`: optional `bipartite` or `community`; absent means client-side Force.
+- `layout`: optional `bipartite` or `community`; absent means client-side Force. The client-side Coreness/Rings modes (SPEC-017) and the edge-routing toggle (SPEC-018) are not API layout values and add no parameters.
 - `max_nodes`: 1,000; `max_edges`: 2,000.
 - `analysis_run`: optional E7 run selection.
 

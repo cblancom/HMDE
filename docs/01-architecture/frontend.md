@@ -1,8 +1,8 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace and alternate layouts implemented locally; headless checks passed; manual ego interaction and remote CI pending
+- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace and alternate layouts implemented locally; SPEC-017/018 follow-ups in plan/tasks review; headless checks passed; manual ego interaction and remote CI pending
 - **Stage:** E10
-- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md)
+- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md), [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md)
 - **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
 
 ## 1. Routes
@@ -107,7 +107,7 @@ Revision 3 makes the layout space-efficient:
 - a `ResizeObserver` calls `cy.resize()` when the graph column changes width, without recreating Cytoscape or restarting physics;
 - panel widths are `minmax(10rem,12rem)` and `minmax(14rem,16rem)` with 0.75rem gaps.
 
-SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, while retaining the producer top-k selector. The baseline is revisions 1–2; a legibility revision was attempted and reverted and revision 3 is in clarification.
+SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, while retaining the producer top-k selector. The baseline is revisions 1–2; a legibility revision was attempted and reverted and revision 3 is deferred. Revision 4 adds a client-side engine selector to Force mode, with the plan approved and tasks in review.
 
 - Force is the default and keeps the current d3-force behavior.
 - Bipartite uses NetworkX `bipartite_layout` on the server: producers on the left, bands/albums on the right. The response includes deterministic coordinates and the graph applies a fitted static preset.
@@ -115,6 +115,12 @@ SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, whi
 - Static modes disable Freeze/Resume/Reheat and show `Static layout`. Selecting Force restores physics.
 - Layouts are requested only for the overview, included in the URL as `layout=force|bipartite|community` and cached by query key. The ego graph is unchanged.
 - Missing or invalid coordinates fall back to Force with a visible notice.
+- Revision 4 (plan approved, tasks in review) adds a three-button force engine group below the Layout selector: `d3-force` (default, infinite), built-in `CoSE` (finite) and `fCoSE` (finite, approved `cytoscape-fcose` dependency). The group is disabled outside Force and the engine is stored as `engine=d3-force|cose|fcose` without changing the API request or query key.
+
+SPEC-017 and SPEC-018 are separate E10 follow-ups in plan/tasks review; they do not change SPEC-013 revision 4.
+
+- SPEC-017 adds separate client-side Coreness and Rings modes. Coreness uses k-core shell numbers with Cytoscape `concentric`. Rings uses bands, albums and producers as three type regions and a dropdown for `betweenness`, `coreness`, `degree` or `producer-connectivity`. Both are static, URL-backed (`layout=coreness|rings`, `ring_metric=...`) and excluded from the API request/query key.
+- SPEC-018 adds a global `Orthogonal edges` toggle for every overview layout. It switches edges between `bezier` and Cytoscape `taxi` routing, is stored as `routing=orthogonal`, and does not re-layout or refetch. The ego graph remains curved.
 
 Current v0.2 corpus: 398 unique nodes / 426 edges in `bands` and 968 nodes / 1,134 edges in `albums`. The albums isolated toggle reduces the loaded network to 893 nodes / 951 edges. In the bands view the 43 isolated producer entities share band entities and remain visible as bands.
 
@@ -145,4 +151,4 @@ Local checks on 2026-11-11:
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is in clarification; the baseline selector/static modes remain.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 has its plan approved and tasks in review. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation.
