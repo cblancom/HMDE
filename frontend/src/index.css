@@ -306,7 +306,8 @@ dd {
   gap: 0.35rem;
 }
 
-.field label {
+.field label,
+.field-label {
   color: var(--ink);
   font-family: var(--display);
   font-size: 0.78rem;
@@ -816,6 +817,21 @@ select:focus {
 .view-tabs {
   display: flex;
   gap: 0.35rem;
+}
+
+.engine-field {
+  min-width: 13rem;
+}
+
+.engine-field .button {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+}
+
+.graph-field-note {
+  color: var(--muted);
+  font-family: var(--display);
+  font-size: 0.7rem;
 }
 
 .graph-field {

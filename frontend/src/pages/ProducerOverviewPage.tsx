@@ -28,6 +28,11 @@ import {
   buildProducerIndex,
   type GraphRole,
 } from '../graph/adapter'
+import {
+  DEFAULT_FORCE_ENGINE,
+  normalizeForceEngine,
+  type ForceEngine,
+} from '../graph/forceLayouts'
 
 const SORTS: ProducerOverviewSort[] = ['album_count', 'band_count', 'betweenness', 'name']
 
@@ -53,6 +58,10 @@ function parseDecade(value: string | null): string {
 
 function parseLayout(value: string | null): GraphLayoutMode {
   return value === 'bipartite' || value === 'community' ? value : 'force'
+}
+
+function parseEngine(value: string | null): ForceEngine {
+  return normalizeForceEngine(value)
 }
 
 function edgeId(edge: { source: string; target: string; role: string }): string {
@@ -81,6 +90,9 @@ export function ProducerOverviewPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const rawView = searchParams.get('view')
   const invalidView = rawView !== null && rawView !== 'albums' && rawView !== 'bands'
+  const urlEngine = parseEngine(searchParams.get('engine'))
+  const [rememberedEngine, setRememberedEngine] = useState<ForceEngine>(urlEngine)
+  const engine = urlEngine === DEFAULT_FORCE_ENGINE ? rememberedEngine : urlEngine
   const options: OverviewOptions = {
     view: parseView(rawView),
     producerLimit: parseProducerLimit(searchParams.get('producers')),
@@ -89,6 +101,7 @@ export function ProducerOverviewPage() {
     decade: parseDecade(searchParams.get('decade')),
     subgenre: searchParams.get('subgenre') ?? '',
     layout: parseLayout(searchParams.get('layout')),
+    engine,
   }
   const [displayState, setDisplayState] = useState<{
     role: GraphRole
@@ -149,26 +162,43 @@ export function ProducerOverviewPage() {
     [graphQuery.data, view, role, hideIsolated],
   )
 
-  function replaceParams(next: Record<string, string | null>) {
+  function replaceParams(next: Record<string, string | null>, replace = false) {
     const params = new URLSearchParams(searchParams)
     for (const [key, value] of Object.entries(next)) {
       if (value === null || value === '') params.delete(key)
       else params.set(key, value)
     }
-    setSearchParams(params)
+    setSearchParams(params, { replace })
   }
 
   function updateOptions(next: OverviewOptions) {
-    replaceParams({
-      view: next.view === 'bands' ? null : next.view,
-      producers: next.producerLimit > 0 ? String(next.producerLimit) : null,
-      sort: next.producerSort === 'album_count' ? null : next.producerSort,
-      order: next.order === 'desc' ? null : next.order,
-      decade: next.decade || null,
-      subgenre: next.subgenre || null,
-      layout: next.layout === 'force' ? null : next.layout,
-      selected: null,
-    })
+    setRememberedEngine(next.engine)
+    const engineOnly =
+      next.engine !== options.engine &&
+      next.view === options.view &&
+      next.producerLimit === options.producerLimit &&
+      next.producerSort === options.producerSort &&
+      next.order === options.order &&
+      next.decade === options.decade &&
+      next.subgenre === options.subgenre &&
+      next.layout === options.layout
+    replaceParams(
+      {
+        view: next.view === 'bands' ? null : next.view,
+        producers: next.producerLimit > 0 ? String(next.producerLimit) : null,
+        sort: next.producerSort === 'album_count' ? null : next.producerSort,
+        order: next.order === 'desc' ? null : next.order,
+        decade: next.decade || null,
+        subgenre: next.subgenre || null,
+        layout: next.layout === 'force' ? null : next.layout,
+        engine:
+          next.layout === 'force' && next.engine !== DEFAULT_FORCE_ENGINE
+            ? next.engine
+            : null,
+        selected: null,
+      },
+      engineOnly,
+    )
   }
 
   function updateDisplay(next: OverviewDisplayOptions) {
@@ -367,6 +397,7 @@ export function ProducerOverviewPage() {
             <ProducerGraph
               graph={adapted}
               variant="overview"
+              engine={options.engine}
               highlightSearch={display.producerSearch}
               onSelect={(id) => updateSelected(id)}
             />

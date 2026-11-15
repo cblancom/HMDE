@@ -1,90 +1,49 @@
 import cytoscape from 'cytoscape'
 import d3Force from 'cytoscape-d3-force'
+import fcose from 'cytoscape-fcose'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { AdaptedGraph } from '../graph/adapter'
+import {
+  DEFAULT_FORCE_ENGINE,
+  d3ForceOptions,
+  forceEngineOptions,
+  isFiniteForceEngine,
+  type ForceEngine,
+  type GraphVariant,
+} from '../graph/forceLayouts'
 import { graphStyles } from '../graph/styles'
 
 cytoscape.use(d3Force)
+let fcoseAvailable = false
+try {
+  cytoscape.use(fcose)
+  fcoseAvailable = true
+} catch {
+  fcoseAvailable = false
+}
 
-type PhysicsState = 'running' | 'frozen'
-export type GraphVariant = 'ego' | 'overview'
+type PhysicsState = 'running' | 'complete' | 'frozen'
+export type { GraphVariant }
 
 type ProducerGraphProps = {
   graph: AdaptedGraph
   variant?: GraphVariant
+  engine?: ForceEngine
   highlightSearch?: string
   onSelect?: (id: string, kind: 'node' | 'edge') => void
 }
 
-function collideRadiusFor(
-  variant: GraphVariant,
-  node: { type?: string },
-): number {
-  if (variant === 'overview') {
-    if (node.type === 'band') return 10
-    if (node.type === 'album') return 7
-    return 8
-  }
-  if (node.type === 'band') return 34
-  if (node.type === 'album') return 28
-  return 22
-}
-
-function linkDistanceFor(
-  variant: GraphVariant,
-  nodeCount: number,
-  canvasHeight: number,
-): number {
-  if (variant === 'overview') {
-    const desired = Math.max(42, Math.min(90, 44 + nodeCount / 40))
-    return Math.max(30, Math.min(desired, canvasHeight / 6))
-  }
-  const desired = Math.max(180, Math.min(300, 70 + nodeCount * 11))
-  return Math.max(120, Math.min(desired, canvasHeight / 2 - 60))
-}
-
-function forceOptions(variant: GraphVariant, nodeCount: number, canvasHeight: number) {
-  const shared = {
-    name: 'd3-force',
-    infinite: true,
-    fixedAfterDragging: false,
-    ungrabifyWhileSimulating: false,
-    animate: true,
-    fit: false,
-    padding: 40,
-    randomize: false,
-    alpha: 1,
-    alphaMin: 0.001,
-    linkId: (node: { id: string }) => node.id,
-    linkDistance: linkDistanceFor(variant, nodeCount, canvasHeight),
-    collideRadius: (node: { type?: string }) => collideRadiusFor(variant, node),
-  }
-  if (variant === 'overview') {
-    return {
-      ...shared,
-      alphaDecay: 0.035,
-      velocityDecay: 0.55,
-      collideStrength: 0.6,
-      collideIterations: 1,
-      manyBodyStrength: -45,
-      manyBodyTheta: 0.9,
-      manyBodyDistanceMin: 8,
-    }
-  }
-  return {
-    ...shared,
-    alphaDecay: 0.0228,
-    velocityDecay: 0.4,
-    collideStrength: 0.9,
-    collideIterations: 2,
-    manyBodyStrength: -320,
-  }
+function engineLabel(engine: ForceEngine): string {
+  if (engine === 'cose') return 'CoSE'
+  if (engine === 'fcose') return 'fCoSE'
+  return 'd3-force'
 }
 
 export function ProducerGraph({
   graph,
   variant = 'ego',
+  engine = DEFAULT_FORCE_ENGINE,
   highlightSearch = '',
   onSelect,
 }: ProducerGraphProps) {
@@ -92,20 +51,22 @@ export function ProducerGraph({
   const cyRef = useRef<cytoscape.Core | null>(null)
   const layoutRef = useRef<cytoscape.Layouts | null>(null)
   const fitTimerRef = useRef<number | null>(null)
+  const runTokenRef = useRef(0)
   const staticLayout = Boolean(graph.layout)
   const reducedMotion =
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const physicsRef = useRef<PhysicsState>(
-    staticLayout || reducedMotion ? 'frozen' : 'running',
-  )
+  const finiteEngine = isFiniteForceEngine(engine)
+  const frozenStart = staticLayout || (reducedMotion && !finiteEngine)
+  const physicsRef = useRef<PhysicsState>(frozenStart ? 'frozen' : 'running')
   const onSelectRef = useRef(onSelect)
-  const [physics, setPhysics] = useState<PhysicsState>(
-    staticLayout || reducedMotion ? 'frozen' : 'running',
-  )
+  const [physics, setPhysics] = useState<PhysicsState>(frozenStart ? 'frozen' : 'running')
+  const [activeEngine, setActiveEngine] = useState<ForceEngine>(engine)
+  const [engineNotice, setEngineNotice] = useState<string | null>(null)
   const nodeCount = graph.nodes.length
-  const displayPhysics = staticLayout || reducedMotion ? 'frozen' : physics
+  const activeFinite = isFiniteForceEngine(activeEngine)
+  const displayPhysics = staticLayout || (reducedMotion && !activeFinite) ? 'frozen' : physics
 
   useEffect(() => {
     onSelectRef.current = onSelect
@@ -137,35 +98,102 @@ export function ProducerGraph({
     }, 1200)
   }, [])
 
-  const runForce = useCallback(
+  const runStaticFallback = useCallback(
+    (cy: cytoscape.Core) => {
+      try {
+        cy.layout({ name: 'breadthfirst', directed: false, padding: 40, animate: false }).run()
+      } catch {
+        // Keep the loaded graph and its fallback table visible.
+      }
+      setPhysicsState('frozen')
+    },
+    [setPhysicsState],
+  )
+
+  const runEngine = useCallback(
     (reheat = false) => {
       const cy = cyRef.current
-      if (!cy) return
+      if (!cy || staticLayout) return
       layoutRef.current?.stop()
+      layoutRef.current = null
+      const token = ++runTokenRef.current
+      setEngineNotice(null)
+      setActiveEngine(engine)
+
+      if (reducedMotion && !finiteEngine) {
+        runStaticFallback(cy)
+        return
+      }
+
       try {
-        const layout = cy.layout({
-          ...forceOptions(variant, nodeCount, cy.height()),
-          randomize: reheat,
-        } as unknown as cytoscape.LayoutOptions)
+        if (engine === 'fcose' && !fcoseAvailable) {
+          throw new Error('fCoSE is not registered')
+        }
+        const layout = cy.layout(
+          forceEngineOptions(engine, variant, nodeCount, cy.height(), {
+            randomize: reheat,
+            reducedMotion,
+          }),
+        )
+        if (finiteEngine) {
+          layout.one('layoutstop', () => {
+            if (token !== runTokenRef.current) return
+            setPhysicsState('complete')
+            try {
+              cy.fit(undefined, 40)
+            } catch {
+              // Keep the completed layout viewport if the fit fails.
+            }
+          })
+        }
+        setPhysicsState('running')
         layout.run()
         layoutRef.current = layout
-        setPhysicsState('running')
-        if (variant === 'overview' && !reheat) fitOverview()
+        if (variant === 'overview' && engine === 'd3-force' && !reheat) fitOverview()
       } catch {
         layoutRef.current = null
-        try {
-          cy.layout({ name: 'breadthfirst', directed: false, padding: 40, animate: false }).run()
-        } catch {
-          // Keep the loaded graph and its fallback table visible.
+        if (engine !== 'd3-force') {
+          setEngineNotice(`The ${engineLabel(engine)} engine is unavailable. Using d3-force.`)
+          setActiveEngine('d3-force')
+          try {
+            const fallback = cy.layout(
+              d3ForceOptions(variant, nodeCount, cy.height(), { randomize: reheat }),
+            )
+            fallback.run()
+            layoutRef.current = fallback
+            setPhysicsState('running')
+            if (variant === 'overview' && !reheat) fitOverview()
+            return
+          } catch {
+            layoutRef.current = null
+          }
         }
-        setPhysicsState('frozen')
+        setActiveEngine('d3-force')
+        runStaticFallback(cy)
       }
     },
-    [fitOverview, nodeCount, setPhysicsState, variant],
+    [
+      engine,
+      finiteEngine,
+      fitOverview,
+      nodeCount,
+      reducedMotion,
+      runStaticFallback,
+      setPhysicsState,
+      staticLayout,
+      variant,
+    ],
   )
+  const runEngineRef = useRef(runEngine)
+
+  useEffect(() => {
+    runEngineRef.current = runEngine
+  }, [runEngine])
 
   const freeze = useCallback(() => {
     layoutRef.current?.stop()
+    layoutRef.current = null
+    runTokenRef.current += 1
     setPhysicsState('frozen')
   }, [setPhysicsState])
 
@@ -195,22 +223,17 @@ export function ProducerGraph({
 
     if (staticLayout) {
       physicsRef.current = 'frozen'
-    } else if (reducedMotion) {
-      cy.layout({ name: 'breadthfirst', directed: false, padding: 40, animate: false }).run()
-      physicsRef.current = 'frozen'
     } else {
-      // The effect owns Cytoscape startup; runForce resets the derived physics status.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      runForce()
+      runEngineRef.current()
     }
 
-    let wasRunning = !reducedMotion
+    let wasRunning = !staticLayout
     const onVisibility = () => {
       if (document.hidden) {
         wasRunning = physicsRef.current === 'running'
         freeze()
-      } else if (wasRunning && !reducedMotion) {
-        runForce()
+      } else if (wasRunning) {
+        runEngineRef.current()
         wasRunning = false
       }
     }
@@ -222,6 +245,7 @@ export function ProducerGraph({
         window.clearTimeout(fitTimerRef.current)
         fitTimerRef.current = null
       }
+      runTokenRef.current += 1
       cy.removeListener('select', 'node, edge', onSelectEvent)
       cy.removeListener('unselect', 'node, edge', onUnselectEvent)
       layoutRef.current?.stop()
@@ -229,7 +253,14 @@ export function ProducerGraph({
       cyRef.current = null
       layoutRef.current = null
     }
-  }, [graph, freeze, reducedMotion, runForce, setPhysicsState, staticLayout])
+  }, [freeze, graph, staticLayout])
+
+  const engineRef = useRef(engine)
+  useEffect(() => {
+    if (engineRef.current === engine) return
+    engineRef.current = engine
+    runEngineRef.current()
+  }, [engine])
 
   useEffect(() => {
     const container = containerRef.current
@@ -259,6 +290,16 @@ export function ProducerGraph({
     })
   }, [graph, highlightSearch])
 
+  const statusText = staticLayout
+    ? 'Static layout. Drag a node to inspect the network.'
+    : activeFinite
+      ? displayPhysics === 'running'
+        ? `${engineLabel(activeEngine)} layout running. Drag a node to inspect the network.`
+        : displayPhysics === 'complete'
+          ? `${engineLabel(activeEngine)} layout complete. Drag a node to inspect the network.`
+          : `Layout frozen · ${engineLabel(activeEngine)}. Drag a node to move the network.`
+      : `${displayPhysics === 'running' ? 'Physics running' : 'Layout frozen'} · d3-force. Drag a node to move the network.`
+
   return (
     <section className="producer-graph" data-testid="producer-graph" aria-labelledby="producer-graph-heading">
       <div className="graph-toolbar">
@@ -268,14 +309,14 @@ export function ProducerGraph({
             type="button"
             className="button button--secondary"
             onClick={freeze}
-            disabled={displayPhysics === 'frozen'}
+            disabled={staticLayout || displayPhysics === 'frozen' || displayPhysics === 'complete'}
           >
             Freeze layout
           </button>
           <button
             type="button"
             className="button button--secondary"
-            onClick={() => runForce(false)}
+            onClick={() => runEngine(false)}
             disabled={staticLayout || displayPhysics === 'running'}
           >
             Resume physics
@@ -283,7 +324,7 @@ export function ProducerGraph({
           <button
             type="button"
             className="button button--secondary"
-            onClick={() => runForce(true)}
+            onClick={() => runEngine(true)}
             disabled={staticLayout}
           >
             Reheat
@@ -301,10 +342,13 @@ export function ProducerGraph({
         }
         data-testid="producer-graph-canvas"
       />
+      {engineNotice ? (
+        <p className="async-state" role="status">
+          {engineNotice}
+        </p>
+      ) : null}
       <p className="graph-meta" role="status">
-        {staticLayout
-          ? 'Static layout. Drag a node to inspect the network.'
-          : `${displayPhysics === 'running' ? 'Physics running' : 'Layout frozen'}. Drag a node to move the network.`}
+        {statusText}
       </p>
     </section>
   )

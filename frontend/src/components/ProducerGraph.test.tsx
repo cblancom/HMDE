@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { ProducerGraphResponse } from '../api/producerGraph'
@@ -7,13 +7,14 @@ import { ProducerGraph } from './ProducerGraph'
 
 const originalMatchMedia = window.matchMedia
 
-const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock, resizeMock } = vi.hoisted(() => {
+const { cytoscapeMock, fcoseMock, layoutRun, layoutStop, layoutOne, destroyMock, fitMock, resizeMock } = vi.hoisted(() => {
   const run = vi.fn()
   const stop = vi.fn()
+  const one = vi.fn()
   const destroy = vi.fn()
   const fit = vi.fn()
   const resize = vi.fn()
-  const layout = vi.fn(() => ({ run, stop }))
+  const layout = vi.fn(() => ({ run, stop, one }))
   const cy = {
     layout,
     fit,
@@ -27,8 +28,10 @@ const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock, resizeMock }
   factory.use = vi.fn()
   return {
     cytoscapeMock: factory,
+    fcoseMock: vi.fn(),
     layoutRun: run,
     layoutStop: stop,
+    layoutOne: one,
     destroyMock: destroy,
     fitMock: fit,
     resizeMock: resize,
@@ -37,6 +40,7 @@ const { cytoscapeMock, layoutRun, layoutStop, destroyMock, fitMock, resizeMock }
 
 vi.mock('cytoscape', () => ({ default: cytoscapeMock }))
 vi.mock('cytoscape-d3-force', () => ({ default: vi.fn() }))
+vi.mock('cytoscape-fcose', () => ({ default: fcoseMock }))
 
 const response: ProducerGraphResponse = {
   nodes: [
@@ -71,6 +75,7 @@ beforeEach(() => {
   cytoscapeMock.mockClear()
   layoutRun.mockClear()
   layoutStop.mockClear()
+  layoutOne.mockClear()
   destroyMock.mockClear()
   fitMock.mockClear()
   resizeMock.mockClear()
@@ -107,6 +112,119 @@ describe('ProducerGraph', () => {
     expect(layoutRun).toHaveBeenCalledTimes(3)
   })
 
+
+  it('runs CoSE, reports completion and keeps d3-force as default', () => {
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="cose" />)
+
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({ name: 'cose', fit: false })
+    expect(screen.getByText(/CoSE layout running/)).toBeInTheDocument()
+
+    act(() => {
+      ;(layoutOne.mock.calls.at(-1)?.[1] as () => void)()
+    })
+    expect(screen.getByText(/CoSE layout complete/)).toBeInTheDocument()
+    expect(fitMock).toHaveBeenCalled()
+  })
+
+  it('registers and runs the fCoSE extension', () => {
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="fcose" />)
+
+    expect(cytoscapeMock.use).toHaveBeenCalledWith(fcoseMock)
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({
+      name: 'fcose',
+      quality: 'proof',
+      packComponents: false,
+    })
+    expect(screen.getByText(/fCoSE layout running/)).toBeInTheDocument()
+  })
+
+  it('stops the previous layout when the engine changes', () => {
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    const { rerender } = render(<ProducerGraph graph={graph} />)
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({ name: 'd3-force' })
+
+    rerender(<ProducerGraph graph={graph} engine="cose" />)
+
+    expect(layoutStop).toHaveBeenCalled()
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({ name: 'cose' })
+    expect(screen.getByText(/CoSE layout running/)).toBeInTheDocument()
+  })
+
+  it('re-runs finite engines on resume and reheat', () => {
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="cose" />)
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+
+    act(() => {
+      ;(layoutOne.mock.calls.at(-1)?.[1] as () => void)()
+    })
+    fireEvent.click(screen.getByRole('button', { name: 'Resume physics' }))
+    expect(layoutRun).toHaveBeenCalledTimes(2)
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({ name: 'cose', randomize: false })
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reheat' }))
+    expect(layoutRun).toHaveBeenCalledTimes(3)
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({ name: 'cose', randomize: true })
+  })
+
+  it('falls back to d3-force when the selected engine fails', () => {
+    layoutRun.mockImplementationOnce(() => {
+      throw new Error('engine unavailable')
+    })
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="fcose" />)
+
+    expect(screen.getByText(/fCoSE engine is unavailable/)).toBeInTheDocument()
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(
+      layoutMock.mock.calls.slice(-2).map((call) => (call[0] as { name?: string }).name),
+    ).toEqual(['fcose', 'd3-force'])
+    expect(screen.getByText(/Physics running/)).toBeInTheDocument()
+  })
+
+  it('falls back to breadthfirst when both force engines fail', () => {
+    layoutRun
+      .mockImplementationOnce(() => {
+        throw new Error('cose unavailable')
+      })
+      .mockImplementationOnce(() => {
+        throw new Error('d3-force unavailable')
+      })
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="cose" />)
+
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(
+      layoutMock.mock.calls.slice(-3).map((call) => (call[0] as { name?: string }).name),
+    ).toEqual(['cose', 'd3-force', 'breadthfirst'])
+    expect(screen.getByText(/Layout frozen/)).toBeInTheDocument()
+  })
+
+  it('computes finite engines statically under reduced motion', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: vi.fn(() => ({ matches: true, media: '', addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(), removeEventListener: vi.fn(), dispatchEvent: vi.fn(), onchange: null })),
+    })
+    layoutRun.mockImplementationOnce(() => {
+      ;(layoutOne.mock.calls.at(-1)?.[1] as () => void)()
+    })
+    const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')
+    render(<ProducerGraph graph={graph} engine="cose" />)
+
+    const layoutMock = (cytoscapeMock.mock.results[0]?.value as { layout: ReturnType<typeof vi.fn> }).layout
+    expect(layoutMock.mock.calls.at(-1)?.[0]).toMatchObject({
+      name: 'cose',
+      animate: false,
+    })
+    expect(screen.getByText(/CoSE layout complete/)).toBeInTheDocument()
+    vi.unstubAllGlobals()
+  })
 
   it('uses a compact overview preset and fits the initial network', () => {
     const graph = adaptGraph(response, 'albums', { role: 'all', decade: '', subgenre: '' }, 'producer-1')

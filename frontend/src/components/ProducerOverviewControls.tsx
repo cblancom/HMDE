@@ -4,6 +4,7 @@ import type {
   ProducerOverviewSort,
 } from '../api/producerGraph'
 import type { GraphRole } from '../graph/adapter'
+import { FORCE_ENGINES, type ForceEngine } from '../graph/forceLayouts'
 import { PeriodFilter } from './PeriodFilter'
 import { TaxonomySelect } from './TaxonomySelect'
 
@@ -15,6 +16,7 @@ export type OverviewOptions = {
   decade: string
   subgenre: string
   layout: GraphLayoutMode
+  engine: ForceEngine
 }
 
 export type OverviewDisplayOptions = {
@@ -91,6 +93,31 @@ export function ProducerOverviewControls({
             </option>
           ))}
         </select>
+      </div>
+
+      <div className="field graph-field engine-field">
+        <span className="field-label" id="overview-engine-label">
+          Force engine
+        </span>
+        <div className="view-tabs" role="group" aria-labelledby="overview-engine-label">
+          {FORCE_ENGINES.map((engine) => (
+            <button
+              key={engine.value}
+              type="button"
+              className={
+                options.engine === engine.value ? 'button' : 'button button--secondary'
+              }
+              aria-pressed={options.engine === engine.value}
+              disabled={options.layout !== 'force'}
+              onClick={() => onOptionsChange({ ...options, engine: engine.value })}
+            >
+              {engine.label}
+            </button>
+          ))}
+        </div>
+        {options.layout !== 'force' ? (
+          <span className="graph-field-note">Available when Layout is Force.</span>
+        ) : null}
       </div>
 
       <div className="field graph-field">

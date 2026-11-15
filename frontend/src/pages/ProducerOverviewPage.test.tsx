@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, useLocation } from 'react-router'
 
 import { mockFetchRoutes } from '../test/fetch'
 import { renderWithProviders } from '../test/render'
@@ -186,9 +186,24 @@ const bands = {
   offset: 0,
 }
 
+function LocationProbe() {
+  const location = useLocation()
+  return <p data-testid="location">{location.search}</p>
+}
+
 function renderOverview(route = '/graph') {
   return renderWithProviders(
-    <Routes><Route path="/graph" element={<ProducerOverviewPage />} /></Routes>,
+    <Routes>
+      <Route
+        path="/graph"
+        element={
+          <>
+            <ProducerOverviewPage />
+            <LocationProbe />
+          </>
+        }
+      />
+    </Routes>,
     { route },
   )
 }
@@ -327,6 +342,69 @@ describe('ProducerOverviewPage', () => {
     expect(
       await screen.findByText(/The requested layout is unavailable/),
     ).toBeInTheDocument()
+  })
+
+  it('selects force engines in the URL without refetching the overview', async () => {
+    const fetchMock = mockOverview()
+    renderOverview()
+    await screen.findByRole('heading', { name: 'Producer network' })
+
+    const overviewCalls = () =>
+      fetchMock.mock.calls.filter(([url]) =>
+        String(url).startsWith('/api/v1/graph/producers'),
+      ).length
+    expect(screen.getByTestId('location').textContent).toBe('')
+    expect(screen.getByRole('button', { name: 'd3-force' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    const callsBefore = overviewCalls()
+
+    fireEvent.click(screen.getByRole('button', { name: 'CoSE' }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toContain('engine=cose')
+    })
+    expect(screen.getByRole('button', { name: 'CoSE' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    expect(overviewCalls()).toBe(callsBefore)
+  })
+
+  it('normalizes unknown engines to d3-force', async () => {
+    mockOverview()
+    renderOverview('/graph?engine=nope')
+
+    await screen.findByRole('heading', { name: 'Producer network' })
+    expect(screen.getByRole('button', { name: 'd3-force' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+  })
+
+  it('disables and removes the engine outside Force while remembering the choice', async () => {
+    mockOverview()
+    renderOverview('/graph?engine=fcose')
+    await screen.findByRole('heading', { name: 'Producer network' })
+
+    expect(screen.getByRole('button', { name: 'fCoSE' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    fireEvent.change(screen.getByLabelText('Layout'), { target: { value: 'community' } })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toContain('layout=community')
+    })
+    await screen.findByRole('heading', { name: 'Producer network' })
+    expect(screen.getByTestId('location').textContent).not.toContain('engine=fcose')
+    expect(screen.getByRole('button', { name: 'fCoSE' })).toBeDisabled()
+
+    fireEvent.change(screen.getByLabelText('Layout'), { target: { value: 'force' } })
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toContain('engine=fcose')
+    })
   })
 
   it('applies a static layout and disables the physics controls', async () => {

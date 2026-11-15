@@ -77,6 +77,7 @@ describe('ProducerGraphPage', () => {
 
     expect(await screen.findByRole('heading', { name: 'Martin Birch' })).toBeInTheDocument()
     expect(screen.getByTestId('producer-graph')).toBeInTheDocument()
+    expect(screen.queryByText('Force engine')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Bands' }))
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(

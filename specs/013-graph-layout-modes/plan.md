@@ -1,6 +1,6 @@
 # Technical plan — SPEC-013 Graph overview layout modes
 
-- **Status:** Approved for revisions 1–2; revision 3 deferred; revision 4 plan approved, tasks in review
+- **Status:** Approved for revisions 1–2; revision 3 deferred; revision 4 implemented locally, remote CI pending
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
@@ -285,7 +285,7 @@ Backend and frontend can ship together. The API change is additive; older client
 
 ## 15. Approval and next step
 
-T-001–T-005 are implemented locally. The NetworkX layouts, API coordinates, selector and static controls passed the automated suite and headless Chromium checks. Remote CI remains pending. Revision 4 is specified in section 17; its plan was approved on 2026-11-13 and its tasks remain in review.
+T-001–T-005 are implemented locally. The NetworkX layouts, API coordinates, selector and static controls passed the automated suite and headless Chromium checks. Remote CI remains pending. Revision 4 is specified in section 17; its plan was approved on 2026-11-13 and it is implemented locally, with remote CI pending.
 
 ## 16. Revision 3 — reverted and deferred
 
@@ -352,7 +352,7 @@ No backend file, schema, migration, OpenAPI artifact or generated API type chang
 - The parameter is removed when the layout is not `force`; the remembered engine remains client state so returning to Force restores the last choice.
 - Invalid or unknown values resolve to `d3-force`.
 - `engine` is excluded from the TanStack query key and from `getProducerOverviewGraph`; changing it never starts a new overview request.
-- The URL update uses replacement history so engine experiments do not flood browser history with one entry per click.
+- Engine-only URL updates use replacement history so engine experiments do not flood browser history with one entry per click; updates that also change layout or filters keep normal history.
 
 #### Layout option builders
 
@@ -389,7 +389,7 @@ No backend file, schema, migration, OpenAPI artifact or generated API type chang
 ### 17.4 Error handling
 
 - Engine change while a layout is running: stop the previous layout, clear its completion callback and start the new one.
-- fCoSE registration failure: log a bounded diagnostic, fall back to d3-force and keep the graph usable.
+- fCoSE registration failure: show a non-blocking notice, fall back to d3-force and keep the graph usable.
 - Layout exception: fall back to d3-force; if that fails, apply `breadthfirst`.
 - Reduced motion plus fCoSE: no animation; the finite result is applied statically.
 - Unmount or graph replacement: stop the active layout and ignore late `layoutstop` callbacks.
@@ -443,7 +443,7 @@ npm run build
 
 ### 17.8 Approval gate
 
-The revision 4 plan was approved on 2026-11-13. Implementation starts only after the matching tasks are approved. Revision 3 remains deferred and must not be mixed into revision 4.
+The revision 4 plan was approved on 2026-11-13. T-006–T-010 are complete locally as of 2026-11-14 and remote CI remains pending. Revision 3 remains deferred and must not be mixed into revision 4.
 
 ## 18. Related follow-up specs
 

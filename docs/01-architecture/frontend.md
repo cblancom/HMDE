@@ -1,6 +1,6 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace and alternate layouts implemented locally; SPEC-017/018 follow-ups in plan/tasks review; headless checks passed; manual ego interaction and remote CI pending
+- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace, alternate layouts and force engines implemented locally; SPEC-017/018 follow-ups in plan/tasks review; headless checks passed; manual ego interaction and remote CI pending
 - **Stage:** E10
 - **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md), [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md)
 - **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
@@ -73,7 +73,7 @@ No hand-written duplicate entity interfaces.
 
 ## 6. Graph views
 
-E10 has two graph scopes built on separate endpoints and the same `cytoscape-d3-force` lifecycle:
+E10 has two graph scopes built on separate endpoints. The ego graph uses the `cytoscape-d3-force` lifecycle; the overview selects between d3-force, CoSE and fCoSE client-side:
 
 - `/graph` is the global overview over `GET /api/v1/graph/producers`.
 - `/producers/:producerId/graph` is the ego drill-down over the bounded E8 endpoint.
@@ -86,7 +86,7 @@ Ego preset: type-sized collision radii (22/28/34), `collideStrength=0.9`, `colli
 
 Overview preset: infinite physics with `manyBodyStrength=-45`, `linkDistance=42–90`, collision 8/7/10 by producer/album/band, `collideStrength=0.6`, `collideIterations=1`, `alphaDecay=0.035` and `velocityDecay=0.55`. The initial view fits immediately and again after 1.2 s. Node size reflects filtered degree. Labels declutter by zoom: bands are always visible, producer and album labels appear at a 12 px rendered font size, and selected or search-matched labels always show. Search highlights matching producers without recreating the Cytoscape instance. Isolated producer nodes are muted.
 
-Both scopes can be frozen, resumed or reheated; physics pauses when the tab is hidden and starts frozen under `prefers-reduced-motion`.
+Both scopes can be frozen, resumed or reheated; physics pauses when the tab is hidden. Under `prefers-reduced-motion` the ego graph and d3-force start frozen, while CoSE and fCoSE compute a static result. CoSE and fCoSE are finite: completion is reported in the status and Resume/Reheat re-run the selected engine.
 
 Overview controls cover view, producer top-k, sort/order, decade, subgenre, role, producer search/highlight and the isolated toggle. Server-side selection uses producer limit/sort/decade/subgenre; role, search and the toggle are client-side over the loaded network. Counts and API truncation remain visible. The accessible table lists the filtered nodes and edges, and details list incident producers with ego-graph links.
 
@@ -107,7 +107,7 @@ Revision 3 makes the layout space-efficient:
 - a `ResizeObserver` calls `cy.resize()` when the graph column changes width, without recreating Cytoscape or restarting physics;
 - panel widths are `minmax(10rem,12rem)` and `minmax(14rem,16rem)` with 0.75rem gaps.
 
-SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, while retaining the producer top-k selector. The baseline is revisions 1–2; a legibility revision was attempted and reverted and revision 3 is deferred. Revision 4 adds a client-side engine selector to Force mode, with the plan approved and tasks in review.
+SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, while retaining the producer top-k selector. The baseline is revisions 1–2; a legibility revision was attempted and reverted and revision 3 is deferred. Revision 4 adds a client-side engine selector to Force mode and is implemented locally.
 
 - Force is the default and keeps the current d3-force behavior.
 - Bipartite uses NetworkX `bipartite_layout` on the server: producers on the left, bands/albums on the right. The response includes deterministic coordinates and the graph applies a fitted static preset.
@@ -115,7 +115,7 @@ SPEC-013 adds a `Layout` selector with `Force`, `Bipartite` and `Community`, whi
 - Static modes disable Freeze/Resume/Reheat and show `Static layout`. Selecting Force restores physics.
 - Layouts are requested only for the overview, included in the URL as `layout=force|bipartite|community` and cached by query key. The ego graph is unchanged.
 - Missing or invalid coordinates fall back to Force with a visible notice.
-- Revision 4 (plan approved, tasks in review) adds a three-button force engine group below the Layout selector: `d3-force` (default, infinite), built-in `CoSE` (finite) and `fCoSE` (finite, approved `cytoscape-fcose` dependency). The group is disabled outside Force and the engine is stored as `engine=d3-force|cose|fcose` without changing the API request or query key.
+- Revision 4 adds a three-button force engine group below the Layout selector: `d3-force` (default, infinite), built-in `CoSE` (finite) and `fCoSE` (finite, approved `cytoscape-fcose` dependency registered once). The group is disabled outside Force and the engine is stored as `engine=d3-force|cose|fcose` without changing the API request or query key. Engine changes stop the previous layout, never refetch the overview and fall back to d3-force and then `breadthfirst` if necessary.
 
 SPEC-017 and SPEC-018 are separate E10 follow-ups in plan/tasks review; they do not change SPEC-013 revision 4.
 
@@ -146,9 +146,10 @@ Local checks on 2026-11-11:
 - SPEC-012 headless checks: equal 858 px panel heights, independent panel scroll, 384 producer and 57 band index rows, dynamic `1968 to 2026` year scale, producer/album/band detail flows and stacked 900/1200 px layouts without horizontal overflow;
 - revision 3 headless checks: 48 px collapsed and 272 px expanded rail with persisted state, 876/1,144/1,348 px graph widths at 1440 px for open/one-closed/both-closed panels, 1,352 px graph at 1920 px with both panels open, canvas width following the column after every toggle; `/bands`, `/albums`, `/producers`, `/graph` and `/search` had no horizontal overflow at 1440/1920 px;
 - SPEC-013 headless checks: Force physics, Bipartite producer x=80 / album x=920, Community clusters, disabled static controls and a fitted 968-node album view; layout API requests took ~0.16 s (Bipartite) and ~0.25 s (Community);
+- revision 4 headless checks: d3-force default, CoSE/fCoSE completion in 4.08/1.43 s for 398 nodes and 14.37/1.81 s for 968 nodes, URL engine state, no overview refetch, reduced-motion fCoSE and a return to d3-force; frontend lint, typecheck, **118 tests** and build passed;
 - backend 220 unit tests with 105 integration tests skipped; Ruff and format;
 - `docker compose config -q`;
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 has its plan approved and tasks in review. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 is implemented locally with remote CI pending. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation.

@@ -1,6 +1,6 @@
 # SPEC-013 — Graph overview layout modes
 
-- **Status:** Plan/tasks in review (revision 4; revision 3 legibility redesign deferred; coreness/radial and orthogonal routing split into SPEC-017/SPEC-018)
+- **Status:** Implemented (revision 4); local validation passed; remote CI pending. Revision 3 legibility redesign deferred; coreness/radial and orthogonal routing split into SPEC-017/SPEC-018
 - **Stage:** E10
 - **Iteration:** MVP
 - **Modules:** `api`, `web`
@@ -397,10 +397,11 @@ Revision 3 is deferred. Revision 4 has no blocking open questions; its decisions
 
 ## 11. Validation result
 
-- **Date:** 2026-11-13 (revisions 1–2 evidence from 2026-11-12)
-- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is deferred. Revision 4 is documented here, its plan is approved and its tasks are in review, and no revision 4 code has been implemented. Revision 5 is a documentation-only split; its follow-up specs are in plan/tasks review. Remote CI remains pending.
+- **Date:** 2026-11-14 (revisions 1–2 evidence from 2026-11-12)
+- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is deferred. Revision 4 is implemented locally and its local acceptance evidence passed; remote CI remains pending. Revision 5 is a documentation-only split; its follow-up specs are in plan/tasks review.
 - **Evidence:**
-  - revision 4: not implemented; plan/tasks pending approval;
+  - revision 4: d3-force/CoSE/fCoSE selector, URL state, finite lifecycle, fallbacks and reduced motion implemented; 118 frontend tests, lint, typecheck and build passed;
+  - revision 4 headless: 398-node bands CoSE 4.08 s / fCoSE 1.43 s; 968-node albums CoSE 14.37 s / fCoSE 1.81 s; no overview refetch on engine change; reduced-motion fCoSE completed;
   - backend 225 unit and 332 full-suite tests passed; Ruff/format passed; OpenAPI drift unchanged;
   - backend layout tests cover deterministic bipartite ordering, disconnected/isolated nodes, community majority/unassigned handling, single-community/no-edge cases and empty graphs;
   - integration tests cover both layout modes, optional/absent coordinates, invalid values, determinism and a computation-error fallback;

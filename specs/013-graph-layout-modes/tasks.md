@@ -1,6 +1,6 @@
 # Tasks — SPEC-013 Graph overview layout modes
 
-- **Status:** Revisions 1–2 completed; revision 3 deferred; revision 4 plan approved, tasks in review
+- **Status:** Revisions 1–2 completed; revision 3 deferred; revision 4 completed locally; remote CI pending
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -15,7 +15,7 @@ T-001 ─► T-002 ─► T-003 ─► T-004 ─► T-005
 
 T-001 implements and tests the NetworkX layout functions. T-002 adds the API contract. T-003 adds the frontend types, adapter and static graph path. T-004 adds the selector and URL/query state. T-005 closes browser verification, performance and documentation.
 
-T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the force engine options module, the engine lifecycle, the selector/URL state, tests and headless verification. Revision 4 does not depend on revision 3. Coreness/radial layouts and orthogonal edge routing are separate follow-ups in SPEC-017 and SPEC-018 and are not part of these tasks.
+T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the force engine options module, the engine lifecycle, the selector/URL state, tests and headless verification. They are complete locally; remote CI is pending. Revision 4 does not depend on revision 3. Coreness/radial layouts and orthogonal edge routing are separate follow-ups in SPEC-017 and SPEC-018 and are not part of these tasks.
 
 ## 2. Tasks
 
@@ -122,7 +122,7 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
 
 ### T-006 — Add approved force dependencies and option builders
 
-- **Status:** Pending.
+- **Status:** Completed (2026-11-14).
 - **Requirements:** FR-011, FR-012, FR-013, NFR-003, NFR-005, AC-016, AC-017.
 - **Dependencies:** Owner approval for `cytoscape-fcose` (given 2026-11-13); T-005 baseline.
 - **Description:** Add the approved `cytoscape-fcose` runtime dependency and `@types/cytoscape-fcose` development dependency. Create `frontend/src/graph/forceLayouts.ts` with the `ForceEngine` union, default/invalid parsing, and option builders for d3-force, CoSE and fCoSE. Move the current d3-force overview option logic into the builder without changing its values; the ego graph path keeps its current behavior. CoSE uses the built-in layout. fCoSE uses `quality: 'proof'` when `randomize` is false and keeps `packComponents: false` for the first implementation. Add focused unit tests for defaults, invalid values and option flags.
@@ -137,11 +137,11 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   npm run test
   ```
 - **Files:** `frontend/package.json`, `frontend/package-lock.json`, `frontend/src/graph/forceLayouts.ts`, `frontend/src/graph/forceLayouts.test.ts`.
-- **Evidence:** Pending.
+- **Evidence:** 2026-11-14: installed `cytoscape-fcose@2.2.0` and `@types/cytoscape-fcose@2.2.5`, added `forceLayouts.ts` with engine normalization, finite/infinite classification and d3-force/CoSE/fCoSE option builders, and moved the overview d3-force presets into the builder. Seven focused tests cover defaults, invalid values, presets, finite flags, reduced motion and the required fCoSE `proof` quality. Frontend lint, typecheck and 105 tests passed.
 
 ### T-007 — Integrate force engine lifecycle in ProducerGraph
 
-- **Status:** Pending.
+- **Status:** Completed (2026-11-14); browser switching is verified in T-010.
 - **Requirements:** FR-011, FR-012, FR-013, FR-014, FR-015, NFR-004, NFR-005, AC-015, AC-016, AC-017, AC-018.
 - **Dependencies:** T-006.
 - **Description:** Register `cytoscape-fcose` once at graph setup. Accept the selected engine through `ProducerGraph` props and start the matching layout: the current infinite d3-force, built-in CoSE, or fCoSE. Stop the previous layout before starting a new engine. Handle `layoutstop` for finite layouts, update the status text, fit the completed result, preserve current Freeze/Resume/Reheat semantics for d3-force, and define Resume/Reheat as re-runs for CoSE/fCoSE. Use `animate: false` under reduced motion. Catch engine failures, fall back to d3-force and then the existing static `breadthfirst` fallback. Stop layouts on unmount and ignore late callbacks.
@@ -155,11 +155,11 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   ```
   Plus a focused headless check of Force engine switching.
 - **Files:** `frontend/src/components/ProducerGraph.tsx`, `frontend/src/components/ProducerGraph.test.tsx`, `frontend/src/graph/forceLayouts.ts`.
-- **Evidence:** Pending.
+- **Evidence:** 2026-11-14: registered fCoSE once, added the `engine` prop, per-engine run/stop/token lifecycle, finite `layoutstop` completion with one fit, active-engine status text and engine-aware Freeze/Resume/Reheat. CoSE/fCoSE failures fall back to d3-force and then breadthfirst with a visible notice; reduced motion uses static finite layouts and the frozen d3-force fallback. Six component tests cover CoSE completion, fCoSE registration, engine switching, finite re-runs, fallback and reduced motion. Lint, typecheck and 111 tests passed. Headless engine switching is verified with the selector in T-010.
 
 ### T-008 — Add the Force engine selector and URL state
 
-- **Status:** Pending.
+- **Status:** Completed (2026-11-14).
 - **Requirements:** FR-010, FR-014, NFR-004, AC-013, AC-014, AC-019.
 - **Dependencies:** T-007.
 - **Description:** Add an accessible three-button Force engine group below the Layout selector in `ProducerOverviewControls`, visible with the selected state and disabled outside Force. Add `engine=d3-force|cose|fcose` to the overview URL state, omit the default, remove it for static layouts and retain the last engine in client state. Pass the engine to `ProducerGraph`. Keep `engine` out of the overview query key and API request. Add CSS consistent with the existing workspace and replacement history for engine-only changes.
@@ -172,11 +172,11 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   npm run test
   ```
 - **Files:** `frontend/src/components/ProducerOverviewControls.tsx`, `frontend/src/components/ProducerOverviewControls.test.tsx`, `frontend/src/pages/ProducerOverviewPage.tsx`, `frontend/src/pages/ProducerOverviewPage.test.tsx`, `frontend/src/index.css`.
-- **Evidence:** Pending.
+- **Evidence:** 2026-11-14: added the segmented Force engine group below Layout with visible labels, `aria-pressed`, disabled state and a reason note outside Force. Added `engine=d3-force|cose|fcose` URL state, default omission, invalid-value normalization, engine-only replacement history and client memory so the choice survives static layouts without entering the overview query key or API request. The page passes the engine to `ProducerGraph`. New control and page tests assert labels, pressed/disabled state, URL round-trips, no overview refetch and static-layout retention. Lint, typecheck and 117 tests passed.
 
 ### T-009 — Complete force engine test coverage and scope checks
 
-- **Status:** Pending.
+- **Status:** Completed (2026-11-14).
 - **Requirements:** AC-013, AC-014, AC-015, AC-016, AC-017, AC-018, AC-019.
 - **Dependencies:** T-008.
 - **Description:** Add or adjust unit, component and page tests for engine parsing, default omission, URL persistence, no overview refetch, static-mode disabling, fCoSE registration, finite/infinite lifecycle, reduced motion, fallback chains and ego-graph isolation. Verify the accessible name and `aria-pressed` state of the button group.
@@ -186,12 +186,12 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   cd frontend
   npm run test
   ```
-- **Files:** `frontend/src/graph/forceLayouts.test.ts`, `frontend/src/components/ProducerGraph.test.tsx`, `frontend/src/components/ProducerOverviewControls.test.tsx`, `frontend/src/pages/ProducerOverviewPage.test.tsx`.
-- **Evidence:** Pending.
+- **Files:** `frontend/src/graph/forceLayouts.test.ts`, `frontend/src/components/ProducerGraph.test.tsx`, `frontend/src/components/ProducerOverviewControls.test.tsx`, `frontend/src/pages/ProducerOverviewPage.test.tsx`, `frontend/src/pages/ProducerGraphPage.test.tsx`.
+- **Evidence:** 2026-11-14: test coverage now includes engine parsing/defaults, option builders, d3-force default behavior, CoSE/fCoSE names and completion, fCoSE registration, engine switching with previous-layout stop, finite Resume/Reheat re-runs, reduced motion, single-engine fallback, the full breadthfirst fallback chain, selector accessibility, URL persistence, no overview refetch, invalid URL normalization, static-mode disabling and ego-graph isolation. All 118 tests pass with no network access.
 
 ### T-010 — Verify the force engines in a browser and update documentation
 
-- **Status:** Pending.
+- **Status:** Completed locally (2026-11-14); remote CI pending explicit authorization.
 - **Requirements:** NFR-005, AC-020.
 - **Dependencies:** T-009.
 - **Description:** Run headless Chromium checks for d3-force, CoSE and fCoSE on the 398-node bands view and the 968-node albums view. Record completion time, canvas usability, fallback behavior, reduced-motion behavior and console errors. Run the full frontend checks and, if applicable, backend checks. Update the spec/tasks evidence, `specs/README.md`, `AGENTS.md` and the relevant frontend/API docs only after implementation is complete.
@@ -205,8 +205,8 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   npm run build
   ```
   Plus a headless Chromium probe for all three engines at 398/968 nodes.
-- **Files:** `specs/013-graph-layout-modes/`, `specs/README.md`, `AGENTS.md`, `docs/01-architecture/frontend.md`, `docs/03-data/api-v1.md` (only if the implementation changes documented behavior).
-- **Evidence:** Pending; remote CI requires explicit authorization.
+- **Files:** `specs/013-graph-layout-modes/`, `specs/README.md`, `AGENTS.md`, `docs/01-architecture/frontend.md`, `README.md`.
+- **Evidence:** 2026-11-14: headless Chromium at 1440 px confirmed d3-force as the default, CoSE and fCoSE completion with status text, URL `engine=cose`/`engine=fcose`, return to d3-force with the parameter removed, no overview refetch on engine changes, reduced-motion fCoSE completion and usable canvases in both 398-node bands and 968-node albums views. Engine completion timings were 4.08 s (CoSE) and 1.43 s (fCoSE) for bands, and 14.37 s (CoSE) and 1.81 s (fCoSE) for albums. The only console error was the pre-existing `favicon.ico` 404. Full frontend lint, typecheck, 118 tests and production build passed; `docker compose config -q` passed. Remote CI requires explicit authorization.
 
 ## 3. Coverage matrix
 
@@ -256,22 +256,22 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
 | AC-010 | Passed | Scope inspection; ego tests unchanged |
 | AC-011 | Passed | Details/table/resize remain available; headless static mode |
 | AC-012 | Passed | Full backend/frontend checks and OpenAPI generation |
-| AC-013 | Pending | Revision 4: control/component tests |
-| AC-014 | Pending | Revision 4: URL and no-refetch tests |
-| AC-015 | Pending | Revision 4: default d3-force tests |
-| AC-016 | Pending | Revision 4: CoSE component test/build inspection |
-| AC-017 | Pending | Revision 4: fCoSE registration/typecheck/build tests |
-| AC-018 | Pending | Revision 4: lifecycle/reduced-motion/fallback tests |
-| AC-019 | Pending | Revision 4: ego/static scope tests |
-| AC-020 | Pending | Revision 4: full checks and 398/968-node headless probe |
+| AC-013 | Passed | Control/page tests; segmented group, pressed and disabled states |
+| AC-014 | Passed | URL engine round-trip and no-refetch page test |
+| AC-015 | Passed | Default d3-force component and page tests |
+| AC-016 | Passed | `name: 'cose'` component test and build |
+| AC-017 | Passed | fCoSE registration test, typecheck and build |
+| AC-018 | Passed | Lifecycle, reduced-motion and fallback-chain tests |
+| AC-019 | Passed | Ego page inspection; Bipartite/Community tests unchanged |
+| AC-020 | Passed | 118 tests, lint, typecheck, build and 398/968-node headless probe |
 
 ## 5. Revision 3 — deferred
 
 No revision 3 tasks are defined. T-001–T-005 remain the completed baseline. Revision 3 remains deferred and must not be mixed into revision 4.
 
-## 6. Revision 4 — plan approved, tasks in review
+## 6. Revision 4 — completed locally
 
-The revision 4 plan was approved on 2026-11-13. T-006–T-010 are defined but not implemented; they start only after these tasks are approved. Revision 4 is frontend-only; it does not change the API, backend, database or ego graph.
+The revision 4 plan was approved on 2026-11-13 and T-006–T-010 are complete locally as of 2026-11-14. Revision 4 is frontend-only; it does not change the API, backend, database or ego graph. Remote CI remains pending explicit authorization.
 
 ## 7. Notes
 
