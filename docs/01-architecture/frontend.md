@@ -1,7 +1,7 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 validated at closure on 2026-11-14 from local evidence. E11/SPEC-014 is implemented locally; remote CI is pending. SPEC-017/018 follow-ups remain in plan/tasks review
-- **Stage:** E11 implemented locally; remote CI pending; E12 next
+- **Status:** E9 validated; E10 validated at closure on 2026-11-14 from local evidence. E11/SPEC-014 is implemented locally; remote CI run 43895517746 passed; documentation closure is pending. SPEC-017/018 follow-ups remain in plan/tasks review
+- **Stage:** E11 remote CI passed; E12 paused by the owner; E13 in Draft
 - **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md), [SPEC-014](../../specs/014-integration-qa/spec.md), [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md)
 - **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
 
@@ -154,4 +154,4 @@ Local checks through 2026-11-16:
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010. SPEC-011, SPEC-012 and SPEC-013 were validated at E10 closure on 2026-11-14 from the recorded local evidence; remote CI was not run for that closure. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 is implemented and validated. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation. SPEC-014 is implemented locally; the remote `e2e` CI job and its required-check setting remain the E11 release gates.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010. SPEC-011, SPEC-012 and SPEC-013 were validated at E10 closure on 2026-11-14 from the recorded local evidence; remote CI was not run for that closure. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 is implemented and validated. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation. SPEC-014 is implemented locally; remote CI run 43895517746 passed, and the required-check setting and documentation closure remain the E11 release gates.

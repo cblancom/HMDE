@@ -1,7 +1,7 @@
 # SPEC-014 — Integration, QA and performance
 
 - **Status:** Implemented
-- **Validation:** Local E2E, performance, accessibility, security and restore evidence passed; remote CI pending.
+- **Validation:** Local E2E, performance, accessibility, security and restore evidence passed; remote CI run 43895517746 passed; required-check setting and documentation closure pending.
 - **Stage:** E11
 - **Iteration:** MVP
 - **Modules:** `platform`, `api`, `web`
@@ -297,7 +297,7 @@ Tests are order-independent, use their own navigation state and clean up tempora
 | Question | Blocking? | Owner | Resolution |
 |---|---|---|---|
 | Approve `@playwright/test` and `@axe-core/playwright` as development dependencies? | No | Cristian | Approved and added as development dependencies |
-| Approve the new CI `e2e` job? | No | Cristian | Approved and added; remote result pending |
+| Approve the new CI `e2e` job? | No | Cristian | Approved and added; remote CI run 43895517746 passed |
 | Use Chromium only for v0.1 E2E? | No | Cristian | Yes; Firefox and WebKit deferred |
 | Are the FR-006 performance targets acceptable? | No | Cristian | Yes; one view-switch exception documented in the QA report |
 | Use a temporary database for the restore drill? | No | Cristian | Yes; the source database was not modified |
@@ -305,8 +305,8 @@ Tests are order-independent, use their own navigation state and clean up tempora
 ## 11. Validation result
 
 - **Date:** 2026-11-16
-- **Verdict:** Implemented locally; not fully validated. Every acceptance criterion has local evidence except AC-003, whose GitHub Actions `e2e` run and required-check setting remain pending.
-- **Evidence:** [QA report](../../docs/01-architecture/qa-report.md), [tasks.md](tasks.md) and the local command output recorded there.
+- **Verdict:** Implemented; remote CI run 43895517746 passed and AC-003's `e2e` job is green. The required-check setting and documentation closure remain pending, so E11 is not yet marked Validated.
+- **Evidence:** [QA report](../../docs/01-architecture/qa-report.md), [tasks.md](tasks.md), the local command output recorded there and remote CI run 43895517746 on commit 4985ad8.
 
 ## 12. References
 

@@ -1,10 +1,11 @@
 # MVP seed list
 
-- **Status:** v0.2.0 active; v0.1.0 historical archive
-- **Version:** 0.2.0 active; 0.1.0 historical
-- **Date:** 2026-11-06
-- **Stage:** E3
+- **Status:** v0.2.0 active; v0.1.0 historical archive; v0.3.0 candidate pool in review
+- **Version:** 0.2.0 active; 0.1.0 historical; 0.3.0-candidates-01 candidate pool
+- **Date:** 2026-11-16
+- **Stage:** E3 active; E13 candidate selection
 - **Machine-readable source:** [`data/seed-list.json`](../../data/seed-list.json) (active pointer) → [`data/seed-lists/v0.2.0.json`](../../data/seed-lists/v0.2.0.json)
+- **Candidate pool:** [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json) (pre-selection; not active)
 - **Criteria:** [`docs/00-vision/scope.md#9-seed-list`](../00-vision/scope.md#9-seed-list)
 
 ## 1. Purpose
@@ -154,7 +155,23 @@ The first v0.2.0 batch is approved in [`data/seed-lists/batches/v0.2.0-batch-01.
 | 14 | Lorna Shore | 2020s | `deathcore` | US | `e86fc1f5-d632-44b2-8aea-38f83aadffe8` |
 | 15 | Blood Incantation | 2020s | `death-metal` | US | `a5f0f298-776a-4909-bc09-4fd56a680542` |
 
-## 7. Known limitations
+## 7. Candidate pool for v0.3.0
+
+E13 is preparing a 200-band v0.3.0 corpus. The pre-selection pool is [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json), version `0.3.0-candidates-01`. A human-readable index grouped by country is [`data/seed-lists/candidates/v0.3.0-by-country.md`](../../data/seed-lists/candidates/v0.3.0-by-country.md).
+
+| Dimension | Distribution |
+|---|---|
+| Candidates | 397 unique MusicBrainz artists |
+| Leaves | All 17 assignable leaves |
+| Regions | Europe 204, North America 124, Latin America 38, Japan 11, Iberia 10, Oceania 10 |
+| Matching | 375 `verified`; 22 `verified_country_inferred` |
+| Relevance | 397 `pending_manual_review`; Wikidata lookup deferred after WDQS rate limiting |
+
+The pool excludes the 57 active v0.2.0 bands. It is not an approved seed list and the active pointer does not use it. The owner must approve 143 additions across three batches (`50 + 50 + 43`) after MusicBrainz, studio-album and published-source verification. The target distribution and selection rules are in [`specs/016-corpus-expansion/spec.md`](../../specs/016-corpus-expansion/spec.md).
+
+The v0.2.0 dataset remains the active corpus until the v0.3.0 seed list, ingestion, normalization, quality and analysis runs are complete and validated.
+
+## 8. Known limitations
 
 - The sample over-represents well-documented, canonical bands.
 - Production-credit coverage was measured on the 28-band spike sample; the 14 added bands were verified for MBID and studio-album existence, not full credit coverage.
@@ -164,7 +181,7 @@ The first v0.2.0 batch is approved in [`data/seed-lists/batches/v0.2.0-batch-01.
 - The v0.2.0 ingestion produced 731 release groups, 9,236 releases, 16,683 recordings, 32,326 credits and 3,991 exclusions across 57 bands, with no band failures.
 - The list is intentionally small for the MVP; expansion to 200–500 bands is E13.
 
-## 8. Change control
+## 9. Change control
 
 - The JSON version and this document's version move together.
 - Additions or removals require a version bump, a rationale and a MusicBrainz verification.

@@ -31,7 +31,7 @@
 | E10 | Product | Graph visualization | E7, E8, E9 |
 | E11 | Closure | Integration, QA and performance | E9, E10 |
 | E12 | Closure | Deployment, documentation and v0.1 | E11 |
-| E13 | Growth | Expansion to 200–500 bands (v1) | E12 |
+| E13 | Growth | Expansion to 200–500 bands (v1) | E11; E12 paused |
 
 ## 3. Milestones
 
@@ -172,14 +172,14 @@
 - **Scope:** new seed-list batches; re-run ingestion, normalization, quality, analysis and result publication across 1960–2026.
 - **Activities:** expand the list using the same criteria; run E3–E5 in batches; compare coverage and bias; recompute analyses with dataset and taxonomy versions; review API and graph performance; update the limitations report.
 - **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-016**.
-- **Depends on:** E12.
+- **Depends on:** E11; E12 is paused by the owner.
 - **Done when:** the expanded corpus passes the same quality gates; API and UI maintain performance; results are documented with their limitations.
 
 ## 5. Dependencies and parallelization
 
 ### Critical path
 
-`E0 → E1 → E2 → E3 → E4 → E5 → E6 → E7 → E8 → E9 → E10 → E11 → E12 → E13`
+`E0 → E1 → E2 → E3 → E4 → E5 → E6 → E7 → E8 → E9 → E10 → E11 → E13` (E12 paused by the owner)
 
 ### Possible parallel work
 
@@ -220,9 +220,9 @@ Before closing any stage:
 | E8 | Validated | SPEC-009 read-only API v1; remote CI run 42741669410 passed. |
 | E9 | Validated | SPEC-010 band, album, producer and search explorer; existing CSS; remote CI run 42747146170 passed. |
 | E10 | Validated | SPEC-011, SPEC-012 and SPEC-013 validated by owner closure on 2026-11-14 based on the recorded local automated, headless and build evidence. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels, an accessible table, a collapsible producer/band index, equal-height panels, a dynamic year scale, node detail panels, a persisted navigation rail, full-width layout, collapsible graph panels, canvas resizing, server-generated bipartite/community layouts and the d3-force/CoSE/fCoSE selector. The ego graph keeps its 500-node cap and static fallback. Remote CI was not run for this closure. |
-| E11 | Implemented locally; remote CI pending | SPEC-014 adds a 26-test Playwright Chromium suite over deterministic E2E data, axe scans on nine routes, a reproducible performance probe, a security and dependency review and a 38-table backup/restore drill. The QA report is [`docs/01-architecture/qa-report.md`](../01-architecture/qa-report.md). One 968-node view-switch performance exception is documented. The `e2e` GitHub Actions job and its required-check setting remain release gates. |
-| E12 | Pending | Deployment, documentation and v0.1 release after E11. |
-| E13 | Pending | Corpus expansion to 200–500 bands after v0.1. |
+| E11 | Implemented locally; remote CI passed | SPEC-014 adds a 26-test Playwright Chromium suite over deterministic E2E data, axe scans on nine routes, a reproducible performance probe, a security and dependency review and a 38-table backup/restore drill. The QA report is [`docs/01-architecture/qa-report.md`](../01-architecture/qa-report.md). One 968-node view-switch performance exception is documented. Remote CI run 43895517746 passed on commit 4985ad8; documentation closure and the required-check setting remain. |
+| E12 | Paused | Deployment, documentation and v0.1 release are paused by the owner. |
+| E13 | Draft | SPEC-016 defines a 200-band v0.3.0 expansion. A 397-band candidate pool is ready for verification and selection; E12 is paused. |
 
 ## 8. Scope growth
 
@@ -255,4 +255,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 E0–E9 are complete and validated. E10 closed on 2026-11-14: SPEC-011, SPEC-012 and SPEC-013 are validated from the recorded local automated, headless and build evidence; the owner accepted this evidence and remote CI was not run for the closure. `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and the graph supports the Force/Bipartite/Community layouts and the d3-force/CoSE/fCoSE engines.
 
-E11 is implemented locally with SPEC-014: Playwright critical flows over deterministic data, performance probes, an accessibility audit, a security review, a 38-table backup restore drill and the [QA report](../01-architecture/qa-report.md). The remote `e2e` CI job and its required-check setting are the remaining release gates; no commit or push was authorized during implementation. E12 follows with deployment and the v0.1 release; E13 expands the corpus to 200–500 bands.
+E11 is implemented locally with SPEC-014: Playwright critical flows over deterministic data, performance probes, an accessibility audit, a security review, a 38-table backup restore drill and the [QA report](../01-architecture/qa-report.md). Remote CI run 43895517746 passed on commit 4985ad8; documentation closure and the required-check setting remain. E12 is paused by the owner. E13 is in Draft: SPEC-016 defines a 200-band v0.3.0 target, and the 397-band candidate pool is ready for verification and owner selection.

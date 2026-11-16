@@ -1,7 +1,7 @@
 # Technical plan — SPEC-014 Integration, QA and performance
 
 - **Status:** Implemented
-- **Validation:** Local evidence complete; remote CI pending.
+- **Validation:** Local evidence complete; remote CI run 43895517746 passed; required-check setting and documentation closure pending.
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **Stage:** E11

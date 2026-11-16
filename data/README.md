@@ -6,6 +6,7 @@ This directory contains versioned curated data used by the project.
 - `seed-list.json` — active-version pointer. It currently resolves to `seed-lists/v0.2.0.json`; the versioned file is the source of truth.
 - `seed-lists/` — immutable versioned seed lists and batch artifacts. `v0.1.0.json` is the validated historical corpus; `v0.2.0.json` adds the approved 15-band batch.
 - `seed-lists/batches/v0.2.0-batch-01.json` — approved batch of 15 new bands, three per expanded decade.
+- `seed-lists/candidates/` — pre-selection candidate pool for the E13 v0.3.0 expansion. `v0.3.0-pool.json` has 397 MusicBrainz-identified bands across all 17 leaves and six regions; it is not an approved seed list. See `seed-lists/candidates/README.md`.
 - `classifications/` — versioned exact tag/genre-to-leaf mappings and manual album overrides for E4 normalization.
 - `quality/` — versioned quality rule catalogue and initial exception baseline for E5.
 - `metrics/` — versioned E6 metric catalogue.

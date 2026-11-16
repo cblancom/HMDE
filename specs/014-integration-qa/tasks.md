@@ -1,7 +1,7 @@
 # Tasks — SPEC-014 Integration, QA and performance
 
 - **Status:** Implemented
-- **Validation:** Local evidence complete; remote CI pending.
+- **Validation:** Local evidence complete; remote CI run 43895517746 passed; required-check setting and documentation closure pending.
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -194,15 +194,15 @@ T-001 and T-002 establish the harness and deterministic data. T-003, T-004 and T
   ```
   plus a documentation link/status review.
 - **Files:** `docs/01-architecture/qa-report.md`, `README.md`, `AGENTS.md`, `docs/00-vision/roadmap.md`, `docs/01-architecture/frontend.md`, `specs/README.md`, `specs/014-integration-qa/`.
-- **Evidence:** 2026-11-16 — wrote `docs/01-architecture/qa-report.md` with scope, environment, dataset versions, commands, E2E results, performance tables, accessibility and security checklists, restore evidence, known issues, acceptance-criteria evidence and a conditional release recommendation. Updated `README.md`, `AGENTS.md`, `docs/00-vision/roadmap.md`, `docs/01-architecture/frontend.md`, `specs/README.md` and the SPEC-014 spec/plan status. Final checks passed: frontend lint, typecheck, 118 Vitest tests and build; backend Ruff, format and 332 tests with `--env-file ../.env`; `docker compose config -q`; `git diff --check`. An initial combined frontend run timed out under concurrent backend-test load; the isolated file and a clean full rerun passed 118/118. No API, schema, migration or production dependency change was found. The remote `e2e` job and required-check setting remain pending, so E11 is implemented but not fully validated.
+- **Evidence:** 2026-11-16 — wrote `docs/01-architecture/qa-report.md` with scope, environment, dataset versions, commands, E2E results, performance tables, accessibility and security checklists, restore evidence, known issues, acceptance-criteria evidence and a conditional release recommendation. Updated `README.md`, `AGENTS.md`, `docs/00-vision/roadmap.md`, `docs/01-architecture/frontend.md`, `specs/README.md` and the SPEC-014 spec/plan status. Final checks passed: frontend lint, typecheck, 118 Vitest tests and build; backend Ruff, format and 332 tests with `--env-file ../.env`; `docker compose config -q`; `git diff --check`. An initial combined frontend run timed out under concurrent backend-test load; the isolated file and a clean full rerun passed 118/118. No API, schema, migration or production dependency change was found. The remote `e2e` job later passed in run 43895517746; the required-check setting and documentation closure remain, so E11 is implemented but not fully validated.
 
 ### T-010 — Add the CI E2E job and run the full regression
 
-- **Status:** Completed locally; remote CI result pending an authorized push.
+- **Status:** Completed locally; remote CI run 43895517746 passed; required-check setting and documentation closure pending.
 - **Requirements:** FR-004, NFR-001, NFR-002, AC-003, AC-012.
 - **Dependencies:** T-001, T-002, T-003, T-004, T-005; owner approval for the CI change.
 - **Description:** Add an `e2e` job to `.github/workflows/ci.yml` with a PostgreSQL service, backend dependency install, migrations, deterministic seed, frontend dependency install, Chromium install and Playwright execution. Publish the HTML report and traces. Enforce a 15-minute timeout and use one worker in CI. Run the full backend and frontend regression locally.
-- **Done when:** the job passes on a pull request, fails on a deliberately broken flow during review, and the complete local regression passes.
+- **Done when:** the job passes remotely, fails on a deliberately broken flow during review, and the complete local regression passes.
 - **Verification:**
   ```bash
   # Local full regression
@@ -223,7 +223,7 @@ T-001 and T-002 establish the harness and deterministic data. T-003, T-004 and T
   ```
   plus the GitHub Actions `e2e` job result.
 - **Files:** `.github/workflows/ci.yml`, `frontend/playwright.config.ts`, `backend/tests/e2e/seed.py`, `frontend/vite.config.ts`.
-- **Evidence:** 2026-11-14 — added the `e2e` job to `.github/workflows/ci.yml` with a PostgreSQL 16 service for `hmde_e2e`, `uv sync --frozen`, Alembic migration, deterministic seed, `npm ci`, `npx playwright install --with-deps chromium`, `npm run test:e2e`, a 15-minute timeout, one CI worker inherited from the Playwright config, and `playwright-report`/`test-results` artifacts uploaded with `if: always()` for 14 days. `CI=true npm run test:e2e` passed locally with 1 worker (26 tests, 1.1 min) and the earlier 5-worker run passed in 1.8 min, leaving ample margin under the 15-minute job budget. A deliberately broken Playwright spec failed with exit code 1 and produced screenshot, video and trace artifacts, confirming the job command fails on a broken flow. Local full regression: `uv run ruff check .` passed, `uv run ruff format --check .` passed, `uv run --env-file ../.env pytest` passed 332 tests, `npm ci` succeeded, `npm run lint` passed, `npm run typecheck` passed, `npm run test` passed 118 tests, `npm run build` passed and `docker compose config -q` passed. The regression exposed that Vitest was collecting `e2e/*.spec.ts`; `frontend/vite.config.ts` now limits Vitest to `src/**/*.{test,spec}.{ts,tsx}`. No remote CI run was executed because no commit or push was authorized; the `e2e` job result on a pull request remains the only pending T-010 check.
+- **Evidence:** 2026-11-14 — added the `e2e` job to `.github/workflows/ci.yml` with a PostgreSQL 16 service for `hmde_e2e`, `uv sync --frozen`, Alembic migration, deterministic seed, `npm ci`, `npx playwright install --with-deps chromium`, `npm run test:e2e`, a 15-minute timeout, one CI worker inherited from the Playwright config, and `playwright-report`/`test-results` artifacts uploaded with `if: always()` for 14 days. `CI=true npm run test:e2e` passed locally with 1 worker (26 tests, 1.1 min) and the earlier 5-worker run passed in 1.8 min, leaving ample margin under the 15-minute job budget. A deliberately broken Playwright spec failed with exit code 1 and produced screenshot, video and trace artifacts, confirming the job command fails on a broken flow. Local full regression: `uv run ruff check .` passed, `uv run ruff format --check .` passed, `uv run --env-file ../.env pytest` passed 332 tests, `npm ci` succeeded, `npm run lint` passed, `npm run typecheck` passed, `npm run test` passed 118 tests, `npm run build` passed and `docker compose config -q` passed. The regression exposed that Vitest was collecting `e2e/*.spec.ts`; `frontend/vite.config.ts` now limits Vitest to `src/**/*.{test,spec}.{ts,tsx}`. No remote CI run was executed during the original implementation because no commit or push was authorized. The later authorized remote CI run 43895517746 passed on commit 4985ad8; the required-check setting and documentation closure remain pending.
 
 ## 3. Coverage matrix
 
@@ -263,7 +263,7 @@ T-001 and T-002 establish the harness and deterministic data. T-003, T-004 and T
 |---|---|---|
 | AC-001 | Pass | Two seed runs matched; second returned `reused=true` (T-002) |
 | AC-002 | Pass | 26 Playwright tests passed; explorer/graph suites passed twice (T-003–T-005, QA report §5) |
-| AC-003 | Pending remote CI | `e2e` job added; CI-mode local run 1.1 min; broken-flow failure produced artifacts (T-010) |
+| AC-003 | Partial; remote run passed | Remote CI run 43895517746 passed; `e2e` job green; required branch-protection setting not yet confirmed (T-010) |
 | AC-004 | Pass | Attached report records environment, versions, samples, min/p50/p95/max (T-006, QA report §6) |
 | AC-005 | Pass with exception | All targets met except view-switch acknowledgement; cause documented (T-006, QA report §6) |
 | AC-006 | Pass | axe: zero critical/serious on nine routes (T-005, QA report §7.1) |

@@ -1,6 +1,6 @@
 # E11 integration, QA and performance report
 
-- **Status:** Implemented locally; remote CI pending
+- **Status:** Implemented; remote CI passed; documentation closure pending
 - **Stage:** E11
 - **Date:** 2026-11-16
 - **Owner:** Cristian
@@ -13,9 +13,9 @@
 
 E11 adds an integration and QA layer around the existing application without changing the API contract, schema, migrations, ingestion rules or product behavior. The local evidence supports proceeding to E12: the 26-test Playwright suite, axe scans, keyboard and reduced-motion checks, security review, restore drill and full backend/frontend regression passed. No P1 or P2 defect remains open.
 
-The evidence also records one accepted performance exception, nine moderate development-only dependency advisories and several non-blocking observations. The only unfinished acceptance criterion is AC-003: the new GitHub Actions `e2e` job has not run remotely because no commit or push was authorized, and branch-protection enforcement is a repository setting that cannot be verified locally.
+The evidence also records one accepted performance exception, nine moderate development-only dependency advisories and several non-blocking observations. The GitHub Actions `e2e` job passed in remote run 43895517746 on commit 4985ad8. Branch-protection enforcement remains a repository setting that cannot be verified locally, and documentation closure is pending.
 
-**Recommendation:** conditional go to E12 after the `e2e` job passes on a pull request and is marked as a required check. Do not describe E11 as fully validated before that remote result exists.
+**Recommendation:** conditional go to E12 after the `e2e` job is marked as a required check. Do not describe E11 as fully validated until that repository setting is confirmed.
 
 ## 2. Changes introduced by E11
 
@@ -319,7 +319,7 @@ Release gates that are not defects:
 |---|---|---|
 | AC-001 | Pass | Two seed runs with matching counts and `reused=true` |
 | AC-002 | Pass | 26 Playwright tests in Chromium; explorer and graph suites passed twice |
-| AC-003 | **Pending remote CI** | `e2e` job added; CI-mode local run 1.1 min; broken-flow failure produced artifacts; no remote run authorized |
+| AC-003 | **Partial; remote run passed** | Remote CI run 43895517746 passed on commit 4985ad8; the `e2e` job is not yet confirmed as a required branch-protection check |
 | AC-004 | Pass | Attached performance report with environment, versions, samples, min, p50, p95 and max |
 | AC-005 | Pass with exception | All targets met except view-switch acknowledgement, documented with cause |
 | AC-006 | Pass | axe: zero critical or serious violations on nine routes |
@@ -334,8 +334,7 @@ Release gates that are not defects:
 
 ## 12. Residual risks and E12 prerequisites
 
-- The remote `e2e` result is the main residual release risk. A CI-only environment difference could expose a port, browser, Postgres service or artifact-upload issue.
-- Branch protection must make the `e2e` job required; otherwise the gate is advisory.
+- The `e2e` job passed remotely in run 43895517746. Branch protection must make it required; otherwise the gate is advisory.
 - The performance evidence comes from one local machine. It is reproducible but not a production capacity claim.
 - The 968-node overview has a main-thread cost during view switches. It is usable but remains the largest known interaction cost.
 - TLS, reverse-proxy headers and the production restore runbook are E12 deliverables, not E11 gaps.
