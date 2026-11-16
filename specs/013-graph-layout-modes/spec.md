@@ -1,11 +1,11 @@
 # SPEC-013 — Graph overview layout modes
 
-- **Status:** Implemented (revision 4); local validation passed; remote CI pending. Revision 3 legibility redesign deferred; coreness/radial and orthogonal routing split into SPEC-017/SPEC-018
+- **Status:** Validated (revision 4). Revision 3 legibility redesign deferred; coreness/radial and orthogonal routing split into SPEC-017/SPEC-018
 - **Stage:** E10
 - **Iteration:** MVP
 - **Modules:** `api`, `web`
 - **Date:** 2026-11-11
-- **Depends on:** SPEC-008 (persisted Louvain communities), SPEC-011 (global overview), SPEC-012 (workspace refinements)
+- **Depends on:** SPEC-008 (persisted Louvain communities), SPEC-011 validated (global overview), SPEC-012 validated (workspace refinements)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md)
 - **Tasks:** [tasks.md](tasks.md)
@@ -21,6 +21,7 @@
 | 3 | 2026-11-12 | Legibility attempts (bipartite lanes, community spacing, size-aware collision, label toggles/Smart density, auto-freeze, edge separation, Fit, wheel sensitivity) were reverted; baseline revisions 1–2 retained; redesign deferred |
 | 4 | 2026-11-13 | Add a client-side Force engine selector for d3-force, CoSE and fCoSE; approve the fCoSE frontend dependency; keep revision 3 deferred |
 | 5 | 2026-11-13 | Split coreness/radial layouts and orthogonal edge routing into SPEC-017 and SPEC-018; revision 4 behavior is unchanged |
+| 6 | 2026-11-14 | Revision 4 implemented locally with 118 frontend tests, lint, typecheck, build and headless evidence; owner confirmed E10 closure and validated the spec. Remote CI was not run for this closure |
 
 ## 1. Context and problem
 
@@ -398,7 +399,7 @@ Revision 3 is deferred. Revision 4 has no blocking open questions; its decisions
 ## 11. Validation result
 
 - **Date:** 2026-11-14 (revisions 1–2 evidence from 2026-11-12)
-- **Verdict:** Revisions 1–2 are implemented locally and validated by the evidence below. Revision 3 was attempted and reverted; the redesign is deferred. Revision 4 is implemented locally and its local acceptance evidence passed; remote CI remains pending. Revision 5 is a documentation-only split; its follow-up specs are in plan/tasks review.
+- **Verdict:** Validated. Revisions 1–2 and revision 4 are implemented locally and their local acceptance evidence passed. Revision 3 was attempted and reverted; the redesign is deferred. Revision 5 is a documentation-only split; its follow-up specs are in plan/tasks review. The owner confirmed E10 closure on 2026-11-14; remote CI was not run for this closure, and that exception is recorded here rather than presented as a passed run.
 - **Evidence:**
   - revision 4: d3-force/CoSE/fCoSE selector, URL state, finite lifecycle, fallbacks and reduced motion implemented; 118 frontend tests, lint, typecheck and build passed;
   - revision 4 headless: 398-node bands CoSE 4.08 s / fCoSE 1.43 s; 968-node albums CoSE 14.37 s / fCoSE 1.81 s; no overview refetch on engine change; reduced-motion fCoSE completed;

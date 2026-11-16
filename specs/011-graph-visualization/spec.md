@@ -1,6 +1,6 @@
 # SPEC-011 — Producer graph visualization and interaction
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E10
 - **Iteration:** MVP
 - **Modules:** `api`, `web`
@@ -8,7 +8,7 @@
 - **Depends on:** SPEC-008 validated; SPEC-009 validated; SPEC-010 validated; read-only API v1; Cytoscape and the approved `cytoscape-d3-force` extension
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md) (revision 6 approved).
-- **Tasks:** [tasks.md](tasks.md) (T-001–T-016 completed locally; remote CI and manual interaction pending).
+- **Tasks:** [tasks.md](tasks.md) (T-001–T-016 completed; validated by the E10 closure on 2026-11-14).
 - **Conventions:** [Engineering conventions](../../docs/01-architecture/conventions.md)
 - **Owner:** Cristian
 
@@ -23,6 +23,7 @@
 | 5 | 2026-11-10 | T-010 polishes the graph: stronger collision/repulsion spreads a producer's neighbors, album titles are always visible, and the canvas uses more vertical space |
 | 6 | 2026-11-10 | Global producer overview: one canvas with many producers and their bands or albums, additive read-only overview endpoint, 1,000-node cap, shared-neighbor semantics, isolated-producer toggle and ego-graph drill-down |
 | 7 | 2026-11-11 | T-011–T-016 implemented locally: overview service and endpoint, `/graph` page, overview physics and labels, tests and documentation. Corrected corpus counts to 398 unique band-view nodes and 968 album-view nodes; the 43 isolated producer entities share band entities in the bands view. Remote CI and manual interaction remainder pending |
+| 8 | 2026-11-14 | Owner confirmed E10 closure from the recorded local evidence; SPEC-011 validated. Remote CI was not run for this closure |
 
 ## 1. Context and problem
 
@@ -655,12 +656,12 @@ No blocking question remains for planning. Exact global force coefficients, fini
 
 ## 13. Validation result
 
-- **Date:** 2026-11-11
-- **Verdict:** Revision 7 is implemented locally and ready for validation. The global overview endpoint, `/graph` page, shared-neighbor semantics, overview physics, labels, filters and accessibility fallback are in place. Remote CI and the manual ego interaction/performance checks remain pending.
+- **Date:** 2026-11-14 (evidence recorded 2026-11-11)
+- **Verdict:** Validated. The owner confirmed E10 closure on 2026-11-14 from the recorded local automated and headless evidence. The global overview endpoint, `/graph` page, shared-neighbor semantics, overview physics, labels, filters and accessibility fallback are in place. Remote CI was not run for this closure; that exception is recorded here rather than presented as a passed run.
 - **Backend:** 325 integration tests passed with `TEST_DATABASE_URL`; 220 unit tests passed with 105 integration tests skipped without it; Ruff and format passed. New tests cover the overview service, shared nodes, role deduplication, isolated handling, top-k, filters, caps, endpoint validation, OpenAPI paths and schemas.
 - **Frontend:** lint, typecheck, 76 Vitest tests and the production build passed. Tests cover the overview client, adapter, page, navigation, controls, shared-node details, isolated toggle, truncation, empty/error states and overview physics presets.
 - **Headless overview evidence:** 398 nodes / 426 edges in `bands` (341 producers + 57 bands, 43 isolated producer entities represented by their shared band nodes) and 968 nodes / 1,134 edges in `albums` (384 producers + 584 albums). Physics moved nodes, freeze/resume/reheat and dragging kept the page stable, the initial fit kept the network inside the canvas, search matched 5 producers, reduced motion started frozen with the table available, and shared-node selection listed all 32 producers for Motörhead. The albums isolated toggle reduced the network to 893 nodes / 951 edges and 341 producers.
-- **Pending:** remote CI and the manual ego drag/500-node feel review.
+- **Closure exception:** the manual ego drag/500-node feel review and remote CI were waived by the owner when confirming E10 closure; the headless drag and 968-node overview evidence remain the recorded basis.
 
 ## 14. References
 

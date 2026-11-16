@@ -1,8 +1,8 @@
 # Frontend: entity explorer
 
-- **Status:** E9 validated; E10 global overview, ego graph, space-efficient workspace, alternate layouts and force engines implemented locally; SPEC-017/018 follow-ups in plan/tasks review; headless checks passed; manual ego interaction and remote CI pending
-- **Stage:** E10
-- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md), [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md)
+- **Status:** E9 validated; E10 validated at closure on 2026-11-14 from local evidence. E11/SPEC-014 is implemented locally; remote CI is pending. SPEC-017/018 follow-ups remain in plan/tasks review
+- **Stage:** E11 implemented locally; remote CI pending; E12 next
+- **Specs:** [SPEC-011](../../specs/011-graph-visualization/spec.md), [SPEC-012](../../specs/012-graph-overview-refinements/spec.md), [SPEC-013](../../specs/013-graph-layout-modes/spec.md), [SPEC-014](../../specs/014-integration-qa/spec.md), [SPEC-017](../../specs/017-graph-coreness-radial-layouts/spec.md), [SPEC-018](../../specs/018-orthogonal-edge-routing/spec.md)
 - **Design plans:** [SPEC-011 plan](../../specs/011-graph-visualization/plan.md), [SPEC-012 plan](../../specs/012-graph-overview-refinements/plan.md)
 
 ## 1. Routes
@@ -70,6 +70,7 @@ No hand-written duplicate entity interfaces.
 - Error, empty and not-found states with next actions.
 - Reduced-motion media query.
 - Cytoscape initialization is guarded when canvas is unavailable.
+- Playwright axe scans and keyboard/reduced-motion checks cover the main routes and graph controls.
 
 ## 6. Graph views
 
@@ -139,7 +140,7 @@ The only E10 API change is the additive read-only overview endpoint. SPEC-012 ad
 
 ## 8. Verification
 
-Local checks on 2026-11-11:
+Local checks through 2026-11-16:
 
 - frontend `npm ci`, OpenAPI generation, lint, typecheck, **98 tests**, production build;
 - headless Chromium on `/graph`: 398-node bands and 968-node albums views, initial fit, live physics, freeze/resume/reheat, dragging, search highlight, isolated toggle, reduced-motion frozen start and accessible table;
@@ -149,7 +150,8 @@ Local checks on 2026-11-11:
 - revision 4 headless checks: d3-force default, CoSE/fCoSE completion in 4.08/1.43 s for 398 nodes and 14.37/1.81 s for 968 nodes, URL engine state, no overview refetch, reduced-motion fCoSE and a return to d3-force; frontend lint, typecheck, **118 tests** and build passed;
 - backend 220 unit tests with 105 integration tests skipped; Ruff and format;
 - `docker compose config -q`;
+- E11/SPEC-014: 26 Playwright Chromium tests passed; axe reported zero critical or serious violations on nine routes; the full regression passed 332 backend tests and 118 frontend tests; the performance probe recorded one documented 968-node view-switch exception. See the [QA report](qa-report.md).
 - no Tailwind/Plotly/UI-kit dependencies;
 - no hard-coded taxonomy arrays.
 
-The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010; SPEC-011, SPEC-012 and SPEC-013 remote CI and the manual ego interaction review are pending. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 is implemented locally with remote CI pending. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation.
+The last passed remote GitHub Actions CI run [42747146170](https://github.com/cblancom/HMDE/actions/runs/42747146170) covers SPEC-010. SPEC-011, SPEC-012 and SPEC-013 were validated at E10 closure on 2026-11-14 from the recorded local evidence; remote CI was not run for that closure. SPEC-013 revision 3 is deferred; the baseline selector/static modes remain, and revision 4 is implemented and validated. SPEC-017 and SPEC-018 are separate follow-ups with plans and tasks in review and no implementation. SPEC-014 is implemented locally; the remote `e2e` CI job and its required-check setting remain the E11 release gates.

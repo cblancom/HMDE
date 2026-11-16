@@ -1,6 +1,6 @@
 # Technical plan — SPEC-012 Graph overview workspace refinements
 
-- **Status:** Approved; implemented locally (revision 3)
+- **Status:** Approved; validated
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)

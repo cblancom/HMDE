@@ -1,6 +1,6 @@
 # Technical plan — SPEC-011 Producer graph visualization and interaction
 
-- **Status:** Approved; implemented locally
+- **Status:** Approved; validated
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **Stage:** E10

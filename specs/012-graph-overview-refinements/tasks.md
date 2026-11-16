@@ -1,6 +1,6 @@
 # Tasks — SPEC-012 Graph overview workspace refinements
 
-- **Status:** Implemented locally; T-001–T-010 completed; remote CI pending
+- **Status:** Validated; T-001–T-010 completed and E10 closed by the owner on 2026-11-14. Remote CI was waived at closure.
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -104,7 +104,7 @@ T-001 and T-002 are independent adapter/test tasks. T-003 and T-004 depend on T-
 
 ### T-006 — Verify in a browser and close documentation
 
-- **Status:** Completed locally (2026-11-11); remote CI pending explicit authorization.
+- **Status:** Completed; owner accepted closure on 2026-11-14 (remote CI waived).
 - **Requirements:** FR-005, FR-006, NFR-003, NFR-004, AC-004, AC-011, AC-012, AC-013.
 - **Dependencies:** T-005.
 - **Description:** Run headless Chromium checks at desktop and narrow viewports. Verify equal panel heights, independent scrolling, the dynamic year range after filters, producer/album/band detail flows, and no console errors. Run the full frontend and backend regression checks. Update the frontend docs, roadmap, README, AGENTS current state and SPEC-012 evidence if implementation proceeds to validation.
@@ -183,7 +183,7 @@ T-001 and T-002 are independent adapter/test tasks. T-003 and T-004 depend on T-
 
 ### T-010 — Verify the wide layout and close revision 3
 
-- **Status:** Completed locally (2026-11-11); remote CI pending explicit authorization.
+- **Status:** Completed; owner accepted closure on 2026-11-14 (remote CI waived).
 - **Requirements:** FR-013–FR-016, NFR-005, AC-014–AC-018.
 - **Dependencies:** T-009.
 - **Description:** Run headless Chromium checks at 1440 and 1920 px for rail collapse, persistence, panel toggles, graph width and canvas resize; verify 900/1200 px remain overflow-free. Run the full frontend/backend checks and update SPEC-012 revision 3, the frontend/roadmap/README/AGENTS docs and the SDD index.

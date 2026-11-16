@@ -1,6 +1,6 @@
 # Technical plan — SPEC-013 Graph overview layout modes
 
-- **Status:** Approved for revisions 1–2; revision 3 deferred; revision 4 implemented locally, remote CI pending
+- **Status:** Approved for revisions 1–2; revision 3 deferred; revision 4 implemented and validated
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
@@ -285,7 +285,7 @@ Backend and frontend can ship together. The API change is additive; older client
 
 ## 15. Approval and next step
 
-T-001–T-005 are implemented locally. The NetworkX layouts, API coordinates, selector and static controls passed the automated suite and headless Chromium checks. Remote CI remains pending. Revision 4 is specified in section 17; its plan was approved on 2026-11-13 and it is implemented locally, with remote CI pending.
+T-001–T-005 are implemented locally. The NetworkX layouts, API coordinates, selector and static controls passed the automated suite and headless Chromium checks. Revision 4 is specified in section 17; its plan was approved on 2026-11-13, it is implemented locally, and it was validated at E10 closure on 2026-11-14. Remote CI was not run for that closure.
 
 ## 16. Revision 3 — reverted and deferred
 
@@ -443,7 +443,7 @@ npm run build
 
 ### 17.8 Approval gate
 
-The revision 4 plan was approved on 2026-11-13. T-006–T-010 are complete locally as of 2026-11-14 and remote CI remains pending. Revision 3 remains deferred and must not be mixed into revision 4.
+The revision 4 plan was approved on 2026-11-13. T-006–T-010 are complete locally as of 2026-11-14 and were validated at E10 closure. Remote CI was not run for that closure. Revision 3 remains deferred and must not be mixed into revision 4.
 
 ## 18. Related follow-up specs
 

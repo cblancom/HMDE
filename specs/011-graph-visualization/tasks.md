@@ -1,6 +1,6 @@
 # Tasks — SPEC-011 Producer graph visualization and interaction
 
-- **Status:** Implemented locally; T-001–T-016 completed; remote CI and manual ego interaction/performance checks pending
+- **Status:** Validated; T-001–T-016 completed and E10 closed by the owner on 2026-11-14. Remote CI and the manual ego/performance review were waived at closure.
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -141,7 +141,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
 
 ### T-008 — Document physics, run manual checklist and close CI
 
-- **Status:** Completed locally (2026-11-10); manual browser physics and remote CI pending.
+- **Status:** Completed; owner accepted closure on 2026-11-14 (manual browser physics and remote CI waived).
 - **Requirements:** FR-015, NFR-001–NFR-008.
 - **Dependencies:** T-007.
 - **Description:** Document graph route, views, physics controls, force parameters, filter limitations and 500-node cap. Run a manual browser checklist for drag/neighbor response, freeze/resume/reheat, reduced motion, hidden-tab pause, empty/truncated states and 500-node behavior. Run full frontend/backend checks and Compose validation. Push only with explicit authorization and record remote CI.
@@ -165,7 +165,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
   docker compose config -q
   ```
 - **Files:** `README.md`, `AGENTS.md`, `docs/01-architecture/frontend.md`, `docs/README.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `specs/011-graph-visualization/`.
-- **Evidence:** 2026-11-10: docs updated; frontend 59 tests, lint, typecheck and build passed; backend 313 tests, Ruff/format and Compose passed; dev graph endpoint and graph page modules returned HTTP 200; web container recreated with the new dependency. Manual drag/freeze/reheat and 500-node visual checklist pending (no graphical browser). Remote CI pending.
+- **Evidence:** 2026-11-10: docs updated; frontend 59 tests, lint, typecheck and build passed; backend 313 tests, Ruff/format and Compose passed; dev graph endpoint and graph page modules returned HTTP 200; web container recreated with the new dependency. The manual drag/freeze/reheat and 500-node visual checklist were not run; the owner waived them when closing E10 on 2026-11-14. Remote CI was not run and is recorded as a closure exception.
 
 ### T-009 — Fix force node identity and guard layout failures
 
@@ -222,7 +222,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
 
 ### T-012 — Add overview API route, OpenAPI and integration tests
 
-- **Status:** Pending.
+- **Status:** Completed (verified 2026-11-14 during E10 closure).
 - **Requirements:** FR-016, FR-014, NFR-005, NFR-010.
 - **Dependencies:** T-011.
 - **Description:** Add `api/routes/graph.py` with `GET /api/v1/graph/producers`, query validation and the existing analysis-run dependency. Register the router in `main.py`. Add integration tests for both views, shared band/album fixtures, isolated toggle, top-k/sort, decade/subgenre, caps/truncation, invalid run and OpenAPI path/schema presence.
@@ -236,7 +236,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
   ```
   plus `uv run python -m hmde.openapi --output ../openapi.json`.
 - **Files:** `backend/src/hmde/api/routes/graph.py`, `backend/src/hmde/main.py`, `backend/tests/integration/test_api_producer_overview_graph.py`, `backend/tests/unit/test_openapi.py`, `openapi.json`.
-- **Evidence:** Pending.
+- **Evidence:** 2026-11-14: closure verification confirmed `backend/src/hmde/api/routes/graph.py` exposes `GET /api/v1/graph/producers`, `backend/src/hmde/main.py` registers the graph router, `backend/tests/integration/test_api_producer_overview_graph.py` covers the endpoint, and `backend/tests/unit/test_openapi.py` asserts the path and overview schemas. The endpoint was exercised by the E10 overview and headless checks.
 
 ### T-013 — Add overview client and adapter
 
@@ -295,7 +295,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
 
 ### T-016 — Update documentation, run full checks and close CI
 
-- **Status:** Completed locally (2026-11-11); remote CI pending explicit authorization.
+- **Status:** Completed; owner accepted closure on 2026-11-14 (remote CI waived).
 - **Requirements:** FR-014, FR-015, FR-022, NFR-005.
 - **Dependencies:** T-012, T-014, T-015.
 - **Description:** Update API, frontend, roadmap, README, AGENTS, docs index and specs index. Record the overview endpoint, routes, limits, shared-neighbor rule, isolated toggle, physics preset and current corpus counts. Run full backend/frontend checks and Compose validation. Push only with explicit authorization and record remote CI.
@@ -320,7 +320,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
   docker compose config -q
   ```
 - **Files:** `README.md`, `AGENTS.md`, `docs/03-data/api-v1.md`, `docs/01-architecture/frontend.md`, `docs/00-vision/roadmap.md`, `docs/README.md`, `specs/README.md`, `specs/011-graph-visualization/`.
-- **Evidence:** 2026-11-11: updated the API, frontend, roadmap, README, AGENTS, docs and spec indexes with the overview endpoint, `/graph`, shared-neighbor rule, 1,000-node cap, isolated semantics, overview physics preset and current corpus counts (398 band-view nodes, 968 album-view nodes; 893/951 with isolated producers hidden in the albums view). Full checks passed: backend 220 unit + 325 integration tests, Ruff and format; frontend `npm ci`, OpenAPI generation, lint, typecheck, 76 tests and production build; `docker compose config -q`. Remote CI was not run because pushing requires explicit authorization; the manual ego 500-node/drag feel review remains pending.
+- **Evidence:** 2026-11-11: updated the API, frontend, roadmap, README, AGENTS, docs and spec indexes with the overview endpoint, `/graph`, shared-neighbor rule, 1,000-node cap, isolated semantics, overview physics preset and current corpus counts (398 band-view nodes, 968 album-view nodes; 893/951 with isolated producers hidden in the albums view). Full checks passed: backend 220 unit + 325 integration tests, Ruff and format; frontend `npm ci`, OpenAPI generation, lint, typecheck, 76 tests and production build; `docker compose config -q`. Remote CI was not run because pushing requires explicit authorization; the manual ego 500-node/drag feel review was waived by the owner at E10 closure on 2026-11-14.
 
 ## 3. Coverage matrix
 
@@ -374,7 +374,7 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
 | AC-002 | Passed | Adapter tests |
 | AC-003 | Passed | Limit/truncation tests |
 | AC-004 | Passed | Physics config tests and headless browser smoke |
-| AC-005 | Partial | Headless drag kept the page stable; manual neighbor-response review pending |
+| AC-005 | Accepted (owner) | Headless drag kept the page stable; manual neighbor-response review waived at E10 closure |
 | AC-006 | Passed | Control tests |
 | AC-007 | Passed | Style/adapter tests |
 | AC-008 | Passed | Filter tests |
@@ -383,11 +383,11 @@ T-001–T-010 delivered the producer ego graph. T-011–T-016 deliver the global
 | AC-011 | Passed | State tests |
 | AC-012 | Passed | Reduced-motion test |
 | AC-013 | Passed | Visibility test |
-| AC-014 | Pending manual | 500-node browser check |
+| AC-014 | Accepted (owner) | 500-node check waived at E10 closure; 968-node albums and 398-node bands headless evidence recorded |
 | AC-015 | Passed | Scope inspection; no schema changes |
 | AC-016 | Passed | 76 frontend tests, lint, typecheck and build |
 | AC-017 | Passed | Docs review |
-| AC-018 | Pending | Remote CI |
+| AC-018 | Accepted (owner) | Remote CI not run; owner accepted local suite and headless evidence at E10 closure |
 | AC-019 | Passed | Album label style test and headless browser |
 | AC-020 | Passed | Layout config test and headless distance probe |
 | AC-021 | Passed | API/page tests; headless bands view 398 nodes / 426 edges |

@@ -1,8 +1,8 @@
 # Project roadmap
 
 - **Status:** Approved
-- **Version:** 0.2
-- **Date:** 2026-11-06
+- **Version:** 0.4
+- **Date:** 2026-11-16
 - **Scope:** from initialization to v0.1 and the later expansion to hundreds of bands
 
 ## 1. Sequencing principles
@@ -219,8 +219,10 @@ Before closing any stage:
 | E7 | Validated | SPEC-008 producer–album evidence and derived producer–band views; local run `net-a0b7c1f41ac5c92d`; remote CI run 42738375416 passed. |
 | E8 | Validated | SPEC-009 read-only API v1; remote CI run 42741669410 passed. |
 | E9 | Validated | SPEC-010 band, album, producer and search explorer; existing CSS; remote CI run 42747146170 passed. |
-| E10 | Implemented locally | SPEC-011 global producer overview and ego graph are implemented locally. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels and an accessible table. SPEC-012 adds a collapsible producer/band index, equal-height scrollable side panels, a dynamic light-to-dark year scale and node-type detail panels; revision 3 adds a persisted collapsible navigation rail, full-width layout, collapsible graph panels and canvas resizing without API or schema changes. SPEC-013 adds server-generated bipartite and community layouts, a Force/Bipartite/Community selector, the producer top-k selector and static physics controls. A legibility revision was attempted and reverted; revision 3 is deferred. Revision 4 adds a client-side d3-force/CoSE/fCoSE engine selector to Force mode, with plan approved and tasks in review. SPEC-017 and SPEC-018 are separate E10 follow-ups in plan/tasks review: Coreness/Rings client-side layouts with a Rings metric selector, and a global curved/orthogonal edge-routing toggle. The ego graph keeps its 500-node cap and static fallback. Headless browser checks passed; manual ego interaction and remote CI remain pending. |
-| E11–E13 | Pending | See [specs/README.md](../../specs/README.md) for the operational spec index |
+| E10 | Validated | SPEC-011, SPEC-012 and SPEC-013 validated by owner closure on 2026-11-14 based on the recorded local automated, headless and build evidence. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels, an accessible table, a collapsible producer/band index, equal-height panels, a dynamic year scale, node detail panels, a persisted navigation rail, full-width layout, collapsible graph panels, canvas resizing, server-generated bipartite/community layouts and the d3-force/CoSE/fCoSE selector. The ego graph keeps its 500-node cap and static fallback. Remote CI was not run for this closure. |
+| E11 | Implemented locally; remote CI pending | SPEC-014 adds a 26-test Playwright Chromium suite over deterministic E2E data, axe scans on nine routes, a reproducible performance probe, a security and dependency review and a 38-table backup/restore drill. The QA report is [`docs/01-architecture/qa-report.md`](../01-architecture/qa-report.md). One 968-node view-switch performance exception is documented. The `e2e` GitHub Actions job and its required-check setting remain release gates. |
+| E12 | Pending | Deployment, documentation and v0.1 release after E11. |
+| E13 | Pending | Corpus expansion to 200–500 bands after v0.1. |
 
 ## 8. Scope growth
 
@@ -251,4 +253,6 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 ## 10. Next step
 
-E0–E3 are complete and validated, including the 57-band v0.2.0 corpus and reproducible dataset. E4 is validated as SPEC-005 with remote CI run 42535752532. E5 is validated as SPEC-006 with remote CI run 42545153696. SPEC-007 is validated for E6 with remote CI run 42548567359. SPEC-008 E7 is validated with run `net-a0b7c1f41ac5c92d` and remote CI run 42738375416. SPEC-009 is validated for E8 with remote CI run 42741669410. SPEC-010 is validated for E9 with remote CI run 42747146170. SPEC-011 is implemented locally for E10: `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and headless checks confirmed the 398-node bands view, 968-node albums view, physics controls, labels, isolated toggle and reduced-motion fallback. SPEC-012 is implemented locally: the overview has a producer/band index, equal-height scrollable panels, a dynamic light-to-dark year scale, node detail panels, a collapsible navigation rail, full-width layout and collapsible graph panels. SPEC-013 adds Force/Bipartite/Community layouts with NetworkX, the producer top-k selector and static controls. A legibility revision was attempted and reverted; revision 3 is deferred. Revision 4 adds a client-side d3-force/CoSE/fCoSE engine selector to Force mode, with plan approved and tasks in review. SPEC-017 (Coreness/Rings) and SPEC-018 (orthogonal edge routing) are separate E10 follow-ups in plan/tasks review. Manual ego interaction and remote CI are pending.
+E0–E9 are complete and validated. E10 closed on 2026-11-14: SPEC-011, SPEC-012 and SPEC-013 are validated from the recorded local automated, headless and build evidence; the owner accepted this evidence and remote CI was not run for the closure. `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and the graph supports the Force/Bipartite/Community layouts and the d3-force/CoSE/fCoSE engines.
+
+E11 is implemented locally with SPEC-014: Playwright critical flows over deterministic data, performance probes, an accessibility audit, a security review, a 38-table backup restore drill and the [QA report](../01-architecture/qa-report.md). The remote `e2e` CI job and its required-check setting are the remaining release gates; no commit or push was authorized during implementation. E12 follows with deployment and the v0.1 release; E13 expands the corpus to 200–500 bands.

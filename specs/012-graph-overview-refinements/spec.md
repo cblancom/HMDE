@@ -1,11 +1,11 @@
 # SPEC-012 — Graph overview workspace refinements
 
-- **Status:** Implemented
+- **Status:** Validated
 - **Stage:** E10
 - **Iteration:** MVP
 - **Module:** `web`
 - **Date:** 2026-11-11
-- **Depends on:** SPEC-011 (implemented locally), SPEC-009, SPEC-010; existing read-only graph and entity endpoints
+- **Depends on:** SPEC-011 validated, SPEC-009, SPEC-010; existing read-only graph and entity endpoints
 - **ADRs:** [ADR-0001](../../docs/01-architecture/adr/ADR-0001-modular-monolith.md), [ADR-0006](../../docs/01-architecture/adr/ADR-0006-read-only-api.md), [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md)
 - **Plan:** [plan.md](plan.md)
 - **Tasks:** [tasks.md](tasks.md)
@@ -19,6 +19,7 @@
 | 1 | 2026-11-11 | Initial draft: producer and band index, panel-height contract, dynamic year scale and node detail panel |
 | 2 | 2026-11-11 | T-001–T-006 implemented locally; equal-height scrollable panels, dynamic year scale, node detail panel and headless verification passed. Remote CI pending |
 | 3 | 2026-11-11 | Space efficiency: collapsible navigation rail, wider global layout, collapsible index/detail panels and canvas resize |
+| 4 | 2026-11-14 | Owner confirmed E10 closure from the recorded local evidence; SPEC-012 validated. Remote CI was not run for this closure |
 
 ## 1. Context and problem
 
@@ -275,8 +276,8 @@ No blocking question remains. The palette values and exact scrollbar styling are
 
 ## 11. Validation result
 
-- **Date:** 2026-11-11
-- **Verdict:** Revision 3 implemented locally; remote CI pending. All acceptance criteria have local automated or headless evidence.
+- **Date:** 2026-11-14 (evidence recorded 2026-11-11)
+- **Verdict:** Validated. The owner confirmed E10 closure on 2026-11-14 from the recorded local automated and headless evidence. Remote CI was not run for this closure; that exception is recorded here rather than presented as a passed run.
 - **Evidence:**
   - frontend lint, typecheck, 94 tests and production build passed;
   - headless Chromium confirmed equal 858 px heights for the index, graph and detail columns; the index scrolled from 14,700 px of content inside an 856 px panel; the producer index showed 384 rows and the band index 57;

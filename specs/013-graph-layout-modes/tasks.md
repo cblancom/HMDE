@@ -1,6 +1,6 @@
 # Tasks — SPEC-013 Graph overview layout modes
 
-- **Status:** Revisions 1–2 completed; revision 3 deferred; revision 4 completed locally; remote CI pending
+- **Status:** Validated; revisions 1–2 and revision 4 completed, revision 3 deferred, E10 closed by the owner on 2026-11-14. Remote CI was waived at closure.
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -191,7 +191,7 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
 
 ### T-010 — Verify the force engines in a browser and update documentation
 
-- **Status:** Completed locally (2026-11-14); remote CI pending explicit authorization.
+- **Status:** Completed; owner accepted closure on 2026-11-14 (remote CI waived).
 - **Requirements:** NFR-005, AC-020.
 - **Dependencies:** T-009.
 - **Description:** Run headless Chromium checks for d3-force, CoSE and fCoSE on the 398-node bands view and the 968-node albums view. Record completion time, canvas usability, fallback behavior, reduced-motion behavior and console errors. Run the full frontend checks and, if applicable, backend checks. Update the spec/tasks evidence, `specs/README.md`, `AGENTS.md` and the relevant frontend/API docs only after implementation is complete.
@@ -206,7 +206,7 @@ T-006–T-010 implement revision 4 only: the approved fCoSE dependency, the forc
   ```
   Plus a headless Chromium probe for all three engines at 398/968 nodes.
 - **Files:** `specs/013-graph-layout-modes/`, `specs/README.md`, `AGENTS.md`, `docs/01-architecture/frontend.md`, `README.md`.
-- **Evidence:** 2026-11-14: headless Chromium at 1440 px confirmed d3-force as the default, CoSE and fCoSE completion with status text, URL `engine=cose`/`engine=fcose`, return to d3-force with the parameter removed, no overview refetch on engine changes, reduced-motion fCoSE completion and usable canvases in both 398-node bands and 968-node albums views. Engine completion timings were 4.08 s (CoSE) and 1.43 s (fCoSE) for bands, and 14.37 s (CoSE) and 1.81 s (fCoSE) for albums. The only console error was the pre-existing `favicon.ico` 404. Full frontend lint, typecheck, 118 tests and production build passed; `docker compose config -q` passed. Remote CI requires explicit authorization.
+- **Evidence:** 2026-11-14: headless Chromium at 1440 px confirmed d3-force as the default, CoSE and fCoSE completion with status text, URL `engine=cose`/`engine=fcose`, return to d3-force with the parameter removed, no overview refetch on engine changes, reduced-motion fCoSE completion and usable canvases in both 398-node bands and 968-node albums views. Engine completion timings were 4.08 s (CoSE) and 1.43 s (fCoSE) for bands, and 14.37 s (CoSE) and 1.81 s (fCoSE) for albums. The only console error was the pre-existing `favicon.ico` 404. Full frontend lint, typecheck, 118 tests and production build passed; `docker compose config -q` passed. The owner accepted this local evidence for E10 closure on 2026-11-14; remote CI was not run.
 
 ## 3. Coverage matrix
 
@@ -271,7 +271,7 @@ No revision 3 tasks are defined. T-001–T-005 remain the completed baseline. Re
 
 ## 6. Revision 4 — completed locally
 
-The revision 4 plan was approved on 2026-11-13 and T-006–T-010 are complete locally as of 2026-11-14. Revision 4 is frontend-only; it does not change the API, backend, database or ego graph. Remote CI remains pending explicit authorization.
+The revision 4 plan was approved on 2026-11-13 and T-006–T-010 are complete locally as of 2026-11-14. Revision 4 is frontend-only; it does not change the API, backend, database or ego graph. The owner accepted the local evidence at E10 closure; remote CI was not run.
 
 ## 7. Notes
 
