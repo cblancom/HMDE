@@ -7,6 +7,7 @@ from pathlib import Path
 from hmde.analytics.catalogue import load_metric_catalogue
 from hmde.analytics.loader import load_frames
 from hmde.models import NormalizationRun, QualityRuleCatalogue, QualityRun, TaxonomyVersion
+from tests.support.memberships import seed_dataset_memberships
 
 DATA = Path(__file__).resolve().parents[3] / "data"
 TAXONOMY = DATA / "taxonomy.json"
@@ -63,6 +64,7 @@ def test_loader_returns_read_only_frames(seeded_session_factory) -> None:
         )
         session.add(quality)
         session.flush()
+        seed_dataset_memberships(session, "mb-test")
         frames = load_frames(
             session,
             normalization_run=normalization,

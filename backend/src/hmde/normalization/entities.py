@@ -27,6 +27,8 @@ from .ids import stable_uuid
 from .inputs import NormalizationInputs
 from .provenance import ensure_source_records
 
+_QUERY_CHUNK_SIZE = 10_000
+
 
 @dataclass(frozen=True, slots=True)
 class EntityCounts:
@@ -156,9 +158,7 @@ def _normalize_artists(
     source_records: dict[uuid.UUID, uuid.UUID],
 ) -> tuple[dict[str, uuid.UUID], tuple[int, int]]:
     mbids = {_mbid(row, "artist") for row in rows}
-    existing = {
-        row.mbid: row for row in session.scalars(select(Artist).where(Artist.mbid.in_(mbids)))
-    }
+    existing = _existing_by_mbid(session, Artist, mbids)
     ids: dict[str, uuid.UUID] = {}
     created = updated = 0
     for row in rows:
@@ -197,10 +197,7 @@ def _normalize_release_groups(
     source_records: dict[uuid.UUID, uuid.UUID],
 ) -> tuple[dict[str, uuid.UUID], tuple[int, int]]:
     mbids = {_mbid(row, "release group") for row in rows}
-    existing = {
-        row.mbid: row
-        for row in session.scalars(select(ReleaseGroup).where(ReleaseGroup.mbid.in_(mbids)))
-    }
+    existing = _existing_by_mbid(session, ReleaseGroup, mbids)
     ids: dict[str, uuid.UUID] = {}
     created = updated = 0
     for row in rows:
@@ -245,9 +242,7 @@ def _normalize_releases(
     source_records: dict[uuid.UUID, uuid.UUID],
 ) -> tuple[dict[str, uuid.UUID], tuple[int, int]]:
     mbids = {_mbid(row, "release") for row in rows}
-    existing = {
-        row.mbid: row for row in session.scalars(select(Release).where(Release.mbid.in_(mbids)))
-    }
+    existing = _existing_by_mbid(session, Release, mbids)
     ids: dict[str, uuid.UUID] = {}
     created = updated = 0
     for row in rows:
@@ -286,9 +281,7 @@ def _normalize_recordings(
     source_records: dict[uuid.UUID, uuid.UUID],
 ) -> tuple[dict[str, uuid.UUID], tuple[int, int]]:
     mbids = {_mbid(row, "recording") for row in rows}
-    existing = {
-        row.mbid: row for row in session.scalars(select(Recording).where(Recording.mbid.in_(mbids)))
-    }
+    existing = _existing_by_mbid(session, Recording, mbids)
     ids: dict[str, uuid.UUID] = {}
     created = updated = 0
     for row in rows:
@@ -318,12 +311,12 @@ def _normalize_recording_releases(
     recording_ids: dict[str, uuid.UUID],
 ) -> tuple[int, int]:
     release_values = set(release_ids.values())
-    existing = {
-        (row.release_id, row.recording_id): row
+    existing: dict[tuple[uuid.UUID, uuid.UUID], RecordingRelease] = {}
+    for chunk in _chunks(sorted(release_values, key=str)):
         for row in session.scalars(
-            select(RecordingRelease).where(RecordingRelease.release_id.in_(release_values))
-        )
-    }
+            select(RecordingRelease).where(RecordingRelease.release_id.in_(chunk))
+        ):
+            existing[(row.release_id, row.recording_id)] = row
     created = updated = 0
     for row in rows:
         release_mbid = _mbid(row, "release", key="release_mbid")
@@ -421,6 +414,25 @@ def _recording_groups(
         if group_id is not None:
             groups.setdefault(recording_mbid, set()).add(group_id)
     return {key: frozenset(value) for key, value in groups.items()}
+
+
+def _chunks(values: Iterable[Any]) -> Iterable[list[Any]]:
+    chunk: list[Any] = []
+    for value in values:
+        chunk.append(value)
+        if len(chunk) >= _QUERY_CHUNK_SIZE:
+            yield chunk
+            chunk = []
+    if chunk:
+        yield chunk
+
+
+def _existing_by_mbid(session: Session, model: Any, mbids: set[str]) -> dict[str, Any]:
+    existing: dict[str, Any] = {}
+    for chunk in _chunks(sorted(mbids)):
+        for row in session.scalars(select(model).where(model.mbid.in_(chunk))):
+            existing[row.mbid] = row
+    return existing
 
 
 def _raw_ids(*record_sets: Iterable[dict[str, Any]]) -> set[uuid.UUID]:

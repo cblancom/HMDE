@@ -1,13 +1,13 @@
 # Data quality rules
 
 - **Status:** Active
-- **Version:** 0.1.0
-- **Date:** 2026-11-08
-- **Stage:** E5
-- **Spec:** [SPEC-006](../../specs/006-data-quality/spec.md)
-- **Plan:** [SPEC-006 plan](../../specs/006-data-quality/plan.md)
-- **Normalized run:** `54d66992-643b-49ec-bac4-fe514ea39e94`
-- **Dataset:** `mb-20261107T194927Z-0d6cedd5c261`
+- **Version:** 0.2.0
+- **Date:** 2026-11-19
+- **Stage:** E5 / E13 extension
+- **Spec:** [SPEC-006](../../specs/006-data-quality/spec.md), extended by [SPEC-016](../../specs/016-corpus-expansion/spec.md)
+- **Plan:** [SPEC-006 plan](../../specs/006-data-quality/plan.md), [SPEC-016 plan](../../specs/016-corpus-expansion/plan.md)
+- **Normalized run:** `ed8e7e12-c181-4041-ba39-42b2bf655453`
+- **Dataset:** `mb-20261119T004940Z-9d5e75fdc1b9`
 - **Taxonomy:** 0.2.0
 
 ## 1. Purpose
@@ -53,6 +53,8 @@ The initial exception baseline is [`data/quality/exceptions-v0.1.0.json`](../../
 - 17 medium-confidence album classifications;
 - 17 band aggregate review cases.
 
+The v0.3.0 baseline is [`data/quality/exceptions-v0.3.0.json`](../../data/quality/exceptions-v0.3.0.json). It is intentionally empty: the expanded run has no blocking finding, so no blocking exception is required. The 900 album-review and 189 aggregate-review findings remain visible as medium/advisory findings.
+
 Exceptions are visible in reports. They do not delete or downgrade findings.
 
 ## 6. Local full-corpus evidence
@@ -66,6 +68,18 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     --normalization-run 54d66992-643b-49ec-bac4-fe514ea39e94 \
     --rules ../data/quality/rules-v0.1.0.json \
     --exceptions ../data/quality/exceptions-v0.1.0.json \
+    --output ../data/quality --strict
+```
+
+The v0.3.0 full run is `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad` against normalization `ed8e7e12-c181-4041-ba39-42b2bf655453`. It persisted 1,089 medium/advisory findings (900 album review and 189 aggregate review), 0 blocking findings, 0 exceptions and 77 coverage/completeness metrics. The strict gate exits `2` because findings remain advisory; it is not blocked. Coverage includes batch, country, decade, taxonomy leaf, role, source, field and credit scope, and missing-data ratios use denominators.
+
+```bash
+cd backend
+DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
+  uv run python -m hmde.quality run \
+    --normalization-run ed8e7e12-c181-4041-ba39-42b2bf655453 \
+    --rules ../data/quality/rules-v0.2.0.json \
+    --exceptions ../data/quality/exceptions-v0.3.0.json \
     --output ../data/quality --strict
 ```
 

@@ -27,7 +27,12 @@ BANDS_SQL = text(
            ) AS qid
     FROM artist a
     JOIN artist_subgenre ag
-      ON ag.artist_id = a.id AND ag.is_primary
+      ON ag.artist_id = a.id
+     AND ag.is_primary
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     """
 )
 ALBUMS_SQL = text(
@@ -39,6 +44,10 @@ ALBUMS_SQL = text(
            rgs.status AS primary_status
     FROM release_group rg
     JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     LEFT JOIN release_group_subgenre rgs
       ON rgs.release_group_id = rg.id
      AND rgs.taxonomy_version = :taxonomy_version
@@ -47,9 +56,15 @@ ALBUMS_SQL = text(
 )
 SECONDARY_SQL = text(
     """
-    SELECT release_group_id, subgenre_code, status
-    FROM release_group_subgenre
-    WHERE taxonomy_version = :taxonomy_version AND NOT is_primary
+    SELECT rgs.release_group_id, rgs.subgenre_code, rgs.status
+    FROM release_group_subgenre rgs
+    JOIN release_group rg ON rg.id = rgs.release_group_id
+    JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
+    WHERE rgs.taxonomy_version = :taxonomy_version AND NOT rgs.is_primary
     """
 )
 CREDITS_SQL = text(
@@ -62,6 +77,10 @@ CREDITS_SQL = text(
     JOIN artist ca ON ca.id = c.artist_id
     JOIN release_group rg ON rg.id = c.release_group_id
     JOIN artist ba ON ba.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = ba.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     """
 )
 MEMBERSHIP_SQL = text(
@@ -71,6 +90,32 @@ MEMBERSHIP_SQL = text(
     WHERE dataset_version = :dataset_version
     GROUP BY batch_id, lifecycle
     ORDER BY batch_id, lifecycle
+    """
+)
+RELEASES_SQL = text(
+    """
+    SELECT count(DISTINCT r.id) AS count
+    FROM release r
+    JOIN release_group rg ON rg.id = r.release_group_id
+    JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
+    """
+)
+RECORDINGS_SQL = text(
+    """
+    SELECT count(DISTINCT rec.id) AS count
+    FROM recording rec
+    JOIN recording_release rr ON rr.recording_id = rec.id
+    JOIN release r ON r.id = rr.release_id
+    JOIN release_group rg ON rg.id = r.release_group_id
+    JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     """
 )
 SOURCE_SQL = text(
@@ -126,23 +171,15 @@ def load_frames(
     taxonomy_version = normalization_run.taxonomy_version or ""
     dataset_version = normalization_run.dataset_version or ""
     connection = session.connection()
-    bands = pd.read_sql(BANDS_SQL, connection)
-    albums = pd.read_sql(
-        ALBUMS_SQL,
-        connection,
-        params={"taxonomy_version": taxonomy_version},
-    )
-    secondary = pd.read_sql(
-        SECONDARY_SQL,
-        connection,
-        params={"taxonomy_version": taxonomy_version},
-    )
-    credits = pd.read_sql(CREDITS_SQL, connection)
-    membership = pd.read_sql(
-        MEMBERSHIP_SQL,
-        connection,
-        params={"dataset_version": dataset_version},
-    )
+    params = {
+        "dataset_version": dataset_version,
+        "taxonomy_version": taxonomy_version,
+    }
+    bands = pd.read_sql(BANDS_SQL, connection, params=params)
+    albums = pd.read_sql(ALBUMS_SQL, connection, params=params)
+    secondary = pd.read_sql(SECONDARY_SQL, connection, params=params)
+    credits = pd.read_sql(CREDITS_SQL, connection, params=params)
+    membership = pd.read_sql(MEMBERSHIP_SQL, connection, params=params)
     sources = pd.read_sql(
         SOURCE_SQL,
         connection,
@@ -160,13 +197,15 @@ def load_frames(
             params={"catalogue_version": quality_run.catalogue_version},
         ).iloc[0]["count"]
     )
+    releases = int(pd.read_sql(RELEASES_SQL, connection, params=params).iloc[0]["count"])
+    recordings = int(pd.read_sql(RECORDINGS_SQL, connection, params=params).iloc[0]["count"])
     counts = {
         "bands": len(bands),
         "albums": len(albums),
-        "releases": _count(session, "release"),
-        "recordings": _count(session, "recording"),
+        "releases": releases,
+        "recordings": recordings,
         "credits": len(credits),
-        "membership": len(membership),
+        "membership": int(membership["count"].sum()) if not membership.empty else 0,
         "source_records": int(sources["count"].sum()) if not sources.empty else 0,
     }
     return AnalysisFrames(
@@ -195,8 +234,3 @@ def _taxonomy(path: Path) -> pd.DataFrame:
     if not required <= set(frame.columns):
         raise AnalysisInputError("taxonomy nodes are missing required fields")
     return frame
-
-
-def _count(session: Session, table: str) -> int:
-    value = session.execute(text(f"SELECT count(*) FROM {table}")).scalar()
-    return int(value or 0)

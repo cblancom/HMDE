@@ -176,6 +176,41 @@ def test_unmapped_album_is_quarantined(test_database_url: str) -> None:
         engine.dispose()
 
 
+def test_unmapped_album_uses_band_seed_fallback(test_database_url: str) -> None:
+    engine = create_engine(test_database_url, pool_pre_ping=True)
+    session_factory = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+    try:
+        with session_factory() as session:
+            inputs, run, index = _setup(session)
+            tag_map = TagMapInput(
+                version="0.1.0",
+                taxonomy_version="0.2.0",
+                path=inputs.tag_map.path,
+                rules=(),
+            )
+            result = classify_albums(
+                session,
+                replace(inputs, tag_map=tag_map),
+                index,
+                run_id=run.id,
+                seed_subgenres={"11111111-1111-4111-8111-111111111111": "heavy-metal"},
+            )
+
+            assert result.counts.review == 1
+            assert result.counts.quarantined == 0
+            row = session.scalar(select(ReleaseGroupSubgenre))
+            assert row is not None
+            assert row.subgenre_code == "heavy-metal"
+            assert row.status == "review"
+            assert row.mapping_rule == "seed-fallback"
+            issue = session.scalar(select(NormalizationIssue))
+            assert issue is not None and issue.issue_type == "classification_review"
+            assert issue.reason == "no album tag mapping; band seed fallback used"
+            session.rollback()
+    finally:
+        engine.dispose()
+
+
 def test_override_takes_precedence(test_database_url: str) -> None:
     engine = create_engine(test_database_url, pool_pre_ping=True)
     session_factory = sessionmaker(bind=engine, autoflush=False, autocommit=False)

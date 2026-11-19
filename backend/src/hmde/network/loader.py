@@ -22,6 +22,10 @@ ALBUMS_SQL = text(
            rgs.subgenre_code AS primary_code, rgs.status AS primary_status
     FROM release_group rg
     JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     LEFT JOIN release_group_subgenre rgs
       ON rgs.release_group_id = rg.id
      AND rgs.taxonomy_version = :taxonomy_version
@@ -30,10 +34,16 @@ ALBUMS_SQL = text(
 )
 SECONDARY_SQL = text(
     """
-    SELECT release_group_id, subgenre_code
-    FROM release_group_subgenre
-    WHERE taxonomy_version = :taxonomy_version AND NOT is_primary
-    ORDER BY release_group_id, subgenre_code
+    SELECT rgs.release_group_id, rgs.subgenre_code
+    FROM release_group_subgenre rgs
+    JOIN release_group rg ON rg.id = rgs.release_group_id
+    JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
+    WHERE rgs.taxonomy_version = :taxonomy_version AND NOT rgs.is_primary
+    ORDER BY rgs.release_group_id, rgs.subgenre_code
     """
 )
 CREDITS_SQL = text(
@@ -44,6 +54,12 @@ CREDITS_SQL = text(
            c.credited_as, c.confidence, c.status, c.source_record_id
     FROM credit c
     JOIN artist ca ON ca.id = c.artist_id
+    JOIN release_group rg ON rg.id = c.release_group_id
+    JOIN artist ba ON ba.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = ba.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     WHERE c.role_code IN ('producer', 'co-producer')
       AND c.release_group_id IS NOT NULL
     ORDER BY c.artist_id, c.release_group_id, c.role_code, c.id
@@ -54,6 +70,12 @@ RECORDINGS_SQL = text(
     SELECT r.release_group_id AS album_id, rr.release_id, rr.recording_id
     FROM release r
     JOIN recording_release rr ON rr.release_id = r.id
+    JOIN release_group rg ON rg.id = r.release_group_id
+    JOIN artist a ON a.id = rg.artist_id
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
     ORDER BY r.release_group_id, rr.release_id, rr.recording_id
     """
 )
@@ -75,9 +97,13 @@ EXCEPTIONS_SQL = text(
 )
 DUPLICATE_LABELS_SQL = text(
     """
-    SELECT lower(name) AS label, count(*) AS count
-    FROM artist
-    GROUP BY lower(name)
+    SELECT lower(a.name) AS label, count(*) AS count
+    FROM artist a
+    JOIN dataset_membership dm
+      ON dm.artist_id = a.id
+     AND dm.dataset_version = :dataset_version
+     AND dm.lifecycle = 'active'
+    GROUP BY lower(a.name)
     HAVING count(*) > 1
     ORDER BY label
     """
@@ -135,9 +161,18 @@ class NetworkData:
 
 def load_network_data(session: Session, *, quality_run: QualityRun) -> NetworkData:
     taxonomy_version = quality_run.taxonomy_version
-    albums = _load_albums(session, taxonomy_version=taxonomy_version)
-    credit_rows = session.execute(CREDITS_SQL).mappings().all()
-    recording_rows = session.execute(RECORDINGS_SQL).mappings().all()
+    dataset_version = quality_run.dataset_version
+    params = {
+        "dataset_version": dataset_version,
+        "taxonomy_version": taxonomy_version,
+    }
+    albums = _load_albums(
+        session,
+        dataset_version=dataset_version,
+        taxonomy_version=taxonomy_version,
+    )
+    credit_rows = session.execute(CREDITS_SQL, params).mappings().all()
+    recording_rows = session.execute(RECORDINGS_SQL, params).mappings().all()
     album_recordings, release_recordings = _recording_maps(recording_rows)
     producer_albums = aggregate_producer_albums(
         albums,
@@ -149,6 +184,7 @@ def load_network_data(session: Session, *, quality_run: QualityRun) -> NetworkDa
         session,
         quality_run=quality_run,
         albums=albums,
+        dataset_version=dataset_version,
     )
     return NetworkData(albums=albums, producer_albums=producer_albums, quality=quality)
 
@@ -233,10 +269,19 @@ def _support_ratio(*, supporting: int, total: int, release_group_scope: bool) ->
     return min(1.0, supporting / total)
 
 
-def _load_albums(session: Session, *, taxonomy_version: str) -> dict[uuid.UUID, AlbumRow]:
-    rows = session.execute(ALBUMS_SQL, {"taxonomy_version": taxonomy_version}).mappings().all()
+def _load_albums(
+    session: Session,
+    *,
+    dataset_version: str,
+    taxonomy_version: str,
+) -> dict[uuid.UUID, AlbumRow]:
+    params = {
+        "dataset_version": dataset_version,
+        "taxonomy_version": taxonomy_version,
+    }
+    rows = session.execute(ALBUMS_SQL, params).mappings().all()
     secondary: dict[uuid.UUID, list[str]] = defaultdict(list)
-    for row in session.execute(SECONDARY_SQL, {"taxonomy_version": taxonomy_version}).mappings():
+    for row in session.execute(SECONDARY_SQL, params).mappings():
         secondary[row["release_group_id"]].append(str(row["subgenre_code"]))
     albums: dict[uuid.UUID, AlbumRow] = {}
     for row in rows:
@@ -274,6 +319,7 @@ def _quality_summary(
     *,
     quality_run: QualityRun,
     albums: dict[uuid.UUID, AlbumRow],
+    dataset_version: str,
 ) -> QualitySummary:
     findings: dict[str, int] = {}
     for row in session.execute(QUALITY_SQL, {"quality_run_id": quality_run.id}).mappings():
@@ -286,7 +332,9 @@ def _quality_summary(
     )
     duplicate_labels = tuple(
         {"label": str(row["label"]), "count": int(row["count"])}
-        for row in session.execute(DUPLICATE_LABELS_SQL).mappings()
+        for row in session.execute(
+            DUPLICATE_LABELS_SQL, {"dataset_version": dataset_version}
+        ).mappings()
     )
     return QualitySummary(
         findings=dict(sorted(findings.items())),

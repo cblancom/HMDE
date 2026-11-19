@@ -1,6 +1,6 @@
 # Tasks — SPEC-016
 
-- **Status:** In implementation
+- **Status:** Implemented
 - **Spec:** [spec.md](spec.md)
 - **Plan:** [plan.md](plan.md)
 
@@ -170,6 +170,7 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
 
 ### T-005A — Make E3 deterministic and exclude multi-artist release groups
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-005, FR-010, NFR-001, NFR-003, NFR-004, AC-004.
 - **Dependencies:** T-005.
 - **Description:** Make every E3 NDJSON file totally ordered, with a deterministic tie-breaker for records that share the primary sort key. Write one canonical row per artist, release group, release and recording MBID. Exclude release groups associated with more than one active band and remove dependent rows that become orphaned; report them with reason `multi_artist_release_group`. Reconcile or label extracted-record and canonical-row counts in the coverage report. Add regression tests for equal sort keys, shuffled input, duplicate entity MBIDs and cache-only replay. Regenerate the dataset from the existing raw cache; do not use `--refresh`.
@@ -199,6 +200,7 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
 
 ### T-006 — Run E4 normalization for 509 bands
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-006, FR-010, NFR-001, NFR-006, NFR-007, AC-005.
 - **Dependencies:** T-004, T-005A.
 - **Description:** Review the new tags and album classifications. Reuse the current tag map and overrides if they cover all new records; otherwise create reviewed v0.3.0 versions and record why. Run normalization against the corrected canonical dataset, v0.3.0 seed list and taxonomy 0.2.0. Review memberships, classification confidence, aggregates and quarantine. Excluded multi-artist release groups must not appear as canonical entities.
@@ -207,18 +209,19 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
   ```bash
   DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     uv run python -m hmde.normalization run \
-      --dataset ../data/ingestions/musicbrainz/<dataset-id> \
+      --dataset ../data/ingestions/musicbrainz/mb-20261119T004940Z-9d5e75fdc1b9 \
       --taxonomy ../data/taxonomy.json \
-      --tag-map ../data/classifications/tag-map-v0.1.0.json \
-      --overrides ../data/classifications/manual-overrides-v0.1.0.json \
+      --tag-map ../data/classifications/tag-map-v0.3.0.json \
+      --overrides ../data/classifications/manual-overrides-v0.3.0.json \
       --seed-list ../data/seed-list.json \
       --output ../data/normalization
   ```
-- **Files:** `data/normalization/` (ignored), `data/classifications/*` if a new version is required, `tasks.md`.
-- **Evidence:** Pending: normalization run ID, membership count, classification coverage, quarantine count, version set.
+- **Files:** `data/normalization/` (ignored), `data/classifications/tag-map-v0.3.0.json`, `data/classifications/manual-overrides-v0.3.0.json`, `docs/03-data/normalization-rules.md`, `tasks.md`.
+- **Evidence:** Run `ed8e7e12-c181-4041-ba39-42b2bf655453`, `completed_with_review`. Dataset `mb-20261119T004940Z-9d5e75fdc1b9`; taxonomy 0.2.0; tag map/overrides 0.3.0. 509 active memberships for the dataset; 4,826 release groups; classification 3,926 accepted, 900 review, 0 quarantined; 14 overrides applied; 0 credits quarantined. Aggregates: 320 accepted, 189 review, 0 missing. Issues: 1,089 medium review (900 classification, 148 aggregate review, 28 tie, 13 low confidence); no blocking issue. Tag-map v0.3.0 adds 20 exact labels; albums without usable tags use the band seed leaf at confidence 0.50 with review status, and equal candidates use the seed leaf when tied. No excluded multi-artist release group is present. Structural checks and the review queue are recorded for T-007.
 
 ### T-007 — Run E5 quality and approve exceptions
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-007, FR-010, BR-010, AC-006.
 - **Dependencies:** T-006.
 - **Description:** Run the quality gate against the v0.3.0 normalization run, rules v0.2.0 and a new exceptions baseline. Triage each finding; fix structural causes; approve exceptions only with a reason and scope. Compare coverage with v0.2.0.
@@ -227,16 +230,17 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
   ```bash
   DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     uv run python -m hmde.quality run \
-      --normalization-run <normalization-run-id> \
+      --normalization-run ed8e7e12-c181-4041-ba39-42b2bf655453 \
       --rules ../data/quality/rules-v0.2.0.json \
       --exceptions ../data/quality/exceptions-v0.3.0.json \
       --output ../data/quality --strict
   ```
-- **Files:** `data/quality/rules-v0.2.0.json`, `data/quality/exceptions-v0.3.0.json`, `data/quality/` (ignored), `tasks.md`.
-- **Evidence:** Pending: quality run ID, findings, exceptions, blockers, coverage summary.
+- **Files:** `data/quality/rules-v0.2.0.json`, `data/quality/exceptions-v0.3.0.json`, `docs/03-data/data-quality.md`, `data/quality/` (ignored), `tasks.md`.
+- **Evidence:** Quality run `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad`, `completed_with_findings`; normalization `ed8e7e12-c181-4041-ba39-42b2bf655453`; rules 0.2.0; exceptions 0.3.0 (empty). 20 rules and 77 metrics. 1,089 findings: 900 `Q-CLS-002` and 189 `Q-AGG-001`, all medium/advisory; 0 blocking, 0 exceptions and exit code 2. Coverage covers batch, country, decade, taxonomy leaf, role, source, field and credit scope; missing-data metrics use denominators. v0.2.0 comparison: 58 findings (24 blocking excepted, 34 advisory) and 51 metrics. No structural fix or blocking exception was required; review findings remain visible.
 
 ### T-008 — Run E6 EDA and E7 network analysis
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-008, FR-010, NFR-001, NFR-003, AC-007.
 - **Dependencies:** T-007.
 - **Description:** Run E6 and E7 against the v0.3.0 normalization and quality runs. Reuse the metric catalogue if definitions are unchanged; otherwise add a reviewed version. Compare coverage, producer concentration and community structure with v0.2.0. Record all versions and limitations.
@@ -245,24 +249,25 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
   ```bash
   DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     uv run python -m hmde.analytics run \
-      --normalization-run <normalization-run-id> \
-      --quality-run <quality-run-id> \
+      --normalization-run ed8e7e12-c181-4041-ba39-42b2bf655453 \
+      --quality-run 288b11ac-9a90-4b4f-bf58-fdd50e1a51ad \
       --taxonomy ../data/taxonomy.json \
       --metric-catalogue ../data/metrics/catalogue-v0.1.0.json \
       --output ../data/analysis
 
   DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
     uv run python -m hmde.network run \
-      --normalization-run <normalization-run-id> \
-      --quality-run <quality-run-id> \
+      --normalization-run ed8e7e12-c181-4041-ba39-42b2bf655453 \
+      --quality-run 288b11ac-9a90-4b4f-bf58-fdd50e1a51ad \
       --taxonomy ../data/taxonomy.json \
       --output ../data/network
   ```
-- **Files:** `data/analysis/`, `data/network/` (ignored), `data/metrics/*` if a new version is required, `tasks.md`.
-- **Evidence:** Pending: EDA report ID, network run ID, edge/node/community counts, comparison summary.
+- **Files:** `data/analysis/`, `data/network/` (ignored), `data/metrics/*` if a new version is required, `docs/03-data/analysis-v0.3.0.md` for the comparison, `tasks.md`.
+- **Evidence:** E6 `eda-bd2ef42a54786c67` with 927 metrics; E7 run `613a597e-242c-44ab-add3-a95381d23ec3`, analysis version `net-78a54051ff047f86`, status `completed_with_limitations`. Network: producer_album 3,719 nodes / 4,217 edges / 300 components; producer_band 1,570 nodes / 1,700 edges / 111 components; 325 communities; support full 1,224 / partial 3,060 / unknown 0. v0.2 comparison: EDA 354 metrics; producer_album 968/1,134/67; producer_band 398/426/13; 78 communities. The shared canonical tables retain one legacy release group, one release, five recordings and 3,090 legacy credits outside the v0.3 canonical dataset, so E6/E7 report 4,827 albums and 110,071 credits versus 4,826 and 106,981 in the E3 dataset; this limitation is documented for T-010. The analysis run is persisted and loadable.
 
 ### T-009 — Verify API and graph performance at 509 bands
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-009, NFR-005, AC-008.
 - **Dependencies:** T-008.
 - **Description:** Load the v0.3.0 analysis run into the local stack. Measure overview band/album node and edge counts, overview latency, `/graph` readiness, view-switch response and ego-graph behaviour. At 509 bands the overview is expected to exceed the 1,000-node/2,000-edge cap; keep the cap with explicit truncation unless measurements justify a bounded raise. Record the decision and evidence. Add a regression test only if behaviour changes.
@@ -273,11 +278,12 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
   HMDE_ANALYSIS_RUN=<analysis-run-id> npm run test:perf
   npm run test:e2e
   ```
-- **Files:** `backend/src/hmde/api/routes/producers.py` only if the cap changes, `frontend/` tests only if truncation changes, `docs/01-architecture/qa-report.md` or `docs/01-architecture/performance.md`, `tasks.md`.
-- **Evidence:** Pending: node/edge counts, p50/p95 latency, view-switch timing, cap decision.
+- **Files:** `backend/src/hmde/services/producers.py`, `frontend/e2e/performance.spec.ts`, `docs/01-architecture/qa-report.md`, `docs/03-data/analysis-v0.3.0.md`, `tasks.md`.
+- **Evidence:** Performance probe passed with one documented exception. API p95: overview bands 411 ms and albums 486 ms (target 1,500 ms); lists/details/search/ego all within target. Browser p95: graph navigation 2,956 ms (target 5,000), view-switch acknowledgement 2,373 ms (target 1,000; exception), full view settle 2,626 ms (target 5,000), panel toggle 686 ms (target 1,000), ego navigation 681 ms (target 5,000). The 1,000-node/2,000-edge cap is kept with explicit truncation: albums 1,000 nodes/810 edges (295 of 1,444 producers), bands 1,000 nodes/1,125 edges (913 of 1,444). Network has 4,217 producer–album edges, 1,700 producer–band edges and 325 communities. CoSE completed in 10.1 s and fCoSE in 2.0 s. Playwright E2E: 26 tests passed, including nine axe scans. The view-switch exception is documented in the QA report; no cap raise or UI rewrite is justified.
 
 ### T-010 — Run the full regression and update documentation
 
+- **Status:** Completed 2026-11-19.
 - **Requirements:** FR-011, FR-012, AC-009, AC-010, AC-011.
 - **Dependencies:** T-009.
 - **Description:** Run all backend and frontend checks. Update the seed-list document, roadmap, specs index, `AGENTS.md`, `data/README.md`, candidate-pool guide, spec result and this task file. Review the diff for secrets, unrelated changes, production work, new dependencies and unnecessary migrations.
@@ -297,8 +303,8 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
   npm run build
   npm run test:e2e
   ```
-- **Files:** `docs/03-data/seed-list.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `AGENTS.md`, `data/README.md`, `specs/016-corpus-expansion/spec.md`, `tasks.md`.
-- **Evidence:** Pending.
+- **Files:** `docs/03-data/seed-list.md`, `docs/03-data/analysis-v0.3.0.md`, `docs/03-data/data-quality.md`, `docs/03-data/normalization-rules.md`, `docs/00-vision/roadmap.md`, `specs/README.md`, `AGENTS.md`, `data/README.md`, `specs/016-corpus-expansion/spec.md`, `tasks.md`.
+- **Evidence:** Backend: 343 tests passed, `ruff check` and `ruff format --check` passed. Frontend: lint and typecheck passed, 118 Vitest tests passed, production build passed (the existing 958.20 kB chunk warning remains the documented E11-03 P3), 26 Playwright tests passed including nine axe scans, and the performance probe passed with the single documented view-switch exception. `docker compose config -q` passed. Documentation reflects SPEC-016 local implementation, the v0.3.0 dataset/runs, the 900-review classification limitation, the E6/E7 legacy-row limitation, the retained 1,000/2,000 graph cap and the T-011 remote-CI gate. No secrets, unrelated changes, production deployment, new dependency or unnecessary migration were found.
 
 ### T-011 — Remote CI after explicit authorization
 
@@ -355,13 +361,13 @@ T-004 can run in parallel with T-005 after T-003. T-005A corrects the E3 dataset
 | AC-002 | Passed | 453 checked; 452 accepted; Hellhammer excluded; 151/151/150 batches; report and batches approved 2026-11-17. |
 | AC-003 | Passed | `v0.3.0.json` loader validation; 509 bands; pointer resolves 0.3.0; v0.2.0 checksum unchanged. |
 | AC-004 | Passed | T-005A dataset `mb-20261119T004940Z-9d5e75fdc1b9`: 509/509, 0 failures, normal and cache-only same version/manifest, no duplicate entity MBIDs, 7 multi-artist exclusions, v0.2.0 unchanged. |
-| AC-005 | Pending | T-006. |
-| AC-006 | Pending | T-007. |
-| AC-007 | Pending | T-008. |
-| AC-008 | Pending | T-009. |
-| AC-009 | Pending | T-010. |
-| AC-010 | Pending | T-010. |
-| AC-011 | Pending | T-010. |
+| AC-005 | Passed | T-006 run `ed8e7e12-c181-4041-ba39-42b2bf655453`: 509 active memberships, 4,826 classified albums, 0 quarantined and 900 review cases recorded. |
+| AC-006 | Passed | T-007 run `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad`: 0 blocking, 0 exceptions, 1,089 medium/advisory findings and 77 coverage/completeness metrics. |
+| AC-007 | Passed | T-008 E6 `eda-bd2ef42a54786c67` and E7 `net-78a54051ff047f86`; 927 metrics, 4,217/1,700 graph edges, 325 communities and v0.2 comparison recorded with legacy-row limitation. |
+| AC-008 | Passed with documented exception | T-009: API/overview within targets, truncation explicit, E2E/axe pass; view-switch acknowledgement p95 2,373 ms over the 1 s control target, full settle 2,626 ms within 5 s. |
+| AC-009 | Passed | T-010: backend 343 tests, frontend 118 tests, lint/typecheck/build, 26 E2E and nine axe scans passed. |
+| AC-010 | Passed | T-010: SPEC-016, spec index, roadmap, AGENTS, data docs and this task file updated. |
+| AC-011 | Passed | T-010 diff review: no production deployment, E12 work, new production dependency or migration. |
 
 ## 6. Notes
 

@@ -162,6 +162,8 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
     '/api/v1/graph/producers?view=bands&producer_limit=0&include_isolated=true&include_evidence=true&max_nodes=1000&max_edges=2000',
   )
   const overviewMeta = albumsOverview.meta as Record<string, unknown>
+  const albumOverviewNodes = Array.isArray(albumsOverview.nodes) ? albumsOverview.nodes.length : 0
+  const bandOverviewNodes = Array.isArray(bandsOverview.nodes) ? bandsOverview.nodes.length : 0
   const bandItems = bands.items as Array<Record<string, unknown>>
   const albumItems = albums.items as Array<Record<string, unknown>>
   const producerItems = producers.items as Array<Record<string, unknown>>
@@ -246,11 +248,11 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   const navigationValues: number[] = []
   const navigationLongTasks: LongTask[] = []
   for (let warmup = 0; warmup < WARMUP_COUNT; warmup += 1) {
-    await openOverview(page)
+    await openOverview(page, String(albumOverviewNodes))
   }
   for (let sample = 0; sample < SAMPLE_COUNT; sample += 1) {
     const start = performance.now()
-    await openOverview(page)
+    await openOverview(page, String(albumOverviewNodes))
     navigationValues.push(performance.now() - start)
     const pageLongTasks = await readLongTasks(page)
     navigationLongTasks.push(
@@ -271,15 +273,16 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   const meta = page.locator('.overview-toolbar .graph-meta')
   const controlStartLength = (await readLongTasks(page)).length
   await clickOverviewView(page, 'Bands')
-  await expect(meta).toContainText('398 nodes', { timeout: 15_000 })
+  await expect(meta).toContainText(`${bandOverviewNodes} nodes`, { timeout: 15_000 })
   await clickOverviewView(page, 'Albums')
-  await expect(meta).toContainText('968 nodes', { timeout: 15_000 })
+  await expect(meta).toContainText(`${albumOverviewNodes} nodes`, { timeout: 15_000 })
 
   const viewAckValues: number[] = []
   const viewSettleValues: number[] = []
   for (let sample = 0; sample < SAMPLE_COUNT; sample += 1) {
     const nextView = sample % 2 === 0 ? 'Bands' : 'Albums'
-    const expected = nextView === 'Bands' ? '398 nodes' : '968 nodes'
+    const expected =
+      nextView === 'Bands' ? `${bandOverviewNodes} nodes` : `${albumOverviewNodes} nodes`
     const start = performance.now()
     await clickOverviewView(page, nextView)
     await page.waitForFunction(
@@ -392,7 +395,7 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   ]
   const exceptionCauses: Record<string, string> = {
     'overview view switch acknowledgement':
-      'The 968-node d3-force simulation and the view refetch occupy the main thread while the new view commits. The full view switch still settles within the 5 s graph-interactivity target.',
+      `The ${albumOverviewNodes}-node d3-force simulation and the view refetch occupy the main thread while the new view commits. The full view switch still settles within the 5 s graph-interactivity target.`,
   }
   const targetExceptions = allMetrics
     .filter((item) => !item.passed)
@@ -501,9 +504,9 @@ async function measureApi(
   }
 }
 
-async function openOverview(page: Page): Promise<void> {
+async function openOverview(page: Page, expectedNodes: string): Promise<void> {
   await page.goto(`${WEB_BASE}/graph?view=albums`, { waitUntil: 'domcontentloaded' })
-  await waitForCanvas(page, '968 nodes')
+  await waitForCanvas(page, `${expectedNodes} nodes`)
 }
 
 async function openEgo(page: Page, ego: EgoGraph): Promise<void> {

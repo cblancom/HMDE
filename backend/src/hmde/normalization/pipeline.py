@@ -78,16 +78,17 @@ class NormalizationRunner:
         )
         index = normalize_entities(self._session, self._inputs)
         credits = normalize_credits(self._session, self._inputs, index)
+        seed_subgenres = (
+            {band.mbid: band.seed_subgenre_code for band in seed_list.bands}
+            if seed_list is not None
+            else {}
+        )
         classification = classify_albums(
             self._session,
             self._inputs,
             index,
             run_id=run.id,
-        )
-        seed_subgenres = (
-            {band.mbid: band.seed_subgenre_code for band in seed_list.bands}
-            if seed_list is not None
-            else {}
+            seed_subgenres=seed_subgenres,
         )
         aggregates = derive_band_aggregates(
             self._session,

@@ -51,10 +51,12 @@ def classify_albums(
     index: EntityIndex,
     *,
     run_id: uuid.UUID,
+    seed_subgenres: dict[str, str] | None = None,
 ) -> ClassificationResult:
     rows = read_ndjson(inputs.dataset.file("release_groups.ndjson").path)
     overrides = {item.release_group_mbid: item for item in inputs.overrides.overrides}
     rules = {rule.source_label: rule for rule in inputs.tag_map.rules}
+    seed_subgenres = seed_subgenres or {}
     issues: list[Any] = []
     accepted = review = quarantined = overrides_applied = 0
     primary_labels = secondary_labels = 0
@@ -64,6 +66,7 @@ def classify_albums(
         release_group_id = index.release_groups.get(mbid)
         if release_group_id is None:
             raise InputValidationError(f"release group is not normalized: {mbid}")
+        seed_code = seed_subgenres.get(str(row.get("artist_mbid") or ""))
         override = overrides.get(mbid)
         if override is not None:
             accepted_codes = _override_codes(override)
@@ -83,110 +86,231 @@ def classify_albums(
         else:
             candidates = _candidates(row, rules)
             if not candidates:
-                quarantined += 1
-                issues.append(
-                    record_issue(
-                        session,
-                        run_id=run_id,
-                        dataset_version=inputs.dataset.dataset_version,
-                        taxonomy_version=inputs.dataset.taxonomy_version,
-                        entity_type="release_group",
-                        entity_mbid=mbid,
-                        issue_type="classification_missing",
-                        severity="blocking",
-                        reason="no exact tag/genre mapping",
-                        evidence={"genres": row.get("genres", []), "tags": row.get("tags", [])},
+                if seed_code is not None:
+                    primary = seed_code
+                    accepted_codes = [seed_code]
+                    confidence = 0.5
+                    status = "review"
+                    mapping_rule = "seed-fallback"
+                    review += 1
+                    issues.append(
+                        record_issue(
+                            session,
+                            run_id=run_id,
+                            dataset_version=inputs.dataset.dataset_version,
+                            taxonomy_version=inputs.dataset.taxonomy_version,
+                            entity_type="release_group",
+                            entity_mbid=mbid,
+                            issue_type="classification_review",
+                            severity="medium",
+                            reason="no album tag mapping; band seed fallback used",
+                            evidence={
+                                "genres": row.get("genres", []),
+                                "tags": row.get("tags", []),
+                                "seed_code": seed_code,
+                            },
+                        )
                     )
-                )
-                _clear_classifications(session, release_group_id, inputs.dataset.taxonomy_version)
-                continue
-            primary, confidence, candidates, conflict = _choose_primary(candidates)
-            if conflict:
-                quarantined += 1
-                issues.append(
-                    record_issue(
-                        session,
-                        run_id=run_id,
-                        dataset_version=inputs.dataset.dataset_version,
-                        taxonomy_version=inputs.dataset.taxonomy_version,
-                        entity_type="release_group",
-                        entity_mbid=mbid,
-                        issue_type="classification_conflict",
-                        severity="blocking",
-                        reason="multiple equally ranked primary candidates",
-                        evidence={
-                            "candidates": [
-                                {
-                                    "code": item.code,
-                                    "confidence": item.confidence,
-                                    "priority": item.priority,
-                                    "labels": list(item.labels),
-                                }
-                                for item in candidates
-                            ]
-                        },
-                    )
-                )
-                _clear_classifications(session, release_group_id, inputs.dataset.taxonomy_version)
-                continue
-            if confidence < MEDIUM_CONFIDENCE:
-                quarantined += 1
-                issues.append(
-                    record_issue(
-                        session,
-                        run_id=run_id,
-                        dataset_version=inputs.dataset.dataset_version,
-                        taxonomy_version=inputs.dataset.taxonomy_version,
-                        entity_type="release_group",
-                        entity_mbid=mbid,
-                        issue_type="classification_low_confidence",
-                        severity="blocking",
-                        reason="best exact mapping is below the medium threshold",
-                        evidence={"primary": primary.code, "confidence": confidence},
-                    )
-                )
-                _clear_classifications(session, release_group_id, inputs.dataset.taxonomy_version)
-                continue
-            accepted_codes = [primary.code] + [
-                item.code
-                for item in candidates
-                if item.code != primary.code and item.confidence >= MEDIUM_CONFIDENCE
-            ]
-            if confidence < HIGH_CONFIDENCE:
-                review += 1
-                status = "review"
-                issues.append(
-                    record_issue(
-                        session,
-                        run_id=run_id,
-                        dataset_version=inputs.dataset.dataset_version,
-                        taxonomy_version=inputs.dataset.taxonomy_version,
-                        entity_type="release_group",
-                        entity_mbid=mbid,
-                        issue_type="classification_review",
-                        severity="medium",
-                        reason="mapping confidence is in the review band",
-                        evidence={"primary": primary.code, "confidence": confidence},
-                    )
-                )
-            else:
-                accepted += 1
-                status = "accepted"
-            mapping_rule = "tag-exact"
-            evidence = {
-                "source": "tag-map",
-                "tag_map_version": inputs.tag_map.version,
-                "primary_confidence": confidence,
-                "candidates": [
-                    {
-                        "code": item.code,
-                        "confidence": item.confidence,
-                        "priority": item.priority,
-                        "labels": list(item.labels),
+                    evidence = {
+                        "source": "band-seed-fallback",
+                        "seed_code": seed_code,
+                        "reason": "no album tag mapping",
+                        "genres": row.get("genres", []),
+                        "tags": row.get("tags", []),
                     }
-                    for item in candidates
-                ],
-            }
+                else:
+                    quarantined += 1
+                    issues.append(
+                        record_issue(
+                            session,
+                            run_id=run_id,
+                            dataset_version=inputs.dataset.dataset_version,
+                            taxonomy_version=inputs.dataset.taxonomy_version,
+                            entity_type="release_group",
+                            entity_mbid=mbid,
+                            issue_type="classification_missing",
+                            severity="blocking",
+                            reason="no exact tag/genre mapping",
+                            evidence={
+                                "genres": row.get("genres", []),
+                                "tags": row.get("tags", []),
+                            },
+                        )
+                    )
+                    _clear_classifications(
+                        session, release_group_id, inputs.dataset.taxonomy_version
+                    )
+                    continue
+            else:
+                primary, confidence, candidates, conflict = _choose_primary(candidates)
+                if conflict:
+                    tied = [
+                        item
+                        for item in candidates
+                        if item.confidence == primary.confidence
+                        and item.priority == primary.priority
+                    ]
+                    seed_tied = next((item for item in tied if item.code == seed_code), None)
+                    if seed_tied is None:
+                        quarantined += 1
+                        issues.append(
+                            record_issue(
+                                session,
+                                run_id=run_id,
+                                dataset_version=inputs.dataset.dataset_version,
+                                taxonomy_version=inputs.dataset.taxonomy_version,
+                                entity_type="release_group",
+                                entity_mbid=mbid,
+                                issue_type="classification_conflict",
+                                severity="blocking",
+                                reason="multiple equally ranked primary candidates",
+                                evidence={
+                                    "candidates": [
+                                        {
+                                            "code": item.code,
+                                            "confidence": item.confidence,
+                                            "priority": item.priority,
+                                            "labels": list(item.labels),
+                                        }
+                                        for item in candidates
+                                    ]
+                                },
+                            )
+                        )
+                        _clear_classifications(
+                            session, release_group_id, inputs.dataset.taxonomy_version
+                        )
+                        continue
+                    primary = seed_tied
+                    confidence = seed_tied.confidence
+                    accepted_codes = [
+                        item.code
+                        for item in candidates
+                        if item.code == seed_tied.code or item.confidence >= MEDIUM_CONFIDENCE
+                    ]
+                    status = "review"
+                    mapping_rule = "seed-tiebreak"
+                    review += 1
+                    issues.append(
+                        record_issue(
+                            session,
+                            run_id=run_id,
+                            dataset_version=inputs.dataset.dataset_version,
+                            taxonomy_version=inputs.dataset.taxonomy_version,
+                            entity_type="release_group",
+                            entity_mbid=mbid,
+                            issue_type="classification_review",
+                            severity="medium",
+                            reason="equal top candidates resolved by band seed fallback",
+                            evidence={
+                                "primary": primary.code,
+                                "confidence": confidence,
+                                "seed_code": seed_code,
+                            },
+                        )
+                    )
+                    evidence = {
+                        "source": "band-seed-tiebreak",
+                        "seed_code": seed_code,
+                        "primary": primary.code,
+                        "confidence": confidence,
+                    }
+                elif confidence < MEDIUM_CONFIDENCE:
+                    if seed_code is not None:
+                        best_code = primary.code
+                        best_confidence = confidence
+                        primary = seed_code
+                        accepted_codes = [seed_code]
+                        confidence = 0.5
+                        status = "review"
+                        mapping_rule = "seed-fallback"
+                        review += 1
+                        issues.append(
+                            record_issue(
+                                session,
+                                run_id=run_id,
+                                dataset_version=inputs.dataset.dataset_version,
+                                taxonomy_version=inputs.dataset.taxonomy_version,
+                                entity_type="release_group",
+                                entity_mbid=mbid,
+                                issue_type="classification_review",
+                                severity="medium",
+                                reason="best mapping is below medium; band seed fallback used",
+                                evidence={
+                                    "primary": best_code,
+                                    "confidence": best_confidence,
+                                    "seed_code": seed_code,
+                                },
+                            )
+                        )
+                        evidence = {
+                            "source": "band-seed-fallback",
+                            "seed_code": seed_code,
+                            "primary": best_code,
+                            "confidence": best_confidence,
+                            "reason": "best mapping is below medium",
+                        }
+                    else:
+                        quarantined += 1
+                        issues.append(
+                            record_issue(
+                                session,
+                                run_id=run_id,
+                                dataset_version=inputs.dataset.dataset_version,
+                                taxonomy_version=inputs.dataset.taxonomy_version,
+                                entity_type="release_group",
+                                entity_mbid=mbid,
+                                issue_type="classification_low_confidence",
+                                severity="blocking",
+                                reason="best exact mapping is below the medium threshold",
+                                evidence={"primary": primary.code, "confidence": confidence},
+                            )
+                        )
+                        _clear_classifications(
+                            session, release_group_id, inputs.dataset.taxonomy_version
+                        )
+                        continue
+                else:
+                    accepted_codes = [primary.code] + [
+                        item.code
+                        for item in candidates
+                        if item.code != primary.code and item.confidence >= MEDIUM_CONFIDENCE
+                    ]
+                    if confidence < HIGH_CONFIDENCE:
+                        review += 1
+                        status = "review"
+                        issues.append(
+                            record_issue(
+                                session,
+                                run_id=run_id,
+                                dataset_version=inputs.dataset.dataset_version,
+                                taxonomy_version=inputs.dataset.taxonomy_version,
+                                entity_type="release_group",
+                                entity_mbid=mbid,
+                                issue_type="classification_review",
+                                severity="medium",
+                                reason="mapping confidence is in the review band",
+                                evidence={"primary": primary.code, "confidence": confidence},
+                            )
+                        )
+                    else:
+                        accepted += 1
+                        status = "accepted"
+                    mapping_rule = "tag-exact"
+                    evidence = {
+                        "source": "tag-map",
+                        "tag_map_version": inputs.tag_map.version,
+                        "primary_confidence": confidence,
+                        "candidates": [
+                            {
+                                "code": item.code,
+                                "confidence": item.confidence,
+                                "priority": item.priority,
+                                "labels": list(item.labels),
+                            }
+                            for item in candidates
+                        ],
+                    }
         _replace_classifications(
             session,
             release_group_id=release_group_id,

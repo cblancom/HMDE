@@ -9,7 +9,7 @@
 - **Verification report:** [`v0.3.0-verification.json`](v0.3.0-verification.json)
 - **Spec:** [`specs/016-corpus-expansion/spec.md`](../../../specs/016-corpus-expansion/spec.md)
 
-This directory holds the verified candidate bands for the E13 corpus expansion. All 453 candidates were checked; 452 are accepted and Hellhammer is excluded because it has no studio album. The active pointer now resolves `seed-lists/v0.3.0.json`. The E3 canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` contains 509 bands, has no duplicate entity MBIDs and reports 7 multi-artist release-group exclusions. E4 normalization is next.
+This directory holds the verified candidate bands for the E13 corpus expansion. All 453 candidates were checked; 452 are accepted and Hellhammer is excluded because it has no studio album. The active pointer now resolves `seed-lists/v0.3.0.json`. The E3 canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` contains 509 bands, has no duplicate entity MBIDs and reports 7 multi-artist release-group exclusions. E4 normalization run `ed8e7e12-c181-4041-ba39-42b2bf655453` created 509 active memberships and classified all 4,826 albums, with 900 review cases and none quarantined. E5 quality run `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad` has 0 blocking findings and 1,089 medium/advisory findings. E6/E7 completed with EDA `eda-bd2ef42a54786c67` and network `net-78a54051ff047f86`. T-009 kept the graph cap with explicit truncation and passed E2E/axe, with one documented view-switch exception. T-010 completed the local regression; remote CI is pending.
 
 ## Contents
 

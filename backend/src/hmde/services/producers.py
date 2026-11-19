@@ -325,15 +325,12 @@ def get_producer_overview_graph(
         producer_order = [node_id for node_id in producer_order if node_id in connected]
 
     truncated = matched > len(selected_rows)
-    if len(producer_order) > max_nodes:
-        producer_order = producer_order[:max_nodes]
-        truncated = True
-    selected_nodes = set(producer_order)
+    candidate_producers = set(producer_order)
 
     merged_edges: list[tuple[GraphEdge, list[str]]] = []
     for rows in grouped.values():
         source_id = rows[0].source_node_id
-        if source_id not in selected_nodes:
+        if source_id not in candidate_producers:
             continue
         best = max(
             rows,
@@ -352,20 +349,39 @@ def get_producer_overview_graph(
         )
     )
 
+    selected_nodes: set[UUID] = set()
     selected_edges: list[GraphEdge] = []
     edge_roles: dict[UUID, list[str]] = {}
-    selected_producer_ids = set(producer_order)
     for edge, roles in merged_edges:
         if len(selected_edges) >= max_edges:
             truncated = True
             break
-        if edge.target_node_id not in selected_nodes:
-            if len(selected_nodes) >= max_nodes:
-                truncated = True
-                continue
-            selected_nodes.add(edge.target_node_id)
+        needed = {
+            node_id
+            for node_id in (edge.source_node_id, edge.target_node_id)
+            if node_id not in selected_nodes
+        }
+        if len(selected_nodes) + len(needed) > max_nodes:
+            truncated = True
+            continue
+        selected_nodes.update(needed)
         selected_edges.append(edge)
         edge_roles[edge.id] = roles
+
+    if include_isolated:
+        for node_id in producer_order:
+            if node_id in selected_nodes:
+                continue
+            if len(selected_nodes) >= max_nodes:
+                truncated = True
+                break
+            selected_nodes.add(node_id)
+
+    selected_producer_ids = {
+        node_id for node_id in selected_nodes if node_id in candidate_producers
+    }
+    if len(selected_producer_ids) < len(candidate_producers):
+        truncated = True
 
     target_ids = {edge.target_node_id for edge in selected_edges}
     edge_source_ids = {edge.source_node_id for edge in selected_edges}

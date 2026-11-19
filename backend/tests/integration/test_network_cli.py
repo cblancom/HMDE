@@ -6,6 +6,7 @@ from pathlib import Path
 
 from hmde.models import NormalizationRun, QualityRuleCatalogue, QualityRun, TaxonomyVersion
 from hmde.network.cli import NetworkOptions, execute_network
+from tests.support.memberships import seed_dataset_memberships
 
 DATA = Path(__file__).resolve().parents[3] / "data"
 
@@ -58,6 +59,7 @@ def _setup(session):
     )
     session.add(quality)
     session.flush()
+    seed_dataset_memberships(session, "fixture-test")
     return normalization, quality
 
 

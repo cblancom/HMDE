@@ -3,7 +3,7 @@
 - **Status:** v0.3.0 active; v0.2.0 archive; v0.1.0 historical archive
 - **Version:** 0.3.0 active; 0.2.0 archive; 0.1.0 historical; 0.3.0-candidates-02 verified pool
 - **Date:** 2026-11-19
-- **Stage:** E13 seed list active; E3 canonical dataset generated; E4 next
+- **Stage:** E13 seed list active; local implementation complete; remote CI pending
 - **Machine-readable source:** [`data/seed-list.json`](../../data/seed-list.json) (active pointer) → [`data/seed-lists/v0.3.0.json`](../../data/seed-lists/v0.3.0.json)
 - **Candidate pool:** [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json) (verified; not active)
 - **Verification report:** [`data/seed-lists/candidates/v0.3.0-verification.json`](../../data/seed-lists/candidates/v0.3.0-verification.json)
@@ -52,6 +52,10 @@ Every band has at least three studio albums in the period according to MusicBrai
 | Lifecycle | 509 active; no retired bands |
 | Verification | [`v0.3.0-verification.json`](../../data/seed-lists/candidates/v0.3.0-verification.json) |
 | E3 dataset | `mb-20261119T004940Z-9d5e75fdc1b9` (509 bands; 7 multi-artist release groups excluded) |
+| E4 normalization | `ed8e7e12-c181-4041-ba39-42b2bf655453` (509 active memberships; 3,926 accepted classifications, 900 review, 0 quarantined) |
+| E5 quality | `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad` (0 blocking; 1,089 medium/advisory findings; 77 metrics) |
+| E6/E7 analysis | EDA `eda-bd2ef42a54786c67` (927 metrics); network `net-78a54051ff047f86` (4,217 producer–album edges, 1,700 producer–band edges, 325 communities) |
+| Performance | 1,000-node/2,000-edge cap kept; albums 1,000 nodes/810 edges, bands 1,000/1,125; one view-switch exception documented |
 
 The active pointer is [`data/seed-list.json`](../../data/seed-list.json). The versioned source of truth is [`data/seed-lists/v0.3.0.json`](../../data/seed-lists/v0.3.0.json). The v0.2.0 and v0.1.0 files remain immutable archives.
 
@@ -188,7 +192,7 @@ E13 verified the 453-candidate pool for a 510-band ceiling. The verified pool is
 
 The pool excludes the 57 active v0.2.0 bands. The owner approved the verification report, the Hellhammer exclusion and the batches on 2026-11-17. The final composition and verification rules are in [`specs/016-corpus-expansion/spec.md`](../../specs/016-corpus-expansion/spec.md).
 
-The v0.3.0 seed list is active. The E3 canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` contains 509 bands, has no duplicate entity MBIDs and reports 7 multi-artist release-group exclusions. The database remains on the v0.2.0 dataset until E4–E7 are complete and validated.
+The v0.3.0 seed list is active. The E3 canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` contains 509 bands, has no duplicate entity MBIDs and reports 7 multi-artist release-group exclusions. E4 normalization run `ed8e7e12-c181-4041-ba39-42b2bf655453` created 509 active memberships and classified all 4,826 albums, with 900 review cases and none quarantined. The local API/frontend remain on the v0.2.0 dataset until T-009 loads the v0.3.0 analysis run.
 
 ## 8. Known limitations
 
@@ -199,6 +203,8 @@ The v0.3.0 seed list is active. The E3 canonical dataset `mb-20261119T004940Z-9d
 - MusicBrainz data changes over time; the 42-band base was verified on 2026-11-05 and the v0.2.0 batch on 2026-11-06.
 - The v0.2.0 ingestion produced 731 release groups, 9,236 releases, 16,683 recordings, 32,326 credits and 3,991 exclusions across 57 bands, with no band failures.
 - The canonical E3 dataset excludes release groups associated with more than one active band (7 at the 2026-11-19 snapshot) because the model stores one artist per album. They are reported with reason `multi_artist_release_group`; this does not change the 509 active bands or the three-album minimum.
+- E4 classified all 4,826 albums with tag map and overrides v0.3.0. 900 albums remain in review because their tags are broad or absent; albums without usable tags use the band seed leaf at confidence 0.50 and are reported, not hidden. No album is quarantined.
+- E6/E7 use the shared canonical tables. One legacy v0.2 release group, one release, five recordings and 3,090 legacy credits remain outside the v0.3 canonical dataset; the analysis reports 4,827 albums and 110,071 credits versus 4,826 and 106,981 in E3. See [`analysis-v0.3.0.md`](analysis-v0.3.0.md).
 - The list is intentionally small for the MVP; E13 adds 452 verified bands for a 509-band corpus.
 
 ## 9. Change control

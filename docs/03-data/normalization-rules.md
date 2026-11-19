@@ -1,12 +1,12 @@
 # Normalization rules
 
 - **Status:** Active
-- **Version:** 0.1.0
-- **Date:** 2026-11-08
-- **Stage:** E4
-- **Spec:** [SPEC-005](../../specs/005-normalization-identity/spec.md)
-- **Plan:** [SPEC-005 plan](../../specs/005-normalization-identity/plan.md)
-- **Input dataset:** `data/ingestions/musicbrainz/mb-20261107T194927Z-0d6cedd5c261`
+- **Version:** 0.2.0
+- **Date:** 2026-11-19
+- **Stage:** E4 / E13 extension
+- **Spec:** [SPEC-005](../../specs/005-normalization-identity/spec.md), extended by [SPEC-016](../../specs/016-corpus-expansion/spec.md)
+- **Plan:** [SPEC-005 plan](../../specs/005-normalization-identity/plan.md), [SPEC-016 plan](../../specs/016-corpus-expansion/plan.md)
+- **Input dataset:** `data/ingestions/musicbrainz/mb-20261119T004940Z-9d5e75fdc1b9`
 - **Taxonomy:** [`data/taxonomy.json`](../../data/taxonomy.json) v0.2.0
 
 ## 1. Purpose
@@ -67,7 +67,7 @@ Unmapped attributes stay in the credit attributes and may create a review issue.
 
 ### 6.1 Tag map
 
-[`data/classifications/tag-map-v0.1.0.json`](../../data/classifications/tag-map-v0.1.0.json) maps exact normalized MusicBrainz genre/tag labels to leaves.
+[`data/classifications/tag-map-v0.3.0.json`](../../data/classifications/tag-map-v0.3.0.json) maps exact normalized MusicBrainz genre/tag labels to leaves.
 
 Each rule has:
 
@@ -86,7 +86,7 @@ No substring, fuzzy or generated matching is allowed.
 
 ### 6.2 Manual overrides
 
-[`data/classifications/manual-overrides-v0.1.0.json`](../../data/classifications/manual-overrides-v0.1.0.json) contains manual album classifications for problematic cases.
+[`data/classifications/manual-overrides-v0.3.0.json`](../../data/classifications/manual-overrides-v0.3.0.json) contains manual album classifications for problematic cases.
 
 Each override records:
 
@@ -112,6 +112,17 @@ Manual overrides always take precedence over mapped candidates and are recorded 
 8. Secondary leaves are other mapped leaves with confidence `>= 0.50`.
 9. An album has one primary leaf and zero or more secondary leaves.
 10. A manual override replaces the generated result.
+
+### 7.1 v0.3.0 seed fallback
+
+Corpus v0.3.0 contains albums with broad, non-genre or absent tags. The tag map adds reviewed exact labels for the new corpus, but the following deterministic fallback is allowed:
+
+- If no exact candidate exists, use the band's approved `seed_subgenre_code` as the primary leaf with confidence `0.50`, status `review` and mapping rule `seed-fallback`.
+- If equal top candidates exist and the band seed leaf is among them, use the seed leaf as the primary, keep the other mapped leaves as secondaries and record a review issue with mapping rule `seed-tiebreak`.
+- If the band seed leaf is unavailable, quarantine the album as `classification_missing`.
+- A fallback is a review aid derived from the approved band classification; it is not independent album-level evidence and never bypasses review.
+
+The v0.3.0 tag map and override files remain versioned. Manual overrides are used for genuinely ambiguous albums, not to replace the general fallback policy.
 
 Missing tags and missing mappings are reported as missing evidence, not as a negative genre claim.
 
@@ -149,6 +160,6 @@ Review actions record actor, timestamp, source file/version and before/after val
 
 ## 11. Feedback loop
 
-If the tag map is insufficient, add exact labels and rerun. Do not edit taxonomy v0.2.0 in place. If a taxonomy change is required, create a new taxonomy version and classify against it in a new run.
+If the tag map is insufficient, add exact labels, check the seed fallback review queue and rerun. Do not edit taxonomy v0.2.0 in place. If a taxonomy change is required, create a new taxonomy version and classify against it in a new run.
 
-Manual overrides should remain rare: use them for genuinely ambiguous albums, not to compensate for broad mapping errors that should be fixed in the tag map.
+Manual overrides should remain rare: use them for genuinely ambiguous albums, not to compensate for broad mapping errors that should be fixed in the tag map. The v0.3.0 expansion applies this policy with `tag-map-v0.3.0.json` and `manual-overrides-v0.3.0.json`.

@@ -32,6 +32,7 @@ from hmde.network.persistence import (
 )
 from hmde.network.report import write_network_report
 from hmde.seed.loader import load_fixtures
+from tests.support.memberships import seed_dataset_memberships
 
 TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL")
 BACKEND_DIR = Path(__file__).resolve().parents[2]
@@ -132,6 +133,7 @@ def network_analysis_run(seeded_session_factory, tmp_path_factory):
         )
         session.add(quality)
         session.flush()
+        seed_dataset_memberships(session, "api-fixture")
         inputs = NetworkInputs(
             normalization_run=normalization,
             quality_run=quality,

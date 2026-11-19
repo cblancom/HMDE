@@ -10,6 +10,7 @@ from hmde.models import (
     TaxonomyVersion,
 )
 from hmde.network.loader import load_network_data
+from tests.support.memberships import seed_dataset_memberships
 
 
 def test_load_network_data_from_fixtures(seeded_session_factory) -> None:
@@ -61,6 +62,7 @@ def test_load_network_data_from_fixtures(seeded_session_factory) -> None:
         )
         session.add(quality)
         session.flush()
+        seed_dataset_memberships(session, "fixture-test")
 
         data = load_network_data(session, quality_run=quality)
         assert data.albums

@@ -27,6 +27,7 @@ from hmde.network.persistence import (
     persist_network_run,
     start_analysis_run,
 )
+from tests.support.memberships import seed_dataset_memberships
 
 
 def _setup(session):
@@ -77,6 +78,7 @@ def _setup(session):
     )
     session.add(quality)
     session.flush()
+    seed_dataset_memberships(session, "fixture-test")
     return normalization, quality
 
 

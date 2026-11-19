@@ -7,8 +7,8 @@ This directory contains versioned curated data used by the project.
 - `seed-lists/` — immutable versioned seed lists and batch artifacts. `v0.1.0.json` is the validated historical corpus; `v0.2.0.json` adds the approved 15-band batch; `v0.3.0.json` has 509 active bands.
 - `seed-lists/batches/v0.3.0-batch-01.json`, `-02`, `-03` — approved 151/151/150 candidate batches. The v0.2.0 batch remains an archive.
 - `seed-lists/candidates/` — verified candidate pool for the E13 v0.3.0 expansion. `v0.3.0-pool.json` has 453 MusicBrainz-identified bands across all 17 leaves and six regions; 452 are accepted and one is excluded, giving a 509-band corpus under a 510-band ceiling. The file is not an active seed list. See `seed-lists/candidates/README.md`.
-- `classifications/` — versioned exact tag/genre-to-leaf mappings and manual album overrides for E4 normalization.
-- `quality/` — versioned quality rule catalogue and initial exception baseline for E5.
+- `classifications/` — versioned exact tag/genre-to-leaf mappings and manual album overrides for E4 normalization. `tag-map-v0.3.0.json` and `manual-overrides-v0.3.0.json` are the reviewed inputs for corpus v0.3.0; v0.1.0 files remain historical.
+- `quality/` — versioned quality rule catalogue and exception baselines for E5. The v0.3.0 gate uses `rules-v0.2.0.json` and the empty `exceptions-v0.3.0.json`; the v0.1.0 baseline remains historical.
 - `metrics/` — versioned E6 metric catalogue.
 - `analysis/` — generated E6 reports (ignored by Git).
 - `network/` — generated E7 producer-network reports (ignored by Git).

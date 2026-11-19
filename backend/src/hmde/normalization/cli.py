@@ -22,8 +22,8 @@ from .taxonomy import sync_taxonomy
 
 DEFAULT_DATASET = Path("../data/ingestions/musicbrainz/mb-20261107T194927Z-0d6cedd5c261")
 DEFAULT_TAXONOMY = Path("../data/taxonomy.json")
-DEFAULT_TAG_MAP = Path("../data/classifications/tag-map-v0.1.0.json")
-DEFAULT_OVERRIDES = Path("../data/classifications/manual-overrides-v0.1.0.json")
+DEFAULT_TAG_MAP = Path("../data/classifications/tag-map-v0.3.0.json")
+DEFAULT_OVERRIDES = Path("../data/classifications/manual-overrides-v0.3.0.json")
 DEFAULT_SEED_LIST = Path("../data/seed-list.json")
 DEFAULT_OUTPUT = Path("../data/normalization")
 

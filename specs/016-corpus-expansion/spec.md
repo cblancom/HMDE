@@ -1,6 +1,6 @@
 # SPEC-016 — Corpus expansion to 510 bands
 
-- **Status:** In implementation
+- **Status:** Implemented
 - **Stage:** E13
 - **Iteration:** v0.3.0
 - **Module:** `ingestion` (primary), with downstream `normalization`, `quality`, `analytics`, `api` and `web` verification
@@ -22,6 +22,11 @@
 | 4 | 2026-11-17 | T-002 verified all 453 candidates: 452 accepted, Hellhammer excluded for having no studio album. The owner approved the report and batches; the verified corpus is 509 active bands in batches of 151/151/150. The 510-band target remains the ceiling. |
 | 5 | 2026-11-19 | T-005 processed 509/509 bands with zero failures. The dataset was not accepted: cache-only replay produced a different dataset version because recordings with equal MBID were ordered non-deterministically, and 7 multi-artist release groups produced duplicate entity MBIDs. The owner approved option A: total deterministic ordering, one canonical row per entity MBID, and exclusion of multi-artist release groups with reason `multi_artist_release_group`. |
 | 6 | 2026-11-19 | T-005A regenerated the canonical dataset from cache: `mb-20261119T004940Z-9d5e75fdc1b9`, 509/509 bands, zero failures. Normal and cache-only runs produced the same dataset version and manifest; entity files have no duplicate MBIDs; 7 multi-artist release groups are excluded and reported. T-006 is next. |
+| 7 | 2026-11-19 | T-006 completed normalization run `ed8e7e12-c181-4041-ba39-42b2bf655453`: 509 active memberships, 4,826 classified albums, 0 quarantined and 900 review cases. Tag map and overrides v0.3.0 add reviewed labels and use a band-seed review fallback for albums without usable tags. T-007 is next. |
+| 8 | 2026-11-19 | T-007 completed quality run `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad`: 0 blocking findings, 1,089 medium/advisory findings and 77 metrics. The v0.3.0 exception baseline is intentionally empty. T-008 is next. |
+| 9 | 2026-11-19 | T-008 completed E6 report `eda-bd2ef42a54786c67` (927 metrics) and E7 run `net-78a54051ff047f86`: 4,217 producer–album edges, 1,700 producer–band edges and 325 communities. The v0.2 comparison and the shared-table legacy-row limitation are documented. T-009 is next. |
+| 10 | 2026-11-19 | T-009 completed the API/browser performance review, E2E and axe checks. The 1,000-node/2,000-edge cap is kept with explicit truncation (albums 1,000/810; bands 1,000/1,125). One view-switch acknowledgement exception is documented: p95 2,373 ms over the 1 s control target, while the full settle remains 2,626 ms within 5 s. T-010 is next. |
+| 11 | 2026-11-19 | T-010 completed the local regression: 343 backend tests, 118 frontend tests, lint, typecheck, build, 26 Playwright tests, nine axe scans and the performance probe passed; the existing chunk warning and one view-switch exception are documented. SPEC-016 is implemented locally; T-011 remote CI remains pending explicit authorization. |
 
 ## 1. Context and problem
 
@@ -33,7 +38,7 @@ E13 targets up to 510 active bands by accepting all 453 candidates in the pool. 
 
 The candidate pool for this spec is [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json). It contains 453 MusicBrainz-identified candidates across all 17 leaves and six regions. All 453 are accepted for verification and ingestion. A candidate that cannot be verified is excluded and reported; it is not silently replaced.
 
-T-005 executed the first v0.3.0 ingestion on 2026-11-19: 509/509 bands processed with zero failures. The produced dataset was not accepted. Cache-only replay changed the order of `recordings.ndjson` because records with the same MBID had no deterministic tie-breaker, and seven release groups were associated with more than one active band, which the single-artist release-group model cannot represent. The owner approved excluding those multi-artist release groups and regenerating the dataset deterministically. T-005A produced `mb-20261119T004940Z-9d5e75fdc1b9`: 509/509 bands, zero failures, one canonical row per entity MBID, seven reported multi-artist exclusions and the same dataset version in normal and cache-only runs.
+T-005 executed the first v0.3.0 ingestion on 2026-11-19: 509/509 bands processed with zero failures. The produced dataset was not accepted. Cache-only replay changed the order of `recordings.ndjson` because records with the same MBID had no deterministic tie-breaker, and seven release groups were associated with more than one active band, which the single-artist release-group model cannot represent. The owner approved excluding those multi-artist release groups and regenerating the dataset deterministically. T-005A produced `mb-20261119T004940Z-9d5e75fdc1b9`: 509/509 bands, zero failures, one canonical row per entity MBID, seven reported multi-artist exclusions and the same dataset version in normal and cache-only runs. T-006 normalized the dataset into 509 active memberships and classified all 4,826 albums using tag map and overrides v0.3.0; 3,926 classifications are accepted, 900 remain in review and none are quarantined. T-007 quality run has 0 blocking findings, 1,089 medium/advisory findings and 77 coverage/completeness metrics; the v0.3.0 exception baseline intentionally records no blocking exception. T-008 produced EDA report `eda-bd2ef42a54786c67` with 927 metrics and network snapshot `net-78a54051ff047f86` with 4,217 producer–album edges, 1,700 producer–band edges and 325 communities; the v0.2 comparison and legacy-row limitation are documented in [`analysis-v0.3.0.md`](../../docs/03-data/analysis-v0.3.0.md). T-009 kept the 1,000-node/2,000-edge cap with explicit truncation and passed E2E/axe; the only exception is the view-switch acknowledgement (p95 2,373 ms over 1 s) while the full settle remains within 5 s.
 
 ## 2. Users and actors
 
@@ -218,6 +223,8 @@ The normalization run must:
 - not normalize release groups excluded by E3; their exclusion is recorded in the ingestion report;
 - maintain deterministic identity resolution with no automatic fuzzy merge;
 - review new MusicBrainz tags against the versioned tag map;
+- when no exact album tag mapping exists, use the band seed leaf at confidence `0.50` with review status; quarantine only when no seed leaf is available;
+- resolve equal album candidates with the band seed leaf when it is tied, and record the decision for review;
 - record medium-confidence and quarantine cases;
 - produce a reviewed versioned manual-override file when required.
 
@@ -358,7 +365,7 @@ The implementation must reuse the existing seed loader, ingestion, normalization
 - **Retired band:** use lifecycle `retired` and `replaced_by_mbid`; never delete.
 - **Interrupted ingestion:** rerun with cache; do not publish a partial dataset.
 - **Cache miss in cache-only mode:** fail the affected band and report it.
-- **New tag without mapping:** quarantine or add a reviewed tag-map rule; do not invent a leaf.
+- **New tag without mapping:** add a reviewed tag-map rule; if the album still has no usable mapping, use the band seed leaf as a review fallback; do not invent a leaf.
 - **Medium-confidence classification:** record a review exception.
 - **Graph cap exceeded:** document truncation or raise the cap with measured evidence.
 - **Regional quota conflict:** preserve leaf coverage and document the redistribution.
@@ -413,9 +420,9 @@ The implementation must reuse the existing seed loader, ingestion, normalization
 
 ## 11. Validation result
 
-- **Date:** —
-- **Verdict:** Not validated
-- **Evidence:** `tasks.md` validation table
+- **Date:** 2026-11-19
+- **Verdict:** Implemented locally; remote validation pending T-011 authorization
+- **Evidence:** `tasks.md` validation table, `docs/01-architecture/qa-report.md` and `docs/03-data/analysis-v0.3.0.md`
 
 ## 12. References
 

@@ -1,6 +1,6 @@
 # Technical plan — SPEC-016
 
-- **Status:** In implementation
+- **Status:** Implemented
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md)
@@ -69,8 +69,8 @@ The existing modules remain the boundaries:
 | `backend/src/hmde/quality/structural.py` | Replace the `active == 57` membership rule with the active seed-list count. |
 | `data/quality/rules-v0.2.0.json` | Quality catalogue version for v0.3.0; membership rule references the active seed-list count. |
 | `data/quality/exceptions-v0.3.0.json` | Approved v0.3.0 exception baseline after the quality run. |
-| `data/classifications/tag-map-v0.1.0.json` | Reuse if the new tags need no mapping changes; otherwise create a reviewed v0.3.0 tag map. |
-| `data/classifications/manual-overrides-v0.1.0.json` | Reuse if no new medium-confidence album overrides are required; otherwise create a reviewed version. |
+| `data/classifications/tag-map-v0.3.0.json` | Reviewed exact-label tag map for v0.3.0; adds specific labels and leaves broad/missing tags to the seed fallback. |
+| `data/classifications/manual-overrides-v0.3.0.json` | Reviewed album overrides for v0.3.0, including the Jinjer conflict. |
 | `backend/src/hmde/api/routes/producers.py` | Overview and ego-graph caps; change only after measurement. |
 | `docs/03-data/seed-list.md` | Record v0.3.0 composition, verification method and limitations. |
 | `docs/00-vision/roadmap.md` | Record E13 progress and the E12 pause. |
@@ -284,7 +284,7 @@ Rollback:
 | NDJSON order changes between identical runs | Use a total deterministic order with a tie-breaker; assert normal and cache-only parity in tests. |
 | Multi-artist release groups cannot be represented | Exclude them with `multi_artist_release_group` and report dependent-row counts; do not assign them to one artist. |
 | Graph cap is exceeded at 509 bands | Measure first; keep explicit truncation with documented counts unless a bounded raise is justified and tested. |
-| New MusicBrainz tags have no mapping | Review and version the tag map; quarantine unmapped records. |
+| New MusicBrainz tags have no mapping | Review and version the tag map; use the band seed fallback at review confidence for albums without usable tags and keep the review queue visible. |
 | Quality findings explode at 509 bands | Triage by rule; fix structural causes; approve exceptions only with reasons and scope. |
 | Historical data is accidentally changed | Checksum v0.2.0 files before and after; append-only writes; pointer-only switch. |
 | Storage growth | Record raw and extracted sizes; prune only disposable caches with explicit authorization. |
@@ -329,4 +329,4 @@ Rollback:
 
 The owner approved the 510-band ceiling, all 453 candidates, the three-batch structure and the exclusion policy on 2026-11-17. T-001 recorded approval; T-002 verified all 453 candidates, accepted 452, excluded Hellhammer and created batches of 151/151/150. The owner approved the verification report and batches on 2026-11-17. T-003 created the 509-band v0.3.0 seed list and moved the active pointer after validation. T-004 made the pipeline guards data-driven.
 
-T-005 executed on 2026-11-19 with 509/509 bands and zero failures, but its dataset was not accepted: cache-only replay was non-deterministic and seven multi-artist release groups produced duplicate entity MBIDs. The owner approved option A on 2026-11-19. T-005A completed: dataset `mb-20261119T004940Z-9d5e75fdc1b9` has 509/509 bands, zero failures, no duplicate entity MBIDs, seven reported multi-artist exclusions and the same dataset version/manifest in normal and cache-only runs. T-006 is next.
+T-005 executed on 2026-11-19 with 509/509 bands and zero failures, but its dataset was not accepted: cache-only replay was non-deterministic and seven multi-artist release groups produced duplicate entity MBIDs. The owner approved option A on 2026-11-19. T-005A completed: dataset `mb-20261119T004940Z-9d5e75fdc1b9` has 509/509 bands, zero failures, no duplicate entity MBIDs, seven reported multi-artist exclusions and the same dataset version/manifest in normal and cache-only runs. T-006 completed normalization run `ed8e7e12-c181-4041-ba39-42b2bf655453` with 509 active memberships, 4,826 classified albums, 0 quarantines and 900 review cases. T-007 completed quality run `288b11ac-9a90-4b4f-bf58-fdd50e1a51ad` with 0 blocking findings, 1,089 medium/advisory findings and 77 metrics. T-008 completed EDA report `eda-bd2ef42a54786c67` (927 metrics) and network run `net-78a54051ff047f86` (4,217 producer–album edges, 1,700 producer–band edges and 325 communities); the v0.2 comparison and legacy-row limitation are documented in [analysis-v0.3.0.md](../../docs/03-data/analysis-v0.3.0.md). T-009 kept the 1,000-node/2,000-edge cap with explicit truncation, passed E2E/axe and documented one view-switch acknowledgement exception. T-010 completed the local regression and documentation. SPEC-016 is implemented locally; T-011 remote CI and validation remain pending explicit authorization.
