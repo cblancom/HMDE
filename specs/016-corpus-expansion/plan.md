@@ -1,6 +1,6 @@
 # Technical plan — SPEC-016
 
-- **Status:** Draft
+- **Status:** In implementation
 - **Spec:** [spec.md](spec.md)
 - **Tasks:** [tasks.md](tasks.md)
 - **ADRs:** [ADR-0008](../../docs/01-architecture/adr/ADR-0008-taxonomy-corpus-and-versioning.md), [ADR-0002](../../docs/01-architecture/adr/ADR-0002-musicbrainz-primary-source.md)
@@ -8,27 +8,29 @@
 
 ## 1. Solution summary
 
-Expand the active corpus from 57 to 200 bands using the existing versioned seed-list, E3 ingestion, E4 normalization, E5 quality, E6/E7 analysis and read-only API. The work is data growth plus the smallest code changes required to remove hardcoded corpus assumptions.
+Expand the active corpus from 57 to a 510-band ceiling using the existing versioned seed-list, E3 ingestion, E4 normalization, E5 quality, E6/E7 analysis and read-only API. T-002 verified 452 candidates and excluded Hellhammer, so the verified corpus is 509 bands. The work is data growth plus the smallest code changes required to remove hardcoded corpus assumptions.
 
-The expansion is split into three approved batches of 50, 50 and 43 bands. The selection is drawn from the 397-band candidate pool at `data/seed-lists/candidates/v0.3.0-pool.json`, which already covers all 17 taxonomy leaves and six regions. Selection is stratified by leaf and region; the final 143 bands require owner approval.
+The expansion accepts all 453 candidates in `data/seed-lists/candidates/v0.3.0-pool.json`, which already covers all 17 taxonomy leaves and six regions. Candidates were verified individually; failures are excluded and reported. The 452 accepted additions are recorded in three batches of 151, 151 and 150 bands.
 
-The v0.3.0 seed list keeps all 57 v0.2.0 bands active and appends the approved bands. A new dataset, normalization run, quality run, EDA report and network snapshot are produced. The v0.2.0 dataset and all historical artifacts remain unchanged.
+The v0.3.0 seed list keeps all 57 v0.2.0 bands active and appends the verified candidates. A new dataset, normalization run, quality run, EDA report and network snapshot are produced. The v0.2.0 dataset and all historical artifacts remain unchanged.
 
-Explicitly not included: the 500-band target, E12 deployment, production infrastructure, a taxonomy revision, new sources, a new credit model, automatic fuzzy identity resolution and a UI redesign.
+E3 canonicalization writes one row per entity MBID, orders every NDJSON file deterministically and excludes release groups associated with more than one active band. These album-level exclusions are reported with reason `multi_artist_release_group` and do not change the 509-band seed list.
+
+Explicitly not included: expansion beyond 510 bands, E12 deployment, production infrastructure, a taxonomy revision, new sources, a new credit model, automatic fuzzy identity resolution and a UI redesign.
 
 ## 2. Architecture and data flow
 
 ```text
-candidate pool (397)
+candidate pool (453)
         │
         ▼
-owner-approved selection (143) ──► 3 batch artifacts (50 + 50 + 43)
+verification (452 accepted, 1 excluded) ──► 3 batch artifacts (151 + 151 + 150)
         │
         ▼
-seed list v0.3.0 (200 active) ──► active pointer
+seed list v0.3.0 (509 active) ──► active pointer
         │
         ▼
-E3 MusicBrainz ingestion ──► raw cache + dataset + manifest
+E3 MusicBrainz ingestion ──► raw cache + canonicalization + dataset + manifest
         │
         ▼
 E4 normalization ──► memberships, classifications, credits, quarantine
@@ -55,12 +57,12 @@ The existing modules remain the boundaries:
 
 | Component or path | Responsibility |
 |---|---|
-| `data/seed-lists/candidates/v0.3.0-pool.json` | Versioned 397-band candidate pool; input to selection, not an approved seed list. |
-| `data/seed-lists/candidates/v0.3.0-selection.json` | Selection report with accepted/rejected candidates, reasons and target checks. Created by T-002. |
-| `data/seed-lists/batches/v0.3.0-batch-01.json` | First approved 50-band batch. |
-| `data/seed-lists/batches/v0.3.0-batch-02.json` | Second approved 50-band batch. |
-| `data/seed-lists/batches/v0.3.0-batch-03.json` | Third approved 43-band batch. |
-| `data/seed-lists/v0.3.0.json` | Append-only 200-band seed list with all 57 v0.2.0 bands retained. |
+| `data/seed-lists/candidates/v0.3.0-pool.json` | Versioned 453-band candidate pool; accepted input to verification, not an approved seed list. |
+| `data/seed-lists/candidates/v0.3.0-verification.json` | Verification report with accepted/excluded candidates, album and source evidence. Created by T-002. |
+| `data/seed-lists/batches/v0.3.0-batch-01.json` | First approved 151-band batch. |
+| `data/seed-lists/batches/v0.3.0-batch-02.json` | Second approved 151-band batch. |
+| `data/seed-lists/batches/v0.3.0-batch-03.json` | Third approved batch (150 bands). |
+| `data/seed-lists/v0.3.0.json` | Append-only seed list with 509 bands and all 57 v0.2.0 bands retained. |
 | `data/seed-list.json` | Active-version pointer; moves to v0.3.0 only after validation. |
 | `backend/src/hmde/etl/musicbrainz/seed.py` | Existing data-driven v2 seed-list loader; extend only if a real validation gap appears. |
 | `backend/src/hmde/normalization/inputs.py` | Version guards currently expect seed list `0.2.0`; update to `0.3.0` and keep taxonomy `0.2.0`. |
@@ -70,36 +72,36 @@ The existing modules remain the boundaries:
 | `data/classifications/tag-map-v0.1.0.json` | Reuse if the new tags need no mapping changes; otherwise create a reviewed v0.3.0 tag map. |
 | `data/classifications/manual-overrides-v0.1.0.json` | Reuse if no new medium-confidence album overrides are required; otherwise create a reviewed version. |
 | `backend/src/hmde/api/routes/producers.py` | Overview and ego-graph caps; change only after measurement. |
-| `docs/03-data/seed-list.md` | Record v0.3.0 composition, selection method and limitations. |
+| `docs/03-data/seed-list.md` | Record v0.3.0 composition, verification method and limitations. |
 | `docs/00-vision/roadmap.md` | Record E13 progress and the E12 pause. |
 | `specs/README.md`, `AGENTS.md`, `data/README.md` | Keep the index, current state and data inventory accurate. |
 | `backend/tests/`, `frontend/` tests | Update corpus/version assertions and validate the pipeline and product. |
 
 ## 4. Technical decisions and alternatives
 
-### 4.1 Decision — 200 bands first, 500 later
+### 4.1 Decision — accept all 453 candidates
 
-E13 closes on 200 active bands. The seed list, pipeline and analyses are rebuilt at that scale. A later spec can repeat the process to 500 with the same batch mechanism.
+E13 closes on 509 verified active bands: the 57 current bands plus 452 accepted candidates. The owner approved the full pool on 2026-11-17; T-002 excluded Hellhammer because it has no studio album. The former 200-band target and 143-band selection are superseded.
 
-**Rationale:** 200 is large enough to validate the architecture and patterns, small enough to review and ingest locally, and 397 candidates already provide more than the 143 additions required.
+**Rationale:** the owner wants the complete candidate set in the database. The pool already covers all leaves and regions; verifying all candidates is simpler and more complete than maintaining a separate selection step.
 
-### 4.2 Decision — stratified selection, not top-N
+### 4.2 Decision — verify all candidates and exclude failures
 
-Selection follows the target leaf and regional distributions in [spec.md](spec.md#fr-002--approved-target-distribution). The target leaf table is authoritative; regional targets are floors that yield to leaf coverage when verified candidates are insufficient.
+Every candidate is checked against the final leaf and regional composition in [spec.md](spec.md#fr-002--verified-final-distribution). The final composition is a consequence of verifying 452 candidates, not a selection target. A candidate that fails the album, source or country check is excluded and reported with the reason; it is never silently replaced. Hellhammer is the only exclusion.
 
-**Rationale:** a simple top-N by popularity would preserve the current US/UK and genre bias and would leave `nwobhm`, `stoner-metal`, `sludge-metal` and `djent` uncovered.
+**Rationale:** accepting the full pool keeps the owner's scope while preserving the existing evidence rules. The exclusion policy prevents invalid bands from entering the corpus without inventing a replacement.
 
-### 4.3 Decision — three batch artifacts
+### 4.3 Decision — three batch artifacts of 151, 151 and 150 bands
 
-The 143 additions are recorded as `50 + 50 + 43`. The batch artifacts are the approval unit and the input to the v0.3.0 seed list.
+The 452 accepted additions are recorded as `151 + 151 + 150`. The batch artifacts are the approval unit and the input to the v0.3.0 seed list.
 
-**Rationale:** the existing seed list and E3 pipeline already understand batch IDs. Smaller approval units make review and rejection cheaper.
+**Rationale:** three batches preserve the existing approval model and batch IDs. The size is large because the owner approved the full pool, not a stratified subset.
 
-### 4.4 Decision — MusicBrainz for data, MusicBrainz URL relationships and Wikipedia for relevance
+### 4.4 Decision — MusicBrainz for data, URL relationships and published sources for relevance
 
-MusicBrainz remains the source for identity, country and releases. Published relevance is verified through MusicBrainz `url-rels` to Wikidata/Wikipedia first, then the Wikipedia API. WDQS is not a dependency because the initial enrichment hit `HTTP 429: Aggressively rate-limiting to 1 req / min`.
+MusicBrainz remains the source for identity, country and releases. Published relevance is verified through MusicBrainz `url-rels` to Wikidata/Wikipedia first, with Discogs and AllMusic as fallbacks. WDQS is not a dependency because the initial enrichment hit `HTTP 429: Aggressively rate-limiting to 1 req / min`.
 
-**Rationale:** it avoids a slow and rate-limited SPARQL dependency while keeping a published source and a stable identifier for every selected band.
+**Rationale:** it avoids a slow and rate-limited SPARQL dependency while keeping a published source and a stable identifier for every accepted band. T-002 recorded 430 Wikidata QIDs, 14 Wikipedia URLs, 19 Discogs sources and 4 AllMusic sources.
 
 ### 4.5 Decision — no new schema or API contract
 
@@ -107,16 +109,25 @@ No database migration or API contract change is planned. The graph cap is the on
 
 **Rationale:** the data model already supports versioned datasets, taxonomy membership and multiple analysis runs. A migration would add risk without evidence.
 
-### 4.6 Alternatives considered
+### 4.6 Decision — exclude multi-artist release groups and make E3 deterministic
+
+The canonical E3 dataset contains one row per artist, release group, release and recording MBID. A release group associated with more than one active band is excluded with reason `multi_artist_release_group`, together with dependent rows that become orphaned. Every NDJSON file uses a total deterministic order, including a tie-breaker for records with equal primary keys. The coverage report distinguishes extracted records from canonical dataset rows.
+
+**Rationale:** the current release-group model stores one artist per album, so attributing a split album to one band would create a false producer–band relationship. Excluding and reporting the seven groups keeps the model correct without a schema change. Deterministic ordering is required for cache-only replay to produce the same dataset version.
+
+### 4.7 Alternatives considered
 
 | Alternative | Reason for rejection |
 |---|---|
-| Expand directly to 500 | Too large for one review and local ingestion cycle; 200 validates the process first. |
-| Use all 397 candidates | Produces an unbalanced corpus, duplicates the current bias and exceeds the target. |
+| Expand beyond 510 bands | Out of scope; the owner accepted the 453-candidate pool, not a larger corpus. |
+| Select only 143 of the 453 candidates | Rejected by the owner on 2026-11-17; the full pool is the accepted scope. |
+| Use an unverified subset or top-N | Would discard accepted candidates without a reason and preserve the current bias. |
 | Change taxonomy to add leaves | Taxonomy v0.2.0 is fixed; a taxonomy change is a separate spec and ADR. |
 | Automatically match names with fuzzy search | Violates the deterministic identity rule and risks wrong bands. |
-| Keep the 57-band hardcode | Breaks quality and membership validation at 200. |
-| Raise the graph cap immediately | No measured evidence; could hide a product regression. |
+| Keep the 57-band hardcode | Breaks quality and membership validation at 509. |
+| Raise the graph cap immediately | The 1,000/2,000 cap will truncate at 509 bands; keep explicit truncation unless measurements justify a bounded raise. |
+| Attribute a multi-artist release group to one canonical artist | Misattributes split albums and creates false producer–band relationships; excluded instead. |
+| Add a `release_group_artist` association now | Correct long-term, but it requires a schema migration, API change and separate spec/ADR; out of scope for E13. |
 | Add a new data source for missing credits | Out of scope; source expansion requires a separate decision. |
 
 ## 5. Data model and migrations
@@ -132,7 +143,7 @@ The existing model already supports:
 
 Artifact changes are file-based:
 
-- new candidate selection and batch files;
+- new candidate verification and batch files;
 - new seed list v0.3.0;
 - new quality rule and exception versions;
 - new dataset, normalization, quality and analysis outputs.
@@ -169,6 +180,8 @@ If the measured overview exceeds the cap, prefer keeping the cap and showing exp
 ## 8. Error handling and consistency
 
 - **Candidate verification failure:** reject the candidate and record the reason; do not substitute an unverified band silently.
+- **Multi-artist release group:** exclude the group and orphaned dependent rows; report `multi_artist_release_group`; do not choose one artist.
+- **Non-deterministic dataset output:** fail the verification check when normal and cache-only runs produce different NDJSON or manifest; fix the ordering rather than accepting the run.
 - **MusicBrainz 4xx/5xx or timeout:** retry with `Retry-After`, preserve the error in the ingestion report and fail the band; a failed band blocks dataset publication.
 - **Cache miss in `--cache-only`:** fail the band and report it; no network fallback.
 - **Interrupted E3 run:** rerun with the same seed list and raw cache; do not publish a partial dataset.
@@ -196,9 +209,9 @@ No authentication or authorization change. The application remains read-only.
 
 Record for every stage:
 
-- candidate pool version and selection report;
+- candidate pool version and verification report;
 - seed-list version and batch IDs;
-- dataset ID, manifest and checksums;
+- dataset ID, manifest, checksums, entity counts and multi-artist exclusion counts;
 - normalization run ID and membership counts;
 - quality run ID, rule version, exception version and finding counts;
 - EDA report ID and network run ID;
@@ -210,7 +223,7 @@ No new tracing or metrics stack is needed. Existing run records and reports are 
 
 | Level | What is tested | Evidence |
 |---|---|---|
-| Unit | Seed-list schema, 200 bands, append-only membership, target distributions, version guards, dynamic quality membership rule, 1,000/2,000 cap helpers | `backend/tests/unit/` |
+| Unit | Seed-list schema, 509 bands, append-only membership, final distribution, version guards, dynamic quality membership rule, E3 total ordering, entity uniqueness, multi-artist exclusion, 1,000/2,000 cap helpers | `backend/tests/unit/` |
 | Integration | E3 dataset/manifest/cache replay, E4 memberships/classifications, E5 findings/exceptions, E6/E7 run persistence | `backend/tests/integration/` |
 | Contract | API responses unchanged for band, album, producer, overview and ego endpoints | `backend/tests/integration/test_api_*` |
 | Frontend | Existing routes, graph controls, loading/error states and accessibility | `frontend/src/**/*.test.tsx` |
@@ -245,7 +258,7 @@ There is no production deployment. The work is local and versioned.
 
 Order:
 
-1. Validate the candidate selection and batch files.
+1. Validate the candidate verification and batch files.
 2. Write the v0.3.0 seed list and validate it.
 3. Run E3 and verify the dataset before normalization.
 4. Run E4 and verify memberships before quality.
@@ -266,11 +279,13 @@ Rollback:
 | Risk | Mitigation |
 |---|---|
 | Wikidata/Wikipedia lookup is slow or rate-limited | Prefer MusicBrainz URL relationships, then bounded Wikipedia API calls; record unresolved candidates as rejected, not guessed. |
-| Selection bias toward familiar US/UK bands | Enforce the target leaf and regional distributions; review deviations in the selection report. |
-| 200-band ingestion exceeds the local batch window | Use the existing cache, retry and resume behaviour; record actual duration; do not lower the target silently. |
-| Graph cap is exceeded at 200 bands | Measure first; keep explicit truncation or raise the cap with a documented exception and tests. |
+| Accepted pool over-represents familiar US/UK bands | Record the final 40.1% US/UK share; do not add a selection step that silently drops accepted candidates. |
+| 509-band ingestion exceeds the local batch window | Use the existing cache, retry and resume behaviour; record actual duration; do not lower the target silently. |
+| NDJSON order changes between identical runs | Use a total deterministic order with a tie-breaker; assert normal and cache-only parity in tests. |
+| Multi-artist release groups cannot be represented | Exclude them with `multi_artist_release_group` and report dependent-row counts; do not assign them to one artist. |
+| Graph cap is exceeded at 509 bands | Measure first; keep explicit truncation with documented counts unless a bounded raise is justified and tested. |
 | New MusicBrainz tags have no mapping | Review and version the tag map; quarantine unmapped records. |
-| Quality findings explode at 200 bands | Triage by rule; fix structural causes; approve exceptions only with reasons and scope. |
+| Quality findings explode at 509 bands | Triage by rule; fix structural causes; approve exceptions only with reasons and scope. |
 | Historical data is accidentally changed | Checksum v0.2.0 files before and after; append-only writes; pointer-only switch. |
 | Storage growth | Record raw and extracted sizes; prune only disposable caches with explicit authorization. |
 | Scope creep into E12 | Keep deployment, TLS, runbooks and release work out of SPEC-016. |
@@ -283,25 +298,25 @@ Rollback:
 | FR-002 | 4.2 | T-001, T-002 |
 | FR-003 | 4.3 | T-002 |
 | FR-004 | 5, 8, 12 | T-003 |
-| FR-005 | 2, 8, 10 | T-005 |
+| FR-005 | 2, 4.6, 8, 10 | T-005, T-005A |
 | FR-006 | 3, 8 | T-004, T-006 |
 | FR-007 | 3, 8 | T-004, T-007 |
 | FR-008 | 2, 10 | T-008 |
 | FR-009 | 6, 7 | T-009 |
-| FR-010 | 10 | T-003, T-005, T-006, T-007, T-008 |
+| FR-010 | 10 | T-003, T-005, T-005A, T-006, T-007, T-008 |
 | FR-011 | 3 | T-010 |
 | FR-012 | 1, 5, 12 | T-010 |
-| NFR-001 | 5, 12 | T-005, T-008 |
+| NFR-001 | 5, 12 | T-005, T-005A, T-008 |
 | NFR-002 | 9 | T-002, T-005 |
-| NFR-003 | 10, 13 | T-005, T-008 |
-| NFR-004 | 5, 13 | T-005 |
+| NFR-003 | 10, 13 | T-005, T-005A, T-008 |
+| NFR-004 | 5, 13 | T-005, T-005A |
 | NFR-005 | 6, 7 | T-009 |
 | NFR-006 | 3, 5 | T-004, T-006 |
 | NFR-007 | 3 | T-004, T-006 |
 | AC-001 | 4.2 | T-002 |
 | AC-002 | 4.2, 4.3 | T-001, T-002 |
 | AC-003 | 5, 12 | T-003 |
-| AC-004 | 2, 8 | T-005 |
+| AC-004 | 2, 4.6, 8 | T-005, T-005A |
 | AC-005 | 3, 8 | T-006 |
 | AC-006 | 3, 8 | T-007 |
 | AC-007 | 2, 10 | T-008 |
@@ -312,4 +327,6 @@ Rollback:
 
 ## 15. Approval and next step
 
-This plan and `tasks.md` require owner approval before implementation. The first executable task is T-001 (approve the target and criteria), followed by T-002 (select the 143 bands). No seed-list or pipeline write happens before T-002 approval.
+The owner approved the 510-band ceiling, all 453 candidates, the three-batch structure and the exclusion policy on 2026-11-17. T-001 recorded approval; T-002 verified all 453 candidates, accepted 452, excluded Hellhammer and created batches of 151/151/150. The owner approved the verification report and batches on 2026-11-17. T-003 created the 509-band v0.3.0 seed list and moved the active pointer after validation. T-004 made the pipeline guards data-driven.
+
+T-005 executed on 2026-11-19 with 509/509 bands and zero failures, but its dataset was not accepted: cache-only replay was non-deterministic and seven multi-artist release groups produced duplicate entity MBIDs. The owner approved option A on 2026-11-19. T-005A completed: dataset `mb-20261119T004940Z-9d5e75fdc1b9` has 509/509 bands, zero failures, no duplicate entity MBIDs, seven reported multi-artist exclusions and the same dataset version/manifest in normal and cache-only runs. T-006 is next.

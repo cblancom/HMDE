@@ -41,6 +41,7 @@ def build_coverage(
     code_version: str | None = None,
     counters: Mapping[str, Any] | None = None,
     failures: Sequence[Mapping[str, Any]] = (),
+    canonical_manifest: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     extraction_list = list(extractions)
     roles: Counter[str] = Counter()
@@ -161,6 +162,7 @@ def build_coverage(
             "code_version": code_version,
         },
         "summary": summary,
+        "canonical": _canonical_coverage(canonical_manifest),
         "credits_by_role": dict(sorted(roles.items())),
         "credits_by_scope": dict(sorted(scopes.items())),
         "exclusions_by_reason": dict(sorted(exclusions_by_reason.items())),
@@ -175,6 +177,21 @@ def build_coverage(
             "failures": failures_list,
         },
         "interpretation": INTERPRETATION,
+    }
+
+
+def _canonical_coverage(manifest: Mapping[str, Any] | None) -> dict[str, Any] | None:
+    if manifest is None:
+        return None
+    files = manifest.get("files", {})
+    return {
+        "dataset_version": manifest.get("dataset_version"),
+        "band_count": manifest.get("band_count"),
+        "files": {
+            str(name): entry.get("count")
+            for name, entry in files.items()
+            if isinstance(entry, Mapping)
+        },
     }
 
 
@@ -212,6 +229,24 @@ def render_report(coverage: Mapping[str, Any]) -> str:
         ("Excluded release groups", "exclusions"),
     ):
         lines.append(f"| {label} | {summary[key]} |")
+
+    canonical = coverage.get("canonical")
+    if canonical is not None:
+        lines.extend(
+            [
+                "",
+                "## Canonical dataset rows",
+                "",
+                "The summary above counts extracted records before canonicalization. "
+                "These counts describe the rows written after deduplication and "
+                "multi-artist exclusion.",
+                "",
+                "| File | Rows |",
+                "|---|---:|",
+            ]
+        )
+        for name, count in canonical["files"].items():
+            lines.append(f"| {name} | {count} |")
 
     lines.extend(["", "## Credits by scope", "", "| Scope | Count |", "|---|---:|"])
     for scope, count in coverage["credits_by_scope"].items():

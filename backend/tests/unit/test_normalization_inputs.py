@@ -40,6 +40,19 @@ def test_validate_inputs_reads_manifest_files_and_versions() -> None:
     assert len(inputs.overrides.overrides) == 13
 
 
+def test_validate_inputs_accepts_v03_seed_list(tmp_path: Path) -> None:
+    dataset = tmp_path / "dataset"
+    shutil.copytree(MINI_DATASET, dataset)
+    manifest_path = dataset / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["seed_list_version"] = "0.3.0"
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+    inputs = _validate(dataset)
+
+    assert inputs.dataset.seed_list_version == "0.3.0"
+
+
 def test_validate_inputs_rejects_checksum_mismatch(tmp_path: Path) -> None:
     dataset = tmp_path / "dataset"
     shutil.copytree(MINI_DATASET, dataset)

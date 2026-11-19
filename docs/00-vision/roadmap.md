@@ -1,8 +1,8 @@
 # Project roadmap
 
 - **Status:** Approved
-- **Version:** 0.4
-- **Date:** 2026-11-16
+- **Version:** 0.5
+- **Date:** 2026-11-19
 - **Scope:** from initialization to v0.1 and the later expansion to hundreds of bands
 
 ## 1. Sequencing principles
@@ -12,7 +12,7 @@
 - **One feature, one spec:** specs are written at the start of a feature, not all in advance.
 - **Stage gates:** do not move on unless exit criteria are met.
 - **No rigid dates:** plan by dependencies and deliverables. Estimates are made per stage with real data.
-- **Progressive growth:** the original corpus uses 42 bands and the active v0.2.0 corpus uses 57; the architecture must support 200–500 without redesign while the period expands to 1960–2026.
+- **Progressive growth:** the original corpus uses 42 bands and the active v0.2.0 corpus uses 57; the architecture must support 510 without redesign while the period expands to 1960–2026.
 
 ## 2. Stage summary
 
@@ -31,7 +31,7 @@
 | E10 | Product | Graph visualization | E7, E8, E9 |
 | E11 | Closure | Integration, QA and performance | E9, E10 |
 | E12 | Closure | Deployment, documentation and v0.1 | E11 |
-| E13 | Growth | Expansion to 200–500 bands (v1) | E11; E12 paused |
+| E13 | Growth | Expansion to 510 bands (v1) | E11; E12 paused |
 
 ## 3. Milestones
 
@@ -42,7 +42,7 @@
 | **M2 — Trustworthy data** | E3–E5 | Normalized, traceable dataset with a quality report |
 | **M3 — Analytics available** | E6–E7 | Reproducible precomputed metrics and networks |
 | **M4 — Product v0.1** | E8–E12 | Public read-only application, tested and documented |
-| **M5 — Expanded corpus** | E13 | 200–500 bands with the same pipeline |
+| **M5 — Expanded corpus** | E13 | 510 bands with the same pipeline |
 
 ## 4. Stages
 
@@ -146,7 +146,7 @@
 - **Deliverables:** global graph page; ego drill-down; interactions; UX and performance documentation; **SPEC-011**.
 - **Follow-ups:** **SPEC-017** adds client-side Coreness and Rings layouts with a Rings metric selector; **SPEC-018** adds a global curved/orthogonal edge-routing toggle. Both are in plan/tasks review and do not change the API or backend.
 - **Depends on:** E7, E8 and E9.
-- **Done when:** the global overview is usable within 1,000 nodes and a 500-node ego subgraph is usable; the interface does not freeze; an accessible table alternative exists. The 2,000-node target moves to E13/API revision.
+- **Done when:** the global overview is usable within 1,000 nodes and a 500-node ego subgraph is usable; the interface does not freeze; an accessible table alternative exists. The graph truncation review moves to E13.
 
 ### E11 — Integration, QA and performance
 
@@ -166,14 +166,14 @@
 - **Depends on:** E11.
 - **Done when:** the application is accessible; deployment is reproducible; rollback is documented; licenses are displayed correctly.
 
-### E13 — Corpus expansion to 200–500 bands (v1)
+### E13 — Corpus expansion to 510 bands (v1)
 
-- **Objective:** expand the dataset without changing the architecture and validate that patterns hold.
-- **Scope:** new seed-list batches; re-run ingestion, normalization, quality, analysis and result publication across 1960–2026.
-- **Activities:** expand the list using the same criteria; run E3–E5 in batches; compare coverage and bias; recompute analyses with dataset and taxonomy versions; review API and graph performance; update the limitations report.
-- **Deliverables:** v1 dataset; coverage report; updated analyses; performance review; **SPEC-016**.
+- **Objective:** expand the dataset without changing the architecture and validate that patterns hold at 510 bands.
+- **Scope:** all 453 accepted candidates added in three batches of 151/151/150; re-run ingestion, normalization, quality, analysis and result publication across 1960–2026.
+- **Activities:** verify all candidates; run E3–E5 in batches; compare coverage and bias; recompute analyses with dataset and taxonomy versions; review API and graph truncation; update the limitations report.
+- **Deliverables:** v1 dataset; verification report; coverage report; updated analyses; performance review; **SPEC-016**.
 - **Depends on:** E11; E12 is paused by the owner.
-- **Done when:** the expanded corpus passes the same quality gates; API and UI maintain performance; results are documented with their limitations.
+- **Done when:** the expanded corpus passes the same quality gates; API and UI maintain performance with explicit graph truncation; results are documented with their limitations.
 
 ## 5. Dependencies and parallelization
 
@@ -222,11 +222,11 @@ Before closing any stage:
 | E10 | Validated | SPEC-011, SPEC-012 and SPEC-013 validated by owner closure on 2026-11-14 based on the recorded local automated, headless and build evidence. `/graph` loads 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges under a 1,000-node cap, with shared band/album nodes, an isolated-producer toggle, overview and ego force presets, zoom-decluttered labels, an accessible table, a collapsible producer/band index, equal-height panels, a dynamic year scale, node detail panels, a persisted navigation rail, full-width layout, collapsible graph panels, canvas resizing, server-generated bipartite/community layouts and the d3-force/CoSE/fCoSE selector. The ego graph keeps its 500-node cap and static fallback. Remote CI was not run for this closure. |
 | E11 | Implemented locally; remote CI passed | SPEC-014 adds a 26-test Playwright Chromium suite over deterministic E2E data, axe scans on nine routes, a reproducible performance probe, a security and dependency review and a 38-table backup/restore drill. The QA report is [`docs/01-architecture/qa-report.md`](../01-architecture/qa-report.md). One 968-node view-switch performance exception is documented. Remote CI run 43895517746 passed on commit 4985ad8; documentation closure and the required-check setting remain. |
 | E12 | Paused | Deployment, documentation and v0.1 release are paused by the owner. |
-| E13 | Draft | SPEC-016 defines a 200-band v0.3.0 expansion. A 397-band candidate pool is ready for verification and selection; E12 is paused. |
+| E13 | In implementation | SPEC-016 defines a 510-band ceiling. T-002 verified 452 of 453 candidates and excluded Hellhammer, giving 509 verified bands in batches of 151/151/150. T-003 activated the v0.3.0 seed list; T-004 is complete. T-005 executed on 2026-11-19 with 509/509 bands and zero failures; T-005A completed the canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` with unique entity MBIDs, 7 reported multi-artist exclusions and the same version in normal and cache-only runs. T-006 is next. E12 is paused. |
 
 ## 8. Scope growth
 
-Moving from 42 to 200–500 bands is a change in volume, not architecture. To keep it that way:
+Moving from 42 to 510 bands is a change in volume, not architecture. To keep it that way:
 
 - Ingestion must be idempotent and batch-operable.
 - Each run must record its dataset version, seed-list version and taxonomy version.
@@ -255,4 +255,4 @@ A change of sources, credit model or taxonomy is a scope change and requires an 
 
 E0–E9 are complete and validated. E10 closed on 2026-11-14: SPEC-011, SPEC-012 and SPEC-013 are validated from the recorded local automated, headless and build evidence; the owner accepted this evidence and remote CI was not run for the closure. `/graph` provides the global producer overview, the producer ego graph remains the drill-down, and the graph supports the Force/Bipartite/Community layouts and the d3-force/CoSE/fCoSE engines.
 
-E11 is implemented locally with SPEC-014: Playwright critical flows over deterministic data, performance probes, an accessibility audit, a security review, a 38-table backup restore drill and the [QA report](../01-architecture/qa-report.md). Remote CI run 43895517746 passed on commit 4985ad8; documentation closure and the required-check setting remain. E12 is paused by the owner. E13 is in Draft: SPEC-016 defines a 200-band v0.3.0 target, and the 397-band candidate pool is ready for verification and owner selection.
+E11 is implemented locally with SPEC-014: Playwright critical flows over deterministic data, performance probes, an accessibility audit, a security review, a 38-table backup restore drill and the [QA report](../01-architecture/qa-report.md). Remote CI run 43895517746 passed on commit 4985ad8; documentation closure and the required-check setting remain. E12 is paused by the owner. E13 is in implementation: SPEC-016 has a 510-band ceiling; 452 of 453 candidates are verified, Hellhammer is excluded, and the verified corpus is 509 bands in batches of 151/151/150. T-003 activated the v0.3.0 seed list. T-005 executed 509/509 bands with zero failures; T-005A completed the canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` with unique entity MBIDs, 7 reported multi-artist exclusions and the same version in normal and cache-only runs. T-006 is next, followed by downstream runs.

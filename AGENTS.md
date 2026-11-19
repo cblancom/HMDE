@@ -4,7 +4,7 @@ Operational instructions for working in this repository.
 
 ## 1. Project summary
 
-Heavy Metal Data Explorer (HMDE) is a public, read-only application for exploring professional production relationships in heavy metal. The canonical E2 fixture dataset covers 42 bands and 1980–2000; the active E3 seed list is v0.2.0 with 57 bands across 1960–2026 and grows through versioned batches toward 200–500 bands.
+Heavy Metal Data Explorer (HMDE) is a public, read-only application for exploring professional production relationships in heavy metal. The canonical E2 fixture dataset covers 42 bands and 1980–2000; the active E3 seed list is v0.3.0 with 509 bands across 1960–2026 and grows through versioned batches.
 
 Stack:
 
@@ -20,7 +20,7 @@ Stack:
 ## 2. Current state
 
 - E0 is complete: vision, scope, roadmap, architecture, source evaluation, the MusicBrainz spike and the 42-band seed list are complete.
-- `data/seed-list.json` is the active-version pointer to `data/seed-lists/v0.2.0.json` (57 active bands, 1960–2026). `data/seed-lists/v0.1.0.json` is the immutable 42-band historical archive; the approved batch is `data/seed-lists/batches/v0.2.0-batch-01.json`.
+- `data/seed-list.json` is the active-version pointer to `data/seed-lists/v0.3.0.json` (509 active bands, 1960–2026). `data/seed-lists/v0.2.0.json` (57 bands) and `v0.1.0.json` (42 bands) are immutable archives. The v0.3.0 batches are `151/151/150`; the approved v0.2.0 batch remains `data/seed-lists/batches/v0.2.0-batch-01.json`.
 - Backend, frontend, development Docker Compose and CI are implemented. The E1 and E2 remote CI runs passed.
 - E1 is complete and SPEC-001 is validated.
 - E2 is complete and SPEC-002 is validated; T-001–T-012 are complete.
@@ -30,7 +30,7 @@ Stack:
 - SPEC-006 is validated: persisted quality rules/runs/findings/exceptions/metrics, structural checks, coverage reports and the two-level CI/full-corpus model. Local quality run `341824ea-5d6f-4279-bae0-f66a1e696e05` has 58 findings covered by 58 approved exceptions and no unexcepted blocker. Remote CI run 42545153696 passed.
 - SPEC-007 is validated: versioned EDA over the normalized corpus with distributions, coverage, producer concentration and descriptive co-credit frequencies. Local report `eda-1267fdcced62b7da` has 354 metric rows. Remote CI run 42548567359 passed.
 - SPEC-008 is validated: producer–album evidence and derived producer–band/artist layers, persisted analysis runs/nodes/edges/metrics/communities, support-aware edges and versioned reports. Local run `net-a0b7c1f41ac5c92d` has 1,134 simple producer–album edges, 426 producer–band edges and 78 communities. Remote CI run 42738375416 passed. SPEC-009 is validated for E8; remote CI run 42741669410 passed. SPEC-010 is validated for E9; remote CI run 42747146170 passed. E10 was closed and validated on 2026-11-14. SPEC-011, SPEC-012 and SPEC-013 are validated from the recorded local automated, headless and build evidence; the owner accepted that evidence and remote CI was not run for the closure. `/graph` provides the global producer overview with 398 unique band-view nodes / 426 edges and 968 album-view nodes / 1,134 edges, shared band/album nodes, producer top-k/sort, filters, an isolated-producer toggle, overview physics, zoom-decluttered labels, server-generated bipartite and community layouts and a client-side d3-force/CoSE/fCoSE engine selector. The workspace adds a collapsible left index with 384 producer and 57 band rows, equal-height scrollable side panels, a dynamic `#bcd8c2`→`#123c38` year scale, node-type detail panels, a persisted 3rem navigation rail, a full-width shell and graph, collapsible Index/Details panels and `ResizeObserver` canvas resizing. The producer ego graph remains at `/producers/:id/graph` with a 500-node cap and static fallback. No API, schema or migration change was added by the E10 refinements. SPEC-014 is implemented locally and remote CI run 43895517746 passed on commit 4985ad8; documentation closure is pending. It adds a 26-test Playwright Chromium suite over deterministic E2E data, axe scans on nine routes, the `e2e` CI job, a reproducible performance probe, a security and dependency review and a 38-table backup/restore drill. No API, schema, migration or production dependency changed. The QA report is [docs/01-architecture/qa-report.md](docs/01-architecture/qa-report.md). One 968-node view-switch performance exception is documented; documentation closure and the required-check setting remain. SPEC-017 and SPEC-018 remain separate E10 follow-ups in review and are not part of E11.
-- SPEC-016 is drafted for E13: a 200-band v0.3.0 target, a 397-band candidate pool at `data/seed-lists/candidates/v0.3.0-pool.json`, three approval batches (`50 + 50 + 43`) and a target leaf/regional distribution. E12 is paused by the owner; E13 depends on E11. No implementation has started.
+- SPEC-016 is in implementation for E13: a 510-band ceiling using all 453 candidates in `data/seed-lists/candidates/v0.3.0-pool.json`. T-002 verified 452 candidates and excluded Hellhammer (no studio album), giving a verified corpus of 509 bands; the three approved batches are 151/151/150. T-003 created `data/seed-lists/v0.3.0.json` (57 + 452 = 509) and moved `data/seed-list.json` to v0.3.0; the loader and version tests pass. T-004 made normalization accept seed-list 0.3.0, made `Q-MEM-001` use the active seed-list count and added `data/quality/rules-v0.2.0.json`. T-005 executed on 2026-11-19 with 509/509 bands and zero failures, but its initial datasets were not accepted: cache-only replay was non-deterministic and 7 multi-artist release groups produced duplicate entity MBIDs. T-005A completed the canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9`: 509/509 bands, zero failures, no duplicate entity MBIDs, 7 reported `multi_artist_release_group` exclusions and the same dataset version/manifest in normal and cache-only runs. T-006 is next; the database still uses the v0.2.0 dataset. E12 is paused.
 - The current SDD index is [specs/README.md](specs/README.md).
 
 ## 3. Target structure
@@ -115,7 +115,7 @@ DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
 DATABASE_URL=postgresql+psycopg://hmde:hmde_dev@localhost:5434/hmde \
   uv run python -m hmde.quality run \
     --normalization-run 54d66992-643b-49ec-bac4-fe514ea39e94 \
-    --rules ../data/quality/rules-v0.1.0.json \
+    --rules ../data/quality/rules-v0.2.0.json \
     --exceptions ../data/quality/exceptions-v0.1.0.json \
     --output ../data/quality --strict
 

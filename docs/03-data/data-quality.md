@@ -45,7 +45,7 @@ The full corpus is intentionally outside Git, so it is a batch gate rather than 
 
 ## 5. Rules and exceptions
 
-The versioned rule catalogue is [`data/quality/rules-v0.1.0.json`](../../data/quality/rules-v0.1.0.json). It defines stable rule codes, dimensions, severities and remediation guidance.
+The versioned rule catalogue is [`data/quality/rules-v0.2.0.json`](../../data/quality/rules-v0.2.0.json) for corpus v0.3.0. It defines stable rule codes, dimensions, severities and remediation guidance. `Q-MEM-001` now compares active memberships with the active seed-list count instead of the hardcoded 57; the v0.1.0 catalogue remains the historical v0.2.0 baseline.
 
 The initial exception baseline is [`data/quality/exceptions-v0.1.0.json`](../../data/quality/exceptions-v0.1.0.json). It contains the owner-approved exceptions for:
 

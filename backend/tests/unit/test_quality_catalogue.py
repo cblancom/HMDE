@@ -9,6 +9,7 @@ from hmde.quality.catalogue import load_rule_catalogue
 from hmde.quality.errors import QualityCatalogueError
 
 CATALOGUE = Path(__file__).resolve().parents[3] / "data" / "quality" / "rules-v0.1.0.json"
+CATALOGUE_V02 = Path(__file__).resolve().parents[3] / "data" / "quality" / "rules-v0.2.0.json"
 
 
 def test_load_catalogue_reads_versioned_rules() -> None:
@@ -19,6 +20,15 @@ def test_load_catalogue_reads_versioned_rules() -> None:
     assert len(catalogue.rules) == 20
     assert len(catalogue.by_code()) == 20
     assert catalogue.by_code()["Q-PROV-001"].severity == "blocking"
+
+
+def test_v02_membership_rule_uses_the_active_seed_count() -> None:
+    catalogue = load_rule_catalogue(CATALOGUE_V02)
+    rule = catalogue.by_code()["Q-MEM-001"]
+
+    assert catalogue.version == "0.2.0"
+    assert rule.threshold is None
+    assert rule.expected == "active memberships equal the active seed-list count"
 
 
 def test_load_catalogue_rejects_duplicate_rule_codes(tmp_path: Path) -> None:

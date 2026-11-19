@@ -10,7 +10,6 @@ from hmde.etl.musicbrainz.seed import SeedListError, load_seed_list, select_band
 DATA = Path(__file__).resolve().parents[3] / "data"
 TAXONOMY_PATH = DATA / "taxonomy.json"
 V02_PATH = DATA / "seed-lists" / "v0.2.0.json"
-POINTER_PATH = DATA / "seed-list.json"
 
 
 def _payload() -> dict:
@@ -28,12 +27,14 @@ def _load_payload(tmp_path: Path, payload: dict):
     return load_seed_list(_write_payload(tmp_path, payload), taxonomy_path=TAXONOMY_PATH)
 
 
-def test_active_pointer_loads_v02_corpus() -> None:
-    seed_list = load_seed_list(POINTER_PATH)
+def test_v02_corpus_loads() -> None:
+    seed_list = load_seed_list(V02_PATH)
 
     assert seed_list.version == "0.2.0"
     assert seed_list.schema_version == 2
     assert seed_list.taxonomy_version == "0.2.0"
+    assert seed_list.period_start is not None
+    assert seed_list.period_end is not None
     assert seed_list.period_start.isoformat() == "1960-01-01"
     assert seed_list.period_end.isoformat() == "2026-12-31"
     assert len(seed_list.bands) == 57

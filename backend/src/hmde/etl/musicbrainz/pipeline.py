@@ -158,6 +158,7 @@ class IngestPipeline:
             code_version=self._code_version,
             counters=counters,
             failures=failures,
+            canonical_manifest=dataset.manifest,
         )
         return PipelineResult(run=run_result, dataset=dataset, report=report)
 

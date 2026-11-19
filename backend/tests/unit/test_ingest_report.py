@@ -115,6 +115,30 @@ def test_build_coverage_labels_expanded_decades() -> None:
     assert set(coverage["decades"]) == set(dates.values())
 
 
+def test_build_coverage_labels_canonical_dataset_rows() -> None:
+    coverage = build_coverage(
+        [sample_extraction()],
+        canonical_manifest={
+            "dataset_version": "mb-test",
+            "band_count": 1,
+            "files": {
+                "artists.ndjson": {"count": 1},
+                "recordings.ndjson": {"count": 2},
+            },
+        },
+    )
+
+    assert coverage["canonical"] == {
+        "dataset_version": "mb-test",
+        "band_count": 1,
+        "files": {"artists.ndjson": 1, "recordings.ndjson": 2},
+    }
+    markdown = render_report(coverage)
+    assert "Canonical dataset rows" in markdown
+    assert "recordings.ndjson" in markdown
+    assert "after deduplication and multi-artist exclusion" in markdown
+
+
 def test_write_report_creates_json_and_markdown(tmp_path: Path) -> None:
     result = write_report(
         tmp_path,

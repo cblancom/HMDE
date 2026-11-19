@@ -92,7 +92,11 @@ def run_quality(
         session,
         run=run,
         rules=rules,
-        specs=structural_findings(session, normalization_run=inputs.normalization_run),
+        specs=structural_findings(
+            session,
+            normalization_run=inputs.normalization_run,
+            expected_active_memberships=inputs.active_seed_bands,
+        ),
     )
     persist_metrics(
         session,

@@ -137,7 +137,11 @@ def test_structural_rules_detect_classification_gaps(test_database_url: str) -> 
             session.add(run)
             session.flush()
 
-            findings = structural_findings(session, normalization_run=run)
+            findings = structural_findings(
+                session,
+                normalization_run=run,
+                expected_active_memberships=57,
+            )
             by_code: dict[str, list] = {}
             for finding in findings:
                 by_code.setdefault(finding.rule_code, []).append(finding)

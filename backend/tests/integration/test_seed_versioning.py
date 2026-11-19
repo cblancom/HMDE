@@ -8,8 +8,10 @@ from hmde.etl.musicbrainz.seed import load_seed_list
 
 DATA = Path(__file__).resolve().parents[3] / "data"
 ARCHIVE = DATA / "seed-lists" / "v0.1.0.json"
+V02 = DATA / "seed-lists" / "v0.2.0.json"
 POINTER = DATA / "seed-list.json"
 BATCH = DATA / "seed-lists" / "batches" / "v0.2.0-batch-01.json"
+VERIFICATION = DATA / "seed-lists" / "candidates" / "v0.3.0-verification.json"
 ARCHIVE_SHA256 = "46028de3834515c0f2d2d71afc371e8d22f67e813df62235e3a776f347c61c43"
 
 
@@ -17,16 +19,16 @@ def test_v01_archive_is_immutable() -> None:
     assert hashlib.sha256(ARCHIVE.read_bytes()).hexdigest() == ARCHIVE_SHA256
 
 
-def test_pointer_resolves_to_v02_without_duplicating_the_corpus() -> None:
+def test_pointer_resolves_to_v03_without_duplicating_the_corpus() -> None:
     pointer = json.loads(POINTER.read_text(encoding="utf-8"))
 
-    assert pointer == {"active_version": "0.2.0", "path": "seed-lists/v0.2.0.json"}
+    assert pointer == {"active_version": "0.3.0", "path": "seed-lists/v0.3.0.json"}
     assert "bands" not in pointer
 
 
 def test_v02_is_the_approved_42_plus_15_composition() -> None:
     old = load_seed_list(ARCHIVE)
-    current = load_seed_list(POINTER)
+    current = load_seed_list(V02)
     batch = json.loads(BATCH.read_text(encoding="utf-8"))
 
     old_mbids = {band.mbid for band in old.bands}
@@ -39,3 +41,28 @@ def test_v02_is_the_approved_42_plus_15_composition() -> None:
     assert current_mbids - old_mbids == batch_mbids
     assert len(batch_mbids) == 15
     assert all(band.lifecycle == "active" for band in current.bands)
+
+
+def test_v03_is_the_approved_57_plus_452_composition() -> None:
+    old = load_seed_list(V02)
+    current = load_seed_list(POINTER)
+    verification = json.loads(VERIFICATION.read_text(encoding="utf-8"))
+
+    old_mbids = {band.mbid for band in old.bands}
+    current_mbids = {band.mbid for band in current.bands}
+    accepted_mbids = {band["mbid"] for band in verification["accepted"]}
+
+    assert current.version == "0.3.0"
+    assert len(current.bands) == 509
+    assert len(current.active_bands) == 509
+    assert old_mbids <= current_mbids
+    assert current_mbids - old_mbids == accepted_mbids
+    assert len(accepted_mbids) == 452
+    assert all(band.lifecycle == "active" for band in current.bands)
+    assert {band.batch_id for band in current.bands} == {
+        "v0.1.0",
+        "v0.2.0-batch-01",
+        "v0.3.0-batch-01",
+        "v0.3.0-batch-02",
+        "v0.3.0-batch-03",
+    }

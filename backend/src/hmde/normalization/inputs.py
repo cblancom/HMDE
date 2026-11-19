@@ -22,7 +22,7 @@ REQUIRED_DATASET_FILES = (
     "credits.ndjson",
     "external_ids.ndjson",
 )
-EXPECTED_SEED_LIST_VERSION = "0.2.0"
+SUPPORTED_SEED_LIST_VERSIONS = frozenset({"0.2.0", "0.3.0"})
 EXPECTED_TAXONOMY_VERSION = "0.2.0"
 EXPECTED_PERIOD_START = "1960-01-01"
 EXPECTED_PERIOD_END = "2026-12-31"
@@ -144,10 +144,10 @@ def load_dataset_input(root: Path) -> DatasetInput:
     taxonomy_version = _required_string(manifest, "taxonomy_version")
     period_start = _required_string(manifest, "period_start")
     period_end = _required_string(manifest, "period_end")
-    if seed_list_version != EXPECTED_SEED_LIST_VERSION:
+    if seed_list_version not in SUPPORTED_SEED_LIST_VERSIONS:
+        supported = ", ".join(sorted(SUPPORTED_SEED_LIST_VERSIONS))
         raise InputValidationError(
-            f"unsupported seed-list version: {seed_list_version!r}; "
-            f"expected {EXPECTED_SEED_LIST_VERSION!r}"
+            f"unsupported seed-list version: {seed_list_version!r}; supported {supported}"
         )
     if taxonomy_version != EXPECTED_TAXONOMY_VERSION:
         raise InputValidationError(

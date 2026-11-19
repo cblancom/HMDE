@@ -1,16 +1,17 @@
 # MVP seed list
 
-- **Status:** v0.2.0 active; v0.1.0 historical archive; v0.3.0 candidate pool in review
-- **Version:** 0.2.0 active; 0.1.0 historical; 0.3.0-candidates-01 candidate pool
-- **Date:** 2026-11-16
-- **Stage:** E3 active; E13 candidate selection
-- **Machine-readable source:** [`data/seed-list.json`](../../data/seed-list.json) (active pointer) → [`data/seed-lists/v0.2.0.json`](../../data/seed-lists/v0.2.0.json)
-- **Candidate pool:** [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json) (pre-selection; not active)
+- **Status:** v0.3.0 active; v0.2.0 archive; v0.1.0 historical archive
+- **Version:** 0.3.0 active; 0.2.0 archive; 0.1.0 historical; 0.3.0-candidates-02 verified pool
+- **Date:** 2026-11-19
+- **Stage:** E13 seed list active; E3 canonical dataset generated; E4 next
+- **Machine-readable source:** [`data/seed-list.json`](../../data/seed-list.json) (active pointer) → [`data/seed-lists/v0.3.0.json`](../../data/seed-lists/v0.3.0.json)
+- **Candidate pool:** [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json) (verified; not active)
+- **Verification report:** [`data/seed-lists/candidates/v0.3.0-verification.json`](../../data/seed-lists/candidates/v0.3.0-verification.json)
 - **Criteria:** [`docs/00-vision/scope.md#9-seed-list`](../00-vision/scope.md#9-seed-list)
 
 ## 1. Purpose
 
-This is the purposive, stratified seed list for the HMDE corpus. Version 0.1.0 contains the original 42 bands used to build the initial MVP dataset and remains the historical 1980–2000 archive. Version 0.2.0 keeps those 42 bands active and adds 15 approved bands so the corpus covers 1960–2026. It is not a ranking and is not statistically representative of the entire heavy metal scene. It is designed to cover the approved taxonomy leaves, the expanded decades and multiple countries while remaining small enough to ingest and validate.
+This is the purposive, stratified seed list for the HMDE corpus. Version 0.1.0 contains the original 42 bands used to build the initial MVP dataset and remains the historical 1980–2000 archive. Version 0.2.0 keeps those 42 bands active and adds 15 approved bands so the corpus covers 1960–2026. Version 0.3.0 keeps all 57 v0.2.0 bands and adds 452 verified candidates for 509 active bands. It is not a ranking and is not statistically representative of the entire heavy metal scene. It is designed to cover the approved taxonomy leaves, the expanded decades and multiple countries while remaining small enough to ingest and validate.
 
 The JSON files are the machine-readable source of truth for ingestion. This document records the selection rationale, verification and limitations.
 
@@ -26,7 +27,7 @@ The JSON files are the machine-readable source of truth for ingestion. This docu
 
 Every band has at least three studio albums in the period according to MusicBrainz. The minimum is three (HammerFall, Mayhem and Pain of Salvation); the maximum is twelve (Iron Maiden and Motörhead).
 
-### 2.1 Active corpus v0.2.0
+### 2.1 Archived corpus v0.2.0
 
 | Dimension | Distribution |
 |---|---|
@@ -38,7 +39,21 @@ Every band has at least three studio albums in the period according to MusicBrai
 | Expanded decades | 3 bands each from the 1960s, 1970s, 2000s, 2010s and 2020s |
 | Lifecycle | 57 active; no retired bands |
 
-The active pointer is [`data/seed-list.json`](../../data/seed-list.json). The versioned source of truth is [`data/seed-lists/v0.2.0.json`](../../data/seed-lists/v0.2.0.json). The historical archive is [`data/seed-lists/v0.1.0.json`](../../data/seed-lists/v0.1.0.json).
+### 2.2 Active corpus v0.3.0
+
+| Dimension | Distribution |
+|---|---|
+| Total active bands | 509 |
+| Base | 42 from v0.1.0 plus 15 from `v0.2.0-batch-01` |
+| New batches | 151 + 151 + 150 verified candidates |
+| Excluded | Hellhammer (no studio album) |
+| Period | 1960-01-01 to 2026-12-31 |
+| Taxonomy | v0.2.0; every band uses an assignable leaf |
+| Lifecycle | 509 active; no retired bands |
+| Verification | [`v0.3.0-verification.json`](../../data/seed-lists/candidates/v0.3.0-verification.json) |
+| E3 dataset | `mb-20261119T004940Z-9d5e75fdc1b9` (509 bands; 7 multi-artist release groups excluded) |
+
+The active pointer is [`data/seed-list.json`](../../data/seed-list.json). The versioned source of truth is [`data/seed-lists/v0.3.0.json`](../../data/seed-lists/v0.3.0.json). The v0.2.0 and v0.1.0 files remain immutable archives.
 
 ## 3. Selection method
 
@@ -155,21 +170,25 @@ The first v0.2.0 batch is approved in [`data/seed-lists/batches/v0.2.0-batch-01.
 | 14 | Lorna Shore | 2020s | `deathcore` | US | `e86fc1f5-d632-44b2-8aea-38f83aadffe8` |
 | 15 | Blood Incantation | 2020s | `death-metal` | US | `a5f0f298-776a-4909-bc09-4fd56a680542` |
 
-## 7. Candidate pool for v0.3.0
+## 7. Verified candidate pool for v0.3.0
 
-E13 is preparing a 200-band v0.3.0 corpus. The pre-selection pool is [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json), version `0.3.0-candidates-01`. A human-readable index grouped by country is [`data/seed-lists/candidates/v0.3.0-by-country.md`](../../data/seed-lists/candidates/v0.3.0-by-country.md).
+E13 verified the 453-candidate pool for a 510-band ceiling. The verified pool is [`data/seed-lists/candidates/v0.3.0-pool.json`](../../data/seed-lists/candidates/v0.3.0-pool.json), version `0.3.0-candidates-02`; evidence is in [`v0.3.0-verification.json`](../../data/seed-lists/candidates/v0.3.0-verification.json). A human-readable index grouped by country is [`v0.3.0-by-country.md`](../../data/seed-lists/candidates/v0.3.0-by-country.md).
 
 | Dimension | Distribution |
 |---|---|
-| Candidates | 397 unique MusicBrainz artists |
+| Candidates checked | 453 unique MusicBrainz artists |
+| Accepted / excluded | 452 accepted; 1 excluded (Hellhammer, no studio album) |
 | Leaves | All 17 assignable leaves |
-| Regions | Europe 204, North America 124, Latin America 38, Japan 11, Iberia 10, Oceania 10 |
-| Matching | 375 `verified`; 22 `verified_country_inferred` |
-| Relevance | 397 `pending_manual_review`; Wikidata lookup deferred after WDQS rate limiting |
+| Accepted regions | Europe 237, North America 124, Latin America 47, Japan 13, Iberia 18, Oceania 13 |
+| Matching | 448 `verified`; 5 `verified_country_inferred` |
+| Album checks | 452 `verified`; 1 `rejected` |
+| Relevance | 453 `verified` (430 Wikidata, 14 Wikipedia, 19 Discogs, 4 AllMusic) |
+| Batch sizes | 151 / 151 / 150 |
+| Final corpus | 509 active bands (57 current + 452 accepted) |
 
-The pool excludes the 57 active v0.2.0 bands. It is not an approved seed list and the active pointer does not use it. The owner must approve 143 additions across three batches (`50 + 50 + 43`) after MusicBrainz, studio-album and published-source verification. The target distribution and selection rules are in [`specs/016-corpus-expansion/spec.md`](../../specs/016-corpus-expansion/spec.md).
+The pool excludes the 57 active v0.2.0 bands. The owner approved the verification report, the Hellhammer exclusion and the batches on 2026-11-17. The final composition and verification rules are in [`specs/016-corpus-expansion/spec.md`](../../specs/016-corpus-expansion/spec.md).
 
-The v0.2.0 dataset remains the active corpus until the v0.3.0 seed list, ingestion, normalization, quality and analysis runs are complete and validated.
+The v0.3.0 seed list is active. The E3 canonical dataset `mb-20261119T004940Z-9d5e75fdc1b9` contains 509 bands, has no duplicate entity MBIDs and reports 7 multi-artist release-group exclusions. The database remains on the v0.2.0 dataset until E4–E7 are complete and validated.
 
 ## 8. Known limitations
 
@@ -179,7 +198,8 @@ The v0.2.0 dataset remains the active corpus until the v0.3.0 seed list, ingesti
 - The list is not a measure of importance, quality or influence.
 - MusicBrainz data changes over time; the 42-band base was verified on 2026-11-05 and the v0.2.0 batch on 2026-11-06.
 - The v0.2.0 ingestion produced 731 release groups, 9,236 releases, 16,683 recordings, 32,326 credits and 3,991 exclusions across 57 bands, with no band failures.
-- The list is intentionally small for the MVP; expansion to 200–500 bands is E13.
+- The canonical E3 dataset excludes release groups associated with more than one active band (7 at the 2026-11-19 snapshot) because the model stores one artist per album. They are reported with reason `multi_artist_release_group`; this does not change the 509 active bands or the three-album minimum.
+- The list is intentionally small for the MVP; E13 adds 452 verified bands for a 509-band corpus.
 
 ## 9. Change control
 

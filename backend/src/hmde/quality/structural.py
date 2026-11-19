@@ -28,6 +28,7 @@ def structural_findings(
     session: Session,
     *,
     normalization_run: NormalizationRun,
+    expected_active_memberships: int,
 ) -> list[FindingSpec]:
     findings: list[FindingSpec] = []
     findings.extend(_foreign_keys(session))
@@ -38,7 +39,13 @@ def structural_findings(
     findings.extend(_album_classifications(session, normalization_run))
     findings.extend(_band_aggregates(session, normalization_run))
     findings.extend(_credits(session))
-    findings.extend(_membership(session, normalization_run))
+    findings.extend(
+        _membership(
+            session,
+            normalization_run,
+            expected_active_memberships=expected_active_memberships,
+        )
+    )
     return findings
 
 
@@ -415,7 +422,31 @@ def _credits(session: Session) -> list[FindingSpec]:
     ]
 
 
-def _membership(session: Session, run: NormalizationRun) -> list[FindingSpec]:
+def membership_finding(
+    *,
+    active: int,
+    expected: int,
+    dataset_version: str,
+) -> FindingSpec | None:
+    if active == expected:
+        return None
+    return FindingSpec(
+        rule_code="Q-MEM-001",
+        entity_type="dataset_membership",
+        entity_mbid=None,
+        entity_id=None,
+        observed_value={"active_memberships": active},
+        expected_value={"active_memberships": expected},
+        details={"dataset_version": dataset_version},
+    )
+
+
+def _membership(
+    session: Session,
+    run: NormalizationRun,
+    *,
+    expected_active_memberships: int,
+) -> list[FindingSpec]:
     active = (
         session.scalar(
             select(func.count())
@@ -427,16 +458,9 @@ def _membership(session: Session, run: NormalizationRun) -> list[FindingSpec]:
         )
         or 0
     )
-    if active == 57:
-        return []
-    return [
-        FindingSpec(
-            rule_code="Q-MEM-001",
-            entity_type="dataset_membership",
-            entity_mbid=None,
-            entity_id=None,
-            observed_value={"active_memberships": active},
-            expected_value={"active_memberships": 57},
-            details={"dataset_version": run.dataset_version},
-        )
-    ]
+    finding = membership_finding(
+        active=active,
+        expected=expected_active_memberships,
+        dataset_version=run.dataset_version,
+    )
+    return [finding] if finding is not None else []
