@@ -11,6 +11,8 @@ import {
 const options: OverviewOptions = {
   view: 'bands',
   producerLimit: 0,
+  bandLimit: 0,
+  albumLimit: 500,
   producerSort: 'album_count',
   order: 'desc',
   decade: '',
@@ -66,6 +68,33 @@ describe('ProducerOverviewControls', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'fCoSE' }))
     expect(onOptionsChange).toHaveBeenCalledWith({ ...options, engine: 'fcose' })
+  })
+
+  it('reports band and album limit changes', () => {
+    const onOptionsChange = renderControls({ bandLimit: 100, albumLimit: 500 })
+
+    fireEvent.change(screen.getByLabelText('Band limit'), { target: { value: '250' } })
+    expect(onOptionsChange).toHaveBeenCalledWith({ ...options, bandLimit: 250, albumLimit: 500 })
+
+    fireEvent.click(screen.getByLabelText('Album limit all'))
+    expect(onOptionsChange).toHaveBeenCalledWith({ ...options, bandLimit: 100, albumLimit: 0 })
+  })
+
+  it('reports a typed producer limit on blur and supports All', () => {
+    const onOptionsChange = renderControls({ producerLimit: 100 })
+    const input = screen.getByRole('spinbutton', { name: 'Producers' })
+
+    fireEvent.change(input, { target: { value: '137' } })
+    expect(onOptionsChange).not.toHaveBeenCalled()
+    fireEvent.blur(input)
+    expect(onOptionsChange).toHaveBeenCalledWith({ ...options, producerLimit: 137 })
+
+    fireEvent.change(input, { target: { value: '1500' } })
+    fireEvent.blur(input)
+    expect(onOptionsChange).toHaveBeenCalledWith({ ...options, producerLimit: 1000 })
+
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Producers all' }))
+    expect(onOptionsChange).toHaveBeenCalledWith({ ...options, producerLimit: 0 })
   })
 
   it('disables the engine group outside Force', () => {

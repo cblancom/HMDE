@@ -33,6 +33,8 @@ const graph = {
     taxonomy_version: '0.2.0',
     graph_version: '0.1.0',
     truncated: false,
+    returned_neighbors: 1,
+    omitted_neighbors: 0,
     limits: { limit: 20, depth: 1, max_nodes: 500, max_edges: 2000 },
   },
 }
@@ -81,12 +83,27 @@ describe('ProducerGraphPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Bands' }))
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        '/api/v1/producers/producer-1/graph?view=bands&limit=20&depth=1&max_nodes=500&max_edges=2000&include_evidence=true',
+        '/api/v1/producers/producer-1/graph?view=bands&limit=100&depth=1&max_nodes=2000&max_edges=5000&include_evidence=true',
         expect.anything(),
       )
     })
   })
 
+
+  it('defaults the bands ego graph to all neighbors', async () => {
+    const fetchMock = mockFetchRoutes({ '/api/v1/producers/producer-1/graph': { body: bandsGraph } })
+    renderGraph('/producers/producer-1/graph?view=bands')
+
+    await screen.findByRole('heading', { name: 'Martin Birch' })
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('limit=0'),
+        expect.anything(),
+      )
+    })
+    expect(screen.getByLabelText('Neighbors')).toBeDisabled()
+    expect(screen.getByLabelText('Neighbors all')).toBeChecked()
+  })
 
   it('shows truncation and recovers from an invalid view', async () => {
     mockFetchRoutes({

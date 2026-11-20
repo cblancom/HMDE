@@ -7,6 +7,8 @@ import { trackConsoleErrors } from './support/console'
 const API_BASE = process.env.HMDE_API_BASE_URL ?? 'http://localhost:8001'
 const WEB_BASE = process.env.HMDE_WEB_BASE_URL ?? 'http://localhost:5173'
 const SAMPLE_COUNT = 20
+const ALL_ALBUMS_SAMPLE_COUNT = 5
+const BANDS_SAMPLE_COUNT = 5
 const WARMUP_COUNT = 1
 const NAVIGATION_TARGET_MS = 5_000
 const CONTROL_TARGET_MS = 1_000
@@ -78,6 +80,25 @@ async function apiJson(request: APIRequestContext, path: string): Promise<Record
   return (await response.json()) as Record<string, unknown>
 }
 
+function visibleOverviewNodeCount(body: Record<string, unknown>, view: 'bands' | 'albums'): number {
+  const nodes = Array.isArray(body.nodes) ? (body.nodes as Array<Record<string, unknown>>) : []
+  const edges = Array.isArray(body.edges) ? (body.edges as Array<Record<string, unknown>>) : []
+  const degree = new Set<string>()
+  for (const edge of edges) {
+    if (typeof edge.source === 'string') degree.add(edge.source)
+    if (typeof edge.target === 'string') degree.add(edge.target)
+  }
+  return nodes.filter((node) => {
+    const id = String(node.id)
+    if (view === 'bands') {
+      return Array.isArray(node.roles) && node.roles.includes('band')
+        ? true
+        : degree.has(id)
+    }
+    return degree.has(id)
+  }).length
+}
+
 async function readLongTasks(page: Page): Promise<LongTask[]> {
   return page.evaluate(() => {
     const target = window as typeof window & {
@@ -133,7 +154,7 @@ async function clickPanelToggle(page: Page): Promise<void> {
 }
 
 test('performance probe', async ({ page, request, browser }, testInfo) => {
-  test.setTimeout(600_000)
+  test.setTimeout(900_000)
 
   const errors = trackConsoleErrors(page)
   await page.addInitScript(() => {
@@ -155,15 +176,20 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   const producers = await apiJson(request, '/api/v1/producers?limit=20&sort=album_count&order=desc')
   const albumsOverview = await apiJson(
     request,
-    '/api/v1/graph/producers?view=albums&producer_limit=0&include_isolated=true&include_evidence=false&max_nodes=1000&max_edges=2000',
+    '/api/v1/graph/producers?view=albums&producer_limit=0&album_limit=500&include_isolated=true&include_evidence=false&max_nodes=5000&max_edges=5000',
+  )
+  const albumsAllOverview = await apiJson(
+    request,
+    '/api/v1/graph/producers?view=albums&producer_limit=0&album_limit=0&include_isolated=true&include_evidence=false&max_nodes=5000&max_edges=5000',
   )
   const bandsOverview = await apiJson(
     request,
-    '/api/v1/graph/producers?view=bands&producer_limit=0&include_isolated=true&include_evidence=true&max_nodes=1000&max_edges=2000',
+    '/api/v1/graph/producers?view=bands&producer_limit=0&band_limit=0&include_isolated=true&include_evidence=true&max_nodes=5000&max_edges=5000',
   )
   const overviewMeta = albumsOverview.meta as Record<string, unknown>
-  const albumOverviewNodes = Array.isArray(albumsOverview.nodes) ? albumsOverview.nodes.length : 0
-  const bandOverviewNodes = Array.isArray(bandsOverview.nodes) ? bandsOverview.nodes.length : 0
+  const albumOverviewNodes = visibleOverviewNodeCount(albumsOverview, 'albums')
+  const allAlbumOverviewNodes = visibleOverviewNodeCount(albumsAllOverview, 'albums')
+  const bandOverviewNodes = visibleOverviewNodeCount(bandsOverview, 'bands')
   const bandItems = bands.items as Array<Record<string, unknown>>
   const albumItems = albums.items as Array<Record<string, unknown>>
   const producerItems = producers.items as Array<Record<string, unknown>>
@@ -199,7 +225,7 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
     },
     { name: 'search', path: '/api/v1/search?q=iron&limit=10', target: 300 },
     {
-      name: 'ego graph depth 2, max 500 nodes',
+      name: 'ego graph depth 2, max 2000 nodes',
       path: largestEgo.path,
       target: 1_000,
       summary: {
@@ -207,12 +233,12 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
         producer_id: largestEgo.id,
         nodes: largestEgo.nodes,
         edges: largestEgo.edges,
-        note: 'No v0.2.0 producer ego graph reaches the 500-node cap; this is the largest depth-2 graph among the ten most credited producers.',
+        note: 'Largest depth-2 graph among the ten most credited producers, capped at 2,000 nodes and 5,000 edges.',
       },
     },
     {
-      name: 'overview bands',
-      path: '/api/v1/graph/producers?view=bands&producer_limit=0&include_isolated=true&include_evidence=true&max_nodes=1000&max_edges=2000',
+      name: 'overview bands all',
+      path: '/api/v1/graph/producers?view=bands&producer_limit=0&band_limit=0&include_isolated=true&include_evidence=true&max_nodes=5000&max_edges=5000',
       target: 1_500,
       summary: {
         nodes: Array.isArray(bandsOverview.nodes) ? bandsOverview.nodes.length : null,
@@ -220,12 +246,21 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
       },
     },
     {
-      name: 'overview albums',
-      path: '/api/v1/graph/producers?view=albums&producer_limit=0&include_isolated=true&include_evidence=false&max_nodes=1000&max_edges=2000',
+      name: 'overview albums default 500',
+      path: '/api/v1/graph/producers?view=albums&producer_limit=0&album_limit=500&include_isolated=true&include_evidence=false&max_nodes=5000&max_edges=5000',
       target: 1_500,
       summary: {
         nodes: Array.isArray(albumsOverview.nodes) ? albumsOverview.nodes.length : null,
         edges: Array.isArray(albumsOverview.edges) ? albumsOverview.edges.length : null,
+      },
+    },
+    {
+      name: 'overview albums all',
+      path: '/api/v1/graph/producers?view=albums&producer_limit=0&album_limit=0&include_isolated=true&include_evidence=false&max_nodes=5000&max_edges=5000',
+      target: 2_000,
+      summary: {
+        nodes: Array.isArray(albumsAllOverview.nodes) ? albumsAllOverview.nodes.length : null,
+        edges: Array.isArray(albumsAllOverview.edges) ? albumsAllOverview.edges.length : null,
       },
     },
   ]
@@ -259,8 +294,27 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
       ...pageLongTasks.map((entry) => ({ ...entry, phase: `navigation ${sample + 1}` })),
     )
   }
+  const bandsNavigationValues: number[] = []
+  for (let sample = 0; sample < BANDS_SAMPLE_COUNT; sample += 1) {
+    const start = performance.now()
+    await page.goto(`${WEB_BASE}/graph?view=bands`, { waitUntil: 'domcontentloaded' })
+    await waitForCanvas(page, `${bandOverviewNodes} nodes`)
+    bandsNavigationValues.push(performance.now() - start)
+  }
+  const bandsNavigationMetric = metric(
+    '/graph bands all interactive canvas',
+    bandsNavigationValues,
+    NAVIGATION_TARGET_MS,
+    '/graph?view=bands',
+    {
+      nodes: bandOverviewNodes,
+      edges: Array.isArray(bandsOverview.edges) ? bandsOverview.edges.length : null,
+      samples: BANDS_SAMPLE_COUNT,
+    },
+  )
+
   const navigationMetric = metric(
-    '/graph albums view interactive canvas',
+    '/graph albums default view interactive canvas',
     navigationValues,
     NAVIGATION_TARGET_MS,
     '/graph?view=albums',
@@ -299,6 +353,28 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
     await expect(meta).toContainText(expected, { timeout: 15_000 })
     viewSettleValues.push(performance.now() - start)
   }
+
+  const allAlbumNavigationValues: number[] = []
+  for (let sample = 0; sample < ALL_ALBUMS_SAMPLE_COUNT; sample += 1) {
+    const start = performance.now()
+    await page.goto(`${WEB_BASE}/graph?view=albums&album_limit=all`, {
+      waitUntil: 'domcontentloaded',
+    })
+    await waitForCanvas(page, `${allAlbumOverviewNodes} nodes`)
+    allAlbumNavigationValues.push(performance.now() - start)
+  }
+  await openOverview(page, `${albumOverviewNodes}`)
+  const allAlbumNavigationMetric = metric(
+    '/graph albums all interactive canvas',
+    allAlbumNavigationValues,
+    NAVIGATION_TARGET_MS,
+    '/graph?view=albums&album_limit=all',
+    {
+      nodes: allAlbumOverviewNodes,
+      edges: Array.isArray(albumsAllOverview.edges) ? albumsAllOverview.edges.length : null,
+      samples: ALL_ALBUMS_SAMPLE_COUNT,
+    },
+  )
   const viewAckMetric = metric(
     'overview view switch acknowledgement',
     viewAckValues,
@@ -331,6 +407,11 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   )
 
   const controlLongTasks = (await readLongTasks(page)).slice(controlStartLength)
+
+  await page.goto(`${WEB_BASE}/graph?view=albums&layout=force&album_limit=500`, {
+    waitUntil: 'domcontentloaded',
+  })
+  await waitForCanvas(page, `${albumOverviewNodes} nodes`)
 
   const finiteLayouts = []
   const finiteLayoutExceptions: Array<Record<string, unknown>> = []
@@ -387,7 +468,9 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
 
   const allMetrics = [
     ...apiMetrics,
+    bandsNavigationMetric,
     navigationMetric,
+    allAlbumNavigationMetric,
     egoNavigationMetric,
     viewAckMetric,
     viewSettleMetric,
@@ -395,7 +478,7 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   ]
   const exceptionCauses: Record<string, string> = {
     'overview view switch acknowledgement':
-      `The ${albumOverviewNodes}-node d3-force simulation and the view refetch occupy the main thread while the new view commits. The full view switch still settles within the 5 s graph-interactivity target.`,
+      `The ${albumOverviewNodes}-node view switch refetches and remounts both views; the remaining cost is the Force layout for the ${bandOverviewNodes}-node band view. The full switch settles within about 5 s.`,
   }
   const targetExceptions = allMetrics
     .filter((item) => !item.passed)
@@ -447,6 +530,8 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
     api: apiMetrics,
     browser: {
       navigation: navigationMetric,
+      bands_navigation: bandsNavigationMetric,
+      all_albums_navigation: allAlbumNavigationMetric,
       ego_navigation: egoNavigationMetric,
       controls: [viewAckMetric, viewSettleMetric, panelMetric],
       finite_layouts: finiteLayouts,
@@ -456,7 +541,7 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
       control_response:
         'Control response measures a direct DOM click to the acknowledged state. Playwright locator actionability is excluded because it waits for layout stability while d3-force animates. The full view data and canvas settle is recorded separately.',
       ego_graph:
-        'No v0.2.0 producer ego graph reaches the 500-node cap; the largest depth-2 graph among the ten most credited producers is sampled with max_nodes=500.',
+        'Albums use the static bipartite layout by default; Force is opt-in. The largest depth-2 ego graph is sampled with the 2,000-node cap.',
     },
     exceptions,
     recommendation:
@@ -475,6 +560,8 @@ test('performance probe', async ({ page, request, browser }, testInfo) => {
   expect(errors).toEqual([])
   expect(apiMetrics.every((item) => item.samples === SAMPLE_COUNT)).toBe(true)
   expect(navigationMetric.samples).toBe(SAMPLE_COUNT)
+  expect(bandsNavigationMetric.samples).toBe(BANDS_SAMPLE_COUNT)
+  expect(allAlbumNavigationMetric.samples).toBe(ALL_ALBUMS_SAMPLE_COUNT)
   expect(egoNavigationMetric.samples).toBe(SAMPLE_COUNT)
   expect(viewAckMetric.samples).toBe(SAMPLE_COUNT)
   expect(viewSettleMetric.samples).toBe(SAMPLE_COUNT)

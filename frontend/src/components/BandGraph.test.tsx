@@ -26,7 +26,14 @@ const graph = {
       albums: ['Iron Maiden', 'Killers'],
     },
   ],
-  meta: { fixture_version: 'e2-v0.1.0' },
+  meta: {
+            fixture_version: 'e2-v0.1.0',
+            producer_limit: 0,
+            max_nodes: 2000,
+            returned_producers: 0,
+            omitted_producers: 0,
+            truncated: false,
+          },
 }
 
 beforeEach(() => {
@@ -70,7 +77,14 @@ describe('BandGraph', () => {
         graph={{
           nodes: [{ id: 'band-1', label: 'No Credit Band', type: 'band' }],
           edges: [],
-          meta: { fixture_version: 'e2-v0.1.0' },
+          meta: {
+            fixture_version: 'e2-v0.1.0',
+            producer_limit: 0,
+            max_nodes: 2000,
+            returned_producers: 0,
+            omitted_producers: 0,
+            truncated: false,
+          },
         }}
       />,
     )

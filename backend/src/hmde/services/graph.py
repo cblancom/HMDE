@@ -14,7 +14,13 @@ from hmde.schemas.graph import BandGraphResponse, GraphEdge, GraphMeta, GraphNod
 CORE_PRODUCER_ROLES = ("producer", "co-producer")
 
 
-def get_band_graph(session: Session, band_id: UUID) -> BandGraphResponse | None:
+def get_band_graph(
+    session: Session,
+    band_id: UUID,
+    *,
+    producer_limit: int = 0,
+    max_nodes: int = 2000,
+) -> BandGraphResponse | None:
     band = session.execute(
         select(Artist)
         .join(ArtistSubgenre, ArtistSubgenre.artist_id == Artist.id)
@@ -50,14 +56,30 @@ def get_band_graph(session: Session, band_id: UUID) -> BandGraphResponse | None:
         producer_roles[artist_id].add(role_code)
         producer_albums[artist_id].add(album_title)
 
+    producer_order = sorted(
+        producer_names,
+        key=lambda artist_id: (
+            -len(producer_albums[artist_id]),
+            producer_names[artist_id].casefold(),
+            str(artist_id),
+        ),
+    )
+    truncated = False
+    if producer_limit > 0 and len(producer_order) > producer_limit:
+        producer_order = producer_order[:producer_limit]
+        truncated = True
+    available_slots = max(0, max_nodes - 1)
+    if len(producer_order) > available_slots:
+        producer_order = producer_order[:available_slots]
+        truncated = True
+    omitted_producers = max(0, len(producer_names) - len(producer_order))
+
     band_id_text = str(band.id)
     nodes = [GraphNode(id=band_id_text, label=band.name, type="band")]
     edges: list[GraphEdge] = []
 
-    for artist_id, producer_name in sorted(
-        producer_names.items(),
-        key=lambda item: (item[1].casefold(), str(item[0])),
-    ):
+    for artist_id in producer_order:
+        producer_name = producer_names[artist_id]
         producer_id_text = str(artist_id)
         role = "producer" if "producer" in producer_roles[artist_id] else "co-producer"
         album_titles = sorted(producer_albums[artist_id])
@@ -88,5 +110,12 @@ def get_band_graph(session: Session, band_id: UUID) -> BandGraphResponse | None:
     return BandGraphResponse(
         nodes=nodes,
         edges=edges,
-        meta=GraphMeta(fixture_version=fixture_version or "unknown"),
+        meta=GraphMeta(
+            fixture_version=fixture_version or "unknown",
+            producer_limit=producer_limit,
+            max_nodes=max_nodes,
+            returned_producers=len(producer_order),
+            omitted_producers=omitted_producers,
+            truncated=truncated or omitted_producers > 0,
+        ),
     )

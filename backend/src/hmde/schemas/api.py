@@ -198,6 +198,8 @@ class ProducerGraphMeta(BaseModel):
     taxonomy_version: str
     graph_version: str
     truncated: bool
+    returned_neighbors: int = 0
+    omitted_neighbors: int = 0
     limits: ProducerGraphLimits
 
 
@@ -209,6 +211,8 @@ class ProducerGraphResponse(BaseModel):
 
 class ProducerOverviewGraphLimits(BaseModel):
     producer_limit: int
+    band_limit: int = 0
+    album_limit: int = 0
     max_nodes: int
     max_edges: int
 
@@ -224,6 +228,10 @@ class ProducerOverviewGraphMeta(BaseModel):
     truncated: bool
     matched_producers: int
     selected_producers: int
+    returned_bands: int = 0
+    returned_albums: int = 0
+    omitted_bands: int = 0
+    omitted_albums: int = 0
     include_isolated: bool
     limits: ProducerOverviewGraphLimits
 

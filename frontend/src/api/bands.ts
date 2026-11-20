@@ -34,12 +34,44 @@ export function getBands(filters: BandFilters = {}): Promise<BandListResponse> {
   )
 }
 
+const BAND_INDEX_PAGE_SIZE = 200
+
+export async function getAllBands(filters: BandFilters = {}): Promise<BandListItem[]> {
+  const first = await getBands({
+    ...filters,
+    limit: BAND_INDEX_PAGE_SIZE,
+    offset: 0,
+  })
+  const items = [...first.items]
+  while (items.length < first.total) {
+    const page = await getBands({
+      ...filters,
+      limit: BAND_INDEX_PAGE_SIZE,
+      offset: items.length,
+    })
+    if (page.items.length === 0) break
+    items.push(...page.items)
+  }
+  return items
+}
+
 export function getBand(bandId: string): Promise<BandDetailResponse> {
   return getJson<BandDetailResponse>(`/api/v1/bands/${encodeURIComponent(bandId)}`)
 }
 
-export function getBandGraph(bandId: string): Promise<BandGraphResponse> {
+export type BandGraphOptions = {
+  producerLimit?: number
+  maxNodes?: number
+}
+
+export function getBandGraph(
+  bandId: string,
+  { producerLimit = 0, maxNodes = 2000 }: BandGraphOptions = {},
+): Promise<BandGraphResponse> {
   return getJson<BandGraphResponse>(
-    `/api/v1/bands/${encodeURIComponent(bandId)}/graph`,
+    `/api/v1/bands/${encodeURIComponent(bandId)}/graph${buildQuery({
+      producer_limit: producerLimit,
+      max_nodes: maxNodes,
+    })}`,
   )
 }

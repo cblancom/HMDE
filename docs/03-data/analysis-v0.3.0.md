@@ -59,12 +59,12 @@ The exact commands and run IDs are recorded in [`specs/016-corpus-expansion/task
 
 ## 6. Performance review
 
-The E13 performance probe (`frontend/test-results/performance-performance-probe-chromium/performance-report.json`, ignored by Git) measured the v0.3.0 network on 2026-11-19:
+The SPEC-019 performance probe (`frontend/test-results/performance-performance-probe-chromium/performance-report.json`, ignored by Git) measured the v0.3.0 full-corpus views on 2026-11-20:
 
-- API p95: bands list 13 ms, albums list 73 ms, producers list 239 ms, band detail 12 ms, album detail 9 ms, producer detail 202 ms, search 16 ms, ego graph 181 ms, overview bands 411 ms, overview albums 486 ms.
-- Browser: `/graph` navigation p95 2.96 s; view-switch acknowledgement p95 2.37 s (1 s target exception); full view settle p95 2.63 s; panel toggle 686 ms; ego navigation 681 ms.
-- The overview keeps the 1,000-node/2,000-edge cap with explicit truncation: albums 1,000 nodes / 810 edges, bands 1,000 nodes / 1,125 edges.
-- CoSE completed in 10.1 s; fCoSE completed in 2.0 s.
-- The 26-test Playwright suite and nine axe scans passed.
+- API p95: bands list 14 ms, albums list 57 ms, producers list 244 ms, band detail 10 ms, album detail 9 ms, producer detail 169 ms, search 12 ms, ego graph 156 ms, all bands 1,034 ms, default 500 albums 1,030 ms, all albums 1,196 ms.
+- Browser: all bands 3.95 s; default 500 albums 4.27 s; explicit all albums 6.04 s; view-switch acknowledgement 1.43 s; full view switch settle 1.60 s; panel toggle 654 ms; ego navigation 851 ms.
+- The overview producer control accepts a typed 1–1000 limit or All. The overview defaults to the static bipartite layout for both views. Force is an explicit opt-in. Selection is stable and does not restart the layout; isolated producers are hidden by default. The recorded browser timings use the pre-revision 1,944-node API view; the default canvas now has 1,401 visible nodes.
+- All bands is 509 bands / 1,708 nodes / 1,700 edges. Default albums is 500 albums / 1,944 API nodes / 1,717 edges with 1,775 omitted; the canvas hides 543 out-of-subset producers, leaving 1,401 visible nodes. All albums is 2,275 graph albums / 3,719 nodes / 4,217 edges.
+- CoSE did not complete within 30 s and fCoSE completed in 34.1 s when Force was selected; both remain documented finite-layout observations.
 
-The view-switch acknowledgement is the only performance exception. The full interaction settles within the 5-second target, so the cap and current UI remain.
+The all-albums view and view-switch acknowledgement are the measured exceptions. The all-bands and default-album views meet the five-second target. See the [QA report](../01-architecture/qa-report.md#14-spec-019-v030-full-corpus-performance-review).

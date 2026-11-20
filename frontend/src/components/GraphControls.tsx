@@ -1,4 +1,5 @@
 import type { ProducerGraphView } from '../api/producerGraph'
+import { GraphLimitField } from './GraphLimitField'
 
 type GraphControlsProps = {
   view: ProducerGraphView
@@ -38,18 +39,13 @@ export function GraphControls({
         </button>
       </div>
 
-      <div className="field graph-field">
-        <label htmlFor="graph-limit">Neighbors</label>
-        <select
-          id="graph-limit"
-          value={limit}
-          onChange={(event) => onLimitChange(Number(event.target.value))}
-        >
-          <option value={20}>20</option>
-          <option value={50}>50</option>
-          <option value={100}>100</option>
-        </select>
-      </div>
+      <GraphLimitField
+        id="graph-limit"
+        label="Neighbors"
+        value={limit}
+        fallback={view === 'albums' ? 100 : 20}
+        onChange={onLimitChange}
+      />
 
       <div className="field graph-field">
         <label htmlFor="graph-depth">Depth</label>

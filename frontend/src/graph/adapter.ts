@@ -158,13 +158,7 @@ export function adaptOverviewGraph(
   const activeSubgenre = supportsSubgenre ? filters.subgenre : ''
 
   const nodeById = new Map(response.nodes.map((node) => [node.id, node]))
-  const isolatedProducers = response.nodes.filter(isIsolatedProducer)
-  const hiddenIsolatedIds = new Set(
-    filters.hideIsolated ? isolatedProducers.map((node) => node.id) : [],
-  )
-
   const filteredEdges = response.edges.filter((edge) => {
-    if (hiddenIsolatedIds.has(edge.source)) return false
     if (!matchesRole(edge, filters.role)) return false
     if (!activeDecade && !activeSubgenre) return true
     const target = nodeById.get(edge.target)
@@ -174,6 +168,19 @@ export function adaptOverviewGraph(
     return true
   })
 
+  const degreeById: Record<string, number> = {}
+  for (const edge of filteredEdges) {
+    degreeById[edge.source] = (degreeById[edge.source] ?? 0) + 1
+    degreeById[edge.target] = (degreeById[edge.target] ?? 0) + 1
+  }
+
+  const isolatedProducers = response.nodes.filter(
+    (node) => node.type === 'producer' && (degreeById[node.id] ?? 0) === 0,
+  )
+  const hiddenIsolatedIds = new Set(
+    filters.hideIsolated ? isolatedProducers.map((node) => node.id) : [],
+  )
+
   const visibleNodeIds = new Set<string>()
   for (const edge of filteredEdges) {
     visibleNodeIds.add(edge.source)
@@ -182,15 +189,23 @@ export function adaptOverviewGraph(
   for (const node of isolatedProducers) {
     if (!hiddenIsolatedIds.has(node.id)) visibleNodeIds.add(node.id)
   }
+  for (const node of response.nodes) {
+    if (hiddenIsolatedIds.has(node.id)) continue
+    if (view === 'bands') {
+      if (node.roles.includes('band')) visibleNodeIds.add(node.id)
+      continue
+    }
+    if (node.type !== 'album' || (degreeById[node.id] ?? 0) === 0) continue
+    if (activeDecade && decadeOf(node) !== activeDecade) continue
+    if (activeSubgenre && !taxonomyCodesOf(node).includes(activeSubgenre)) continue
+    visibleNodeIds.add(node.id)
+  }
   const filteredNodes = response.nodes.filter((node) => visibleNodeIds.has(node.id))
 
   const yearRange = visibleYearRange(filteredNodes)
   const layout = adaptLayout(response)
-  const degreeById: Record<string, number> = {}
   const incidentProducersById: Record<string, ProducerGraphNode[]> = {}
   for (const edge of filteredEdges) {
-    degreeById[edge.source] = (degreeById[edge.source] ?? 0) + 1
-    degreeById[edge.target] = (degreeById[edge.target] ?? 0) + 1
     const producer = nodeById.get(edge.source)
     if (!producer || producer.type !== 'producer') continue
     const incident = incidentProducersById[edge.target] ?? []
@@ -384,7 +399,7 @@ function nodeElement(
   const artistType = attributeString(node, 'artist_type')
   const selfProduced = node.attributes.self_produced_albums
   const year = nodeYear(node)
-  const isolated = overview && isIsolatedProducer(node)
+  const isolated = overview && node.type === 'producer' && degree === 0
   return {
     group: 'nodes',
     ...(position ? { position } : {}),

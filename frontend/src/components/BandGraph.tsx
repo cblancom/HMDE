@@ -2,8 +2,19 @@ import cytoscape from 'cytoscape'
 import { useEffect, useRef } from 'react'
 
 import type { BandGraphResponse } from '../api/bands'
+import { GraphLimitField } from './GraphLimitField'
 
-export function BandGraph({ graph }: { graph: BandGraphResponse }) {
+type BandGraphProps = {
+  graph: BandGraphResponse
+  producerLimit?: number
+  onProducerLimitChange?: (limit: number) => void
+}
+
+export function BandGraph({
+  graph,
+  producerLimit = graph.meta.producer_limit,
+  onProducerLimitChange,
+}: BandGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const bandLabel =
     graph.nodes.find((node) => node.type === 'band')?.label ?? 'this band'
@@ -107,7 +118,29 @@ export function BandGraph({ graph }: { graph: BandGraphResponse }) {
   return (
     <section className="graph-section" aria-labelledby="graph-heading">
       <h2 id="graph-heading">Producer graph</h2>
-      <p className="graph-meta">Fixture {graph.meta.fixture_version}</p>
+      {onProducerLimitChange ? (
+        <div className="graph-controls">
+          <GraphLimitField
+            id="band-producer-limit"
+            label="Producer limit"
+            value={producerLimit}
+            fallback={10}
+            onChange={onProducerLimitChange}
+          />
+        </div>
+      ) : null}
+      <p className="graph-meta">
+        Fixture {graph.meta.fixture_version} · {graph.meta.returned_producers} producers
+      </p>
+      {graph.meta.truncated ? (
+        <p className="async-state" role="status">
+          This graph is truncated at the server limits
+          {graph.meta.omitted_producers > 0
+            ? ` (${graph.meta.omitted_producers} producers omitted)`
+            : ''}
+          .
+        </p>
+      ) : null}
       <ul className="graph-legend" aria-label="Graph legend">
         <li>
           <span className="legend-swatch legend-swatch--band" aria-hidden="true" />

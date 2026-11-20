@@ -67,10 +67,10 @@ def get_producer_graph_endpoint(
     db: Annotated[Session, Depends(get_db)],
     run: Annotated[AnalysisRun, Depends(get_analysis_run)],
     view: Literal["albums", "bands"] = "bands",
-    limit: Annotated[int, Query(ge=1, le=100)] = 20,
+    limit: Annotated[int, Query(ge=0, le=5000)] = 20,
     depth: Annotated[int, Query(ge=1, le=2)] = 1,
-    max_nodes: Annotated[int, Query(ge=1, le=500)] = 500,
-    max_edges: Annotated[int, Query(ge=1, le=2000)] = 2000,
+    max_nodes: Annotated[int, Query(ge=1, le=2000)] = 500,
+    max_edges: Annotated[int, Query(ge=1, le=5000)] = 2000,
     include_evidence: bool = False,
 ) -> ProducerGraphResponse:
     graph = get_producer_graph(

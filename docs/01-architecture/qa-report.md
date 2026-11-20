@@ -355,43 +355,46 @@ Release gates that are not defects:
 
 Local Playwright reports, traces, screenshots, videos and `performance-report.json` are generated under `frontend/playwright-report` and `frontend/test-results`. They are ignored by Git and should be uploaded as CI artifacts, not committed.
 
-## 14. E13 v0.3.0 performance review
+## 14. SPEC-019 v0.3.0 full-corpus performance review
 
-The E13 probe ran on 2026-11-19 against analysis run `613a597e-242c-44ab-add3-a95381d23ec3` (`net-78a54051ff047f86`), dataset `mb-20261119T004940Z-9d5e75fdc1b9`, in Chromium 159.0.8154.6 at 1440×900.
+The SPEC-019 probe ran on 2026-11-20 against analysis run `613a597e-242c-44ab-add3-a95381d23ec3` (`net-78a54051ff047f86`), dataset `mb-20261119T004940Z-9d5e75fdc1b9`, in Chromium 159.0.8154.6 at 1440×900.
 
 ### 14.1 API p95
 
 | Endpoint | p95 (ms) | Target (ms) | Result |
 |---|---:|---:|---|
-| Bands list | 13.01 | 300 | Pass |
-| Albums list | 72.70 | 300 | Pass |
-| Producers list | 239.47 | 300 | Pass |
-| Band detail | 12.13 | 300 | Pass |
-| Album detail | 9.49 | 300 | Pass |
-| Producer detail | 202.39 | 300 | Pass |
-| Search | 15.68 | 300 | Pass |
-| Ego graph, depth 2, `max_nodes=500` | 180.54 | 1,000 | Pass |
-| Overview, bands view | 411.24 | 1,500 | Pass |
-| Overview, albums view | 486.36 | 1,500 | Pass |
+| Bands list | 14.03 | 300 | Pass |
+| Albums list | 56.66 | 300 | Pass |
+| Producers list | 244.03 | 300 | Pass |
+| Band detail | 9.50 | 300 | Pass |
+| Album detail | 9.03 | 300 | Pass |
+| Producer detail | 169.46 | 300 | Pass |
+| Search | 12.47 | 300 | Pass |
+| Ego graph, depth 2, `max_nodes=2000` | 156.11 | 1,000 | Pass |
+| Overview, all bands (`1708` nodes) | 1,033.89 | 1,500 | Pass |
+| Overview, default 500 albums (`1944` API nodes; `1401` visible) | 1,029.65 | 1,500 | Pass |
+| Overview, all albums (`3719` nodes) | 1,195.87 | 2,000 | Pass |
 
 ### 14.2 Browser timings
 
 | Measurement | p95 (ms) | Target (ms) | Result |
 |---|---:|---:|---|
-| `/graph` albums navigation | 2,956.50 | 5,000 | Pass |
-| View-switch acknowledgement | 2,372.68 | 1,000 | Exception |
-| View-switch data and canvas settled | 2,625.52 | 5,000 | Pass |
-| Index panel toggle | 685.78 | 1,000 | Pass |
-| Ego graph navigation | 680.81 | 5,000 | Pass |
+| `/graph` all bands navigation | 3,949.26 | 5,000 | Pass |
+| `/graph` default 500-album navigation | 4,270.49 | 5,000 | Pass |
+| `/graph` all-albums navigation | 6,042.23 | 5,000 | Exception, explicit view |
+| View-switch acknowledgement | 1,426.14 | 1,000 | Exception |
+| View-switch data and canvas settled | 1,598.22 | 5,000 | Pass |
+| Index panel toggle | 654.04 | 1,000 | Pass |
+| Ego graph navigation | 851.30 | 5,000 | Pass |
 
-The view-switch acknowledgement exception has the recorded cause: the 1,000-node d3-force simulation and view refetch occupy the main thread while the new view commits. The full switch settles within the 5-second graph-interactivity target, so this remains a P3 interaction cost and does not justify a UI rewrite. CoSE completed in 10.1 s and fCoSE in 2.0 s; both are recorded as finite-layout observations.
+The browser timings above were recorded with the API returning 1,944 default-album nodes; revision 2 now draws 1,401 visible nodes after hiding producers outside the selected subgraph, so the recorded default-album timing is conservative. The overview defaults to the server-generated static bipartite layout for both bands and albums; Force remains an explicit opt-in. Producers with degree zero in the selected subgraph are hidden by default and can be revealed with “Show isolated producers”. Revision 2 also keeps node selection from recreating the graph. The all-bands and default-album views meet the five-second interaction target. The explicit all-albums view remains above target at 6.04 s and is accepted as the measured large-graph exception. The view-switch acknowledgement remains a P3 interaction cost: it refetches and remounts the overview but settles in 1.60 s, within the five-second graph target. With 1,944 nodes, CoSE did not complete within 30 s and fCoSE completed in 34.1 s when Force was explicitly selected; both remain documented finite-layout observations.
 
 ### 14.3 Graph health and truncation
 
-The API keeps the 1,000-node/2,000-edge cap with explicit truncation:
-
-- Albums view: 1,000 nodes, 810 edges, 295 of 1,444 matched producers selected, `truncated=true`.
-- Bands view: 1,000 nodes, 1,125 edges, 913 of 1,444 matched producers selected, `truncated=true`.
+- All bands: 509 bands, 1,708 nodes / 1,700 edges, untruncated at `max_nodes=5000` / `max_edges=5000`.
+- Default albums: 500 albums, 1,944 API nodes / 1,717 edges, 1,775 albums omitted intentionally. The canvas hides 543 producers outside the selected subgraph, so 1,401 nodes are visible by default.
+- All albums: 2,275 graph albums, 3,719 nodes / 4,217 edges, untruncated at the 5,000 cap.
+- The overview band index pages the list endpoint to all 509 rows.
 - The network has 4,217 producer–album edges, 1,700 producer–band edges and 325 communities.
 
-No cap raise is justified. The frontend and E2E tests expose the truncation state and accessible table fallback. The 26-test Playwright suite passed, including nine axe route scans; the performance probe passed with the single recorded view-switch exception.
+The performance probe is not a CI gate. Its JSON report is generated under `frontend/test-results` and is ignored by Git. The full regression passed: 27 Playwright tests in Chromium, including nine axe route scans; 346 backend and 127 frontend tests; lint, typecheck and build passed.

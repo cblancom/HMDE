@@ -13,6 +13,7 @@ from pathlib import Path
 from sqlalchemy import create_engine, func, select
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session, sessionmaker
+from tests.support.memberships import seed_dataset_memberships
 
 from hmde.models import Artist, NormalizationRun, QualityRuleCatalogue, QualityRun
 from hmde.network.inputs import NetworkInputs
@@ -90,6 +91,14 @@ def _seed_runs(session: Session) -> None:
     )
     session.merge(quality)
     session.flush()
+    seed_dataset_memberships(
+        session,
+        DATASET_VERSION,
+        seed_list_version="e2.0.0",
+        batch_id="e2e-fixture",
+        added_in_version="e2.0.0",
+        bands_only=True,
+    )
 
     inputs = NetworkInputs(
         normalization_run=normalization,
@@ -103,6 +112,13 @@ def _seed_runs(session: Session) -> None:
         code_version="e2e-seed",
         output_dir=Path("/tmp/hmde-e2e-network"),
     )
+    graph_counts = result.counters.get("graphs", {}) if isinstance(result.counters, dict) else {}
+    album_graph = graph_counts.get("producer_album", {}) if isinstance(graph_counts, dict) else {}
+    band_graph = graph_counts.get("producer_band", {}) if isinstance(graph_counts, dict) else {}
+    if not album_graph.get("nodes") or not album_graph.get("edges"):
+        raise SystemExit("E2E seed produced an empty producer-album graph")
+    if not band_graph.get("nodes") or not band_graph.get("edges"):
+        raise SystemExit("E2E seed produced an empty producer-band graph")
     print(
         json.dumps(
             {

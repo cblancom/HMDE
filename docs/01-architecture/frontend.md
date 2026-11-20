@@ -89,7 +89,7 @@ Overview preset: infinite physics with `manyBodyStrength=-45`, `linkDistance=42â
 
 Both scopes can be frozen, resumed or reheated; physics pauses when the tab is hidden. Under `prefers-reduced-motion` the ego graph and d3-force start frozen, while CoSE and fCoSE compute a static result. CoSE and fCoSE are finite: completion is reported in the status and Resume/Reheat re-run the selected engine.
 
-Overview controls cover view, producer top-k, sort/order, decade, subgenre, role, producer search/highlight and the isolated toggle. Server-side selection uses producer limit/sort/decade/subgenre; role, search and the toggle are client-side over the loaded network. Counts and API truncation remain visible. The accessible table lists the filtered nodes and edges, and details list incident producers with ego-graph links.
+Overview controls cover view, producer limit (All or a typed value from 1 to 1000, committed on blur/Enter), sort/order, decade, subgenre, role, producer search/highlight and the isolated toggle. Server-side selection uses producer limit/sort/decade/subgenre; role, search and the toggle are client-side over the loaded network. Counts and API truncation remain visible. The accessible table lists the filtered nodes and edges, and details list incident producers with ego-graph links.
 
 SPEC-012 turns the overview into a three-region workspace:
 

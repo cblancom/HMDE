@@ -3,7 +3,8 @@ export const queryKeys = {
   taxonomy: ['taxonomy'] as const,
   bands: (params: Record<string, unknown>) => ['bands', params] as const,
   band: (id: string) => ['band', id] as const,
-  bandGraph: (id: string) => ['band-graph', id] as const,
+  bandGraph: (id: string, params: Record<string, unknown> = {}) =>
+    ['band-graph', id, params] as const,
   albums: (params: Record<string, unknown>) => ['albums', params] as const,
   album: (id: string) => ['album', id] as const,
   artists: (id: string) => ['artist', id] as const,

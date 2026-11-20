@@ -17,8 +17,18 @@ const meta = {
   truncated: false,
   matched_producers: 3,
   selected_producers: 3,
+  returned_bands: 2,
+  returned_albums: 0,
+  omitted_bands: 0,
+  omitted_albums: 0,
   include_isolated: true,
-  limits: { producer_limit: 0, max_nodes: 1000, max_edges: 2000 },
+  limits: {
+    producer_limit: 0,
+    band_limit: 0,
+    album_limit: 500,
+    max_nodes: 5000,
+    max_edges: 5000,
+  },
 }
 
 const overview = {
@@ -227,11 +237,11 @@ describe('ProducerOverviewPage', () => {
 
     expect(await screen.findByRole('heading', { name: 'Producer network' })).toBeInTheDocument()
     expect(screen.getByTestId('producer-graph')).toBeInTheDocument()
-    expect(screen.getByText(/5 nodes/)).toBeInTheDocument()
+    expect(screen.getByText(/4 nodes/)).toBeInTheDocument()
     expect(screen.getByText(/3 edges/)).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'How to read the network' })).toBeInTheDocument()
     expect(screen.getByText('View the network as tables')).toBeInTheDocument()
-    expect(screen.getAllByText('Carol Isolated').length).toBeGreaterThan(0)
+    expect(screen.queryByText('Carol Isolated')).not.toBeInTheDocument()
 
     const index = screen.getByRole('complementary', { name: 'Network index' })
     expect(within(index).getByText('Producers')).toBeInTheDocument()
@@ -251,7 +261,58 @@ describe('ProducerOverviewPage', () => {
     await screen.findByRole('heading', { name: 'Producer network' })
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        '/api/v1/bands?subgenre=heavy-metal&decade=1990s&limit=200',
+        '/api/v1/bands?subgenre=heavy-metal&decade=1990s&limit=200&offset=0',
+        expect.anything(),
+      )
+    })
+  })
+
+  it('requests full-corpus caps and defaults', async () => {
+    const fetchMock = mockOverview()
+    renderOverview()
+
+    await screen.findByRole('heading', { name: 'Producer network' })
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('band_limit=0'),
+        expect.anything(),
+      )
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('album_limit=500'),
+        expect.anything(),
+      )
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('max_nodes=5000'),
+        expect.anything(),
+      )
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('max_edges=5000'),
+        expect.anything(),
+      )
+    })
+    expect(screen.getByText(/2 bands/)).toBeInTheDocument()
+  })
+
+  it('stores target limits in the URL and request', async () => {
+    const fetchMock = mockOverview()
+    renderOverview()
+
+    await screen.findByRole('heading', { name: 'Producer network' })
+    fireEvent.click(screen.getByLabelText('Band limit all'))
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toContain('band_limit=100')
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('band_limit=100'),
+        expect.anything(),
+      )
+    })
+
+    await screen.findByLabelText('Album limit all')
+    fireEvent.click(screen.getByLabelText('Album limit all'))
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toContain('album_limit=all')
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('album_limit=0'),
         expect.anything(),
       )
     })
@@ -262,27 +323,31 @@ describe('ProducerOverviewPage', () => {
     renderOverview()
 
     await screen.findByRole('heading', { name: 'Producer network' })
-    fireEvent.change(screen.getByLabelText('Producers'), { target: { value: '10' } })
+    const producers = screen.getByLabelText('Producers')
+    fireEvent.change(producers, { target: { value: '10' } })
+    fireEvent.blur(producers)
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
         expect.stringContaining('producer_limit=10'),
         expect.anything(),
       )
     })
-    expect(await screen.findByLabelText('Producers')).toHaveValue('10')
+    expect(await screen.findByLabelText('Producers')).toHaveValue(10)
   })
 
-  it('hides isolated producers immediately and updates counts', async () => {
+  it('hides isolated producers by default and can show them', async () => {
     mockOverview()
     renderOverview()
     await screen.findByRole('heading', { name: 'Producer network' })
 
     const table = screen.getByText('View the network as tables').closest('details')
     expect(table).not.toBeNull()
-    expect(within(table as HTMLElement).getByText('Carol Isolated')).toBeInTheDocument()
-    fireEvent.click(screen.getByLabelText('Show isolated producers'))
     expect(within(table as HTMLElement).queryByText('Carol Isolated')).not.toBeInTheDocument()
     expect(screen.getByText(/1 isolated producer hidden/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByLabelText('Show isolated producers'))
+    expect(within(table as HTMLElement).getByText('Carol Isolated')).toBeInTheDocument()
+    expect(screen.queryByText(/1 isolated producer hidden/)).not.toBeInTheDocument()
   })
 
   it('shows connected producers for a shared node and producer drill-down links', async () => {
@@ -346,14 +411,14 @@ describe('ProducerOverviewPage', () => {
 
   it('selects force engines in the URL without refetching the overview', async () => {
     const fetchMock = mockOverview()
-    renderOverview()
+    renderOverview('/graph?layout=force')
     await screen.findByRole('heading', { name: 'Producer network' })
 
     const overviewCalls = () =>
       fetchMock.mock.calls.filter(([url]) =>
         String(url).startsWith('/api/v1/graph/producers'),
       ).length
-    expect(screen.getByTestId('location').textContent).toBe('')
+    expect(screen.getByTestId('location').textContent).toContain('layout=force')
     expect(screen.getByRole('button', { name: 'd3-force' })).toHaveAttribute(
       'aria-pressed',
       'true',

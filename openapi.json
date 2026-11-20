@@ -1155,6 +1155,31 @@
           "fixture_version": {
             "title": "Fixture Version",
             "type": "string"
+          },
+          "max_nodes": {
+            "default": 2000,
+            "title": "Max Nodes",
+            "type": "integer"
+          },
+          "omitted_producers": {
+            "default": 0,
+            "title": "Omitted Producers",
+            "type": "integer"
+          },
+          "producer_limit": {
+            "default": 0,
+            "title": "Producer Limit",
+            "type": "integer"
+          },
+          "returned_producers": {
+            "default": 0,
+            "title": "Returned Producers",
+            "type": "integer"
+          },
+          "truncated": {
+            "default": false,
+            "title": "Truncated",
+            "type": "boolean"
           }
         },
         "required": [
@@ -1573,6 +1598,16 @@
           "limits": {
             "$ref": "#/components/schemas/ProducerGraphLimits"
           },
+          "omitted_neighbors": {
+            "default": 0,
+            "title": "Omitted Neighbors",
+            "type": "integer"
+          },
+          "returned_neighbors": {
+            "default": 0,
+            "title": "Returned Neighbors",
+            "type": "integer"
+          },
           "taxonomy_version": {
             "title": "Taxonomy Version",
             "type": "string"
@@ -1836,6 +1871,16 @@
       },
       "ProducerOverviewGraphLimits": {
         "properties": {
+          "album_limit": {
+            "default": 0,
+            "title": "Album Limit",
+            "type": "integer"
+          },
+          "band_limit": {
+            "default": 0,
+            "title": "Band Limit",
+            "type": "integer"
+          },
           "max_edges": {
             "title": "Max Edges",
             "type": "integer"
@@ -1885,6 +1930,26 @@
           },
           "matched_producers": {
             "title": "Matched Producers",
+            "type": "integer"
+          },
+          "omitted_albums": {
+            "default": 0,
+            "title": "Omitted Albums",
+            "type": "integer"
+          },
+          "omitted_bands": {
+            "default": 0,
+            "title": "Omitted Bands",
+            "type": "integer"
+          },
+          "returned_albums": {
+            "default": 0,
+            "title": "Returned Albums",
+            "type": "integer"
+          },
+          "returned_bands": {
+            "default": 0,
+            "title": "Returned Bands",
             "type": "integer"
           },
           "scope": {
@@ -2876,6 +2941,30 @@
               "title": "Band Id",
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "producer_limit",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 5000,
+              "minimum": 0,
+              "title": "Producer Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_nodes",
+            "required": false,
+            "schema": {
+              "default": 2000,
+              "maximum": 2000,
+              "minimum": 1,
+              "title": "Max Nodes",
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -3211,6 +3300,30 @@
           },
           {
             "in": "query",
+            "name": "band_limit",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 5000,
+              "minimum": 0,
+              "title": "Band Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "album_limit",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "maximum": 5000,
+              "minimum": 0,
+              "title": "Album Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
             "name": "producer_sort",
             "required": false,
             "schema": {
@@ -3299,7 +3412,7 @@
             "required": false,
             "schema": {
               "default": 1000,
-              "maximum": 1000,
+              "maximum": 5000,
               "minimum": 1,
               "title": "Max Nodes",
               "type": "integer"
@@ -3311,7 +3424,7 @@
             "required": false,
             "schema": {
               "default": 2000,
-              "maximum": 2000,
+              "maximum": 5000,
               "minimum": 1,
               "title": "Max Edges",
               "type": "integer"
@@ -3631,8 +3744,8 @@
             "required": false,
             "schema": {
               "default": 20,
-              "maximum": 100,
-              "minimum": 1,
+              "maximum": 5000,
+              "minimum": 0,
               "title": "Limit",
               "type": "integer"
             }
@@ -3655,7 +3768,7 @@
             "required": false,
             "schema": {
               "default": 500,
-              "maximum": 500,
+              "maximum": 2000,
               "minimum": 1,
               "title": "Max Nodes",
               "type": "integer"
@@ -3667,7 +3780,7 @@
             "required": false,
             "schema": {
               "default": 2000,
-              "maximum": 2000,
+              "maximum": 5000,
               "minimum": 1,
               "title": "Max Edges",
               "type": "integer"

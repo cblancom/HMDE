@@ -57,7 +57,10 @@ const response: ProducerGraphResponse = {
   meta: {
     view: 'albums', analysis_run_id: 'run-1', analysis_version: 'net-test',
     dataset_version: 'mb-test', taxonomy_version: '0.2.0', graph_version: '0.1.0',
-    truncated: false, limits: { limit: 20, depth: 1, max_nodes: 500, max_edges: 2000 },
+    truncated: false,
+    returned_neighbors: 0,
+    omitted_neighbors: 0,
+    limits: { limit: 20, depth: 1, max_nodes: 500, max_edges: 2000 },
   },
 }
 

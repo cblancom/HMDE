@@ -24,6 +24,11 @@ class GraphEdge(BaseModel):
 
 class GraphMeta(BaseModel):
     fixture_version: str
+    producer_limit: int = 0
+    max_nodes: int = 2_000
+    returned_producers: int = 0
+    omitted_producers: int = 0
+    truncated: bool = False
 
 
 class BandGraphResponse(BaseModel):

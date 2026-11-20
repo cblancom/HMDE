@@ -838,6 +838,33 @@ select:focus {
   min-width: 7rem;
 }
 
+.limit-field {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.limit-field input[type='number'] {
+  width: 5.5rem;
+  min-width: 0;
+}
+
+.limit-field__all {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: 0.78rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.limit-field__all input {
+  width: auto;
+  min-height: auto;
+}
+
 .producer-graph {
   margin-top: 1rem;
 }

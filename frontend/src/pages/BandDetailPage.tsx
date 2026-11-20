@@ -1,15 +1,24 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useSearchParams } from 'react-router'
 
 import { ApiError } from '../api/client'
 import { getBand, getBandGraph } from '../api/bands'
 import { AsyncState } from '../components/AsyncState'
 import { BandGraph } from '../components/BandGraph'
 import { CreditList } from '../components/CreditList'
+import { queryKeys } from '../api/queryKeys'
+
+function parseProducerLimit(value: string | null): number {
+  if (!value || value === 'all') return 0
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : 0
+}
 
 export function BandDetailPage() {
   const { bandId } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const id = bandId ?? ''
+  const producerLimit = parseProducerLimit(searchParams.get('producer_limit'))
 
   const bandQuery = useQuery({
     queryKey: ['band', id],
@@ -18,10 +27,17 @@ export function BandDetailPage() {
   })
 
   const graphQuery = useQuery({
-    queryKey: ['band-graph', id],
-    queryFn: () => getBandGraph(id),
+    queryKey: queryKeys.bandGraph(id, { producerLimit }),
+    queryFn: () => getBandGraph(id, { producerLimit, maxNodes: 2000 }),
     enabled: id.length > 0 && bandQuery.isSuccess,
   })
+
+  function updateProducerLimit(next: number) {
+    const params = new URLSearchParams(searchParams)
+    if (next === 0) params.delete('producer_limit')
+    else params.set('producer_limit', String(next))
+    setSearchParams(params)
+  }
 
   if (!id) {
     return (
@@ -136,7 +152,13 @@ export function BandDetailPage() {
         </section>
       ) : null}
 
-      {graphQuery.isSuccess ? <BandGraph graph={graphQuery.data} /> : null}
+      {graphQuery.isSuccess ? (
+        <BandGraph
+          graph={graphQuery.data}
+          producerLimit={producerLimit}
+          onProducerLimitChange={updateProducerLimit}
+        />
+      ) : null}
     </section>
   )
 }

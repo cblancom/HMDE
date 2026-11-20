@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { Route, Routes } from 'react-router'
 
@@ -21,7 +21,14 @@ const graph = {
       albums: ['Iron Maiden'],
     },
   ],
-  meta: { fixture_version: 'e2-v0.1.0' },
+  meta: {
+    fixture_version: 'e2-v0.1.0',
+    producer_limit: 0,
+    max_nodes: 2000,
+    returned_producers: 1,
+    omitted_producers: 0,
+    truncated: false,
+  },
 }
 
 const detail = {
@@ -140,6 +147,23 @@ describe('BandDetailPage', () => {
       'href',
       '/producers/artist-1',
     )
+  })
+
+  it('updates the producer limit for the band graph', async () => {
+    const fetchMock = mockFetchRoutes({
+      '/api/v1/bands/band-1': { body: detail },
+      '/api/v1/bands/band-1/graph': { body: graph },
+    })
+    renderDetail()
+
+    await screen.findByLabelText('Producer limit all')
+    fireEvent.click(screen.getByLabelText('Producer limit all'))
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining('producer_limit=10'),
+        expect.anything(),
+      )
+    })
   })
 
   it('shows an empty state when a band has no albums', async () => {

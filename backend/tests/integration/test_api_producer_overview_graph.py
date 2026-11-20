@@ -22,6 +22,8 @@ def test_overview_bands_view_uses_shared_band_nodes(api_client, network_analysis
     assert body["meta"]["analysis_run_id"] == str(network_analysis_run)
     assert body["meta"]["limits"] == {
         "producer_limit": 0,
+        "band_limit": 0,
+        "album_limit": 0,
         "max_nodes": 1000,
         "max_edges": 2000,
     }
@@ -37,9 +39,13 @@ def test_overview_bands_view_uses_shared_band_nodes(api_client, network_analysis
     target_counts = Counter(edge["target"] for edge in body["edges"])
     assert target_counts.most_common(1)[0][1] >= 2
 
-    producer_ids = {node["id"] for node in body["nodes"] if node["type"] == "producer"}
+    producer_only_ids = {
+        node["id"]
+        for node in body["nodes"]
+        if node["type"] == "producer" and "band" not in node["roles"]
+    }
     assert all(
-        not (edge["source"] in producer_ids and edge["target"] in producer_ids)
+        not (edge["source"] in producer_only_ids and edge["target"] in producer_only_ids)
         for edge in body["edges"]
     )
 
@@ -83,6 +89,37 @@ def test_overview_isolated_toggle_and_top_k(api_client, network_analysis_run) ->
     assert meta["selected_producers"] == 5
     assert meta["matched_producers"] > meta["selected_producers"]
     assert meta["truncated"] is True
+
+
+def test_overview_band_and_album_limits_are_explicit(api_client, network_analysis_run) -> None:
+    limited = _overview(
+        api_client,
+        network_analysis_run,
+        view="bands",
+        band_limit=2,
+        max_nodes=5000,
+        max_edges=5000,
+    )
+    assert limited.status_code == 200
+    body = limited.json()
+    assert body["meta"]["limits"]["band_limit"] == 2
+    assert body["meta"]["returned_bands"] <= 2
+    assert body["meta"]["omitted_bands"] >= 0
+    assert body["meta"]["truncated"] is True
+
+    limited_albums = _overview(
+        api_client,
+        network_analysis_run,
+        view="albums",
+        album_limit=2,
+        max_nodes=5000,
+        max_edges=5000,
+    )
+    assert limited_albums.status_code == 200
+    album_meta = limited_albums.json()["meta"]
+    assert album_meta["limits"]["album_limit"] == 2
+    assert album_meta["returned_albums"] <= 2
+    assert album_meta["truncated"] is True
 
 
 def test_overview_album_filters_and_caps(api_client, network_analysis_run) -> None:
@@ -161,7 +198,9 @@ def test_overview_rejects_invalid_parameters(api_client, network_analysis_run) -
     assert _overview(api_client, network_analysis_run, view="mixed").status_code == 422
     assert _overview(api_client, network_analysis_run, producer_limit=1001).status_code == 422
     assert _overview(api_client, network_analysis_run, max_nodes=0).status_code == 422
-    assert _overview(api_client, network_analysis_run, max_edges=2001).status_code == 422
+    assert _overview(api_client, network_analysis_run, max_edges=5001).status_code == 422
+    assert _overview(api_client, network_analysis_run, band_limit=-1).status_code == 422
+    assert _overview(api_client, network_analysis_run, album_limit=-1).status_code == 422
     assert _overview(api_client, network_analysis_run, decade="1980").status_code == 422
     assert _overview(api_client, network_analysis_run, layout="mixed").status_code == 422
 

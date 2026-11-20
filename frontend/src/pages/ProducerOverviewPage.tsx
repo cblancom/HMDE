@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router'
 
-import { getBands } from '../api/bands'
+import { getAllBands } from '../api/bands'
 import { ApiError } from '../api/client'
 import {
   getProducerOverviewGraph,
@@ -35,6 +35,9 @@ import {
 } from '../graph/forceLayouts'
 
 const SORTS: ProducerOverviewSort[] = ['album_count', 'band_count', 'betweenness', 'name']
+const DEFAULT_BAND_LIMIT = 0
+const DEFAULT_ALBUM_LIMIT = 500
+const PRODUCER_LIMIT_MAX = 1000
 
 function parseView(value: string | null): ProducerGraphView {
   return value === 'albums' ? 'albums' : 'bands'
@@ -43,7 +46,15 @@ function parseView(value: string | null): ProducerGraphView {
 function parseProducerLimit(value: string | null): number {
   if (!value || value === 'all') return 0
   const parsed = Number(value)
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : 0
+  if (!Number.isInteger(parsed) || parsed <= 0) return 0
+  return Math.min(parsed, PRODUCER_LIMIT_MAX)
+}
+
+function parseTargetLimit(value: string | null, fallback: number): number {
+  if (value === 'all') return 0
+  if (!value) return fallback
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback
 }
 
 function parseSort(value: string | null): ProducerOverviewSort {
@@ -56,8 +67,13 @@ function parseDecade(value: string | null): string {
   return value && /^\d{4}s$/.test(value) ? value : ''
 }
 
-function parseLayout(value: string | null): GraphLayoutMode {
-  return value === 'bipartite' || value === 'community' ? value : 'force'
+function defaultLayout(view: ProducerGraphView): GraphLayoutMode {
+  return view === 'albums' || view === 'bands' ? 'bipartite' : 'force'
+}
+
+function parseLayout(value: string | null, view: ProducerGraphView): GraphLayoutMode {
+  if (value === 'force' || value === 'bipartite' || value === 'community') return value
+  return defaultLayout(view)
 }
 
 function parseEngine(value: string | null): ForceEngine {
@@ -93,14 +109,19 @@ export function ProducerOverviewPage() {
   const urlEngine = parseEngine(searchParams.get('engine'))
   const [rememberedEngine, setRememberedEngine] = useState<ForceEngine>(urlEngine)
   const engine = urlEngine === DEFAULT_FORCE_ENGINE ? rememberedEngine : urlEngine
+  const view = parseView(rawView)
+  const bandLimit = parseTargetLimit(searchParams.get('band_limit'), DEFAULT_BAND_LIMIT)
+  const albumLimit = parseTargetLimit(searchParams.get('album_limit'), DEFAULT_ALBUM_LIMIT)
   const options: OverviewOptions = {
-    view: parseView(rawView),
+    view,
     producerLimit: parseProducerLimit(searchParams.get('producers')),
+    bandLimit,
+    albumLimit,
     producerSort: parseSort(searchParams.get('sort')),
     order: searchParams.get('order') === 'asc' ? 'asc' : 'desc',
     decade: parseDecade(searchParams.get('decade')),
     subgenre: searchParams.get('subgenre') ?? '',
-    layout: parseLayout(searchParams.get('layout')),
+    layout: parseLayout(searchParams.get('layout'), view),
     engine,
   }
   const [displayState, setDisplayState] = useState<{
@@ -111,13 +132,15 @@ export function ProducerOverviewPage() {
   const [detailsOpen, setDetailsOpen] = useState(true)
   const display: OverviewDisplayOptions = {
     ...displayState,
-    hideIsolated: searchParams.get('isolated') === '0',
+    hideIsolated: searchParams.get('isolated') !== '1',
   }
 
   const graphQuery = useQuery({
     queryKey: queryKeys.producerOverviewGraph({
       view: options.view,
       producers: options.producerLimit,
+      bands: options.bandLimit,
+      albums: options.albumLimit,
       sort: options.producerSort,
       order: options.order,
       decade: options.decade,
@@ -128,39 +151,41 @@ export function ProducerOverviewPage() {
       getProducerOverviewGraph({
         view: options.view,
         producerLimit: options.producerLimit,
+        bandLimit: options.bandLimit,
+        albumLimit: options.albumLimit,
         producerSort: options.producerSort,
         order: options.order,
         decade: options.decade || undefined,
         subgenre: options.subgenre || undefined,
         includeIsolated: true,
         includeEvidence: options.view === 'bands',
-        maxNodes: 1000,
-        maxEdges: 2000,
+        maxNodes: 5000,
+        maxEdges: 5000,
         layout: options.layout === 'force' ? undefined : options.layout,
       }),
   })
 
   const bandsQuery = useQuery({
     queryKey: queryKeys.bands({
-      limit: 200,
+      all: true,
       decade: options.decade || undefined,
       subgenre: options.subgenre || undefined,
     }),
     queryFn: () =>
-      getBands({
-        limit: 200,
+      getAllBands({
         decade: options.decade || undefined,
         subgenre: options.subgenre || undefined,
       }),
   })
 
-  const view = options.view
   const role = displayState.role
-  const hideIsolated = searchParams.get('isolated') === '0'
+  const hideIsolated = searchParams.get('isolated') !== '1'
   const adapted = useMemo(
     () => (graphQuery.data ? adaptResponse(graphQuery.data, view, role, hideIsolated) : null),
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization -- search params are immutable; compiler false positive
     [graphQuery.data, view, role, hideIsolated],
   )
+
 
   function replaceParams(next: Record<string, string | null>, replace = false) {
     const params = new URLSearchParams(searchParams)
@@ -177,6 +202,8 @@ export function ProducerOverviewPage() {
       next.engine !== options.engine &&
       next.view === options.view &&
       next.producerLimit === options.producerLimit &&
+      next.bandLimit === options.bandLimit &&
+      next.albumLimit === options.albumLimit &&
       next.producerSort === options.producerSort &&
       next.order === options.order &&
       next.decade === options.decade &&
@@ -186,11 +213,18 @@ export function ProducerOverviewPage() {
       {
         view: next.view === 'bands' ? null : next.view,
         producers: next.producerLimit > 0 ? String(next.producerLimit) : null,
+        band_limit: next.bandLimit === DEFAULT_BAND_LIMIT ? null : String(next.bandLimit),
+        album_limit:
+          next.albumLimit === DEFAULT_ALBUM_LIMIT
+            ? null
+            : next.albumLimit === 0
+              ? 'all'
+              : String(next.albumLimit),
         sort: next.producerSort === 'album_count' ? null : next.producerSort,
         order: next.order === 'desc' ? null : next.order,
         decade: next.decade || null,
         subgenre: next.subgenre || null,
-        layout: next.layout === 'force' ? null : next.layout,
+        layout: next.layout === defaultLayout(next.view) ? null : next.layout,
         engine:
           next.layout === 'force' && next.engine !== DEFAULT_FORCE_ENGINE
             ? next.engine
@@ -204,7 +238,7 @@ export function ProducerOverviewPage() {
   function updateDisplay(next: OverviewDisplayOptions) {
     setDisplayState({ role: next.role, producerSearch: next.producerSearch })
     replaceParams({
-      isolated: next.hideIsolated ? '0' : null,
+      isolated: next.hideIsolated ? '0' : '1',
       selected: null,
     })
   }
@@ -255,8 +289,8 @@ export function ProducerOverviewPage() {
     )
   }
 
-  const producerIndex = buildProducerIndex(graph.nodes)
-  const bandIndex = bandsQuery.data ? buildBandIndex(bandsQuery.data.items) : []
+  const producerIndex = buildProducerIndex(adapted?.nodes ?? graph.nodes)
+  const bandIndex = bandsQuery.data ? buildBandIndex(bandsQuery.data) : []
   const adaptationFailed = !adapted
   const selectedId = searchParams.get('selected') ?? ''
   const selectedNode = adapted?.nodes.find((node) => node.id === selectedId) ?? null
@@ -273,6 +307,8 @@ export function ProducerOverviewPage() {
       : 0
   const activeServerFilters =
     options.producerLimit > 0 ||
+    options.bandLimit !== DEFAULT_BAND_LIMIT ||
+    options.albumLimit !== DEFAULT_ALBUM_LIMIT ||
     options.decade !== '' ||
     options.subgenre !== '' ||
     options.view !== 'bands' ||
@@ -315,8 +351,11 @@ export function ProducerOverviewPage() {
       ) : null}
       {graph.meta.truncated ? (
         <p className="async-state" role="status">
-          This overview is truncated at the server limits. Filters apply only to the loaded
-          network.
+          This overview is truncated at the server limits
+          {options.view === 'bands'
+            ? ` (${graph.meta.omitted_bands} bands omitted)`
+            : ` (${graph.meta.omitted_albums} albums omitted)`}
+          . Filters apply only to the loaded network.
         </p>
       ) : null}
 
@@ -324,7 +363,11 @@ export function ProducerOverviewPage() {
         <p className="graph-meta" role="status">
           {adapted?.counts.nodes ?? graph.nodes.length} nodes ·{' '}
           {adapted?.counts.edges ?? graph.edges.length} edges ·{' '}
-          {adapted?.counts.producers ?? 0} producers · {graph.meta.analysis_version}
+          {adapted?.counts.producers ?? 0} producers ·{' '}
+          {options.view === 'bands'
+            ? `${graph.meta.returned_bands} bands`
+            : `${graph.meta.returned_albums} albums`}{' '}
+          · {graph.meta.analysis_version}
           {display.hideIsolated && adapted
             ? ` · ${adapted.counts.hiddenIsolatedProducers} isolated ${
                 adapted.counts.hiddenIsolatedProducers === 1 ? 'producer' : 'producers'

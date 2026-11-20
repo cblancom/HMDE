@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { getAlbums } from './albums'
+import { getAllBands } from './bands'
 import { buildQuery } from './client'
 import { getProducerOverviewGraph } from './producerGraph'
 import { getProducers } from './producers'
@@ -47,7 +48,13 @@ describe('API query builders', () => {
             matched_producers: 0,
             selected_producers: 0,
             include_isolated: true,
-            limits: { producer_limit: 0, max_nodes: 1000, max_edges: 2000 },
+            limits: {
+              producer_limit: 0,
+              band_limit: 0,
+              album_limit: 0,
+              max_nodes: 1000,
+              max_edges: 2000,
+            },
           },
         },
       },
@@ -59,7 +66,7 @@ describe('API query builders', () => {
       includeIsolated: false,
     })
     expect(fetchMock).toHaveBeenCalledWith(
-      '/api/v1/graph/producers?view=bands&producer_limit=5&producer_sort=album_count&order=desc&decade=1990s&include_isolated=false&include_evidence=false&max_nodes=1000&max_edges=2000',
+      '/api/v1/graph/producers?view=bands&producer_limit=5&band_limit=0&album_limit=0&producer_sort=album_count&order=desc&decade=1990s&include_isolated=false&include_evidence=false&max_nodes=5000&max_edges=5000',
       expect.anything(),
     )
     await getProducerOverviewGraph({ view: 'bands', layout: 'community' })
@@ -67,6 +74,33 @@ describe('API query builders', () => {
       expect.stringContaining('layout=community'),
       expect.anything(),
     )
+  })
+
+  it('pages through the full band index', async () => {
+    const fetchMock = vi.fn((input: RequestInfo | URL) => {
+      const url = String(input)
+      const offset = Number(new URL(url, 'http://localhost').searchParams.get('offset'))
+      const items =
+        offset === 0
+          ? [
+              { id: 'band-1', mbid: 'mbid-1', name: 'One', country: null, subgenre: null, album_count: 1 },
+              { id: 'band-2', mbid: 'mbid-2', name: 'Two', country: null, subgenre: null, album_count: 1 },
+            ]
+          : [
+              { id: 'band-3', mbid: 'mbid-3', name: 'Three', country: null, subgenre: null, album_count: 1 },
+            ]
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: async () => ({ items, total: 3, limit: 200, offset }),
+      })
+    })
+    vi.stubGlobal('fetch', fetchMock)
+
+    const items = await getAllBands()
+    expect(items.map((item) => item.name)).toEqual(['One', 'Two', 'Three'])
+    expect(fetchMock).toHaveBeenCalledWith('/api/v1/bands?limit=200&offset=0', expect.anything())
+    expect(fetchMock).toHaveBeenCalledWith('/api/v1/bands?limit=200&offset=2', expect.anything())
   })
 
   it('requests producer rankings and grouped search', async () => {

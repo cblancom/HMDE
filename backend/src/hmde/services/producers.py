@@ -3,15 +3,18 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from uuid import UUID
+from uuid import NAMESPACE_URL, UUID, uuid5
 
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
 from hmde.models import (
     AnalysisRun,
+    Artist,
+    ArtistSubgenre,
     Community,
     CommunityMembership,
+    DatasetMembership,
     GraphEdge,
     GraphNode,
     ProducerMetric,
@@ -175,6 +178,7 @@ def get_producer_graph(
     }
     selected_nodes = {start.id}
     selected_edges: dict[UUID, GraphEdge] = {}
+    candidate_neighbors: set[UUID] = set()
     frontier = {start.id}
     truncated = False
     for level in range(depth):
@@ -198,7 +202,7 @@ def get_producer_graph(
                 )
             )
         )
-        if len(edge_rows) > limit:
+        if limit and len(edge_rows) > limit:
             edge_rows = edge_rows[:limit]
             truncated = True
         next_frontier: set[UUID] = set()
@@ -207,6 +211,8 @@ def get_producer_graph(
                 truncated = True
                 break
             other = edge.target_node_id if edge.source_node_id in frontier else edge.source_node_id
+            if other != start.id:
+                candidate_neighbors.add(other)
             if other not in selected_nodes and len(selected_nodes) >= max_nodes:
                 truncated = True
                 continue
@@ -214,8 +220,13 @@ def get_producer_graph(
             selected_edges[edge.id] = edge
             next_frontier.add(other)
         frontier = next_frontier
-        if level + 1 < depth and len(edge_rows) >= limit:
+        if level + 1 < depth and limit and len(edge_rows) >= limit:
             truncated = True
+
+    returned_neighbors = max(0, len(selected_nodes) - 1)
+    omitted_neighbors = max(0, len(candidate_neighbors) - returned_neighbors)
+    if omitted_neighbors:
+        truncated = True
 
     node_payload = [
         _node_payload(all_nodes[node_id], view=view)
@@ -237,6 +248,8 @@ def get_producer_graph(
         taxonomy_version=run.taxonomy_version,
         graph_version=run.graph_version,
         truncated=truncated,
+        returned_neighbors=returned_neighbors,
+        omitted_neighbors=omitted_neighbors,
         limits=ProducerGraphLimits(
             limit=limit,
             depth=depth,
@@ -253,19 +266,39 @@ def get_producer_overview_graph(
     *,
     view: str,
     producer_limit: int,
-    producer_sort: str,
-    order: str,
-    decade: str | None,
-    subgenre: str | None,
-    include_isolated: bool,
-    include_evidence: bool,
-    max_nodes: int,
-    max_edges: int,
+    band_limit: int = 0,
+    album_limit: int = 0,
+    producer_sort: str = "album_count",
+    order: str = "desc",
+    decade: str | None = None,
+    subgenre: str | None = None,
+    include_isolated: bool = True,
+    include_evidence: bool = False,
+    max_nodes: int = 1000,
+    max_edges: int = 2000,
     layout: str | None = None,
 ) -> ProducerOverviewGraphResponse:
     all_nodes = {
         node.id: node
         for node in session.scalars(select(GraphNode).where(GraphNode.analysis_run_id == run.id))
+    }
+    band_entity_ids: set[UUID] = set()
+    for band_node in _dataset_band_nodes(session, run=run):
+        band_entity_ids.add(band_node.entity_id)
+        existing = next(
+            (
+                node
+                for node in all_nodes.values()
+                if node.entity_id == band_node.entity_id and node.node_type == "artist"
+            ),
+            None,
+        )
+        if existing is None:
+            all_nodes[band_node.id] = band_node
+    band_node_ids = {
+        node.id
+        for node in all_nodes.values()
+        if node.node_type == "artist" and node.entity_id in band_entity_ids
     }
     nodes_by_entity = {
         node.entity_id: node
@@ -316,6 +349,32 @@ def get_producer_overview_graph(
                 continue
         filtered_edges.append(edge)
 
+    target_weights: dict[UUID, float] = defaultdict(float)
+    for edge in filtered_edges:
+        target_weights[edge.target_node_id] += float(edge.weight)
+
+    if view == "bands":
+        target_candidates = band_node_ids
+        target_limit = band_limit
+    else:
+        target_candidates = {node.id for node in all_nodes.values() if node.node_type == "album"}
+        target_limit = album_limit
+
+    if target_limit > 0 and len(target_candidates) > target_limit:
+        selected_targets = set(
+            sorted(
+                target_candidates,
+                key=lambda node_id: (
+                    -target_weights.get(node_id, 0.0),
+                    str(all_nodes[node_id].entity_id),
+                ),
+            )[:target_limit]
+        )
+    else:
+        selected_targets = target_candidates
+
+    filtered_edges = [edge for edge in filtered_edges if edge.target_node_id in selected_targets]
+
     grouped: dict[tuple[UUID, UUID], list[GraphEdge]] = defaultdict(list)
     for edge in filtered_edges:
         grouped[(edge.source_node_id, edge.target_node_id)].append(edge)
@@ -324,7 +383,9 @@ def get_producer_overview_graph(
         connected = {source_id for source_id, _ in grouped}
         producer_order = [node_id for node_id in producer_order if node_id in connected]
 
-    truncated = matched > len(selected_rows)
+    truncated = matched > len(selected_rows) or (
+        target_limit > 0 and len(target_candidates) > target_limit
+    )
     candidate_producers = set(producer_order)
 
     merged_edges: list[tuple[GraphEdge, list[str]]] = []
@@ -350,6 +411,11 @@ def get_producer_overview_graph(
     )
 
     selected_nodes: set[UUID] = set()
+    for node_id in sorted(selected_targets, key=str):
+        if len(selected_nodes) >= max_nodes:
+            truncated = True
+            break
+        selected_nodes.add(node_id)
     selected_edges: list[GraphEdge] = []
     edge_roles: dict[UUID, list[str]] = {}
     for edge, roles in merged_edges:
@@ -383,18 +449,20 @@ def get_producer_overview_graph(
     if len(selected_producer_ids) < len(candidate_producers):
         truncated = True
 
-    target_ids = {edge.target_node_id for edge in selected_edges}
-    edge_source_ids = {edge.source_node_id for edge in selected_edges}
+    returned_targets = {node_id for node_id in selected_targets if node_id in selected_nodes}
+    omitted_targets = max(0, len(target_candidates) - len(returned_targets))
+    if omitted_targets:
+        truncated = True
+    returned_bands = len(returned_targets) if view == "bands" else 0
+    returned_albums = len(returned_targets) if view == "albums" else 0
+    omitted_bands = omitted_targets if view == "bands" else 0
+    omitted_albums = omitted_targets if view == "albums" else 0
     node_payload = [
         _overview_node_payload(
             all_nodes[node_id],
             view=view,
             producer_row=producer_rows.get(all_nodes[node_id].entity_id),
-            display_type=(
-                "band"
-                if view == "bands" and node_id in target_ids and node_id not in edge_source_ids
-                else None
-            ),
+            display_type=("band" if view == "bands" and node_id in selected_targets else None),
         )
         for node_id in sorted(selected_nodes, key=str)
         if node_id in all_nodes
@@ -428,9 +496,15 @@ def get_producer_overview_graph(
         truncated=truncated,
         matched_producers=matched,
         selected_producers=sum(1 for node_id in selected_nodes if node_id in selected_producer_ids),
+        returned_bands=returned_bands,
+        returned_albums=returned_albums,
+        omitted_bands=omitted_bands,
+        omitted_albums=omitted_albums,
         include_isolated=include_isolated,
         limits=ProducerOverviewGraphLimits(
             producer_limit=producer_limit,
+            band_limit=band_limit,
+            album_limit=album_limit,
             max_nodes=max_nodes,
             max_edges=max_edges,
         ),
@@ -441,6 +515,50 @@ def get_producer_overview_graph(
         meta=meta,
         layout=layout_payload,
     )
+
+
+def _dataset_band_nodes(session: Session, *, run: AnalysisRun) -> list[GraphNode]:
+    rows = session.execute(
+        select(
+            Artist.id,
+            Artist.mbid,
+            Artist.name,
+            Artist.type,
+            Artist.country,
+            ArtistSubgenre.subgenre_code,
+        )
+        .join(DatasetMembership, DatasetMembership.artist_id == Artist.id)
+        .outerjoin(
+            ArtistSubgenre,
+            (ArtistSubgenre.artist_id == Artist.id) & ArtistSubgenre.is_primary.is_(True),
+        )
+        .where(
+            DatasetMembership.dataset_version == run.dataset_version,
+            DatasetMembership.lifecycle == "active",
+        )
+        .order_by(Artist.name, Artist.id)
+    ).all()
+    nodes: list[GraphNode] = []
+    for artist_id, mbid, name, artist_type, country, subgenre in rows:
+        nodes.append(
+            GraphNode(
+                id=uuid5(NAMESPACE_URL, f"hmde:band-node:{artist_id}"),
+                analysis_run_id=run.id,
+                node_key=f"dataset-band:{artist_id}",
+                node_type="artist",
+                entity_id=artist_id,
+                mbid=mbid,
+                label=name,
+                roles=["band"],
+                attributes={
+                    "band_type": artist_type,
+                    "band_country": country,
+                    "subgenre": subgenre,
+                    "self_produced_albums": 0,
+                },
+            )
+        )
+    return nodes
 
 
 def _overview_layout_payload(

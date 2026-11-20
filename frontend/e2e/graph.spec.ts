@@ -39,25 +39,28 @@ test('overview filters, layouts and engines', async ({ page }) => {
   await page.goto('/graph')
   const meta = page.locator('.overview-toolbar .graph-meta')
 
-  await page.locator('#overview-producers').selectOption('10')
+  await page.getByRole('checkbox', { name: 'Producers all' }).click()
+  await page.locator('#overview-producers').fill('10')
+  await page.locator('#overview-producers').press('Enter')
   await expect(page).toHaveURL(/producers=10/)
-  await expect(meta).toContainText('16 nodes · 9 edges · 8 producers')
+  await expect(meta).toContainText('21 nodes · 9 edges · 7 producers')
 
   await page.getByLabel('Highlight producer').fill('Scott')
   await expect(page.getByText('1 producer matches the highlight.')).toBeVisible()
 
   await page.locator('#overview-sort').selectOption('name')
   await expect(page).toHaveURL(/sort=name/)
-  await expect(meta).toContainText('17 nodes · 10 edges')
+  await expect(meta).toContainText('23 nodes · 10 edges')
   await page.locator('#overview-order').selectOption('asc')
   await expect(page).toHaveURL(/order=asc/)
-  await expect(meta).toContainText('15 nodes · 8 edges')
+  await expect(meta).toContainText('21 nodes · 8 edges')
 
   const isolatedToggle = page.getByLabel('Show isolated producers')
-  await isolatedToggle.click()
   await expect(isolatedToggle).not.toBeChecked()
-  await expect(page).toHaveURL(/isolated=0/)
-  await expect(meta).toContainText('1 isolated producer hidden')
+  await expect(meta).toContainText('isolated producers hidden')
+  await isolatedToggle.click()
+  await expect(isolatedToggle).toBeChecked()
+  await expect(page).toHaveURL(/isolated=1/)
 
   await page.getByRole('button', { name: 'Reset filters' }).click()
   await expect(page).toHaveURL(/\/graph$/)
@@ -65,10 +68,11 @@ test('overview filters, layouts and engines', async ({ page }) => {
 
   await page.locator('#decade-filter').selectOption('1990s')
   await expect(page).toHaveURL(/decade=1990s/)
-  await expect(meta).toContainText('20 nodes · 13 edges')
+  await expect(meta).toContainText('26 nodes · 13 edges')
   await page.getByRole('button', { name: 'Reset filters' }).click()
   await expect(meta).toContainText('42 nodes · 30 edges')
 
+  await page.locator('#overview-layout').selectOption('force')
   await page.getByRole('group', { name: 'Force engine' }).getByRole('button', { name: 'CoSE', exact: true }).click()
   await expect(page).toHaveURL(/engine=cose/)
   await expect(page.getByTestId('producer-graph-canvas')).toBeVisible()
@@ -77,7 +81,7 @@ test('overview filters, layouts and engines', async ({ page }) => {
   await expect(page.getByTestId('producer-graph-canvas')).toBeVisible()
 
   await page.locator('#overview-layout').selectOption('bipartite')
-  await expect(page).toHaveURL(/layout=bipartite/)
+  await expect(page.getByTestId('location')).toHaveCount(0)
   await expect(page.locator('.producer-graph .graph-meta')).toContainText('Static layout.')
   await expect(page.getByRole('group', { name: 'Force engine' }).getByRole('button', { name: 'CoSE', exact: true })).toBeDisabled()
 
@@ -92,6 +96,44 @@ test('overview filters, layouts and engines', async ({ page }) => {
   expect(errors).toEqual([])
 })
 
+test('overview band, album and band-detail producer limits', async ({ page }) => {
+  const errors = trackConsoleErrors(page)
+  await page.goto('/graph')
+  const meta = page.locator('.overview-toolbar .graph-meta')
+
+  await expect(page.getByRole('spinbutton', { name: 'Band limit' })).toBeDisabled()
+  await expect(page.getByRole('checkbox', { name: 'Band limit all' })).toBeChecked()
+  await expect(page.getByRole('spinbutton', { name: 'Album limit' })).toHaveValue('500')
+
+  const index = page.getByRole('complementary', { name: 'Network index' })
+  await index.getByText('Bands').click()
+  await expect(index.getByRole('link', { name: 'Iron Maiden' })).toBeVisible()
+  await expect(index.locator('.overview-index__count').first()).toBeVisible()
+
+  await page.getByRole('checkbox', { name: 'Band limit all' }).click()
+  await expect(page).toHaveURL(/band_limit=100/)
+  await page.getByRole('spinbutton', { name: 'Band limit' }).fill('5')
+  await expect(page).toHaveURL(/band_limit=5/)
+  await expect(meta).toContainText('5 bands')
+
+  await page.getByRole('group', { name: 'Graph view' }).getByRole('button', { name: 'Albums' }).click()
+  await expect(page).toHaveURL(/view=albums/)
+  await page.getByRole('spinbutton', { name: 'Album limit' }).fill('3')
+  await expect(page).toHaveURL(/album_limit=3/)
+  await expect(meta).toContainText('3 albums')
+  await page.getByRole('checkbox', { name: 'Album limit all' }).click()
+  await expect(page).toHaveURL(/album_limit=all/)
+  await expect(meta).toContainText('40 albums')
+
+  await page.goto(`/bands/${IRON_MAIDEN_ID}`)
+  await expect(page.getByRole('checkbox', { name: 'Producer limit all' })).toBeChecked()
+  await page.getByRole('checkbox', { name: 'Producer limit all' }).click()
+  await expect(page).toHaveURL(/producer_limit=10/)
+  await expect(page.getByRole('spinbutton', { name: 'Producer limit' })).toHaveValue('10')
+
+  expect(errors).toEqual([])
+})
+
 test('overview subgenre filter reflects the seeded corpus', async ({ page }) => {
   const errors = trackConsoleErrors(page)
   await page.goto('/graph')
@@ -99,7 +141,7 @@ test('overview subgenre filter reflects the seeded corpus', async ({ page }) => 
 
   await page.locator('#taxonomy-filter').selectOption('heavy-metal')
   await expect(page).toHaveURL(/subgenre=heavy-metal/)
-  await expect(page.getByText('No producers match these filters.')).toBeVisible()
+  await expect(page.locator('.overview-toolbar .graph-meta')).toContainText('14 nodes · 0 edges')
 
   await page.goto('/graph')
   await expect(page.locator('.overview-toolbar .graph-meta')).toContainText('42 nodes · 30 edges')
@@ -150,8 +192,8 @@ test('producer ego graph views, filters, tables and physics controls', async ({ 
   await expect(page.getByRole('table', { name: 'Loaded graph nodes' })).toContainText('Cannibal Corpse')
   await expect(page.getByRole('table', { name: 'Loaded graph edges' })).toContainText('Scott Burns')
 
-  await page.locator('#graph-limit').selectOption('50')
-  await expect(page).toHaveURL(/limit=50/)
+  await page.getByLabel('Neighbors all').click()
+  await expect(page).toHaveURL(/limit=20/)
   await page.getByRole('group', { name: 'Graph view' }).getByRole('button', { name: 'Albums' }).click()
   await expect(page).toHaveURL(/view=albums/)
   await expect(page.getByText('Producer albums', { exact: true })).toBeVisible()

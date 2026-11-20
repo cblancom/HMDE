@@ -74,16 +74,16 @@ test('truncated graph states', async ({ page }) => {
   })
 
   await page.goto('/graph')
-  await expect(page.getByText('This overview is truncated at the server limits. Filters apply only to the loaded network.')).toBeVisible()
+  await expect(page.getByText(/This overview is truncated at the server limits/)).toBeVisible()
 
   await page.goto(`/producers/${SCOTT_BURNS_ID}/graph`)
-  await expect(page.getByText('This graph is truncated at the server limits. Filters apply only to the loaded network.')).toBeVisible()
+  await expect(page.getByText(/This graph is truncated at the server limits/)).toBeVisible()
 })
 
 test('reduced motion freezes force layouts', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
 
-  await page.goto('/graph')
+  await page.goto('/graph?layout=force')
   await expect(page.locator('.producer-graph .graph-meta')).toContainText('Layout frozen · d3-force')
   await expect(page.getByRole('button', { name: 'Freeze layout' })).toBeDisabled()
   await expect(page.getByRole('button', { name: 'Resume physics' })).toBeEnabled()
@@ -120,6 +120,7 @@ test('keyboard navigation reaches navigation, filters, tabs, controls and tables
   await page.keyboard.press('Enter')
   await expect(page.getByRole('complementary', { name: 'Network index' })).toHaveCount(0)
 
+  await page.locator('#overview-layout').selectOption('force')
   await page.getByRole('group', { name: 'Force engine' }).getByRole('button', { name: 'CoSE', exact: true }).focus()
   await page.keyboard.press('Enter')
   await expect(page).toHaveURL(/engine=cose/)

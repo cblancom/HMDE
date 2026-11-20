@@ -28,6 +28,8 @@ export type ProducerGraphOptions = {
 export type ProducerOverviewGraphOptions = {
   view: ProducerGraphView
   producerLimit?: number
+  bandLimit?: number
+  albumLimit?: number
   producerSort?: ProducerOverviewSort
   order?: 'asc' | 'desc'
   decade?: string
@@ -43,14 +45,16 @@ export type ProducerOverviewGraphOptions = {
 export function getProducerOverviewGraph({
   view,
   producerLimit = 0,
+  bandLimit = 0,
+  albumLimit = 0,
   producerSort = 'album_count',
   order = 'desc',
   decade,
   subgenre,
   includeIsolated = true,
   includeEvidence = false,
-  maxNodes = 1000,
-  maxEdges = 2000,
+  maxNodes = 5000,
+  maxEdges = 5000,
   layout,
   analysisRun,
 }: ProducerOverviewGraphOptions): Promise<ProducerOverviewGraphResponse> {
@@ -58,6 +62,8 @@ export function getProducerOverviewGraph({
     `/api/v1/graph/producers${buildQuery({
       view,
       producer_limit: producerLimit,
+      band_limit: bandLimit,
+      album_limit: albumLimit,
       producer_sort: producerSort,
       order,
       decade,
@@ -77,8 +83,8 @@ export function getProducerGraph({
   view,
   limit = 20,
   depth = 1,
-  maxNodes = 500,
-  maxEdges = 2000,
+  maxNodes = 2000,
+  maxEdges = 5000,
   includeEvidence = true,
   analysisRun,
 }: ProducerGraphOptions): Promise<ProducerGraphResponse> {

@@ -69,6 +69,8 @@ const response: ProducerGraphResponse = {
     taxonomy_version: '0.2.0',
     graph_version: '0.1.0',
     truncated: false,
+    returned_neighbors: 0,
+    omitted_neighbors: 0,
     limits: { limit: 20, depth: 1, max_nodes: 500, max_edges: 2000 },
   },
 }
@@ -160,8 +162,18 @@ const overviewResponse: ProducerOverviewGraphResponse = {
     truncated: false,
     matched_producers: 3,
     selected_producers: 3,
+    returned_bands: 2,
+    returned_albums: 0,
+    omitted_bands: 0,
+    omitted_albums: 0,
     include_isolated: true,
-    limits: { producer_limit: 0, max_nodes: 1000, max_edges: 2000 },
+    limits: {
+      producer_limit: 0,
+      band_limit: 0,
+      album_limit: 0,
+      max_nodes: 1000,
+      max_edges: 2000,
+    },
   },
 }
 
@@ -276,7 +288,13 @@ const albumsOverviewResponse: ProducerOverviewGraphResponse = {
   meta: {
     ...overviewResponse.meta,
     view: 'albums',
-    limits: { producer_limit: 0, max_nodes: 1000, max_edges: 2000 },
+    limits: {
+      producer_limit: 0,
+      band_limit: 0,
+      album_limit: 0,
+      max_nodes: 1000,
+      max_edges: 2000,
+    },
   },
 }
 
@@ -327,6 +345,21 @@ describe('overview adapter', () => {
     expect(graph.counts.hiddenIsolatedProducers).toBe(1)
     expect(isIsolatedProducer(overviewResponse.nodes[2])).toBe(true)
     expect(isIsolatedProducer(overviewResponse.nodes[0])).toBe(false)
+  })
+
+  it('excludes albums that have no edge in the selected subgraph', () => {
+    const responseWithoutAlbum2Edge: ProducerOverviewGraphResponse = {
+      ...albumsOverviewResponse,
+      edges: albumsOverviewResponse.edges.filter((edge) => edge.target !== 'album-2'),
+    }
+    const graph = adaptOverviewGraph(responseWithoutAlbum2Edge, 'albums', {
+      role: 'all',
+      decade: '',
+      subgenre: '',
+    })
+    expect(graph.nodes.map((node) => node.id)).toContain('album-1')
+    expect(graph.nodes.map((node) => node.id)).not.toContain('album-2')
+    expect(graph.counts.albums).toBe(1)
   })
 
   it('keeps a shared band with the producer role visible in the bands view', () => {
@@ -381,7 +414,13 @@ describe('overview adapter', () => {
       subgenre: '',
     })
     expect(graph.edges.map((edge) => edge.target)).toEqual(['band-1'])
-    expect(graph.nodes.map((node) => node.id)).toEqual(['producer-2', 'producer-3', 'band-1'])
+    expect(graph.nodes.map((node) => node.id)).toEqual([
+      'producer-1',
+      'producer-2',
+      'producer-3',
+      'band-1',
+      'band-2',
+    ])
     expect(graph.incidentProducersById['band-1'].map((node) => node.id)).toEqual(['producer-2'])
     expect(graph.allIncidentProducersById['band-1'].map((node) => node.id)).toEqual([
       'producer-1',

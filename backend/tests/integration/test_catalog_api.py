@@ -108,6 +108,24 @@ def test_band_graph_returns_producer_nodes_and_edges(api_client) -> None:
     assert body["meta"]["fixture_version"] == "e2-v0.1.0"
 
 
+def test_band_graph_producer_limit_and_cap(api_client) -> None:
+    bands = api_client.get("/api/v1/bands", params={"q": "Iron Maiden"}).json()
+    band_id = bands["items"][0]["id"]
+
+    response = api_client.get(
+        f"/api/v1/bands/{band_id}/graph",
+        params={"producer_limit": 1, "max_nodes": 1},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["meta"]["producer_limit"] == 1
+    assert body["meta"]["max_nodes"] == 1
+    assert body["meta"]["returned_producers"] == 0
+    assert body["meta"]["omitted_producers"] > 0
+    assert body["meta"]["truncated"] is True
+
+
 def test_band_graph_unknown_id_returns_404(api_client) -> None:
     response = api_client.get("/api/v1/bands/00000000-0000-0000-0000-000000000000/graph")
 

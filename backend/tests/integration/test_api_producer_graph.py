@@ -36,3 +36,18 @@ def test_producer_band_graph_has_only_producer_and_band_nodes(
     assert {node["type"] for node in body["nodes"]} <= {"producer", "band"}
     assert any(edge["layer"] == "producer_band" for edge in body["edges"])
     assert body["meta"]["limits"]["max_nodes"] == 500
+
+
+def test_producer_graph_limit_zero_returns_all_neighbors(api_client, network_analysis_run) -> None:
+    producer_id = _producer_id(api_client)
+    response = api_client.get(
+        f"/api/v1/producers/{producer_id}/graph",
+        params={"view": "albums", "limit": 0, "max_nodes": 2000, "max_edges": 5000},
+    )
+    assert response.status_code == 200
+    meta = response.json()["meta"]
+    assert meta["limits"]["limit"] == 0
+    assert meta["limits"]["max_nodes"] == 2000
+    assert meta["returned_neighbors"] > 0
+    assert meta["omitted_neighbors"] == 0
+    assert meta["truncated"] is False

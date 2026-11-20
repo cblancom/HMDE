@@ -5,12 +5,15 @@ import type {
 } from '../api/producerGraph'
 import type { GraphRole } from '../graph/adapter'
 import { FORCE_ENGINES, type ForceEngine } from '../graph/forceLayouts'
+import { GraphLimitField } from './GraphLimitField'
 import { PeriodFilter } from './PeriodFilter'
 import { TaxonomySelect } from './TaxonomySelect'
 
 export type OverviewOptions = {
   view: ProducerGraphView
   producerLimit: number
+  bandLimit: number
+  albumLimit: number
   producerSort: ProducerOverviewSort
   order: 'asc' | 'desc'
   decade: string
@@ -37,14 +40,6 @@ const LAYOUTS: Array<{ value: GraphLayoutMode; label: string }> = [
   { value: 'force', label: 'Force' },
   { value: 'bipartite', label: 'Bipartite' },
   { value: 'community', label: 'Community' },
-]
-
-const PRODUCER_LIMITS = [
-  { value: 0, label: 'All producers' },
-  { value: 10, label: 'Top 10' },
-  { value: 25, label: 'Top 25' },
-  { value: 50, label: 'Top 50' },
-  { value: 100, label: 'Top 100' },
 ]
 
 export function ProducerOverviewControls({
@@ -74,6 +69,22 @@ export function ProducerOverviewControls({
           Albums
         </button>
       </div>
+
+      <GraphLimitField
+        id="overview-bands"
+        label="Band limit"
+        value={options.bandLimit}
+        fallback={100}
+        onChange={(bandLimit) => onOptionsChange({ ...options, bandLimit })}
+      />
+
+      <GraphLimitField
+        id="overview-albums"
+        label="Album limit"
+        value={options.albumLimit}
+        fallback={500}
+        onChange={(albumLimit) => onOptionsChange({ ...options, albumLimit })}
+      />
 
       <div className="field graph-field">
         <label htmlFor="overview-layout">Layout</label>
@@ -120,22 +131,15 @@ export function ProducerOverviewControls({
         ) : null}
       </div>
 
-      <div className="field graph-field">
-        <label htmlFor="overview-producers">Producers</label>
-        <select
-          id="overview-producers"
-          value={options.producerLimit}
-          onChange={(event) =>
-            onOptionsChange({ ...options, producerLimit: Number(event.target.value) })
-          }
-        >
-          {PRODUCER_LIMITS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <GraphLimitField
+        id="overview-producers"
+        label="Producers"
+        value={options.producerLimit}
+        fallback={100}
+        max={1000}
+        commitOnBlur
+        onChange={(producerLimit) => onOptionsChange({ ...options, producerLimit })}
+      />
 
       <div className="field graph-field">
         <label htmlFor="overview-sort">Sort producers</label>

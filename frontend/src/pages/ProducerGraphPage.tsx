@@ -18,6 +18,13 @@ function parseView(value: string | null): ProducerGraphView {
   return value === 'albums' ? 'albums' : 'bands'
 }
 
+function parseNeighborLimit(value: string | null, fallback: number): number {
+  if (value === 'all') return 0
+  if (!value) return fallback
+  const parsed = Number(value)
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback
+}
+
 export function ProducerGraphPage() {
   const { producerId } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -25,14 +32,24 @@ export function ProducerGraphPage() {
   const rawView = searchParams.get('view')
   const view = parseView(rawView)
   const invalidView = rawView !== null && rawView !== 'albums' && rawView !== 'bands'
-  const limit = Number(searchParams.get('limit') ?? 20)
+  const defaultLimit = view === 'albums' ? 100 : 0
+  const limit = parseNeighborLimit(searchParams.get('limit'), defaultLimit)
   const depth = Number(searchParams.get('depth') ?? 1)
   const [filters, setFilters] = useState<GraphFilterState>({ role: 'all', decade: '', subgenre: '' })
   const [selection, setSelection] = useState<{ id: string; kind: 'node' | 'edge' } | null>(null)
 
   const graphQuery = useQuery({
     queryKey: queryKeys.producerGraph(id, { view, limit, depth }),
-    queryFn: () => getProducerGraph({ producerId: id, view, limit, depth, includeEvidence: true }),
+    queryFn: () =>
+      getProducerGraph({
+        producerId: id,
+        view,
+        limit,
+        depth,
+        maxNodes: 2000,
+        maxEdges: 5000,
+        includeEvidence: true,
+      }),
     enabled: id.length > 0,
   })
   const adapted = useMemo(() => {
@@ -129,12 +146,17 @@ export function ProducerGraphPage() {
       />
 
       <p className="graph-meta">
-        {graph.nodes.length} nodes · {graph.edges.length} edges · {graph.meta.analysis_version}
+        {graph.nodes.length} nodes · {graph.edges.length} edges ·{' '}
+        {graph.meta.returned_neighbors} neighbors · {graph.meta.analysis_version}
       </p>
 
       {graph.meta.truncated ? (
         <p className="async-state" role="status">
-          This graph is truncated at the server limits. Filters apply only to the loaded network.
+          This graph is truncated at the server limits
+          {graph.meta.omitted_neighbors > 0
+            ? ` (${graph.meta.omitted_neighbors} neighbors omitted)`
+            : ''}
+          . Filters apply only to the loaded network.
         </p>
       ) : null}
 

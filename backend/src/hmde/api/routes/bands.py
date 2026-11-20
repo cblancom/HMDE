@@ -58,8 +58,15 @@ def get_band_endpoint(
 def get_band_graph_endpoint(
     band_id: UUID,
     db: Annotated[Session, Depends(get_db)],
+    producer_limit: Annotated[int, Query(ge=0, le=5000)] = 0,
+    max_nodes: Annotated[int, Query(ge=1, le=2000)] = 2000,
 ) -> BandGraphResponse:
-    graph = get_band_graph(db, band_id)
+    graph = get_band_graph(
+        db,
+        band_id,
+        producer_limit=producer_limit,
+        max_nodes=max_nodes,
+    )
     if graph is None:
         raise HTTPException(status_code=404, detail="Band not found")
     return graph

@@ -48,6 +48,9 @@ def test_bands_overview_uses_shared_band_nodes(
     assert graph.meta.graph_version == run.graph_version
     assert graph.meta.limits.max_nodes == 1000
     assert graph.meta.limits.max_edges == 2000
+    assert graph.meta.limits.band_limit == 0
+    assert graph.meta.limits.album_limit == 0
+    assert graph.meta.returned_bands > 0
     assert {node.type for node in graph.nodes} <= {"producer", "band"}
     assert all(edge.layer == "producer_band" for edge in graph.edges)
 
@@ -62,17 +65,15 @@ def test_bands_overview_uses_shared_band_nodes(
     assert degree >= 2
     assert sum(1 for node in graph.nodes if node.id == shared_target) == 1
 
-    producer_ids = {node.id for node in graph.nodes if node.type == "producer"}
+    producer_only_ids = {
+        node.id for node in graph.nodes if node.type == "producer" and "band" not in node.roles
+    }
     assert all(
-        not (edge.source in producer_ids and edge.target in producer_ids) for edge in graph.edges
+        not (edge.source in producer_only_ids and edge.target in producer_only_ids)
+        for edge in graph.edges
     )
 
-    band_producers = [
-        node for node in graph.nodes if node.type == "band" and "producer" in node.roles
-    ]
-    assert band_producers
-    assert all("band_count" in node.attributes for node in band_producers)
-    assert any(node.attributes["band_count"] == 0 for node in band_producers)
+    assert any("band" in node.roles for node in graph.nodes)
 
 
 def test_albums_overview_deduplicates_roles_and_keeps_album_nodes(
@@ -193,8 +194,8 @@ def test_overview_top_k_sort_and_truncation(seeded_session_factory, network_anal
     assert graph.meta.matched_producers == matched
     assert matched > graph.meta.selected_producers
     assert graph.meta.truncated is True
-    assert {node.id for node in graph.nodes if node.type == "producer"} == {
-        item.id for item in ranking
+    assert {item.id for item in ranking} <= {
+        node.id for node in graph.nodes if "producer" in node.roles
     }
 
 
